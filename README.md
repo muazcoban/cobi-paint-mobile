@@ -41,7 +41,7 @@
 
 1. **Projeyi klonlayın**
 ```bash
-git clone https://github.com/your-repo/cobi-paint-mobile.git
+git clone https://github.com/muazcoban/cobi-paint-mobile.git
 cd Cobi.Paint.Mobile
 ```
 
@@ -127,9 +127,8 @@ Bu proje özel lisans altındadır. Tüm hakları saklıdır.
 
 ## İletişim
 
-- Email: support@cobipaint.com
-- Website: https://cobipaint.com
+- Email: muazcoban@icloud.com
 
 ---
 
-Made with ❤️ for kids
+Made with ❤️ for kids by Muaz Çoban
