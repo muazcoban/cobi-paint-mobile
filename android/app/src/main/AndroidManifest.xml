@@ -16,6 +16,9 @@
     <!-- In-App Purchase -->
     <uses-permission android:name="com.android.vending.BILLING"/>
 
+    <!-- Google Mobile Ads -->
+    <uses-permission android:name="com.google.android.gms.permission.AD_ID"/>
+
     <application
         android:label="Cobi Paint"
         android:name="${applicationName}"
@@ -42,6 +45,11 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+
+        <!-- Google Mobile Ads Application ID -->
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-5547492389514605~7682406592"/>
 
         <!-- File Provider for sharing images -->
         <provider

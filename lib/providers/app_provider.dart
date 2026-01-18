@@ -591,6 +591,33 @@ class AppProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  // Reklam yonetimi - Boyama sayaci
+  /// Boyama tamamlaninca sayaci arttirir
+  /// Reklam gosterilmesi gerekip gerekmedigi bilgisini doner
+  Future<bool> incrementColoringCount() async {
+    if (_settings.isPro) return false; // Pro kullanicilara reklam gosterme
+
+    final newCount = _settings.coloringCompletedCount + 1;
+    _settings = _settings.copyWith(coloringCompletedCount: newCount);
+    await _storageService.saveUserSettings(_settings);
+    notifyListeners();
+
+    // 2 boyamada bir reklam goster
+    return newCount >= UserSettings.coloringsBeforeAd;
+  }
+
+  /// Boyama sayacini sifirlar (reklam gosterildikten sonra)
+  Future<void> resetColoringCount() async {
+    _settings = _settings.copyWith(coloringCompletedCount: 0);
+    await _storageService.saveUserSettings(_settings);
+    notifyListeners();
+  }
+
+  /// Reklam gosterilmeli mi?
+  bool shouldShowAd() {
+    return _settings.shouldShowAd();
+  }
+
   // Import management
   Future<bool> canImportImage() async {
     if (_settings.isPro) return true;

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
+import '../l10n/app_localizations.dart';
 import '../models/coloring_image.dart';
 import '../models/saved_artwork.dart';
 import '../providers/app_provider.dart';
@@ -10,7 +11,9 @@ import '../providers/coloring_provider.dart';
 import '../services/share_service.dart';
 import '../services/image_processing_service.dart';
 import '../services/sound_service.dart';
+import '../services/ad_service.dart';
 import '../theme/app_theme.dart';
+import '../utils/paint_textures.dart';
 import '../widgets/color_palette.dart';
 import '../widgets/coloring_canvas.dart';
 
@@ -33,11 +36,13 @@ class _ColoringScreenState extends State<ColoringScreen> {
   final ShareService _shareService = ShareService();
   final ImageProcessingService _imageProcessingService = ImageProcessingService();
   final SoundService _soundService = SoundService();
+  final AdService _adService = AdService();
 
   bool _isLoading = true;
   bool _isSaving = false;
   bool _isFullScreen = false;
   bool _isPanelCollapsed = false;
+  double _panelWidth = 70; // Genişletilebilir panel (70-150px)
   String? _artworkId;
 
   @override
@@ -45,6 +50,8 @@ class _ColoringScreenState extends State<ColoringScreen> {
     super.initState();
     _artworkId = widget.existingArtwork?.id ?? const Uuid().v4();
     _loadImage();
+    // Interstitial reklami onceden yukle
+    _adService.loadInterstitialAd();
   }
 
   Future<void> _loadImage() async {
@@ -138,6 +145,23 @@ class _ColoringScreenState extends State<ColoringScreen> {
             backgroundColor: AppTheme.successColor,
           ),
         );
+
+        // Boyama sayacini artir ve reklam goster
+        // Pro kullanicilar icin reklam gosterilmez
+        final shouldShowAd = await appProvider.incrementColoringCount();
+        if (shouldShowAd) {
+          // Reklam goster ve sayaci sifirla
+          _adService.showInterstitialAd(
+            onAdShown: () {
+              appProvider.resetColoringCount();
+            },
+            onAdNotReady: () {
+              // Reklam hazir degilse sayaci yine de sifirla
+              // kullanici deneyimini bozmamak icin
+              appProvider.resetColoringCount();
+            },
+          );
+        }
       }
     } catch (e) {
       if (mounted) {
@@ -258,6 +282,8 @@ class _ColoringScreenState extends State<ColoringScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return ChangeNotifierProvider.value(
       value: _coloringProvider,
       child: Scaffold(
@@ -281,7 +307,7 @@ class _ColoringScreenState extends State<ColoringScreen> {
                               _soundService.playUndoSound();
                             }
                           : null,
-                      tooltip: 'Geri Al',
+                      tooltip: l10n.undo,
                     ),
                   ),
                   // Redo
@@ -294,26 +320,26 @@ class _ColoringScreenState extends State<ColoringScreen> {
                               _soundService.playUndoSound();
                             }
                           : null,
-                      tooltip: 'İleri Al',
+                      tooltip: l10n.redo,
                     ),
                   ),
                   // Clear all
                   IconButton(
                     icon: const Icon(Icons.delete_outline),
                     onPressed: _showClearConfirmation,
-                    tooltip: 'Temizle',
+                    tooltip: l10n.clear,
                   ),
                   // Full screen
                   IconButton(
                     icon: const Icon(Icons.fullscreen),
                     onPressed: _toggleFullScreen,
-                    tooltip: 'Tam Ekran',
+                    tooltip: l10n.fullscreen,
                   ),
                   // Share
                   IconButton(
                     icon: const Icon(Icons.share),
                     onPressed: _showShareOptions,
-                    tooltip: 'Paylaş',
+                    tooltip: l10n.share,
                   ),
                 ],
               ),
@@ -336,7 +362,7 @@ class _ColoringScreenState extends State<ColoringScreen> {
                         ),
                       )
                     : const Icon(Icons.save),
-                label: Text(_isSaving ? 'Kaydediliyor...' : 'Kaydet'),
+                label: Text(_isSaving ? l10n.saving : l10n.save),
               ),
       ),
     );
@@ -365,6 +391,7 @@ class _ColoringScreenState extends State<ColoringScreen> {
                 currentTool: provider.currentTool,
                 selectedColor: provider.selectedColor,
                 brushSize: provider.brushSize,
+                paintTexture: provider.paintTexture,
                 onTap: (x, y) {
                   if (provider.currentTool == DrawingTool.fill) {
                     final filledPixels = provider.fillArea(x, y);
@@ -397,18 +424,47 @@ class _ColoringScreenState extends State<ColoringScreen> {
           bottom: 100,
           child: _buildZoomButtons(),
         ),
-        // Collapsible left panel
+        // Panel expand button (shown when collapsed)
+        if (_isPanelCollapsed)
+          Positioned(
+            left: 8,
+            top: MediaQuery.of(context).size.height / 2 - 24,
+            child: GestureDetector(
+              onTap: () => setState(() => _isPanelCollapsed = false),
+              child: Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.95),
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.15),
+                      blurRadius: 8,
+                      offset: const Offset(2, 2),
+                    ),
+                  ],
+                ),
+                child: Icon(
+                  Icons.chevron_right,
+                  color: AppTheme.primaryColor,
+                  size: 28,
+                ),
+              ),
+            ),
+          ),
+        // Collapsible & resizable left panel
         AnimatedPositioned(
           duration: const Duration(milliseconds: 200),
           curve: Curves.easeInOut,
-          left: _isPanelCollapsed ? -70 : 0,
+          left: _isPanelCollapsed ? -_panelWidth : 0,
           top: 0,
           bottom: 0,
           child: Row(
             children: [
               // Panel content
               Container(
-                width: 70,
+                width: _panelWidth,
                 decoration: BoxDecoration(
                   color: Colors.white.withValues(alpha: 0.95),
                   boxShadow: [
@@ -432,35 +488,41 @@ class _ColoringScreenState extends State<ColoringScreen> {
                         return _buildBrushSizeSlider();
                       },
                     ),
+                    // Texture button (opens popup)
+                    _buildTextureButton(),
                     // Color palette
-                    const Expanded(child: ColorPalette()),
+                    Expanded(child: ColorPalette(width: _panelWidth)),
+                    // Toggle button (at bottom of panel)
+                    _buildPanelToggleButton(),
                   ],
                 ),
               ),
-              // Toggle button
-              GestureDetector(
-                onTap: () => setState(() => _isPanelCollapsed = !_isPanelCollapsed),
-                child: Container(
-                  width: 24,
-                  height: 60,
-                  decoration: BoxDecoration(
-                    color: AppTheme.primaryColor,
-                    borderRadius: const BorderRadius.horizontal(right: Radius.circular(12)),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.2),
-                        blurRadius: 4,
-                        offset: const Offset(2, 0),
+              // Resize handle (drag to expand/shrink panel)
+              if (!_isPanelCollapsed)
+                GestureDetector(
+                  onHorizontalDragUpdate: (details) {
+                    setState(() {
+                      _panelWidth = (_panelWidth + details.delta.dx).clamp(70.0, 150.0);
+                    });
+                  },
+                  child: MouseRegion(
+                    cursor: SystemMouseCursors.resizeColumn,
+                    child: Container(
+                      width: 8,
+                      color: Colors.transparent,
+                      child: Center(
+                        child: Container(
+                          width: 3,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            color: Colors.grey.withValues(alpha: 0.5),
+                            borderRadius: BorderRadius.circular(2),
+                          ),
+                        ),
                       ),
-                    ],
-                  ),
-                  child: Icon(
-                    _isPanelCollapsed ? Icons.chevron_right : Icons.chevron_left,
-                    color: Colors.white,
-                    size: 20,
+                    ),
                   ),
                 ),
-              ),
             ],
           ),
         ),
@@ -468,7 +530,43 @@ class _ColoringScreenState extends State<ColoringScreen> {
     );
   }
 
+  Widget _buildPanelToggleButton() {
+    return GestureDetector(
+      onTap: () => setState(() => _isPanelCollapsed = !_isPanelCollapsed),
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        decoration: BoxDecoration(
+          color: AppTheme.primaryColor.withValues(alpha: 0.1),
+          border: Border(
+            top: BorderSide(color: Colors.grey.withValues(alpha: 0.2)),
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.chevron_left,
+              color: AppTheme.primaryColor,
+              size: 20,
+            ),
+            const SizedBox(width: 4),
+            Text(
+              AppLocalizations.of(context)!.hide,
+              style: TextStyle(
+                color: AppTheme.primaryColor,
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _buildToolSelector() {
+    final l10n = AppLocalizations.of(context)!;
     return Consumer<ColoringProvider>(
       builder: (context, provider, _) {
         return Container(
@@ -479,21 +577,21 @@ class _ColoringScreenState extends State<ColoringScreen> {
             children: [
               _ToolButton(
                 icon: Icons.format_color_fill,
-                label: 'Doldur',
+                label: l10n.fill,
                 isSelected: provider.currentTool == DrawingTool.fill,
                 onTap: () => provider.setCurrentTool(DrawingTool.fill),
               ),
               const SizedBox(height: 8),
               _ToolButton(
                 icon: Icons.edit,
-                label: 'Kalem',
+                label: l10n.pencil,
                 isSelected: provider.currentTool == DrawingTool.pencil,
                 onTap: () => provider.setCurrentTool(DrawingTool.pencil),
               ),
               const SizedBox(height: 8),
               _ToolButton(
                 icon: Icons.auto_fix_high,
-                label: 'Silgi',
+                label: l10n.eraser,
                 isSelected: provider.currentTool == DrawingTool.eraser,
                 onTap: () => provider.setCurrentTool(DrawingTool.eraser),
               ),
@@ -536,6 +634,181 @@ class _ColoringScreenState extends State<ColoringScreen> {
         );
       },
     );
+  }
+
+  Widget _buildTextureButton() {
+    return Consumer<ColoringProvider>(
+      builder: (context, provider, _) {
+        return Container(
+          width: _panelWidth,
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+          child: GestureDetector(
+            onTap: () => _showTexturePopup(context, provider),
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+              decoration: BoxDecoration(
+                color: Colors.grey.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(
+                  color: Colors.grey.withValues(alpha: 0.3),
+                ),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    provider.paintTexture.icon,
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                  const SizedBox(width: 6),
+                  Flexible(
+                    child: Text(
+                      provider.paintTexture.displayName,
+                      style: const TextStyle(
+                        fontSize: 11,
+                        color: AppTheme.textSecondary,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  const SizedBox(width: 4),
+                  Icon(
+                    Icons.arrow_drop_down,
+                    size: 16,
+                    color: AppTheme.textSecondary,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void _showTexturePopup(BuildContext context, ColoringProvider provider) {
+    final l10n = AppLocalizations.of(context)!;
+    showDialog(
+      context: context,
+      builder: (context) => Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                l10n.paintTexture,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                l10n.paintTextureDescription,
+                style: TextStyle(
+                  fontSize: 13,
+                  color: AppTheme.textSecondary,
+                ),
+              ),
+              const SizedBox(height: 16),
+              ...PaintTexture.values.map((texture) {
+                final isSelected = texture == provider.paintTexture;
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: InkWell(
+                    onTap: () {
+                      provider.setPaintTexture(texture);
+                      Navigator.pop(context);
+                    },
+                    borderRadius: BorderRadius.circular(12),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                      decoration: BoxDecoration(
+                        color: isSelected
+                            ? AppTheme.primaryColor.withValues(alpha: 0.15)
+                            : Colors.grey.withValues(alpha: 0.05),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: isSelected
+                              ? AppTheme.primaryColor
+                              : Colors.grey.withValues(alpha: 0.2),
+                          width: isSelected ? 2 : 1,
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          Text(
+                            texture.icon,
+                            style: const TextStyle(fontSize: 28),
+                          ),
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  _getTextureDisplayName(texture, l10n),
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+                                    color: isSelected ? AppTheme.primaryColor : AppTheme.textPrimary,
+                                  ),
+                                ),
+                                Text(
+                                  _getTextureDescription(texture, l10n),
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: AppTheme.textSecondary,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          if (isSelected)
+                            Icon(
+                              Icons.check_circle,
+                              color: AppTheme.primaryColor,
+                            ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              }),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  String _getTextureDisplayName(PaintTexture texture, AppLocalizations l10n) {
+    switch (texture) {
+      case PaintTexture.none:
+        return l10n.textureNone;
+      case PaintTexture.canvas:
+        return l10n.textureCanvas;
+      case PaintTexture.paper:
+        return l10n.texturePaper;
+      case PaintTexture.watercolor:
+        return l10n.textureWatercolor;
+    }
+  }
+
+  String _getTextureDescription(PaintTexture texture, AppLocalizations l10n) {
+    switch (texture) {
+      case PaintTexture.none:
+        return l10n.textureNoneDesc;
+      case PaintTexture.canvas:
+        return l10n.textureCanvasDesc;
+      case PaintTexture.paper:
+        return l10n.texturePaperDesc;
+      case PaintTexture.watercolor:
+        return l10n.textureWatercolorDesc;
+    }
   }
 
   Widget _buildZoomButtons() {
@@ -627,6 +900,7 @@ class _ColoringScreenState extends State<ColoringScreen> {
               currentTool: provider.currentTool,
               selectedColor: provider.selectedColor,
               brushSize: provider.brushSize,
+              paintTexture: provider.paintTexture,
               onTap: (x, y) {
                 if (provider.currentTool == DrawingTool.fill) {
                   final filledPixels = provider.fillArea(x, y);
@@ -796,6 +1070,50 @@ class _ColoringScreenState extends State<ColoringScreen> {
                       style: const TextStyle(color: Colors.white, fontSize: 12),
                     ),
                   ],
+                  // Texture selector
+                  const SizedBox(width: 16),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                    decoration: BoxDecoration(
+                      border: Border(
+                        left: BorderSide(color: Colors.white30, width: 1),
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: PaintTexture.values.map((texture) {
+                        final isSelected = texture == provider.paintTexture;
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 2),
+                          child: GestureDetector(
+                            onTap: () => provider.setPaintTexture(texture),
+                            child: Container(
+                              width: 32,
+                              height: 32,
+                              decoration: BoxDecoration(
+                                color: isSelected
+                                    ? Colors.white.withValues(alpha: 0.3)
+                                    : Colors.transparent,
+                                borderRadius: BorderRadius.circular(6),
+                                border: Border.all(
+                                  color: isSelected
+                                      ? Colors.white
+                                      : Colors.white30,
+                                  width: isSelected ? 2 : 1,
+                                ),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  texture.icon,
+                                  style: const TextStyle(fontSize: 14),
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -849,24 +1167,25 @@ class _ColoringScreenState extends State<ColoringScreen> {
   }
 
   void _showClearConfirmation() {
+    final l10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Temizle'),
-        content: const Text('Tüm boyamayı temizlemek istediğinize emin misiniz?'),
+        title: Text(l10n.clearConfirmTitle),
+        content: Text(l10n.clearConfirmMessage),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('İptal'),
+            child: Text(l10n.cancel),
           ),
           TextButton(
             onPressed: () {
               Navigator.pop(context);
               _coloringProvider.clearAll();
             },
-            child: const Text(
-              'Temizle',
-              style: TextStyle(color: AppTheme.errorColor),
+            child: Text(
+              l10n.clear,
+              style: const TextStyle(color: AppTheme.errorColor),
             ),
           ),
         ],

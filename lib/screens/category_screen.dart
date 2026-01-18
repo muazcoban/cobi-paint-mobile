@@ -1,22 +1,63 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import '../providers/app_provider.dart';
 import '../models/category.dart';
 import '../models/coloring_image.dart';
+import '../services/ad_service.dart';
 import '../theme/app_theme.dart';
 import 'coloring_screen.dart';
 
-class CategoryScreen extends StatelessWidget {
+class CategoryScreen extends StatefulWidget {
   final Category category;
 
   const CategoryScreen({super.key, required this.category});
 
   @override
+  State<CategoryScreen> createState() => _CategoryScreenState();
+}
+
+class _CategoryScreenState extends State<CategoryScreen> {
+  final AdService _adService = AdService();
+  bool _isBannerLoaded = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadBannerAd();
+  }
+
+  @override
+  void dispose() {
+    _adService.disposeBannerAd();
+    super.dispose();
+  }
+
+  void _loadBannerAd() {
+    final provider = context.read<AppProvider>();
+    // Pro kullanicilara reklam gosterme
+    if (provider.settings.isPro) return;
+
+    _adService.loadBannerAd(
+      onAdLoaded: () {
+        if (mounted) {
+          setState(() => _isBannerLoaded = true);
+        }
+      },
+      onAdFailed: () {
+        if (mounted) {
+          setState(() => _isBannerLoaded = false);
+        }
+      },
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(category.name),
+        title: Text(widget.category.name),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios),
           onPressed: () => Navigator.pop(context),
@@ -24,7 +65,7 @@ class CategoryScreen extends StatelessWidget {
       ),
       body: Consumer<AppProvider>(
         builder: (context, provider, _) {
-          final images = provider.getImagesForCategory(category.id);
+          final images = provider.getImagesForCategory(widget.category.id);
 
           if (images.isEmpty) {
             return Center(
@@ -32,7 +73,7 @@ class CategoryScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    category.icon,
+                    widget.category.icon,
                     style: const TextStyle(fontSize: 80),
                   ),
                   const SizedBox(height: 20),
@@ -56,18 +97,33 @@ class CategoryScreen extends StatelessWidget {
             );
           }
 
-          return GridView.builder(
-            padding: const EdgeInsets.all(16),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 16,
-              mainAxisSpacing: 16,
-              childAspectRatio: 1.0,
-            ),
-            itemCount: images.length,
-            itemBuilder: (context, index) {
-              return _ImageCard(image: images[index]);
-            },
+          return Column(
+            children: [
+              // Banner reklam alani
+              if (_isBannerLoaded && _adService.bannerAd != null && !provider.settings.isPro)
+                Container(
+                  alignment: Alignment.center,
+                  width: _adService.bannerAd!.size.width.toDouble(),
+                  height: _adService.bannerAd!.size.height.toDouble(),
+                  child: AdWidget(ad: _adService.bannerAd!),
+                ),
+              // Resim gridi
+              Expanded(
+                child: GridView.builder(
+                  padding: const EdgeInsets.all(16),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 16,
+                    mainAxisSpacing: 16,
+                    childAspectRatio: 1.0,
+                  ),
+                  itemCount: images.length,
+                  itemBuilder: (context, index) {
+                    return _ImageCard(image: images[index]);
+                  },
+                ),
+              ),
+            ],
           );
         },
       ),

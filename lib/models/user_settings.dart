@@ -6,8 +6,10 @@ class UserSettings {
   final String language;
   final bool soundEnabled;
   final double soundVolume;
+  final int coloringCompletedCount; // Reklam gosterimi icin boyama sayaci
 
   static const int maxFreeImportsPerDay = 3;
+  static const int coloringsBeforeAd = 2; // Kac boyamada bir reklam gosterilecek
 
   UserSettings({
     this.isPro = false,
@@ -17,6 +19,7 @@ class UserSettings {
     this.language = 'tr',
     this.soundEnabled = true,
     this.soundVolume = 0.7,
+    this.coloringCompletedCount = 0,
   }) : lastImportDate = lastImportDate ?? DateTime.now();
 
   factory UserSettings.fromJson(Map<String, dynamic> json) {
@@ -30,6 +33,7 @@ class UserSettings {
       language: json['language'] ?? 'tr',
       soundEnabled: json['soundEnabled'] ?? true,
       soundVolume: (json['soundVolume'] ?? 0.7).toDouble(),
+      coloringCompletedCount: json['coloringCompletedCount'] ?? 0,
     );
   }
 
@@ -42,6 +46,7 @@ class UserSettings {
       'language': language,
       'soundEnabled': soundEnabled,
       'soundVolume': soundVolume,
+      'coloringCompletedCount': coloringCompletedCount,
     };
   }
 
@@ -53,6 +58,7 @@ class UserSettings {
     String? language,
     bool? soundEnabled,
     double? soundVolume,
+    int? coloringCompletedCount,
   }) {
     return UserSettings(
       isPro: isPro ?? this.isPro,
@@ -62,7 +68,15 @@ class UserSettings {
       language: language ?? this.language,
       soundEnabled: soundEnabled ?? this.soundEnabled,
       soundVolume: soundVolume ?? this.soundVolume,
+      coloringCompletedCount: coloringCompletedCount ?? this.coloringCompletedCount,
     );
+  }
+
+  /// Reklam gosterilmeli mi kontrol eder
+  /// Pro kullanicilar icin her zaman false doner
+  bool shouldShowAd() {
+    if (isPro) return false;
+    return coloringCompletedCount >= coloringsBeforeAd;
   }
 
   bool canImportToday() {

@@ -66,5 +66,13 @@
 			<string>cstr6suwn9.skadnetwork</string>
 		</dict>
 	</array>
+
+	<!-- Google Mobile Ads -->
+	<key>GADApplicationIdentifier</key>
+	<string>ca-app-pub-5547492389514605~7682406592</string>
+
+	<!-- App Tracking Transparency -->
+	<key>NSUserTrackingUsageDescription</key>
+	<string>Size daha iyi reklamlar gostermek icin izin gerekli</string>
 </dict>
 </plist>
