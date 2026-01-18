@@ -6,9 +6,10 @@ import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 import '../models/coloring_image.dart';
 import '../providers/app_provider.dart';
-import '../services/image_processing_service.dart';
+import '../services/opencv_image_service.dart';
 import '../theme/app_theme.dart';
 import 'coloring_screen.dart';
+import 'line_edit_screen.dart';
 import 'pro_screen.dart';
 
 class ImportScreen extends StatefulWidget {
@@ -20,14 +21,15 @@ class ImportScreen extends StatefulWidget {
 
 class _ImportScreenState extends State<ImportScreen> {
   final ImagePicker _picker = ImagePicker();
-  final ImageProcessingService _imageProcessingService = ImageProcessingService();
+  final OpenCVImageService _imageService = OpenCVImageService();
 
   bool _isProcessing = false;
   Uint8List? _originalImage;
   Uint8List? _processedImage;
 
-  // Processing parameters
-  int _edgeThreshold = 30;
+  // Processing parameters - OpenCV pipeline
+  int _detailLevel = 1; // 0: düşük, 1: orta, 2: yüksek
+  int _smoothness = 1; // 0: az, 1: orta, 2: çok
   int _lineThickness = 2;
 
   @override
@@ -80,18 +82,38 @@ class _ImportScreenState extends State<ImportScreen> {
                   // Processing options
                   if (!_isProcessing && _processedImage != null) ...[
                     _ProcessingOptions(
-                      edgeThreshold: _edgeThreshold,
+                      detailLevel: _detailLevel,
+                      smoothness: _smoothness,
                       lineThickness: _lineThickness,
-                      onEdgeThresholdChanged: (value) {
-                        setState(() => _edgeThreshold = value.round());
+                      onDetailLevelChanged: (value) {
+                        setState(() => _detailLevel = value.round());
+                        _reprocessImage();
+                      },
+                      onSmoothnessChanged: (value) {
+                        setState(() => _smoothness = value.round());
                         _reprocessImage();
                       },
                       onLineThicknessChanged: (value) {
                         setState(() => _lineThickness = value.round());
                         _reprocessImage();
                       },
+                      onPresetSelected: _applyPreset,
                     ),
                     const SizedBox(height: 20),
+
+                    // Çizgi düzenleme butonu
+                    SizedBox(
+                      width: double.infinity,
+                      child: OutlinedButton.icon(
+                        onPressed: _openLineEditor,
+                        icon: const Icon(Icons.edit),
+                        label: const Text('Çizgileri Düzenle'),
+                        style: OutlinedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
 
                     // Action buttons
                     Row(
@@ -201,9 +223,10 @@ class _ImportScreenState extends State<ImportScreen> {
     setState(() => _isProcessing = true);
 
     try {
-      final processed = await _imageProcessingService.convertToColoringPage(
+      final processed = await _imageService.convertToColoringPage(
         imageData,
-        edgeThreshold: _edgeThreshold,
+        detailLevel: _detailLevel,
+        smoothness: _smoothness,
         lineThickness: _lineThickness,
       );
 
@@ -226,9 +249,39 @@ class _ImportScreenState extends State<ImportScreen> {
     setState(() {
       _originalImage = null;
       _processedImage = null;
-      _edgeThreshold = 30;
+      _detailLevel = 1;
+      _smoothness = 1;
       _lineThickness = 2;
     });
+  }
+
+  void _applyPreset(ImagePreset preset) {
+    final params = preset.params;
+    setState(() {
+      _detailLevel = params.detailLevel;
+      _smoothness = params.smoothness;
+      _lineThickness = params.lineThickness;
+    });
+    _reprocessImage();
+  }
+
+  Future<void> _openLineEditor() async {
+    if (_processedImage == null) return;
+
+    final editedImage = await Navigator.push<Uint8List>(
+      context,
+      MaterialPageRoute(
+        builder: (context) => LineEditScreen(
+          processedImage: _processedImage!,
+        ),
+      ),
+    );
+
+    if (editedImage != null && mounted) {
+      setState(() {
+        _processedImage = editedImage;
+      });
+    }
   }
 
   Future<void> _saveAndStartColoring(AppProvider provider) async {
@@ -649,17 +702,49 @@ class _ErrorPreview extends StatelessWidget {
 }
 
 class _ProcessingOptions extends StatelessWidget {
-  final int edgeThreshold;
+  final int detailLevel;
+  final int smoothness;
   final int lineThickness;
-  final ValueChanged<double> onEdgeThresholdChanged;
+  final ValueChanged<double> onDetailLevelChanged;
+  final ValueChanged<double> onSmoothnessChanged;
   final ValueChanged<double> onLineThicknessChanged;
+  final void Function(ImagePreset) onPresetSelected;
 
   const _ProcessingOptions({
-    required this.edgeThreshold,
+    required this.detailLevel,
+    required this.smoothness,
     required this.lineThickness,
-    required this.onEdgeThresholdChanged,
+    required this.onDetailLevelChanged,
+    required this.onSmoothnessChanged,
     required this.onLineThicknessChanged,
+    required this.onPresetSelected,
   });
+
+  String _getDetailLevelText(int level) {
+    switch (level) {
+      case 0:
+        return 'Düşük (Portre)';
+      case 1:
+        return 'Orta (Normal)';
+      case 2:
+        return 'Yüksek (Detaylı)';
+      default:
+        return 'Orta';
+    }
+  }
+
+  String _getSmoothnessText(int level) {
+    switch (level) {
+      case 0:
+        return 'Az';
+      case 1:
+        return 'Orta';
+      case 2:
+        return 'Çok';
+      default:
+        return 'Orta';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -673,21 +758,53 @@ class _ProcessingOptions extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
-            'Ayarlar',
+            'Hazır Ayarlar',
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 16,
             ),
           ),
-          const SizedBox(height: 16),
-          Text('Kenar Hassasiyeti: $edgeThreshold'),
-          Slider(
-            value: edgeThreshold.toDouble(),
-            min: 10,
-            max: 100,
-            divisions: 18,
-            onChanged: onEdgeThresholdChanged,
+          const SizedBox(height: 12),
+          Row(
+            children: ImagePreset.values.map((preset) {
+              return Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  child: _PresetButton(
+                    preset: preset,
+                    onTap: () => onPresetSelected(preset),
+                  ),
+                ),
+              );
+            }).toList(),
           ),
+          const SizedBox(height: 20),
+          const Text(
+            'Manuel Ayarlar',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Text('Detay Seviyesi: ${_getDetailLevelText(detailLevel)}'),
+          Slider(
+            value: detailLevel.toDouble(),
+            min: 0,
+            max: 2,
+            divisions: 2,
+            onChanged: onDetailLevelChanged,
+          ),
+          const SizedBox(height: 8),
+          Text('Pürüzsüzlük: ${_getSmoothnessText(smoothness)}'),
+          Slider(
+            value: smoothness.toDouble(),
+            min: 0,
+            max: 2,
+            divisions: 2,
+            onChanged: onSmoothnessChanged,
+          ),
+          const SizedBox(height: 8),
           Text('Çizgi Kalınlığı: $lineThickness'),
           Slider(
             value: lineThickness.toDouble(),
@@ -697,6 +814,52 @@ class _ProcessingOptions extends StatelessWidget {
             onChanged: onLineThicknessChanged,
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _PresetButton extends StatelessWidget {
+  final ImagePreset preset;
+  final VoidCallback onTap;
+
+  const _PresetButton({
+    required this.preset,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+        decoration: BoxDecoration(
+          color: AppTheme.primaryColor.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: AppTheme.primaryColor.withOpacity(0.3),
+          ),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              preset.icon,
+              style: const TextStyle(fontSize: 24),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              preset.displayName,
+              style: const TextStyle(
+                fontSize: 11,
+                fontWeight: FontWeight.w500,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
       ),
     );
   }
