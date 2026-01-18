@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:image/image.dart' as img;
 import 'dart:collection';
+import '../utils/paint_textures.dart';
 
 /// Drawing tool types
 enum DrawingTool {
@@ -59,6 +60,9 @@ class ColoringProvider extends ChangeNotifier {
   // Manually drawn edge pixels (tracked separately for undo support)
   Set<int> _manualEdges = {};
 
+  // Paint texture for visual effect
+  PaintTexture _paintTexture = PaintTexture.none;
+
   // Getters
   Color get selectedColor => _selectedColor;
   Uint8List? get originalImageData => _originalImageData;
@@ -75,6 +79,12 @@ class ColoringProvider extends ChangeNotifier {
   int get coloredPixelsVersion => _coloredPixelsVersion;
   DrawingTool get currentTool => _currentTool;
   double get brushSize => _brushSize;
+  PaintTexture get paintTexture => _paintTexture;
+
+  void setPaintTexture(PaintTexture texture) {
+    _paintTexture = texture;
+    notifyListeners();
+  }
 
   void setEdgeThreshold(int value) {
     _edgeThreshold = value.clamp(10, 100);

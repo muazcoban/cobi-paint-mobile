@@ -2,6 +2,7 @@ import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import '../providers/coloring_provider.dart';
+import '../utils/paint_textures.dart';
 
 class ColoringCanvas extends StatefulWidget {
   final Uint8List imageData;
@@ -22,6 +23,9 @@ class ColoringCanvas extends StatefulWidget {
   final Function(List<Offset>, Color, double)? onDraw;
   final Function(List<Offset>, double)? onErase;
 
+  // Paint texture for visual effect
+  final PaintTexture paintTexture;
+
   const ColoringCanvas({
     super.key,
     required this.imageData,
@@ -39,6 +43,7 @@ class ColoringCanvas extends StatefulWidget {
     this.brushSize = 5.0,
     this.onDraw,
     this.onErase,
+    this.paintTexture = PaintTexture.none,
   });
 
   @override
@@ -48,6 +53,7 @@ class ColoringCanvas extends StatefulWidget {
 class _ColoringCanvasState extends State<ColoringCanvas> {
   ui.Image? _image;
   ui.Image? _coloredOverlay; // Bitmap buffer for colored pixels
+  ui.Image? _textureImage; // Texture overlay image
   int _lastColoredVersion = -1; // Track last rendered version
 
   // Gesture state - captured at gesture START, never modified during gesture
@@ -78,11 +84,16 @@ class _ColoringCanvasState extends State<ColoringCanvas> {
     if (oldWidget.imageData != widget.imageData) {
       _loadImage();
       _coloredOverlay = null;
+      _textureImage = null;
       _lastColoredVersion = -1;
     }
     // Rebuild overlay only when colored pixels actually change
     if (oldWidget.coloredPixelsVersion != widget.coloredPixelsVersion) {
       _buildColoredOverlay();
+    }
+    // Rebuild texture when texture type changes
+    if (oldWidget.paintTexture != widget.paintTexture) {
+      _buildTextureImage();
     }
   }
 
@@ -94,6 +105,32 @@ class _ColoringCanvasState extends State<ColoringCanvas> {
         _image = frame.image;
       });
       _buildColoredOverlay();
+      _buildTextureImage();
+    }
+  }
+
+  /// Build texture image based on selected paint texture
+  Future<void> _buildTextureImage() async {
+    if (widget.paintTexture == PaintTexture.none) {
+      if (mounted && _textureImage != null) {
+        setState(() {
+          _textureImage = null;
+        });
+      }
+      return;
+    }
+
+    // Generate texture image
+    final textureImage = await TextureGenerator.createTextureImage(
+      widget.paintTexture,
+      widget.imageWidth,
+      widget.imageHeight,
+    );
+
+    if (mounted) {
+      setState(() {
+        _textureImage = textureImage;
+      });
     }
   }
 
@@ -163,6 +200,7 @@ class _ColoringCanvasState extends State<ColoringCanvas> {
   @override
   void dispose() {
     _coloredOverlay?.dispose();
+    _textureImage?.dispose();
     _strokeNotifier.dispose();
     super.dispose();
   }
@@ -293,6 +331,7 @@ class _ColoringCanvasState extends State<ColoringCanvas> {
                       painter: _ColoringPainter(
                         image: _image!,
                         coloredOverlay: _coloredOverlay,
+                        textureImage: _textureImage,
                         imageWidth: widget.imageWidth,
                         imageHeight: widget.imageHeight,
                         coloredPixelsVersion: _lastColoredVersion,
@@ -586,6 +625,7 @@ class _ColoringCanvasState extends State<ColoringCanvas> {
 class _ColoringPainter extends CustomPainter {
   final ui.Image image;
   final ui.Image? coloredOverlay; // Pre-rendered bitmap buffer
+  final ui.Image? textureImage; // Texture overlay for paint effect
   final int imageWidth;
   final int imageHeight;
   final int coloredPixelsVersion; // Version for efficient change detection
@@ -601,6 +641,7 @@ class _ColoringPainter extends CustomPainter {
   _ColoringPainter({
     required this.image,
     required this.coloredOverlay,
+    this.textureImage,
     required this.imageWidth,
     required this.imageHeight,
     required this.coloredPixelsVersion,
@@ -648,6 +689,20 @@ class _ColoringPainter extends CustomPainter {
     // Draw colored overlay (bitmap buffer - single draw call instead of thousands)
     if (coloredOverlay != null) {
       canvas.drawImageRect(coloredOverlay!, srcRect, dstRect, Paint());
+
+      // Draw texture overlay on top of colored areas (only where colored)
+      if (textureImage != null) {
+        // Use srcIn blend mode to only show texture where colored overlay exists
+        canvas.saveLayer(dstRect, Paint());
+        canvas.drawImageRect(coloredOverlay!, srcRect, dstRect, Paint());
+        canvas.drawImageRect(
+          textureImage!,
+          srcRect,
+          dstRect,
+          Paint()..blendMode = ui.BlendMode.srcATop,
+        );
+        canvas.restore();
+      }
     }
 
     // Draw current stroke preview
@@ -718,6 +773,7 @@ class _ColoringPainter extends CustomPainter {
     // Use version comparison instead of Map reference comparison
     return oldDelegate.image != image ||
         oldDelegate.coloredOverlay != coloredOverlay ||
+        oldDelegate.textureImage != textureImage ||
         oldDelegate.coloredPixelsVersion != coloredPixelsVersion ||
         oldDelegate.scale != scale ||
         oldDelegate.offset != offset ||

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../l10n/app_localizations.dart';
 import '../providers/app_provider.dart';
 import '../theme/app_theme.dart';
 import '../models/category.dart';
@@ -20,6 +21,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       body: IndexedStack(
         index: _currentIndex,
@@ -33,7 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
         decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.1),
+              color: Colors.black.withValues(alpha: 0.1),
               blurRadius: 10,
               offset: const Offset(0, -5),
             ),
@@ -42,21 +45,21 @@ class _HomeScreenState extends State<HomeScreen> {
         child: BottomNavigationBar(
           currentIndex: _currentIndex,
           onTap: (index) => setState(() => _currentIndex = index),
-          items: const [
+          items: [
             BottomNavigationBarItem(
-              icon: Icon(Icons.palette_outlined),
-              activeIcon: Icon(Icons.palette),
-              label: 'Boyama',
+              icon: const Icon(Icons.palette_outlined),
+              activeIcon: const Icon(Icons.palette),
+              label: l10n.categories,
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.collections_outlined),
-              activeIcon: Icon(Icons.collections),
-              label: 'Resimlerim',
+              icon: const Icon(Icons.collections_outlined),
+              activeIcon: const Icon(Icons.collections),
+              label: l10n.myArtworks,
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.settings_outlined),
-              activeIcon: Icon(Icons.settings),
-              label: 'Ayarlar',
+              icon: const Icon(Icons.settings_outlined),
+              activeIcon: const Icon(Icons.settings),
+              label: l10n.settings,
             ),
           ],
         ),
@@ -159,6 +162,8 @@ class _CategoriesTab extends StatelessWidget {
 class _WelcomeSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Container(
       margin: const EdgeInsets.all(16),
       padding: const EdgeInsets.all(20),
@@ -171,7 +176,7 @@ class _WelcomeSection extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: AppTheme.primaryColor.withOpacity(0.3),
+            color: AppTheme.primaryColor.withValues(alpha: 0.3),
             blurRadius: 15,
             offset: const Offset(0, 8),
           ),
@@ -183,9 +188,9 @@ class _WelcomeSection extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Merhaba! 👋',
-                  style: TextStyle(
+                Text(
+                  '${l10n.welcome} 👋',
+                  style: const TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
@@ -193,10 +198,10 @@ class _WelcomeSection extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Bugün ne boyamak istersin?',
+                  l10n.welcomeMessage,
                   style: TextStyle(
                     fontSize: 16,
-                    color: Colors.white.withOpacity(0.9),
+                    color: Colors.white.withValues(alpha: 0.9),
                   ),
                 ),
               ],

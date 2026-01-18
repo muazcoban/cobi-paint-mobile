@@ -1,7 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../l10n/app_localizations.dart';
 import '../providers/app_provider.dart';
+import '../providers/locale_provider.dart';
 import '../services/purchase_service.dart';
 import '../services/sound_service.dart';
 import '../theme/app_theme.dart';
@@ -12,9 +14,12 @@ class SettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final localeProvider = context.watch<LocaleProvider>();
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Ayarlar'),
+        title: Text(l10n.settings),
         automaticallyImplyLeading: false,
       ),
       body: Consumer<AppProvider>(
@@ -26,6 +31,17 @@ class SettingsScreen extends StatelessWidget {
               // TODO: Uncomment when ready to enable in-app purchases
               // _ProStatusCard(isPro: provider.settings.isPro),
               // const SizedBox(height: 20),
+
+              // Language Selection
+              _SectionTitle(title: l10n.language),
+              _LanguageSelector(
+                currentLocale: localeProvider.locale,
+                onLanguageSelected: (locale) {
+                  localeProvider.setLocale(locale);
+                },
+              ),
+
+              const SizedBox(height: 20),
 
               // Theme Selection
               _SectionTitle(title: 'Tema'),
@@ -44,7 +60,7 @@ class SettingsScreen extends StatelessWidget {
               const SizedBox(height: 20),
 
               // Sound Settings
-              _SectionTitle(title: 'Ses'),
+              _SectionTitle(title: l10n.soundEffects),
               _SoundSettingsTile(
                 soundEnabled: provider.settings.soundEnabled,
                 soundVolume: provider.settings.soundVolume,
@@ -69,11 +85,11 @@ class SettingsScreen extends StatelessWidget {
               const SizedBox(height: 20),
 
               // App Info
-              _SectionTitle(title: 'Uygulama'),
+              _SectionTitle(title: l10n.about),
               _SettingsTile(
                 icon: Icons.info_outline,
-                title: 'Hakkında',
-                subtitle: 'Versiyon 1.0.0',
+                title: l10n.about,
+                subtitle: '${l10n.version} 1.0.0',
                 onTap: () => _showAboutDialog(context),
               ),
               // Restore purchases - temporarily hidden for initial launch
@@ -431,6 +447,72 @@ class _ThemeSelector extends StatelessWidget {
                       fontSize: 11,
                       fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                       color: isSelected ? theme.primary : AppTheme.textSecondary,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        }).toList(),
+      ),
+    );
+  }
+}
+
+class _LanguageSelector extends StatelessWidget {
+  final Locale currentLocale;
+  final ValueChanged<Locale> onLanguageSelected;
+
+  const _LanguageSelector({
+    required this.currentLocale,
+    required this.onLanguageSelected,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final languages = [
+      {'code': 'tr', 'name': 'Turkce', 'flag': '\u{1F1F9}\u{1F1F7}'},
+      {'code': 'en', 'name': 'English', 'flag': '\u{1F1FA}\u{1F1F8}'},
+    ];
+
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: languages.map((lang) {
+          final isSelected = currentLocale.languageCode == lang['code'];
+          return GestureDetector(
+            onTap: () => onLanguageSelected(Locale(lang['code']!)),
+            child: Container(
+              width: 100,
+              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+              decoration: BoxDecoration(
+                color: isSelected
+                    ? AppTheme.primaryColor.withValues(alpha: 0.15)
+                    : Colors.transparent,
+                borderRadius: BorderRadius.circular(12),
+                border: isSelected
+                    ? Border.all(color: AppTheme.primaryColor, width: 2)
+                    : Border.all(color: Colors.grey.withValues(alpha: 0.2)),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    lang['flag']!,
+                    style: const TextStyle(fontSize: 24),
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    lang['name']!,
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                      color: isSelected ? AppTheme.primaryColor : AppTheme.textSecondary,
                     ),
                   ),
                 ],
