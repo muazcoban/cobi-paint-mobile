@@ -152,6 +152,60 @@ abstract class AppLocalizations {
   /// **'Doğa'**
   String get nature;
 
+  /// No description provided for @things.
+  ///
+  /// In tr, this message translates to:
+  /// **'Eşyalar'**
+  String get things;
+
+  /// No description provided for @pageLevel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sayfa zorluğu'**
+  String get pageLevel;
+
+  /// No description provided for @pageLevelDesc.
+  ///
+  /// In tr, this message translates to:
+  /// **'Çocuk birkaç sayfa boyadıkça daha zor sayfalar öne gelir. Hiçbir sayfa kilitli değildir.'**
+  String get pageLevelDesc;
+
+  /// No description provided for @levelAuto.
+  ///
+  /// In tr, this message translates to:
+  /// **'Otomatik'**
+  String get levelAuto;
+
+  /// No description provided for @level1.
+  ///
+  /// In tr, this message translates to:
+  /// **'Büyük alanlar'**
+  String get level1;
+
+  /// No description provided for @level2.
+  ///
+  /// In tr, this message translates to:
+  /// **'Daha çok alan'**
+  String get level2;
+
+  /// No description provided for @level3.
+  ///
+  /// In tr, this message translates to:
+  /// **'İnce ayrıntı'**
+  String get level3;
+
+  /// No description provided for @licenses.
+  ///
+  /// In tr, this message translates to:
+  /// **'Lisanslar'**
+  String get licenses;
+
+  /// Home card that opens a blank page for free drawing
+  ///
+  /// In tr, this message translates to:
+  /// **'Çiz'**
+  String get freeDraw;
+
   /// Food category
   ///
   /// In tr, this message translates to:

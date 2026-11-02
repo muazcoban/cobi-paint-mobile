@@ -5,6 +5,7 @@ import '../l10n/app_localizations.dart';
 import '../providers/app_provider.dart';
 import '../models/category.dart';
 import '../models/coloring_image.dart';
+import '../data/page_order.dart';
 import '../models/saved_artwork.dart';
 import '../services/sound_service.dart';
 import '../theme/app_theme.dart';
@@ -55,7 +56,8 @@ class CategoryScreen extends StatelessWidget {
             Expanded(
               child: Consumer<AppProvider>(
                 builder: (context, provider, _) {
-                  final images = provider.getImagesForCategory(category.id);
+                  final level = currentLevel(provider.settings, provider.savedArtworks, provider.pagesById);
+                  final images = orderPages(provider.getImagesForCategory(category.id), level);
                   if (images.isEmpty) {
                     return Center(child: Text(category.icon, style: const TextStyle(fontSize: 96)));
                   }
@@ -74,7 +76,7 @@ class CategoryScreen extends StatelessWidget {
                       ),
                       itemCount: images.length,
                       itemBuilder: (context, index) =>
-                          _PageCard(image: images[index], artwork: latest[images[index].id]),
+                          _PageCard(image: images[index], artwork: latest[images[index].id], highlighted: images[index].level == level),
                     ),
                   );
                 },
@@ -91,7 +93,10 @@ class _PageCard extends StatelessWidget {
   final ColoringImage image;
   final SavedArtwork? artwork;
 
-  const _PageCard({required this.image, this.artwork});
+  /// Pages of the child's current level get a quiet coloured rim.
+  final bool highlighted;
+
+  const _PageCard({required this.image, this.artwork, this.highlighted = false});
 
   @override
   Widget build(BuildContext context) {
@@ -110,6 +115,7 @@ class _PageCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(20),
+          border: highlighted ? Border.all(color: const Color(0xFFFFD54F), width: 4) : null,
           boxShadow: [
             BoxShadow(color: Colors.black.withValues(alpha: 0.08), blurRadius: 10, offset: const Offset(0, 4)),
           ],

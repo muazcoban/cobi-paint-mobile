@@ -14,6 +14,12 @@ import 'screens/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // The coloring pages are drawn from Fluent UI Emoji (MIT); its notice
+  // shows with the other licences in the Parents area.
+  LicenseRegistry.addLicense(() async* {
+    final text = await rootBundle.loadString('assets/licenses/fluentui-emoji.txt');
+    yield LicenseEntryWithLineBreaks(const ['Fluent UI Emoji (coloring pages)'], text);
+  });
 
   // Set preferred orientations
   await SystemChrome.setPreferredOrientations([

@@ -65,17 +65,9 @@ LabelMap _buildAsset(String path) {
   return RegionBuilder.build(page.rgba, page.width, page.height);
 }
 
-/// Pages whose art has nothing a toddler's finger can fill: open outlines
-/// (cloud, lightning), bare lines (snowflake) or only tiny parts (palm,
-/// cherry blossom). Redraw them in phase 3; a page leaves this list once
-/// it passes [PageCheck].
-const _pagesToRedraw = [
-  'nature_snowflake',
-  'nature_cloud',
-  'nature_lightning',
-  'plant_palm',
-  'plant_cherry_blossom',
-];
+/// Pages that fail [PageCheck] and still ship, listed by id so a new bad
+/// page cannot slip in unnoticed. Empty since the Fluent UI Emoji pages.
+const _pagesToRedraw = <String>[];
 
 void main() {
   test('a one-pixel diagonal line keeps both sides apart', () {
@@ -185,6 +177,8 @@ void main() {
         expect(map.labels.where((l) => l == 0), isEmpty, reason: page.imagePath);
         final check = PageCheck.of(map, RegionBuilder.lineMask(asset.rgba, asset.width, asset.height));
         if (check.problems.isNotEmpty) failing.add(page.id);
+        // The level in the catalog is the one the page check computes.
+        expect(page.level, check.level, reason: page.id);
       }
       expect(failing, unorderedEquals(_pagesToRedraw));
     });

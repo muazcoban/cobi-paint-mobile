@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../l10n/app_localizations.dart';
+import '../data/free_pages.dart';
 import '../models/category.dart';
 import '../models/saved_artwork.dart';
 import '../providers/app_provider.dart';
@@ -9,6 +10,7 @@ import '../theme/app_theme.dart';
 import '../widgets/kid_button.dart';
 import '../widgets/parental_gate.dart';
 import 'category_screen.dart';
+import 'coloring_screen.dart';
 import 'my_artworks_screen.dart';
 import 'parents_screen.dart';
 
@@ -59,8 +61,10 @@ class HomeScreen extends StatelessWidget {
                             childAspectRatio: 0.95,
                           ),
                           delegate: SliverChildBuilderDelegate(
-                            (context, index) => _CategoryCard(category: provider.categories[index]),
-                            childCount: provider.categories.length,
+                            (context, index) => index == 0
+                                ? const _DrawCard()
+                                : _CategoryCard(category: provider.categories[index - 1]),
+                            childCount: provider.categories.length + 1,
                           ),
                         ),
                       ),
@@ -169,6 +173,55 @@ class _GalleryCard extends StatelessWidget {
   }
 }
 
+/// Blank page for free drawing: one card, always in the same place.
+class _DrawCard extends StatelessWidget {
+  const _DrawCard();
+
+  @override
+  Widget build(BuildContext context) {
+    final label = AppLocalizations.of(context)!.freeDraw;
+    return PressableCard(
+      semanticLabel: label,
+      onTap: () {
+        SoundService().playClickSound();
+        Navigator.push(context, MaterialPageRoute(builder: (_) => const ColoringScreen(image: freeDrawPage)));
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(24),
+          boxShadow: [
+            BoxShadow(color: Colors.black.withValues(alpha: 0.08), blurRadius: 10, offset: const Offset(0, 4)),
+          ],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Expanded(
+              child: FittedBox(
+                child: Padding(
+                  padding: EdgeInsets.all(12),
+                  child: Text('🖍️', style: TextStyle(fontSize: 72)),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(8, 0, 8, 14),
+              child: Text(
+                label,
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppTheme.textPrimary),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class _CategoryCard extends StatelessWidget {
   final Category category;
 
@@ -234,6 +287,8 @@ String categoryName(AppLocalizations l10n, Category category) {
       return l10n.nature;
     case 'food':
       return l10n.food;
+    case 'things':
+      return l10n.things;
     case 'import':
       return l10n.importedPages;
     default:

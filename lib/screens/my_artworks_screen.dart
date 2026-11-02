@@ -106,20 +106,27 @@ class _ArtworkCard extends StatelessWidget {
         openArtwork(context, artwork);
       },
       onLongPress: () => _showOptions(context),
+      // A framed picture on the wall: wooden frame, white mat, the whole
+      // drawing visible. The frame is only decoration, never a reward.
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
+          color: const Color(0xFFC98A4B),
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: const Color(0xFFA86A32), width: 2),
           boxShadow: [
-            BoxShadow(color: Colors.black.withValues(alpha: 0.08), blurRadius: 10, offset: const Offset(0, 4)),
+            BoxShadow(color: Colors.black.withValues(alpha: 0.18), blurRadius: 10, offset: const Offset(0, 5)),
           ],
         ),
-        clipBehavior: Clip.antiAlias,
-        child: Image.file(
-          file,
-          fit: BoxFit.cover,
-          errorBuilder: (context, error, stackTrace) =>
-              const Center(child: Icon(Icons.image_rounded, size: 56, color: Color(0xFFB0B3C6))),
+        padding: const EdgeInsets.all(10),
+        child: Container(
+          color: Colors.white,
+          padding: const EdgeInsets.all(6),
+          child: Image.file(
+            file,
+            fit: BoxFit.contain,
+            errorBuilder: (context, error, stackTrace) =>
+                const Center(child: Icon(Icons.image_rounded, size: 56, color: Color(0xFFB0B3C6))),
+          ),
         ),
       ),
     );
@@ -185,8 +192,7 @@ class _ArtworkCard extends StatelessWidget {
 /// imported before the freeze and pages that no longer exist in the app.
 void openArtwork(BuildContext context, SavedArtwork artwork) {
   final app = context.read<AppProvider>();
-  final page =
-      [...app.staticImages, ...app.importedImages].where((img) => img.id == artwork.originalImageId).firstOrNull ??
+  final page = app.pagesById[artwork.originalImageId] ??
       ColoringImage(
         id: artwork.originalImageId,
         name: artwork.name,

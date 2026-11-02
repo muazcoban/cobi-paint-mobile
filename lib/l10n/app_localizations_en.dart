@@ -36,6 +36,34 @@ class AppLocalizationsEn extends AppLocalizations {
   String get nature => 'Nature';
 
   @override
+  String get things => 'Things';
+
+  @override
+  String get pageLevel => 'Page difficulty';
+
+  @override
+  String get pageLevelDesc =>
+      'Harder pages move to the front as your child colours. No page is ever locked.';
+
+  @override
+  String get levelAuto => 'Automatic';
+
+  @override
+  String get level1 => 'Big areas';
+
+  @override
+  String get level2 => 'More areas';
+
+  @override
+  String get level3 => 'Fine detail';
+
+  @override
+  String get licenses => 'Licenses';
+
+  @override
+  String get freeDraw => 'Draw';
+
+  @override
   String get food => 'Food';
 
   @override

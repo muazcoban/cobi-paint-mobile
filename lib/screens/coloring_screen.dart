@@ -7,6 +7,8 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../engine/document/coloring_document.dart';
+import '../engine/document/page_progress.dart';
+import '../engine/region/label_map.dart';
 import '../l10n/app_localizations.dart';
 import '../models/coloring_image.dart';
 import '../models/saved_artwork.dart';
@@ -16,6 +18,7 @@ import '../services/haptics.dart';
 import '../services/sound_service.dart';
 import '../services/system_gestures.dart';
 import '../widgets/celebration.dart';
+import '../widgets/idle_hint.dart';
 import '../widgets/kid_button.dart';
 import '../widgets/kid_palette.dart';
 import '../widgets/paint_canvas.dart';
@@ -85,6 +88,9 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
   int _revisionAtOpen = 0;
 
   CanvasTool _tool = CanvasTool.fill;
+  bool _celebrated = false;
+  Timer? _hintTimer;
+  Offset? _hintAt;
   Color _color = littlePalette.first;
   int _brushStep = 1;
 
@@ -92,6 +98,8 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    // A blank page is for drawing, so the brush is in hand from the start.
+    if (widget.image.freeDraw) _tool = CanvasTool.marker;
     unawaited(_load());
     unawaited(_sound.preload());
     unawaited(SystemGestures.deferEdgeGestures(true));
@@ -99,6 +107,7 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
 
   @override
   void dispose() {
+    _hintTimer?.cancel();
     WidgetsBinding.instance.removeObserver(this);
     unawaited(SystemGestures.deferEdgeGestures(false));
     final saver = _saver;
@@ -179,11 +188,40 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
         _saver = saver;
         _revisionAtOpen = document.revision;
       });
+      _scheduleHint(app, document);
     } catch (e) {
       // No error text for the child: a sad face and the home button.
       debugPrint('Coloring page could not be loaded: $e');
       if (mounted) setState(() => _failed = true);
     }
+  }
+
+  /// After 6 s without a touch on an untouched page, the mascot shows where
+  /// a tap would land. Only until the child has made their first few fills,
+  /// never with a screen reader, and never on the free drawing page.
+  void _scheduleHint(AppProvider app, ColoringDocument document) {
+    final mode = context.read<AppProvider>().settings.ageMode;
+    if (widget.image.freeDraw || mode != AgeMode.little || !document.isEmpty) return;
+    if (app.settings.firstFills >= 3 || MediaQuery.accessibleNavigationOf(context)) return;
+    final map = document.map;
+    final background = PageProgress.backgroundLabel(map);
+    RegionInfo? biggest;
+    for (var label = 1; label <= map.regionCount; label++) {
+      if (label == background) continue;
+      final r = map.region(label);
+      if (biggest == null || r.area > biggest.area) biggest = r;
+    }
+    if (biggest == null) return;
+    final at = Offset((biggest.left + biggest.right) / 2 / map.width, (biggest.top + biggest.bottom) / 2 / map.height);
+    _hintTimer?.cancel();
+    _hintTimer = Timer(const Duration(seconds: 6), () {
+      if (mounted && (_document?.isEmpty ?? false)) setState(() => _hintAt = at);
+    });
+  }
+
+  void _hideHint() {
+    _hintTimer?.cancel();
+    if (_hintAt != null) setState(() => _hintAt = null);
   }
 
   // Actions ------------------------------------------------------------------
@@ -226,6 +264,21 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
   void _onFilled(int label) {
     unawaited(_sound.playFillSound());
     Haptics.light();
+    _hideHint();
+    final app = context.read<AppProvider>();
+    if (app.settings.firstFills < 3) {
+      unawaited(app.updateSettings(app.settings.copyWith(firstFills: app.settings.firstFills + 1)));
+    }
+    final document = _document;
+    if (document == null || _celebrated || widget.image.freeDraw) return;
+    // The picture is done when every finger-sized area has paint: one short
+    // celebration, no star and no counter anywhere.
+    if (PageProgress.of(document).isComplete) {
+      _celebrated = true;
+      _saver?.completed = true;
+      unawaited(_sound.playSuccessSound());
+      unawaited(showCelebration(context, duration: const Duration(milliseconds: 1100)));
+    }
   }
 
   /// Home: saves, celebrates when something was added, then leaves.
@@ -235,7 +288,7 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
     final navigator = Navigator.of(context);
     final save = _flush();
     final changed = (_document?.revision ?? 0) != _revisionAtOpen && !(_document?.isEmpty ?? true);
-    if (changed) {
+    if (changed && !_celebrated) {
       unawaited(_sound.playSuccessSound());
       await showCelebration(context, duration: const Duration(milliseconds: 1100));
     } else {
@@ -389,16 +442,28 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
           ),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(24),
-            child: Semantics(
-              label: AppLocalizations.of(context)!.canvasLabel,
-              child: PaintCanvas(
-                document: document,
-                page: page,
-                tool: _tool,
-                color: _color,
-                brushSize: side * (big ? _brushSteps[_brushStep] : _brushSteps[1]),
-                allowZoom: big,
-                onFilled: _onFilled,
+            child: Listener(
+              behavior: HitTestBehavior.translucent,
+              onPointerDown: (_) => _hideHint(),
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  Semantics(
+                    label: AppLocalizations.of(context)!.canvasLabel,
+                    child: PaintCanvas(
+                      document: document,
+                      page: page,
+                      tool: _tool,
+                      color: _color,
+                      brushSize: side * (big ? _brushSteps[_brushStep] : _brushSteps[1]),
+                      stayInside: !widget.image.freeDraw,
+                      eraseFills: !widget.image.freeDraw,
+                      allowZoom: big,
+                      onFilled: _onFilled,
+                    ),
+                  ),
+                  if (_hintAt != null) IdleHint(at: _hintAt!),
+                ],
               ),
             ),
           ),

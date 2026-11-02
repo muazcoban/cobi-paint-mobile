@@ -24,6 +24,7 @@ class PaintCanvas extends StatefulWidget {
     required this.color,
     required this.brushSize,
     this.stayInside = true,
+    this.eraseFills = true,
     this.allowZoom = false,
     this.paperColor = Colors.white,
     this.onFilled,
@@ -42,6 +43,9 @@ class PaintCanvas extends StatefulWidget {
 
   /// Marker strokes stay inside the region they started in.
   final bool stayInside;
+
+  /// Whether the eraser also clears the fill of the regions it crosses.
+  final bool eraseFills;
   final bool allowZoom;
   final Color paperColor;
 
@@ -259,7 +263,7 @@ class _PaintCanvasState extends State<PaintCanvas> with SingleTickerProviderStat
     );
     _liveKind = null;
     if (kind == BrushKind.eraser) {
-      widget.document.erase(stroke, _labelsAlong(stroke));
+      widget.document.erase(stroke, widget.eraseFills ? _labelsAlong(stroke) : const {});
     } else {
       widget.document.addStroke(stroke);
     }

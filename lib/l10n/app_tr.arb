@@ -36,6 +36,18 @@
   "@nature": {
     "description": "Nature category"
   },
+  "things": "Eşyalar",
+  "pageLevel": "Sayfa zorluğu",
+  "pageLevelDesc": "Çocuk birkaç sayfa boyadıkça daha zor sayfalar öne gelir. Hiçbir sayfa kilitli değildir.",
+  "levelAuto": "Otomatik",
+  "level1": "Büyük alanlar",
+  "level2": "Daha çok alan",
+  "level3": "İnce ayrıntı",
+  "licenses": "Lisanslar",
+  "freeDraw": "Çiz",
+  "@freeDraw": {
+    "description": "Home card that opens a blank page for free drawing"
+  },
   "food": "Yiyecekler",
   "@food": {
     "description": "Food category"

@@ -51,4 +51,12 @@ flutter:
     - assets/images/categories/characters/
     - assets/images/categories/nature/
     - assets/images/categories/food/
+    - assets/pages/animals/
+    - assets/pages/plants/
+    - assets/pages/food/
+    - assets/pages/vehicles/
+    - assets/pages/nature/
+    - assets/pages/things/
+    - assets/pages/free/
+    - assets/licenses/
     - assets/sounds/

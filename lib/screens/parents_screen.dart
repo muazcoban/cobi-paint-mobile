@@ -51,6 +51,21 @@ class ParentsScreen extends StatelessWidget {
               ],
             ),
           ),
+          _Section(l10n.pageLevel),
+          Text(l10n.pageLevelDesc),
+          const SizedBox(height: 8),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              for (final entry in {0: l10n.levelAuto, 1: l10n.level1, 2: l10n.level2, 3: l10n.level3}.entries)
+                ChoiceChip(
+                  label: Text(entry.value),
+                  selected: settings.level == entry.key,
+                  onSelected: (_) => app.updateSettings(settings.copyWith(level: entry.key)),
+                ),
+            ],
+          ),
           _Section(l10n.language),
           Wrap(
             spacing: 8,
@@ -129,6 +144,13 @@ class ParentsScreen extends StatelessWidget {
             title: Text(l10n.privacyPolicy),
             trailing: const Icon(Icons.chevron_right_rounded),
             onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const PrivacyScreen())),
+          ),
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            leading: const Icon(Icons.article_outlined),
+            title: Text(l10n.licenses),
+            trailing: const Icon(Icons.chevron_right_rounded),
+            onTap: () => showLicensePage(context: context, applicationName: 'Cobi Paint'),
           ),
           ListTile(
             contentPadding: EdgeInsets.zero,

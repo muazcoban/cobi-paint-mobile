@@ -30,6 +30,9 @@ class ArtworkAutosaver {
   final Duration delay;
 
   SavedArtwork? _artwork;
+
+  /// Set once every finger-sized area has paint; kept on every save.
+  bool completed = false;
   Timer? _timer;
   bool _saving = false;
   bool _again = false;
@@ -92,6 +95,7 @@ class ArtworkAutosaver {
         name: image.name,
         createdAt: _artwork?.createdAt ?? now,
         updatedAt: now,
+        isCompleted: completed || (_artwork?.isCompleted ?? false),
         schema: 2,
       );
       await app.saveArtwork(saved);

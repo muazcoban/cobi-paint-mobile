@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import '../data/builtin_images.dart';
+import '../data/free_pages.dart';
 import '../engine/region/region_service.dart';
 import '../models/user_settings.dart';
 import '../models/category.dart';
@@ -27,6 +28,13 @@ class AppProvider extends ChangeNotifier {
   UserSettings get settings => _settings;
   List<Category> get categories => _categories;
   List<ColoringImage> get staticImages => builtInImages;
+
+  /// Every page a saved artwork can point at, by id.
+  Map<String, ColoringImage> get pagesById => {
+        for (final p in builtInImages) p.id: p,
+        for (final p in _importedImages) p.id: p,
+        freeDrawPage.id: freeDrawPage,
+      };
   List<ColoringImage> get importedImages => _importedImages;
   List<SavedArtwork> get savedArtworks => _savedArtworks;
   bool get isLoading => _isLoading;
@@ -59,9 +67,10 @@ class AppProvider extends ChangeNotifier {
       // Pages imported before the freeze stay reachable through the import category.
       _importedImages = await _storageService.getImportedImages();
 
-      // Load categories, showing the import category only when it has pages
+      // Only categories that have pages: the import category once photos
+      // were imported, and no category whose pages left the bundle.
       _categories = Category.getDefaultCategories()
-          .where((c) => !c.isImportCategory || _importedImages.isNotEmpty)
+          .where((c) => getImagesForCategory(c.id).isNotEmpty)
           .toList()
         ..sort((a, b) => a.order.compareTo(b.order));
 

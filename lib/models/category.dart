@@ -39,56 +39,13 @@ class Category {
 
   static List<Category> getDefaultCategories() {
     return [
-      Category(
-        id: 'animals',
-        name: 'Hayvanlar',
-        nameEn: 'Animals',
-        icon: '🐾',
-        order: 1,
-      ),
-      Category(
-        id: 'plants',
-        name: 'Bitkiler',
-        nameEn: 'Plants',
-        icon: '🌸',
-        order: 2,
-      ),
-      Category(
-        id: 'vehicles',
-        name: 'Araçlar',
-        nameEn: 'Vehicles',
-        icon: '🚗',
-        order: 3,
-      ),
-      Category(
-        id: 'characters',
-        name: 'Karakterler',
-        nameEn: 'Characters',
-        icon: '👸',
-        order: 4,
-      ),
-      Category(
-        id: 'nature',
-        name: 'Doğa',
-        nameEn: 'Nature',
-        icon: '🌈',
-        order: 5,
-      ),
-      Category(
-        id: 'food',
-        name: 'Yiyecekler',
-        nameEn: 'Food',
-        icon: '🍎',
-        order: 6,
-      ),
-      Category(
-        id: 'import',
-        name: 'İçe Aktar',
-        nameEn: 'Import',
-        icon: '📥',
-        order: 99,
-        isImportCategory: true,
-      ),
+      Category(id: 'animals', name: 'Hayvanlar', nameEn: 'Animals', icon: '🐾', order: 1),
+      Category(id: 'plants', name: 'Bitkiler', nameEn: 'Plants', icon: '🌸', order: 2),
+      Category(id: 'vehicles', name: 'Araçlar', nameEn: 'Vehicles', icon: '🚗', order: 3),
+      Category(id: 'nature', name: 'Doğa', nameEn: 'Nature', icon: '🌈', order: 5),
+      Category(id: 'food', name: 'Yiyecekler', nameEn: 'Food', icon: '🍎', order: 6),
+      Category(id: 'things', name: 'Eşyalar', nameEn: 'Things', icon: '🧸', order: 7),
+      Category(id: 'import', name: 'İçe Aktar', nameEn: 'Import', icon: '📥', order: 99, isImportCategory: true),
     ];
   }
 }

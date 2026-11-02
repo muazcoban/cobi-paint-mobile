@@ -1,0 +1,1677 @@
+{
+ "source": {
+  "name": "Fluent UI Emoji",
+  "repo": "microsoft/fluentui-emoji",
+  "commit": "1ffb34c752ecf5d402f04cfb4b392c77f57c54bc",
+  "license": "MIT",
+  "licenseFile": "assets/licenses/fluentui-emoji.txt",
+  "style": "Flat"
+ },
+ "notes": "Subjects chosen for 2-5 year olds: everyday animals, plants, food, vehicles, weather, toys. No people, faces, flags, brands, weapons, alcohol or religious symbols.",
+ "pages": [
+  {
+   "code": "1f401",
+   "name": "mouse",
+   "nameTr": "fare",
+   "nameEn": "mouse",
+   "category": "animals",
+   "subgroup": "animal-mammal"
+  },
+  {
+   "code": "1f404",
+   "name": "cow",
+   "nameTr": "inek",
+   "nameEn": "cow",
+   "category": "animals",
+   "subgroup": "animal-mammal"
+  },
+  {
+   "code": "1f405",
+   "name": "tiger",
+   "nameTr": "kaplan",
+   "nameEn": "tiger",
+   "category": "animals",
+   "subgroup": "animal-mammal"
+  },
+  {
+   "code": "1f406",
+   "name": "leopard",
+   "nameTr": "leopar",
+   "nameEn": "leopard",
+   "category": "animals",
+   "subgroup": "animal-mammal"
+  },
+  {
+   "code": "1f407",
+   "name": "rabbit",
+   "nameTr": "tavşan",
+   "nameEn": "rabbit",
+   "category": "animals",
+   "subgroup": "animal-mammal"
+  },
+  {
+   "code": "1f408",
+   "name": "cat",
+   "nameTr": "kedi",
+   "nameEn": "cat",
+   "category": "animals",
+   "subgroup": "animal-mammal"
+  },
+  {
+   "code": "1f409",
+   "name": "dragon",
+   "nameTr": "ejderha",
+   "nameEn": "dragon",
+   "category": "animals",
+   "subgroup": "animal-reptile"
+  },
+  {
+   "code": "1f40a",
+   "name": "crocodile",
+   "nameTr": "timsah",
+   "nameEn": "crocodile",
+   "category": "animals",
+   "subgroup": "animal-reptile"
+  },
+  {
+   "code": "1f40b",
+   "name": "whale",
+   "nameTr": "balina",
+   "nameEn": "whale",
+   "category": "animals",
+   "subgroup": "animal-marine"
+  },
+  {
+   "code": "1f40c",
+   "name": "snail",
+   "nameTr": "salyangoz",
+   "nameEn": "snail",
+   "category": "animals",
+   "subgroup": "animal-bug"
+  },
+  {
+   "code": "1f40d",
+   "name": "snake",
+   "nameTr": "yılan",
+   "nameEn": "snake",
+   "category": "animals",
+   "subgroup": "animal-reptile"
+  },
+  {
+   "code": "1f40e",
+   "name": "horse",
+   "nameTr": "at",
+   "nameEn": "horse",
+   "category": "animals",
+   "subgroup": "animal-mammal"
+  },
+  {
+   "code": "1f410",
+   "name": "goat",
+   "nameTr": "keçi",
+   "nameEn": "goat",
+   "category": "animals",
+   "subgroup": "animal-mammal"
+  },
+  {
+   "code": "1f412",
+   "name": "monkey",
+   "nameTr": "maymun",
+   "nameEn": "monkey",
+   "category": "animals",
+   "subgroup": "animal-mammal"
+  },
+  {
+   "code": "1f413",
+   "name": "rooster",
+   "nameTr": "horoz",
+   "nameEn": "rooster",
+   "category": "animals",
+   "subgroup": "animal-bird"
+  },
+  {
+   "code": "1f414",
+   "name": "chicken",
+   "nameTr": "tavuk",
+   "nameEn": "chicken",
+   "category": "animals",
+   "subgroup": "animal-bird"
+  },
+  {
+   "code": "1f415",
+   "name": "dog",
+   "nameTr": "köpek",
+   "nameEn": "dog",
+   "category": "animals",
+   "subgroup": "animal-mammal"
+  },
+  {
+   "code": "1f416",
+   "name": "pig",
+   "nameTr": "domuz",
+   "nameEn": "pig",
+   "category": "animals",
+   "subgroup": "animal-mammal"
+  },
+  {
+   "code": "1f418",
+   "name": "elephant",
+   "nameTr": "fil",
+   "nameEn": "elephant",
+   "category": "animals",
+   "subgroup": "animal-mammal"
+  },
+  {
+   "code": "1f419",
+   "name": "octopus",
+   "nameTr": "ahtapot",
+   "nameEn": "octopus",
+   "category": "animals",
+   "subgroup": "animal-marine"
+  },
+  {
+   "code": "1f41c",
+   "name": "ant",
+   "nameTr": "karınca",
+   "nameEn": "ant",
+   "category": "animals",
+   "subgroup": "animal-bug"
+  },
+  {
+   "code": "1f41d",
+   "name": "honeybee",
+   "nameTr": "bal arısı",
+   "nameEn": "honeybee",
+   "category": "animals",
+   "subgroup": "animal-bug"
+  },
+  {
+   "code": "1f41e",
+   "name": "lady beetle",
+   "nameTr": "uğur böceği",
+   "nameEn": "lady beetle",
+   "category": "animals",
+   "subgroup": "animal-bug"
+  },
+  {
+   "code": "1f41f",
+   "name": "fish",
+   "nameTr": "balık",
+   "nameEn": "fish",
+   "category": "animals",
+   "subgroup": "animal-marine"
+  },
+  {
+   "code": "1f420",
+   "name": "tropical fish",
+   "nameTr": "tropikal balık",
+   "nameEn": "tropical fish",
+   "category": "animals",
+   "subgroup": "animal-marine"
+  },
+  {
+   "code": "1f422",
+   "name": "turtle",
+   "nameTr": "kaplumbağa",
+   "nameEn": "turtle",
+   "category": "animals",
+   "subgroup": "animal-reptile"
+  },
+  {
+   "code": "1f423",
+   "name": "hatching chick",
+   "nameTr": "yumurtadan çıkan civciv",
+   "nameEn": "hatching chick",
+   "category": "animals",
+   "subgroup": "animal-bird"
+  },
+  {
+   "code": "1f426",
+   "name": "bird",
+   "nameTr": "kuş",
+   "nameEn": "bird",
+   "category": "animals",
+   "subgroup": "animal-bird"
+  },
+  {
+   "code": "1f427",
+   "name": "penguin",
+   "nameTr": "penguen",
+   "nameEn": "penguin",
+   "category": "animals",
+   "subgroup": "animal-bird"
+  },
+  {
+   "code": "1f428",
+   "name": "koala",
+   "nameTr": "koala",
+   "nameEn": "koala",
+   "category": "animals",
+   "subgroup": "animal-mammal"
+  },
+  {
+   "code": "1f429",
+   "name": "poodle",
+   "nameTr": "kaniş",
+   "nameEn": "poodle",
+   "category": "animals",
+   "subgroup": "animal-mammal"
+  },
+  {
+   "code": "1f42a",
+   "name": "camel",
+   "nameTr": "deve",
+   "nameEn": "camel",
+   "category": "animals",
+   "subgroup": "animal-mammal"
+  },
+  {
+   "code": "1f42c",
+   "name": "dolphin",
+   "nameTr": "yunus",
+   "nameEn": "dolphin",
+   "category": "animals",
+   "subgroup": "animal-marine"
+  },
+  {
+   "code": "1f433",
+   "name": "spouting whale",
+   "nameTr": "su püskürten balina",
+   "nameEn": "spouting whale",
+   "category": "animals",
+   "subgroup": "animal-marine"
+  },
+  {
+   "code": "1f438",
+   "name": "frog",
+   "nameTr": "kurbağa",
+   "nameEn": "frog",
+   "category": "animals",
+   "subgroup": "animal-amphibian"
+  },
+  {
+   "code": "1f439",
+   "name": "hamster",
+   "nameTr": "hamster",
+   "nameEn": "hamster",
+   "category": "animals",
+   "subgroup": "animal-mammal"
+  },
+  {
+   "code": "1f43a",
+   "name": "wolf",
+   "nameTr": "kurt",
+   "nameEn": "wolf",
+   "category": "animals",
+   "subgroup": "animal-mammal"
+  },
+  {
+   "code": "1f43b",
+   "name": "bear",
+   "nameTr": "ayı",
+   "nameEn": "bear",
+   "category": "animals",
+   "subgroup": "animal-mammal"
+  },
+  {
+   "code": "1f43c",
+   "name": "panda",
+   "nameTr": "panda",
+   "nameEn": "panda",
+   "category": "animals",
+   "subgroup": "animal-mammal"
+  },
+  {
+   "code": "1f43f",
+   "name": "chipmunk",
+   "nameTr": "sincap",
+   "nameEn": "chipmunk",
+   "category": "animals",
+   "subgroup": "animal-mammal"
+  },
+  {
+   "code": "1f54a",
+   "name": "dove",
+   "nameTr": "güvercin",
+   "nameEn": "dove",
+   "category": "animals",
+   "subgroup": "animal-bird"
+  },
+  {
+   "code": "1f980",
+   "name": "crab",
+   "nameTr": "yengeç",
+   "nameEn": "crab",
+   "category": "animals",
+   "subgroup": "animal-marine"
+  },
+  {
+   "code": "1f981",
+   "name": "lion",
+   "nameTr": "aslan",
+   "nameEn": "lion",
+   "category": "animals",
+   "subgroup": "animal-mammal"
+  },
+  {
+   "code": "1f983",
+   "name": "turkey",
+   "nameTr": "hindi",
+   "nameEn": "turkey",
+   "category": "animals",
+   "subgroup": "animal-bird"
+  },
+  {
+   "code": "1f984",
+   "name": "unicorn",
+   "nameTr": "tek boynuzlu at",
+   "nameEn": "unicorn",
+   "category": "animals",
+   "subgroup": "animal-mammal"
+  },
+  {
+   "code": "1f985",
+   "name": "eagle",
+   "nameTr": "kartal",
+   "nameEn": "eagle",
+   "category": "animals",
+   "subgroup": "animal-bird"
+  },
+  {
+   "code": "1f986",
+   "name": "duck",
+   "nameTr": "ördek",
+   "nameEn": "duck",
+   "category": "animals",
+   "subgroup": "animal-bird"
+  },
+  {
+   "code": "1f987",
+   "name": "bat",
+   "nameTr": "yarasa",
+   "nameEn": "bat",
+   "category": "animals",
+   "subgroup": "animal-mammal"
+  },
+  {
+   "code": "1f988",
+   "name": "shark",
+   "nameTr": "köpek balığı",
+   "nameEn": "shark",
+   "category": "animals",
+   "subgroup": "animal-marine"
+  },
+  {
+   "code": "1f989",
+   "name": "owl",
+   "nameTr": "baykuş",
+   "nameEn": "owl",
+   "category": "animals",
+   "subgroup": "animal-bird"
+  },
+  {
+   "code": "1f98a",
+   "name": "fox",
+   "nameTr": "tilki",
+   "nameEn": "fox",
+   "category": "animals",
+   "subgroup": "animal-mammal"
+  },
+  {
+   "code": "1f98b",
+   "name": "butterfly",
+   "nameTr": "kelebek",
+   "nameEn": "butterfly",
+   "category": "animals",
+   "subgroup": "animal-bug"
+  },
+  {
+   "code": "1f98c",
+   "name": "deer",
+   "nameTr": "geyik",
+   "nameEn": "deer",
+   "category": "animals",
+   "subgroup": "animal-mammal"
+  },
+  {
+   "code": "1f98d",
+   "name": "gorilla",
+   "nameTr": "goril",
+   "nameEn": "gorilla",
+   "category": "animals",
+   "subgroup": "animal-mammal"
+  },
+  {
+   "code": "1f98e",
+   "name": "lizard",
+   "nameTr": "kertenkele",
+   "nameEn": "lizard",
+   "category": "animals",
+   "subgroup": "animal-reptile"
+  },
+  {
+   "code": "1f98f",
+   "name": "rhinoceros",
+   "nameTr": "gergedan",
+   "nameEn": "rhinoceros",
+   "category": "animals",
+   "subgroup": "animal-mammal"
+  },
+  {
+   "code": "1f992",
+   "name": "giraffe",
+   "nameTr": "zürafa",
+   "nameEn": "giraffe",
+   "category": "animals",
+   "subgroup": "animal-mammal"
+  },
+  {
+   "code": "1f993",
+   "name": "zebra",
+   "nameTr": "zebra",
+   "nameEn": "zebra",
+   "category": "animals",
+   "subgroup": "animal-mammal"
+  },
+  {
+   "code": "1f994",
+   "name": "hedgehog",
+   "nameTr": "kirpi",
+   "nameEn": "hedgehog",
+   "category": "animals",
+   "subgroup": "animal-mammal"
+  },
+  {
+   "code": "1f995",
+   "name": "sauropod",
+   "nameTr": "soropod",
+   "nameEn": "sauropod",
+   "category": "animals",
+   "subgroup": "animal-reptile"
+  },
+  {
+   "code": "1f996",
+   "name": "T-Rex",
+   "nameTr": "T-Rex",
+   "nameEn": "T-Rex",
+   "category": "animals",
+   "subgroup": "animal-reptile"
+  },
+  {
+   "code": "1f998",
+   "name": "kangaroo",
+   "nameTr": "kanguru",
+   "nameEn": "kangaroo",
+   "category": "animals",
+   "subgroup": "animal-mammal"
+  },
+  {
+   "code": "1f999",
+   "name": "llama",
+   "nameTr": "lama",
+   "nameEn": "llama",
+   "category": "animals",
+   "subgroup": "animal-mammal"
+  },
+  {
+   "code": "1f99a",
+   "name": "peacock",
+   "nameTr": "tavus kuşu",
+   "nameEn": "peacock",
+   "category": "animals",
+   "subgroup": "animal-bird"
+  },
+  {
+   "code": "1f99b",
+   "name": "hippopotamus",
+   "nameTr": "hipopotam",
+   "nameEn": "hippopotamus",
+   "category": "animals",
+   "subgroup": "animal-mammal"
+  },
+  {
+   "code": "1f99c",
+   "name": "parrot",
+   "nameTr": "papağan",
+   "nameEn": "parrot",
+   "category": "animals",
+   "subgroup": "animal-bird"
+  },
+  {
+   "code": "1f99d",
+   "name": "raccoon",
+   "nameTr": "rakun",
+   "nameEn": "raccoon",
+   "category": "animals",
+   "subgroup": "animal-mammal"
+  },
+  {
+   "code": "1f9a2",
+   "name": "swan",
+   "nameTr": "kuğu",
+   "nameEn": "swan",
+   "category": "animals",
+   "subgroup": "animal-bird"
+  },
+  {
+   "code": "1f9a3",
+   "name": "mammoth",
+   "nameTr": "mamut",
+   "nameEn": "mammoth",
+   "category": "animals",
+   "subgroup": "animal-mammal"
+  },
+  {
+   "code": "1f9a4",
+   "name": "dodo",
+   "nameTr": "dodo kuşu",
+   "nameEn": "dodo",
+   "category": "animals",
+   "subgroup": "animal-bird"
+  },
+  {
+   "code": "1f9a5",
+   "name": "sloth",
+   "nameTr": "tembel hayvan",
+   "nameEn": "sloth",
+   "category": "animals",
+   "subgroup": "animal-mammal"
+  },
+  {
+   "code": "1f9a6",
+   "name": "otter",
+   "nameTr": "su samuru",
+   "nameEn": "otter",
+   "category": "animals",
+   "subgroup": "animal-mammal"
+  },
+  {
+   "code": "1f9a7",
+   "name": "orangutan",
+   "nameTr": "orangutan",
+   "nameEn": "orangutan",
+   "category": "animals",
+   "subgroup": "animal-mammal"
+  },
+  {
+   "code": "1f9a8",
+   "name": "skunk",
+   "nameTr": "kokarca",
+   "nameEn": "skunk",
+   "category": "animals",
+   "subgroup": "animal-mammal"
+  },
+  {
+   "code": "1f9a9",
+   "name": "flamingo",
+   "nameTr": "flamingo",
+   "nameEn": "flamingo",
+   "category": "animals",
+   "subgroup": "animal-bird"
+  },
+  {
+   "code": "1f9ab",
+   "name": "beaver",
+   "nameTr": "kunduz",
+   "nameEn": "beaver",
+   "category": "animals",
+   "subgroup": "animal-mammal"
+  },
+  {
+   "code": "1f9ac",
+   "name": "bison",
+   "nameTr": "bizon",
+   "nameEn": "bison",
+   "category": "animals",
+   "subgroup": "animal-mammal"
+  },
+  {
+   "code": "1f9ad",
+   "name": "seal",
+   "nameTr": "fok",
+   "nameEn": "seal",
+   "category": "animals",
+   "subgroup": "animal-marine"
+  },
+  {
+   "code": "1fabc",
+   "name": "jellyfish",
+   "nameTr": "denizanası",
+   "nameEn": "jellyfish",
+   "category": "animals",
+   "subgroup": "animal-marine"
+  },
+  {
+   "code": "1fabf",
+   "name": "goose",
+   "nameTr": "kaz",
+   "nameEn": "goose",
+   "category": "animals",
+   "subgroup": "animal-bird"
+  },
+  {
+   "code": "1facc",
+   "name": "monarch butterfly",
+   "nameTr": "kral kelebeği",
+   "nameEn": "monarch butterfly",
+   "category": "animals",
+   "subgroup": "animal-bug"
+  },
+  {
+   "code": "1facd",
+   "name": "orca",
+   "nameTr": "orka",
+   "nameEn": "orca",
+   "category": "animals",
+   "subgroup": "animal-marine"
+  },
+  {
+   "code": "1face",
+   "name": "moose",
+   "nameTr": "sığın",
+   "nameEn": "moose",
+   "category": "animals",
+   "subgroup": "animal-mammal"
+  },
+  {
+   "code": "1facf",
+   "name": "donkey",
+   "nameTr": "eşek",
+   "nameEn": "donkey",
+   "category": "animals",
+   "subgroup": "animal-mammal"
+  },
+  {
+   "code": "1f331",
+   "name": "seedling",
+   "nameTr": "filizlenme",
+   "nameEn": "seedling",
+   "category": "plants",
+   "subgroup": "plant-other"
+  },
+  {
+   "code": "1f332",
+   "name": "evergreen tree",
+   "nameTr": "yaprak dökmeyen ağaç",
+   "nameEn": "evergreen tree",
+   "category": "plants",
+   "subgroup": "plant-other"
+  },
+  {
+   "code": "1f333",
+   "name": "deciduous tree",
+   "nameTr": "yaprak döken ağaç",
+   "nameEn": "deciduous tree",
+   "category": "plants",
+   "subgroup": "plant-other"
+  },
+  {
+   "code": "1f334",
+   "name": "palm tree",
+   "nameTr": "palmiye ağacı",
+   "nameEn": "palm tree",
+   "category": "plants",
+   "subgroup": "plant-other"
+  },
+  {
+   "code": "1f335",
+   "name": "cactus",
+   "nameTr": "kaktüs",
+   "nameEn": "cactus",
+   "category": "plants",
+   "subgroup": "plant-other"
+  },
+  {
+   "code": "1f337",
+   "name": "tulip",
+   "nameTr": "lale",
+   "nameEn": "tulip",
+   "category": "plants",
+   "subgroup": "plant-flower"
+  },
+  {
+   "code": "1f338",
+   "name": "cherry blossom",
+   "nameTr": "kiraz çiçeği",
+   "nameEn": "cherry blossom",
+   "category": "plants",
+   "subgroup": "plant-flower"
+  },
+  {
+   "code": "1f339",
+   "name": "rose",
+   "nameTr": "gül",
+   "nameEn": "rose",
+   "category": "plants",
+   "subgroup": "plant-flower"
+  },
+  {
+   "code": "1f33a",
+   "name": "hibiscus",
+   "nameTr": "çingülü",
+   "nameEn": "hibiscus",
+   "category": "plants",
+   "subgroup": "plant-flower"
+  },
+  {
+   "code": "1f33b",
+   "name": "sunflower",
+   "nameTr": "ayçiçeği",
+   "nameEn": "sunflower",
+   "category": "plants",
+   "subgroup": "plant-flower"
+  },
+  {
+   "code": "1f340",
+   "name": "four leaf clover",
+   "nameTr": "dört yapraklı yonca",
+   "nameEn": "four leaf clover",
+   "category": "plants",
+   "subgroup": "plant-other"
+  },
+  {
+   "code": "1f341",
+   "name": "maple leaf",
+   "nameTr": "akçaağaç yaprağı",
+   "nameEn": "maple leaf",
+   "category": "plants",
+   "subgroup": "plant-other"
+  },
+  {
+   "code": "1f344",
+   "name": "mushroom",
+   "nameTr": "mantar",
+   "nameEn": "mushroom",
+   "category": "plants",
+   "subgroup": "plant-other"
+  },
+  {
+   "code": "1f490",
+   "name": "bouquet",
+   "nameTr": "buket",
+   "nameEn": "bouquet",
+   "category": "plants",
+   "subgroup": "plant-flower"
+  },
+  {
+   "code": "1fab4",
+   "name": "potted plant",
+   "nameTr": "saksı bitkisi",
+   "nameEn": "potted plant",
+   "category": "plants",
+   "subgroup": "plant-other"
+  },
+  {
+   "code": "1fab7",
+   "name": "lotus",
+   "nameTr": "nilüfer",
+   "nameEn": "lotus",
+   "category": "plants",
+   "subgroup": "plant-flower"
+  },
+  {
+   "code": "1faba",
+   "name": "nest with eggs",
+   "nameTr": "yumurta bulunan yuva",
+   "nameEn": "nest with eggs",
+   "category": "plants",
+   "subgroup": "plant-other"
+  },
+  {
+   "code": "1fabb",
+   "name": "hyacinth",
+   "nameTr": "sümbül",
+   "nameEn": "hyacinth",
+   "category": "plants",
+   "subgroup": "plant-flower"
+  },
+  {
+   "code": "2618",
+   "name": "shamrock",
+   "nameTr": "yonca",
+   "nameEn": "shamrock",
+   "category": "plants",
+   "subgroup": "plant-other"
+  },
+  {
+   "code": "1f32d",
+   "name": "hot dog",
+   "nameTr": "sosisli sandviç",
+   "nameEn": "hot dog",
+   "category": "food",
+   "subgroup": "food-prepared"
+  },
+  {
+   "code": "1f33d",
+   "name": "ear of corn",
+   "nameTr": "mısır koçanı",
+   "nameEn": "ear of corn",
+   "category": "food",
+   "subgroup": "food-vegetable"
+  },
+  {
+   "code": "1f345",
+   "name": "tomato",
+   "nameTr": "domates",
+   "nameEn": "tomato",
+   "category": "food",
+   "subgroup": "food-fruit"
+  },
+  {
+   "code": "1f347",
+   "name": "grapes",
+   "nameTr": "üzüm",
+   "nameEn": "grapes",
+   "category": "food",
+   "subgroup": "food-fruit"
+  },
+  {
+   "code": "1f348",
+   "name": "melon",
+   "nameTr": "kavun",
+   "nameEn": "melon",
+   "category": "food",
+   "subgroup": "food-fruit"
+  },
+  {
+   "code": "1f349",
+   "name": "watermelon",
+   "nameTr": "karpuz",
+   "nameEn": "watermelon",
+   "category": "food",
+   "subgroup": "food-fruit"
+  },
+  {
+   "code": "1f34a",
+   "name": "tangerine",
+   "nameTr": "mandalina",
+   "nameEn": "tangerine",
+   "category": "food",
+   "subgroup": "food-fruit"
+  },
+  {
+   "code": "1f34b",
+   "name": "lemon",
+   "nameTr": "limon",
+   "nameEn": "lemon",
+   "category": "food",
+   "subgroup": "food-fruit"
+  },
+  {
+   "code": "1f34c",
+   "name": "banana",
+   "nameTr": "muz",
+   "nameEn": "banana",
+   "category": "food",
+   "subgroup": "food-fruit"
+  },
+  {
+   "code": "1f34d",
+   "name": "pineapple",
+   "nameTr": "ananas",
+   "nameEn": "pineapple",
+   "category": "food",
+   "subgroup": "food-fruit"
+  },
+  {
+   "code": "1f34e",
+   "name": "red apple",
+   "nameTr": "kırmızı elma",
+   "nameEn": "red apple",
+   "category": "food",
+   "subgroup": "food-fruit"
+  },
+  {
+   "code": "1f34f",
+   "name": "green apple",
+   "nameTr": "yeşil elma",
+   "nameEn": "green apple",
+   "category": "food",
+   "subgroup": "food-fruit"
+  },
+  {
+   "code": "1f350",
+   "name": "pear",
+   "nameTr": "armut",
+   "nameEn": "pear",
+   "category": "food",
+   "subgroup": "food-fruit"
+  },
+  {
+   "code": "1f353",
+   "name": "strawberry",
+   "nameTr": "çilek",
+   "nameEn": "strawberry",
+   "category": "food",
+   "subgroup": "food-fruit"
+  },
+  {
+   "code": "1f354",
+   "name": "hamburger",
+   "nameTr": "hamburger",
+   "nameEn": "hamburger",
+   "category": "food",
+   "subgroup": "food-prepared"
+  },
+  {
+   "code": "1f355",
+   "name": "pizza",
+   "nameTr": "pizza dilimi",
+   "nameEn": "pizza",
+   "category": "food",
+   "subgroup": "food-prepared"
+  },
+  {
+   "code": "1f35e",
+   "name": "bread",
+   "nameTr": "ekmek",
+   "nameEn": "bread",
+   "category": "food",
+   "subgroup": "food-prepared"
+  },
+  {
+   "code": "1f35f",
+   "name": "french fries",
+   "nameTr": "patates kızartması",
+   "nameEn": "french fries",
+   "category": "food",
+   "subgroup": "food-prepared"
+  },
+  {
+   "code": "1f366",
+   "name": "soft ice cream",
+   "nameTr": "yumuşak dondurma",
+   "nameEn": "soft ice cream",
+   "category": "food",
+   "subgroup": "food-sweet"
+  },
+  {
+   "code": "1f368",
+   "name": "ice cream",
+   "nameTr": "dondurma",
+   "nameEn": "ice cream",
+   "category": "food",
+   "subgroup": "food-sweet"
+  },
+  {
+   "code": "1f369",
+   "name": "doughnut",
+   "nameTr": "donut",
+   "nameEn": "doughnut",
+   "category": "food",
+   "subgroup": "food-sweet"
+  },
+  {
+   "code": "1f36a",
+   "name": "cookie",
+   "nameTr": "kurabiye",
+   "nameEn": "cookie",
+   "category": "food",
+   "subgroup": "food-sweet"
+  },
+  {
+   "code": "1f36b",
+   "name": "chocolate bar",
+   "nameTr": "çikolata",
+   "nameEn": "chocolate bar",
+   "category": "food",
+   "subgroup": "food-sweet"
+  },
+  {
+   "code": "1f36c",
+   "name": "candy",
+   "nameTr": "şekerleme",
+   "nameEn": "candy",
+   "category": "food",
+   "subgroup": "food-sweet"
+  },
+  {
+   "code": "1f36d",
+   "name": "lollipop",
+   "nameTr": "lolipop",
+   "nameEn": "lollipop",
+   "category": "food",
+   "subgroup": "food-sweet"
+  },
+  {
+   "code": "1f37f",
+   "name": "popcorn",
+   "nameTr": "patlamış mısır",
+   "nameEn": "popcorn",
+   "category": "food",
+   "subgroup": "food-prepared"
+  },
+  {
+   "code": "1f382",
+   "name": "birthday cake",
+   "nameTr": "doğum günü pastası",
+   "nameEn": "birthday cake",
+   "category": "food",
+   "subgroup": "food-sweet"
+  },
+  {
+   "code": "1f950",
+   "name": "croissant",
+   "nameTr": "kruvasan",
+   "nameEn": "croissant",
+   "category": "food",
+   "subgroup": "food-prepared"
+  },
+  {
+   "code": "1f951",
+   "name": "avocado",
+   "nameTr": "avokado",
+   "nameEn": "avocado",
+   "category": "food",
+   "subgroup": "food-vegetable"
+  },
+  {
+   "code": "1f952",
+   "name": "cucumber",
+   "nameTr": "salatalık",
+   "nameEn": "cucumber",
+   "category": "food",
+   "subgroup": "food-vegetable"
+  },
+  {
+   "code": "1f954",
+   "name": "potato",
+   "nameTr": "patates",
+   "nameEn": "potato",
+   "category": "food",
+   "subgroup": "food-vegetable"
+  },
+  {
+   "code": "1f955",
+   "name": "carrot",
+   "nameTr": "havuç",
+   "nameEn": "carrot",
+   "category": "food",
+   "subgroup": "food-vegetable"
+  },
+  {
+   "code": "1f95a",
+   "name": "egg",
+   "nameTr": "yumurta",
+   "nameEn": "egg",
+   "category": "food",
+   "subgroup": "food-prepared"
+  },
+  {
+   "code": "1f95b",
+   "name": "glass of milk",
+   "nameTr": "süt bardağı",
+   "nameEn": "glass of milk",
+   "category": "food",
+   "subgroup": "drink"
+  },
+  {
+   "code": "1f95d",
+   "name": "kiwi fruit",
+   "nameTr": "kivi",
+   "nameEn": "kiwi fruit",
+   "category": "food",
+   "subgroup": "food-fruit"
+  },
+  {
+   "code": "1f95e",
+   "name": "pancakes",
+   "nameTr": "krep",
+   "nameEn": "pancakes",
+   "category": "food",
+   "subgroup": "food-prepared"
+  },
+  {
+   "code": "1f965",
+   "name": "coconut",
+   "nameTr": "Hindistan cevizi",
+   "nameEn": "coconut",
+   "category": "food",
+   "subgroup": "food-fruit"
+  },
+  {
+   "code": "1f966",
+   "name": "broccoli",
+   "nameTr": "brokoli",
+   "nameEn": "broccoli",
+   "category": "food",
+   "subgroup": "food-vegetable"
+  },
+  {
+   "code": "1f96a",
+   "name": "sandwich",
+   "nameTr": "sandviç",
+   "nameEn": "sandwich",
+   "category": "food",
+   "subgroup": "food-prepared"
+  },
+  {
+   "code": "1f96c",
+   "name": "leafy green",
+   "nameTr": "yeşil yapraklı sebze",
+   "nameEn": "leafy green",
+   "category": "food",
+   "subgroup": "food-vegetable"
+  },
+  {
+   "code": "1f96d",
+   "name": "mango",
+   "nameTr": "mango",
+   "nameEn": "mango",
+   "category": "food",
+   "subgroup": "food-fruit"
+  },
+  {
+   "code": "1f9c1",
+   "name": "cupcake",
+   "nameTr": "cupcake",
+   "nameEn": "cupcake",
+   "category": "food",
+   "subgroup": "food-sweet"
+  },
+  {
+   "code": "1f9c7",
+   "name": "waffle",
+   "nameTr": "waffle",
+   "nameEn": "waffle",
+   "category": "food",
+   "subgroup": "food-prepared"
+  },
+  {
+   "code": "1f9cb",
+   "name": "bubble tea",
+   "nameTr": "bubble tea",
+   "nameEn": "bubble tea",
+   "category": "food",
+   "subgroup": "drink"
+  },
+  {
+   "code": "1fad0",
+   "name": "blueberries",
+   "nameTr": "yaban mersini",
+   "nameEn": "blueberries",
+   "category": "food",
+   "subgroup": "food-fruit"
+  },
+  {
+   "code": "1f3cd",
+   "name": "motorcycle",
+   "nameTr": "motosiklet",
+   "nameEn": "motorcycle",
+   "category": "vehicles",
+   "subgroup": "transport-ground"
+  },
+  {
+   "code": "1f3ce",
+   "name": "racing car",
+   "nameTr": "yarış arabası",
+   "nameEn": "racing car",
+   "category": "vehicles",
+   "subgroup": "transport-ground"
+  },
+  {
+   "code": "1f680",
+   "name": "rocket",
+   "nameTr": "roket",
+   "nameEn": "rocket",
+   "category": "vehicles",
+   "subgroup": "transport-air"
+  },
+  {
+   "code": "1f681",
+   "name": "helicopter",
+   "nameTr": "helikopter",
+   "nameEn": "helicopter",
+   "category": "vehicles",
+   "subgroup": "transport-air"
+  },
+  {
+   "code": "1f686",
+   "name": "train",
+   "nameTr": "tren",
+   "nameEn": "train",
+   "category": "vehicles",
+   "subgroup": "transport-ground"
+  },
+  {
+   "code": "1f68a",
+   "name": "tram",
+   "nameTr": "tramvay",
+   "nameEn": "tram",
+   "category": "vehicles",
+   "subgroup": "transport-ground"
+  },
+  {
+   "code": "1f68c",
+   "name": "bus",
+   "nameTr": "otobüs",
+   "nameEn": "bus",
+   "category": "vehicles",
+   "subgroup": "transport-ground"
+  },
+  {
+   "code": "1f692",
+   "name": "fire engine",
+   "nameTr": "itfaiye arabası",
+   "nameEn": "fire engine",
+   "category": "vehicles",
+   "subgroup": "transport-ground"
+  },
+  {
+   "code": "1f695",
+   "name": "taxi",
+   "nameTr": "taksi",
+   "nameEn": "taxi",
+   "category": "vehicles",
+   "subgroup": "transport-ground"
+  },
+  {
+   "code": "1f697",
+   "name": "automobile",
+   "nameTr": "araba",
+   "nameEn": "automobile",
+   "category": "vehicles",
+   "subgroup": "transport-ground"
+  },
+  {
+   "code": "1f699",
+   "name": "sport utility vehicle",
+   "nameTr": "cip",
+   "nameEn": "sport utility vehicle",
+   "category": "vehicles",
+   "subgroup": "transport-ground"
+  },
+  {
+   "code": "1f69a",
+   "name": "delivery truck",
+   "nameTr": "nakliye kamyonu",
+   "nameEn": "delivery truck",
+   "category": "vehicles",
+   "subgroup": "transport-ground"
+  },
+  {
+   "code": "1f69c",
+   "name": "tractor",
+   "nameTr": "traktör",
+   "nameEn": "tractor",
+   "category": "vehicles",
+   "subgroup": "transport-ground"
+  },
+  {
+   "code": "1f6a2",
+   "name": "ship",
+   "nameTr": "gemi",
+   "nameEn": "ship",
+   "category": "vehicles",
+   "subgroup": "transport-water"
+  },
+  {
+   "code": "1f6a4",
+   "name": "speedboat",
+   "nameTr": "sürat teknesi",
+   "nameEn": "speedboat",
+   "category": "vehicles",
+   "subgroup": "transport-water"
+  },
+  {
+   "code": "1f6b2",
+   "name": "bicycle",
+   "nameTr": "bisiklet",
+   "nameEn": "bicycle",
+   "category": "vehicles",
+   "subgroup": "transport-ground"
+  },
+  {
+   "code": "1f6d9",
+   "name": "lighthouse",
+   "nameTr": "deniz feneri",
+   "nameEn": "lighthouse",
+   "category": "vehicles",
+   "subgroup": "transport-water"
+  },
+  {
+   "code": "1f6f6",
+   "name": "canoe",
+   "nameTr": "kano",
+   "nameEn": "canoe",
+   "category": "vehicles",
+   "subgroup": "transport-water"
+  },
+  {
+   "code": "26f4",
+   "name": "ferry",
+   "nameTr": "feribot",
+   "nameEn": "ferry",
+   "category": "vehicles",
+   "subgroup": "transport-water"
+  },
+  {
+   "code": "26f5",
+   "name": "sailboat",
+   "nameTr": "yelkenli tekne",
+   "nameEn": "sailboat",
+   "category": "vehicles",
+   "subgroup": "transport-water"
+  },
+  {
+   "code": "2708",
+   "name": "airplane",
+   "nameTr": "uçak",
+   "nameEn": "airplane",
+   "category": "vehicles",
+   "subgroup": "transport-air"
+  },
+  {
+   "code": "1f308",
+   "name": "rainbow",
+   "nameTr": "gökkuşağı",
+   "nameEn": "rainbow",
+   "category": "nature",
+   "subgroup": "sky & weather"
+  },
+  {
+   "code": "1f30a",
+   "name": "water wave",
+   "nameTr": "dalga",
+   "nameEn": "water wave",
+   "category": "nature",
+   "subgroup": "sky & weather"
+  },
+  {
+   "code": "1f30b",
+   "name": "volcano",
+   "nameTr": "yanardağ",
+   "nameEn": "volcano",
+   "category": "nature",
+   "subgroup": "place-geographic"
+  },
+  {
+   "code": "1f327",
+   "name": "cloud with rain",
+   "nameTr": "yağmur bulutu",
+   "nameEn": "cloud with rain",
+   "category": "nature",
+   "subgroup": "sky & weather"
+  },
+  {
+   "code": "1f328",
+   "name": "cloud with snow",
+   "nameTr": "kar bulutu",
+   "nameEn": "cloud with snow",
+   "category": "nature",
+   "subgroup": "sky & weather"
+  },
+  {
+   "code": "1f3d6",
+   "name": "beach with umbrella",
+   "nameTr": "plaj ve şemsiye",
+   "nameEn": "beach with umbrella",
+   "category": "nature",
+   "subgroup": "place-geographic"
+  },
+  {
+   "code": "2600",
+   "name": "sun",
+   "nameTr": "güneş",
+   "nameEn": "sun",
+   "category": "nature",
+   "subgroup": "sky & weather"
+  },
+  {
+   "code": "2601",
+   "name": "cloud",
+   "nameTr": "bulut",
+   "nameEn": "cloud",
+   "category": "nature",
+   "subgroup": "sky & weather"
+  },
+  {
+   "code": "2602",
+   "name": "umbrella",
+   "nameTr": "şemsiye",
+   "nameEn": "umbrella",
+   "category": "nature",
+   "subgroup": "sky & weather"
+  },
+  {
+   "code": "2603",
+   "name": "snowman",
+   "nameTr": "kardan adam",
+   "nameEn": "snowman",
+   "category": "nature",
+   "subgroup": "sky & weather"
+  },
+  {
+   "code": "26f0",
+   "name": "mountain",
+   "nameTr": "dağ",
+   "nameEn": "mountain",
+   "category": "nature",
+   "subgroup": "place-geographic"
+  },
+  {
+   "code": "2744",
+   "name": "snowflake",
+   "nameTr": "kar tanesi",
+   "nameEn": "snowflake",
+   "category": "nature",
+   "subgroup": "sky & weather"
+  },
+  {
+   "code": "2b50",
+   "name": "star",
+   "nameTr": "yıldız",
+   "nameEn": "star",
+   "category": "nature",
+   "subgroup": "sky & weather"
+  },
+  {
+   "code": "1f380",
+   "name": "ribbon",
+   "nameTr": "kurdele",
+   "nameEn": "ribbon",
+   "category": "things",
+   "subgroup": "event"
+  },
+  {
+   "code": "1f381",
+   "name": "wrapped gift",
+   "nameTr": "paketlenmiş hediye",
+   "nameEn": "wrapped gift",
+   "category": "things",
+   "subgroup": "event"
+  },
+  {
+   "code": "1f384",
+   "name": "Christmas tree",
+   "nameTr": "Noel ağacı",
+   "nameEn": "Christmas tree",
+   "category": "things",
+   "subgroup": "event"
+  },
+  {
+   "code": "1f388",
+   "name": "balloon",
+   "nameTr": "balon",
+   "nameEn": "balloon",
+   "category": "things",
+   "subgroup": "event"
+  },
+  {
+   "code": "1f389",
+   "name": "party popper",
+   "nameTr": "parti konfetisi",
+   "nameEn": "party popper",
+   "category": "things",
+   "subgroup": "event"
+  },
+  {
+   "code": "1f3be",
+   "name": "tennis",
+   "nameTr": "tenis",
+   "nameEn": "tennis",
+   "category": "things",
+   "subgroup": "sport"
+  },
+  {
+   "code": "1f3c0",
+   "name": "basketball",
+   "nameTr": "basketbol",
+   "nameEn": "basketball",
+   "category": "things",
+   "subgroup": "sport"
+  },
+  {
+   "code": "1f3e0",
+   "name": "house",
+   "nameTr": "ev",
+   "nameEn": "house",
+   "category": "things",
+   "subgroup": "place-building"
+  },
+  {
+   "code": "1f3eb",
+   "name": "school",
+   "nameTr": "okul",
+   "nameEn": "school",
+   "category": "things",
+   "subgroup": "place-building"
+  },
+  {
+   "code": "1f3f0",
+   "name": "castle",
+   "nameTr": "şato",
+   "nameEn": "castle",
+   "category": "things",
+   "subgroup": "place-building"
+  },
+  {
+   "code": "1f453",
+   "name": "glasses",
+   "nameTr": "gözlük",
+   "nameEn": "glasses",
+   "category": "things",
+   "subgroup": "clothing"
+  },
+  {
+   "code": "1f455",
+   "name": "t-shirt",
+   "nameTr": "tişört",
+   "nameEn": "t-shirt",
+   "category": "things",
+   "subgroup": "clothing"
+  },
+  {
+   "code": "1f45f",
+   "name": "running shoe",
+   "nameTr": "koşu ayakkabısı",
+   "nameEn": "running shoe",
+   "category": "things",
+   "subgroup": "clothing"
+  },
+  {
+   "code": "1f6dd",
+   "name": "playground slide",
+   "nameTr": "kaydırak",
+   "nameEn": "playground slide",
+   "category": "things",
+   "subgroup": "place-other"
+  },
+  {
+   "code": "1f941",
+   "name": "drum",
+   "nameTr": "davul",
+   "nameEn": "drum",
+   "category": "things",
+   "subgroup": "musical-instrument"
+  },
+  {
+   "code": "1f9f8",
+   "name": "teddy bear",
+   "nameTr": "oyuncak ayı",
+   "nameEn": "teddy bear",
+   "category": "things",
+   "subgroup": "game"
+  },
+  {
+   "code": "1fa70",
+   "name": "ballet shoes",
+   "nameTr": "bale ayakkabıları",
+   "nameEn": "ballet shoes",
+   "category": "things",
+   "subgroup": "clothing"
+  },
+  {
+   "code": "1fa80",
+   "name": "yo-yo",
+   "nameTr": "yoyo",
+   "nameEn": "yo-yo",
+   "category": "things",
+   "subgroup": "game"
+  },
+  {
+   "code": "1fa81",
+   "name": "kite",
+   "nameTr": "uçurtma",
+   "nameEn": "kite",
+   "category": "things",
+   "subgroup": "game"
+  },
+  {
+   "code": "1fa84",
+   "name": "magic wand",
+   "nameTr": "sihirli asa",
+   "nameEn": "magic wand",
+   "category": "things",
+   "subgroup": "game"
+  },
+  {
+   "code": "1fa85",
+   "name": "piñata",
+   "nameTr": "pinyata",
+   "nameEn": "piñata",
+   "category": "things",
+   "subgroup": "game"
+  },
+  {
+   "code": "1fa88",
+   "name": "flute",
+   "nameTr": "flüt",
+   "nameEn": "flute",
+   "category": "things",
+   "subgroup": "musical-instrument"
+  },
+  {
+   "code": "1fae7",
+   "name": "bubbles",
+   "nameTr": "baloncuk",
+   "nameEn": "bubbles",
+   "category": "things",
+   "subgroup": "household"
+  },
+  {
+   "code": "26bd",
+   "name": "soccer ball",
+   "nameTr": "futbol topu",
+   "nameEn": "soccer ball",
+   "category": "things",
+   "subgroup": "sport"
+  },
+  {
+   "code": "26be",
+   "name": "baseball",
+   "nameTr": "beyzbol",
+   "nameEn": "baseball",
+   "category": "things",
+   "subgroup": "sport"
+  },
+  {
+   "code": "26fa",
+   "name": "tent",
+   "nameTr": "çadır",
+   "nameEn": "tent",
+   "category": "things",
+   "subgroup": "place-other"
+  }
+ ]
+}

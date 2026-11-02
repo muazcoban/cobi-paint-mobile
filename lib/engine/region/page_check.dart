@@ -52,6 +52,14 @@ class PageCheck {
   /// Share of the page covered by lines.
   final double lineShare;
 
+  /// Difficulty: 1 = a few big areas, 2 = more areas, 3 = fine detail.
+  /// Same rule as level_for in tool/pages/build_pages.py.
+  int get level {
+    if (fingerRegions <= 4 && regions <= 10) return 1;
+    if (fingerRegions >= 8 || regions >= 16) return 3;
+    return 2;
+  }
+
   /// Reasons the page does not work for a toddler; empty when it does.
   List<String> get problems => [
         if (fingerRegions == 0) 'no area big enough for a finger',

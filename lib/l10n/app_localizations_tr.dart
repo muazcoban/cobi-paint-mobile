@@ -36,6 +36,34 @@ class AppLocalizationsTr extends AppLocalizations {
   String get nature => 'Doğa';
 
   @override
+  String get things => 'Eşyalar';
+
+  @override
+  String get pageLevel => 'Sayfa zorluğu';
+
+  @override
+  String get pageLevelDesc =>
+      'Çocuk birkaç sayfa boyadıkça daha zor sayfalar öne gelir. Hiçbir sayfa kilitli değildir.';
+
+  @override
+  String get levelAuto => 'Otomatik';
+
+  @override
+  String get level1 => 'Büyük alanlar';
+
+  @override
+  String get level2 => 'Daha çok alan';
+
+  @override
+  String get level3 => 'İnce ayrıntı';
+
+  @override
+  String get licenses => 'Lisanslar';
+
+  @override
+  String get freeDraw => 'Çiz';
+
+  @override
   String get food => 'Yiyecekler';
 
   @override
