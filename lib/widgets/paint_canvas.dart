@@ -9,6 +9,7 @@ import '../engine/document/coloring_document.dart';
 import '../engine/document/stroke.dart';
 import '../engine/input/canvas_gestures.dart';
 import '../engine/render/page_layers.dart';
+import 'motion.dart';
 
 export '../engine/input/canvas_gestures.dart' show CanvasTool;
 
@@ -155,7 +156,7 @@ class _PaintCanvasState extends State<PaintCanvas> with SingleTickerProviderStat
       previous?.dispose();
       return;
     }
-    if (animate && previous != null) {
+    if (animate && previous != null && !reduceMotion(context)) {
       _revealFrom?.dispose();
       _revealFrom = previous;
       unawaited(_reveal.forward(from: 0));

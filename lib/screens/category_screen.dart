@@ -73,7 +73,8 @@ class CategoryScreen extends StatelessWidget {
                         mainAxisSpacing: 16,
                       ),
                       itemCount: images.length,
-                      itemBuilder: (context, index) => _PageCard(image: images[index], artwork: latest[images[index].id]),
+                      itemBuilder: (context, index) =>
+                          _PageCard(image: images[index], artwork: latest[images[index].id]),
                     ),
                   );
                 },
@@ -94,29 +95,28 @@ class _PageCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Semantics(
-      button: true,
-      label: image.name,
-      child: GestureDetector(
-        onTap: () {
-          SoundService().playClickSound();
-          final existing = artwork;
-          if (existing != null) {
-            openArtwork(context, existing);
-          } else {
-            Navigator.push(context, MaterialPageRoute(builder: (_) => ColoringScreen(image: image)));
-          }
-        },
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(20),
-            boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.08), blurRadius: 10, offset: const Offset(0, 4))],
-          ),
-          clipBehavior: Clip.antiAlias,
-          padding: const EdgeInsets.all(8),
-          child: _buildImage(context),
+    return PressableCard(
+      semanticLabel: image.name,
+      onTap: () {
+        SoundService().playClickSound();
+        final existing = artwork;
+        if (existing != null) {
+          openArtwork(context, existing);
+        } else {
+          Navigator.push(context, MaterialPageRoute(builder: (_) => ColoringScreen(image: image)));
+        }
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(color: Colors.black.withValues(alpha: 0.08), blurRadius: 10, offset: const Offset(0, 4)),
+          ],
         ),
+        clipBehavior: Clip.antiAlias,
+        padding: const EdgeInsets.all(8),
+        child: _buildImage(context),
       ),
     );
   }
@@ -126,7 +126,9 @@ class _PageCard extends StatelessWidget {
     final existing = artwork;
     if (existing != null) {
       final storage = context.read<AppProvider>().storageService;
-      final file = storage.resolveArtworkFile(existing.thumbnailPath.isNotEmpty ? existing.thumbnailPath : existing.savedImagePath);
+      final file = storage.resolveArtworkFile(
+        existing.thumbnailPath.isNotEmpty ? existing.thumbnailPath : existing.savedImagePath,
+      );
       return Image.file(file, fit: BoxFit.contain, errorBuilder: (context, error, stack) => _page(placeholder));
     }
     return _page(placeholder);

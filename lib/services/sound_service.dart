@@ -32,7 +32,25 @@ class SoundService {
 
   /// Loads every sound ahead of the first tap.
   Future<void> preload() async {
+    await _configureSession();
     await Future.wait(_sounds.map(_player));
+  }
+
+  Future<void>? _session;
+
+  /// Sound effects follow the Ring/Silent switch and mix with other audio
+  /// (iOS ambient session); on Android they never take audio focus.
+  Future<void> _configureSession() {
+    return _session ??= AudioPlayer.global
+        .setAudioContext(AudioContext(
+          iOS: AudioContextIOS(category: AVAudioSessionCategory.ambient),
+          android: const AudioContextAndroid(
+            contentType: AndroidContentType.sonification,
+            usageType: AndroidUsageType.game,
+            audioFocus: AndroidAudioFocus.none,
+          ),
+        ))
+        .catchError((Object e) => debugPrint('Audio session setup failed: $e'));
   }
 
   /// Play a pop sound when filling an area
@@ -61,6 +79,7 @@ class SoundService {
     if (ready != null) return Future.value(ready);
     return _loading.putIfAbsent(name, () async {
       try {
+        await _configureSession();
         final player = AudioPlayer();
         await player.setReleaseMode(ReleaseMode.stop);
         await player.setPlayerMode(PlayerMode.lowLatency);

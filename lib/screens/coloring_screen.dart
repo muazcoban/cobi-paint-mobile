@@ -21,15 +21,27 @@ import 'coloring/artwork_autosaver.dart';
 
 /// Nine clearly different colours for Minik mode; the eraser is the tenth cell.
 const littlePalette = <Color>[
-  Color(0xFFE53935), Color(0xFFFB8C00), Color(0xFFFDD835), Color(0xFF43A047), Color(0xFF1E88E5),
-  Color(0xFF8E24AA), Color(0xFFEC407A), Color(0xFF8D6E63), Color(0xFF212121),
+  Color(0xFFE53935),
+  Color(0xFFFB8C00),
+  Color(0xFFFDD835),
+  Color(0xFF43A047),
+  Color(0xFF1E88E5),
+  Color(0xFF8E24AA),
+  Color(0xFFEC407A),
+  Color(0xFF8D6E63),
+  Color(0xFF212121),
 ];
 
 /// Büyük mode adds lighter, darker and neutral colours.
 const bigPalette = <Color>[
   ...littlePalette,
-  Color(0xFF4FC3F7), Color(0xFFAED581), Color(0xFFFFAB91), Color(0xFFFFF59D),
-  Color(0xFF283593), Color(0xFF2E7D32), Color(0xFF9E9E9E),
+  Color(0xFF4FC3F7),
+  Color(0xFFAED581),
+  Color(0xFFFFAB91),
+  Color(0xFFFFF59D),
+  Color(0xFF283593),
+  Color(0xFF2E7D32),
+  Color(0xFF9E9E9E),
 ];
 
 /// Brush diameters as a share of the page's shorter side.
@@ -42,7 +54,7 @@ class _Metrics {
     final tablet = size.shortestSide >= 600;
     primary = big ? (tablet ? 96 : 64) : (tablet ? 116 : 82);
     cell = big ? (tablet ? 88 : 52) : (tablet ? 112 : 70);
-    gap = tablet ? 16 : (big ? 10 : 12);
+    gap = tablet ? 16 : 12;
   }
 
   late final double primary;
@@ -54,11 +66,7 @@ class ColoringScreen extends StatefulWidget {
   final ColoringImage image;
   final SavedArtwork? existingArtwork;
 
-  const ColoringScreen({
-    super.key,
-    required this.image,
-    this.existingArtwork,
-  });
+  const ColoringScreen({super.key, required this.image, this.existingArtwork});
 
   @override
   State<ColoringScreen> createState() => _ColoringScreenState();
@@ -93,10 +101,12 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
     final page = _page;
     if (saver != null) {
       // Finish the last save before letting go of the page image.
-      unawaited(saver.flush().catchError((Object e) => debugPrint('Autosave failed: $e')).whenComplete(() {
-        saver.dispose();
-        page?.dispose();
-      }));
+      unawaited(
+        saver.flush().catchError((Object e) => debugPrint('Autosave failed: $e')).whenComplete(() {
+          saver.dispose();
+          page?.dispose();
+        }),
+      );
     } else {
       page?.dispose();
     }
@@ -238,8 +248,9 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
     final mode = context.select<AppProvider, AgeMode>((p) => p.settings.ageMode);
     final big = mode == AgeMode.big;
     return PopScope(
-      // A system back or edge swipe goes home the same way as the button,
-      // with the save; it never drops the drawing.
+      // No pop without the save: the iOS edge swipe is off on this screen,
+      // and Android back or the VoiceOver escape gesture go home the same
+      // way as the home button.
       canPop: false,
       onPopInvokedWithResult: (didPop, _) {
         if (!didPop) unawaited(_goHome());
@@ -266,14 +277,13 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
       children: [
         Padding(
           padding: EdgeInsets.fromLTRB(12, 8, 12, 0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: _controls(m, big),
-          ),
+          child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: _controls(m, big)),
         ),
-        Expanded(child: Padding(padding: const EdgeInsets.all(12), child: _canvasArea(big))),
+        Expanded(
+          child: Padding(padding: const EdgeInsets.all(12), child: _canvasArea(big)),
+        ),
         Padding(
-          padding: const EdgeInsets.only(bottom: 12),
+          padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
           child: _palette(m, big, columns: big ? 6 : 5),
         ),
       ],
@@ -285,12 +295,11 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
       children: [
         Padding(
           padding: const EdgeInsets.all(12),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: _controls(m, big),
-          ),
+          child: Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: _controls(m, big)),
         ),
-        Expanded(child: Padding(padding: const EdgeInsets.symmetric(vertical: 12), child: _canvasArea(big))),
+        Expanded(
+          child: Padding(padding: const EdgeInsets.symmetric(vertical: 12), child: _canvasArea(big)),
+        ),
         Padding(
           padding: const EdgeInsets.all(12),
           child: Center(child: _palette(m, big, columns: big ? 3 : 2)),
@@ -316,7 +325,7 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
         icon: Icons.format_color_fill_rounded,
         size: m.primary * 0.96,
         selected: _tool == CanvasTool.fill,
-        iconColor: _color,
+        badgeColor: _color,
         semanticLabel: l10n.fill,
         onTap: () => _selectTool(CanvasTool.fill),
       ),
@@ -324,7 +333,7 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
         icon: Icons.brush_rounded,
         size: m.primary * 0.96,
         selected: _tool == CanvasTool.marker,
-        iconColor: _color,
+        badgeColor: _color,
         semanticLabel: l10n.marker,
         onTap: () => _selectTool(CanvasTool.marker),
       ),
@@ -355,45 +364,63 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
   Widget _canvasArea(bool big) {
     final document = _document;
     final page = _page;
-    Widget child;
     if (_failed) {
-      child = const Center(child: Icon(Icons.sentiment_dissatisfied_rounded, size: 96, color: Color(0xFFB0B3C6)));
-    } else if (document == null || page == null) {
-      child = const Center(child: CircularProgressIndicator());
-    } else {
-      final side = document.map.width < document.map.height ? document.map.width : document.map.height;
-      child = PaintCanvas(
-        document: document,
-        page: page,
-        tool: _tool,
-        color: _color,
-        brushSize: side * (big ? _brushSteps[_brushStep] : _brushSteps[1]),
-        allowZoom: big,
-        onFilled: _onFilled,
-      );
+      return const Center(child: Icon(Icons.sentiment_dissatisfied_rounded, size: 96, color: Color(0xFFB0B3C6)));
     }
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.08), blurRadius: 12, offset: const Offset(0, 4))],
+    if (document == null || page == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
+    final map = document.map;
+    final side = map.width < map.height ? map.width : map.height;
+    // The white card is exactly the page, so every white spot the child
+    // sees takes paint; strokes outside a wider card used to vanish.
+    return Center(
+      child: AspectRatio(
+        aspectRatio: map.width / map.height,
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(24),
+            boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.08), blurRadius: 12, offset: const Offset(0, 4))],
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(24),
+            child: Semantics(
+              label: AppLocalizations.of(context)!.canvasLabel,
+              child: PaintCanvas(
+                document: document,
+                page: page,
+                tool: _tool,
+                color: _color,
+                brushSize: side * (big ? _brushSteps[_brushStep] : _brushSteps[1]),
+                allowZoom: big,
+                onFilled: _onFilled,
+              ),
+            ),
+          ),
+        ),
       ),
-      child: ClipRRect(borderRadius: BorderRadius.circular(24), child: child),
     );
   }
 
   Widget _palette(_Metrics m, bool big, {required int columns}) {
+    final l10n = AppLocalizations.of(context)!;
+    final names = l10n.colorNames.split(',');
     final colors = _colors(big);
     final items = <PaletteItem>[
-      for (final c in colors) PaletteItem.color(c),
-      const PaletteItem.glyph(EraserGlyph()),
+      for (var i = 0; i < colors.length; i++)
+        PaletteItem.color(colors[i], label: i < names.length ? names[i].trim() : null),
+      PaletteItem.glyph(const EraserGlyph(), label: l10n.eraser),
       if (big)
         PaletteItem.glyph(
+          label: l10n.brushSize,
           Center(
             child: FractionallySizedBox(
               widthFactor: 0.35 + _brushStep * 0.3,
               heightFactor: 0.35 + _brushStep * 0.3,
-              child: DecoratedBox(decoration: BoxDecoration(color: _color, shape: BoxShape.circle)),
+              child: DecoratedBox(
+                decoration: BoxDecoration(color: _color, shape: BoxShape.circle),
+              ),
             ),
           ),
         ),

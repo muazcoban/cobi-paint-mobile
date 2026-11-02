@@ -14,7 +14,7 @@ import '../theme/app_theme.dart';
 class ParentsScreen extends StatelessWidget {
   const ParentsScreen({super.key});
 
-  static const contactEmail = 'muazcoban@icloud.com';
+  static const contactEmail = 'cobipaint@gmail.com';
 
   @override
   Widget build(BuildContext context) {

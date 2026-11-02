@@ -360,7 +360,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get privacyPolicyText =>
-      'Cobi Paint collects no personal data.\n\n• There are no accounts, ads, analytics or internet connections.\n• The pictures your child colours are stored only on this device and are never sent to a server.\n• A picture leaves the device only when you pass the grown-up check and choose to share it through the system share sheet, to an app you pick.\n• You can delete a saved picture in the Parents area. Deleting the app deletes all pictures.\n\nQuestions: muazcoban@icloud.com';
+      'Cobi Paint collects no personal data.\n\n• There are no accounts, ads, analytics or internet connections.\n• The pictures your child colours are stored only on this device and are never sent to a server.\n• A picture leaves the device only when you pass the grown-up check and choose to share it through the system share sheet, to an app you pick.\n• You can delete a saved picture by pressing and holding it in My Artworks and passing the grown-up check. Deleting the app deletes all pictures.\n\nQuestions: cobipaint@gmail.com';
 
   @override
   String get guidedAccessTitle => 'Keep your child in the app';
@@ -371,4 +371,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get artworkOptions => 'Artwork options';
+
+  @override
+  String get colorNames =>
+      'red,orange,yellow,green,blue,purple,pink,brown,black,light blue,light green,peach,light yellow,navy,dark green,grey';
+
+  @override
+  String get canvasLabel => 'Coloring page';
 }

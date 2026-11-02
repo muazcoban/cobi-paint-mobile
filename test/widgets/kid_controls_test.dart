@@ -64,6 +64,35 @@ void main() {
     expect(picked, 2);
   });
 
+  for (final width in [375.0 - 24, 393.0 - 24]) {
+    testWidgets('on a ${width + 24} pt wide phone every palette cell, the eraser included, is reachable', (tester) async {
+      int? picked;
+      await tester.pumpWidget(_app(SizedBox(
+        width: width,
+        child: Center(
+          child: KidPalette(
+            items: [for (var i = 0; i < 9; i++) const PaletteItem.color(Colors.red), const PaletteItem.glyph(EraserGlyph())],
+            columns: 5,
+            cellSize: 70,
+            selectedIndex: 0,
+            onSelected: (i) => picked = i,
+          ),
+        ),
+      )));
+      final box = tester.getRect(find.byType(KidPalette));
+      expect(box.width, lessThanOrEqualTo(width));
+
+      // Centre of each cell in a 5 x 2 grid that fills the palette's box.
+      final pitchX = (box.width + 12) / 5;
+      final pitchY = (box.height + 12) / 2;
+      for (var i = 0; i < 10; i++) {
+        final center = box.topLeft + Offset((i % 5) * pitchX + (pitchX - 12) / 2, (i ~/ 5) * pitchY + (pitchY - 12) / 2);
+        await tester.tapAt(center);
+        expect(picked, i, reason: 'cell $i');
+      }
+    });
+  }
+
   group('parental gate', () {
     setUp(resetParentalGateLock);
 

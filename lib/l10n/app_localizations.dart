@@ -791,7 +791,7 @@ abstract class AppLocalizations {
   /// No description provided for @privacyPolicyText.
   ///
   /// In tr, this message translates to:
-  /// **'Cobi Paint hiçbir kişisel veri toplamaz.\n\n• Hesap, reklam, analiz aracı ve internet bağlantısı yoktur.\n• Çocuğunuzun boyadığı resimler yalnız bu cihazda saklanır ve hiçbir sunucuya gönderilmez.\n• Bir resim yalnız siz ebeveyn kontrolünü geçip paylaşmayı seçtiğinizde, sistemin paylaşım menüsüyle ve sizin seçtiğiniz uygulamaya gönderilir.\n• Kayıtlı bir resmi Ebeveyn alanından silebilirsiniz. Uygulamayı silmek bütün resimleri siler.\n\nSorularınız için: muazcoban@icloud.com'**
+  /// **'Cobi Paint hiçbir kişisel veri toplamaz.\n\n• Hesap, reklam, analiz aracı ve internet bağlantısı yoktur.\n• Çocuğunuzun boyadığı resimler yalnız bu cihazda saklanır ve hiçbir sunucuya gönderilmez.\n• Bir resim yalnız siz ebeveyn kontrolünü geçip paylaşmayı seçtiğinizde, sistemin paylaşım menüsüyle ve sizin seçtiğiniz uygulamaya gönderilir.\n• Kayıtlı bir resmi Eserlerim\'de basılı tutup ebeveyn kontrolünü geçerek silebilirsiniz. Uygulamayı silmek bütün resimleri siler.\n\nSorularınız için: cobipaint@gmail.com'**
   String get privacyPolicyText;
 
   /// No description provided for @guidedAccessTitle.
@@ -811,6 +811,18 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Eser seçenekleri'**
   String get artworkOptions;
+
+  /// No description provided for @colorNames.
+  ///
+  /// In tr, this message translates to:
+  /// **'kırmızı,turuncu,sarı,yeşil,mavi,mor,pembe,kahverengi,siyah,açık mavi,açık yeşil,şeftali,açık sarı,lacivert,koyu yeşil,gri'**
+  String get colorNames;
+
+  /// No description provided for @canvasLabel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Boyama sayfası'**
+  String get canvasLabel;
 }
 
 class _AppLocalizationsDelegate

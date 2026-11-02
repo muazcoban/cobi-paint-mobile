@@ -96,32 +96,30 @@ class _ArtworkCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final storage = context.read<AppProvider>().storageService;
-    final file = storage.resolveArtworkFile(artwork.thumbnailPath.isNotEmpty ? artwork.thumbnailPath : artwork.savedImagePath);
-    return Semantics(
-      button: true,
-      label: artwork.name,
-      child: GestureDetector(
-        onTap: () {
-          SoundService().playClickSound();
-          openArtwork(context, artwork);
-        },
-        onLongPress: () => _showOptions(context),
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(20),
-            boxShadow: [
-              BoxShadow(color: Colors.black.withValues(alpha: 0.08), blurRadius: 10, offset: const Offset(0, 4)),
-            ],
-          ),
-          clipBehavior: Clip.antiAlias,
-          child: Image.file(
-            file,
-            fit: BoxFit.cover,
-            errorBuilder: (context, error, stackTrace) => const Center(
-              child: Icon(Icons.image_rounded, size: 56, color: Color(0xFFB0B3C6)),
-            ),
-          ),
+    final file = storage.resolveArtworkFile(
+      artwork.thumbnailPath.isNotEmpty ? artwork.thumbnailPath : artwork.savedImagePath,
+    );
+    return PressableCard(
+      semanticLabel: artwork.name,
+      onTap: () {
+        SoundService().playClickSound();
+        openArtwork(context, artwork);
+      },
+      onLongPress: () => _showOptions(context),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(color: Colors.black.withValues(alpha: 0.08), blurRadius: 10, offset: const Offset(0, 4)),
+          ],
+        ),
+        clipBehavior: Clip.antiAlias,
+        child: Image.file(
+          file,
+          fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) =>
+              const Center(child: Icon(Icons.image_rounded, size: 56, color: Color(0xFFB0B3C6))),
         ),
       ),
     );
@@ -187,7 +185,8 @@ class _ArtworkCard extends StatelessWidget {
 /// imported before the freeze and pages that no longer exist in the app.
 void openArtwork(BuildContext context, SavedArtwork artwork) {
   final app = context.read<AppProvider>();
-  final page = [...app.staticImages, ...app.importedImages].where((img) => img.id == artwork.originalImageId).firstOrNull ??
+  final page =
+      [...app.staticImages, ...app.importedImages].where((img) => img.id == artwork.originalImageId).firstOrNull ??
       ColoringImage(
         id: artwork.originalImageId,
         name: artwork.name,
@@ -197,6 +196,8 @@ void openArtwork(BuildContext context, SavedArtwork artwork) {
       );
   Navigator.push(
     context,
-    MaterialPageRoute(builder: (context) => ColoringScreen(image: page, existingArtwork: artwork)),
+    MaterialPageRoute(
+      builder: (context) => ColoringScreen(image: page, existingArtwork: artwork),
+    ),
   );
 }

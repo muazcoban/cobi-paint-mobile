@@ -55,7 +55,8 @@ class _SplashScreenState extends State<SplashScreen>
     // Wait for animation and initialization
     await Future.wait([
       appProvider.init(),
-      Future.delayed(const Duration(seconds: 2)),
+      // Brief, so a child is colouring within a second or two.
+      Future.delayed(const Duration(milliseconds: 600)),
     ]);
 
     if (mounted) {

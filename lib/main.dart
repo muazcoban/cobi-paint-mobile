@@ -27,20 +27,25 @@ void main() async {
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
-      statusBarIconBrightness: Brightness.light,
+      // Dark status bar content on the light screens (iOS and Android).
+      statusBarBrightness: Brightness.light,
+      statusBarIconBrightness: Brightness.dark,
       systemNavigationBarColor: Colors.white,
       systemNavigationBarIconBrightness: Brightness.dark,
     ),
   );
 
-  // Android: hide the system bars so a stray swipe only reveals them
-  // instead of leaving the app (the first swipe is swallowed).
-  if (defaultTargetPlatform == TargetPlatform.android) {
-    await SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
-  }
-
   runApp(const CobiPaintApp());
-  unawaited(SoundService().preload());
+
+  // After the first frame, so neither delays the app appearing:
+  // Android hides the system bars, so a stray swipe only reveals them
+  // instead of leaving the app; sounds load ahead of the first tap.
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    if (defaultTargetPlatform == TargetPlatform.android) {
+      unawaited(SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky));
+    }
+    unawaited(Future<void>.delayed(const Duration(seconds: 1), SoundService().preload));
+  });
 }
 
 class CobiPaintApp extends StatelessWidget {
@@ -73,6 +78,9 @@ class CobiPaintApp extends StatelessWidget {
               GlobalCupertinoLocalizations.delegate,
             ],
             supportedLocales: LocaleProvider.supportedLocales,
+            // Text may grow to 200% (HIG) but no further, so big type cannot
+            // break the fixed-size kid layouts.
+            builder: (context, child) => MediaQuery.withClampedTextScaling(maxScaleFactor: 2.0, child: child!),
             home: const SplashScreen(),
           );
         },

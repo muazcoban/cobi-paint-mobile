@@ -406,8 +406,10 @@
   "ageModeBigDesc": "16 renk, iki parmakla yakınlaştırma, fırça boyutları, ileri al.",
   "soundVolume": "Ses seviyesi",
   "theme": "Tema",
-  "privacyPolicyText": "Cobi Paint hiçbir kişisel veri toplamaz.\n\n• Hesap, reklam, analiz aracı ve internet bağlantısı yoktur.\n• Çocuğunuzun boyadığı resimler yalnız bu cihazda saklanır ve hiçbir sunucuya gönderilmez.\n• Bir resim yalnız siz ebeveyn kontrolünü geçip paylaşmayı seçtiğinizde, sistemin paylaşım menüsüyle ve sizin seçtiğiniz uygulamaya gönderilir.\n• Kayıtlı bir resmi Ebeveyn alanından silebilirsiniz. Uygulamayı silmek bütün resimleri siler.\n\nSorularınız için: muazcoban@icloud.com",
+  "privacyPolicyText": "Cobi Paint hiçbir kişisel veri toplamaz.\n\n• Hesap, reklam, analiz aracı ve internet bağlantısı yoktur.\n• Çocuğunuzun boyadığı resimler yalnız bu cihazda saklanır ve hiçbir sunucuya gönderilmez.\n• Bir resim yalnız siz ebeveyn kontrolünü geçip paylaşmayı seçtiğinizde, sistemin paylaşım menüsüyle ve sizin seçtiğiniz uygulamaya gönderilir.\n• Kayıtlı bir resmi Eserlerim'de basılı tutup ebeveyn kontrolünü geçerek silebilirsiniz. Uygulamayı silmek bütün resimleri siler.\n\nSorularınız için: cobipaint@gmail.com",
   "guidedAccessTitle": "Çocuk uygulamada kalsın",
   "guidedAccessText": "iPhone ve iPad'de Rehberli Erişim'i kullanabilirsiniz: Ayarlar > Erişilebilirlik > Rehberli Erişim'i açın, sonra uygulama açıkken yan düğmeye üç kez basın. Android'de Ayarlar > Güvenlik > Uygulama sabitleme'yi kullanın.",
-  "artworkOptions": "Eser seçenekleri"
+  "artworkOptions": "Eser seçenekleri",
+  "colorNames": "kırmızı,turuncu,sarı,yeşil,mavi,mor,pembe,kahverengi,siyah,açık mavi,açık yeşil,şeftali,açık sarı,lacivert,koyu yeşil,gri",
+  "canvasLabel": "Boyama sayfası"
 }

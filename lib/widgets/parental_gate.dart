@@ -4,6 +4,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import '../l10n/app_localizations.dart';
+import 'motion.dart';
 
 /// Shows an adult-level check before anything that leaves the coloring
 /// world: sharing, settings, deleting, purchases, links. Returns true when
@@ -55,7 +56,10 @@ class _ParentalGateState extends State<ParentalGate> with SingleTickerProviderSt
     super.initState();
     _shake = AnimationController(vsync: this, duration: const Duration(milliseconds: 360));
     _newTask();
-    _resetIdle();
+    // MediaQuery is not available in initState.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) _resetIdle();
+    });
     _startLockTicker();
   }
 
@@ -69,6 +73,7 @@ class _ParentalGateState extends State<ParentalGate> with SingleTickerProviderSt
 
   void _resetIdle() {
     _idle?.cancel();
+    if (MediaQuery.maybeAccessibleNavigationOf(context) ?? false) return;
     _idle = Timer(widget.idleTimeout, () {
       if (mounted) Navigator.of(context).pop(false);
     });
@@ -110,7 +115,7 @@ class _ParentalGateState extends State<ParentalGate> with SingleTickerProviderSt
           _lockedUntil = DateTime.now().add(Duration(seconds: wait));
           _startLockTicker();
         }
-        _shake.forward(from: 0);
+        if (!reduceMotion(context)) _shake.forward(from: 0);
         _newTask();
       } else if (_entered.length == _target.length) {
         _wrongAnswers = 0;

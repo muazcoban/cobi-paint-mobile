@@ -46,8 +46,22 @@
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 
-	<!-- Photo Library Add Permission (the share sheet's "Save Image" action) -->
+	<!-- Photo Library Add Permission (the share sheet's "Save Image" action); localized in en.lproj/tr.lproj InfoPlist.strings -->
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Boyadığın resimleri galeriye kaydetmek için izin gerekli</string>
+	<string>Saves the pictures your child colours to your photo library when you choose Save Image.</string>
+
+	<!-- The app is light-only (the page is white paper); keeps the status bar readable -->
+	<key>UIUserInterfaceStyle</key>
+	<string>Light</string>
+
+	<key>CFBundleLocalizations</key>
+	<array>
+		<string>en</string>
+		<string>tr</string>
+	</array>
+
+	<!-- No encryption beyond what the OS provides: no export compliance documents needed -->
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 </dict>
 </plist>

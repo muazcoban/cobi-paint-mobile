@@ -6,6 +6,7 @@ import '../models/saved_artwork.dart';
 import '../providers/app_provider.dart';
 import '../services/sound_service.dart';
 import '../theme/app_theme.dart';
+import '../widgets/kid_button.dart';
 import '../widgets/parental_gate.dart';
 import 'category_screen.dart';
 import 'my_artworks_screen.dart';
@@ -38,16 +39,12 @@ class HomeScreen extends StatelessWidget {
                   final columns = gridColumns(constraints.maxWidth);
                   return CustomScrollView(
                     slivers: [
-                      SliverToBoxAdapter(
-                        child: _Header(onParents: () => _openParents(context)),
-                      ),
+                      SliverToBoxAdapter(child: _Header(onParents: () => _openParents(context))),
                       SliverPadding(
                         padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
                         sliver: SliverToBoxAdapter(
                           child: _GalleryCard(
-                            latest: provider.savedArtworks.isEmpty
-                                ? null
-                                : provider.savedArtworks.first,
+                            latest: provider.savedArtworks.isEmpty ? null : provider.savedArtworks.first,
                             label: l10n.myArtworks,
                           ),
                         ),
@@ -55,17 +52,14 @@ class HomeScreen extends StatelessWidget {
                       SliverPadding(
                         padding: const EdgeInsets.all(16),
                         sliver: SliverGrid(
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: columns,
-                                crossAxisSpacing: 16,
-                                mainAxisSpacing: 16,
-                                childAspectRatio: 0.95,
-                              ),
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: columns,
+                            crossAxisSpacing: 16,
+                            mainAxisSpacing: 16,
+                            childAspectRatio: 0.95,
+                          ),
                           delegate: SliverChildBuilderDelegate(
-                            (context, index) => _CategoryCard(
-                              category: provider.categories[index],
-                            ),
+                            (context, index) => _CategoryCard(category: provider.categories[index]),
                             childCount: provider.categories.length,
                           ),
                         ),
@@ -83,10 +77,7 @@ class HomeScreen extends StatelessWidget {
 
   Future<void> _openParents(BuildContext context) async {
     if (!await showParentalGate(context) || !context.mounted) return;
-    await Navigator.push(
-      context,
-      MaterialPageRoute(builder: (_) => const ParentsScreen()),
-    );
+    await Navigator.push(context, MaterialPageRoute(builder: (_) => const ParentsScreen()));
   }
 }
 
@@ -102,29 +93,19 @@ class _Header extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(16, 12, 8, 8),
       child: Row(
         children: [
-          ClipOval(
-            child: Image.asset(
-              'assets/images/app_icon.png',
-              width: 64,
-              height: 64,
-            ),
-          ),
+          ClipOval(child: Image.asset('assets/images/app_icon.png', width: 64, height: 64)),
           const SizedBox(width: 12),
           const Expanded(
             child: Text(
               'Cobi Paint',
-              style: TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.w800,
-                color: AppTheme.textPrimary,
-              ),
+              style: TextStyle(fontSize: 28, fontWeight: FontWeight.w800, color: AppTheme.textPrimary),
             ),
           ),
           // Grown-up entrance: small, grey and gated on purpose.
           IconButton(
             tooltip: l10n.parentsArea,
             iconSize: 26,
-            icon: const Icon(Icons.settings_rounded, color: Color(0xFFB0B3C6)),
+            icon: const Icon(Icons.settings_rounded, color: Color(0xFF7D8297)),
             onPressed: onParents,
           ),
         ],
@@ -144,74 +125,44 @@ class _GalleryCard extends StatelessWidget {
     final storage = context.read<AppProvider>().storageService;
     final thumb = latest == null
         ? null
-        : storage.resolveArtworkFile(
-            latest!.thumbnailPath.isNotEmpty
-                ? latest!.thumbnailPath
-                : latest!.savedImagePath,
-          );
-    return Semantics(
-      button: true,
-      label: label,
-      child: GestureDetector(
-        onTap: () {
-          SoundService().playClickSound();
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const MyArtworksScreen()),
-          );
-        },
-        child: Container(
-          height: 120,
-          decoration: BoxDecoration(
-            gradient: const LinearGradient(
-              colors: [Color(0xFFFFD54F), Color(0xFFFF8A65)],
+        : storage.resolveArtworkFile(latest!.thumbnailPath.isNotEmpty ? latest!.thumbnailPath : latest!.savedImagePath);
+    return PressableCard(
+      semanticLabel: label,
+      onTap: () {
+        SoundService().playClickSound();
+        Navigator.push(context, MaterialPageRoute(builder: (_) => const MyArtworksScreen()));
+      },
+      child: Container(
+        height: 120,
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(colors: [Color(0xFFFFD54F), Color(0xFFFF8A65)]),
+          borderRadius: BorderRadius.circular(24),
+          boxShadow: [
+            BoxShadow(color: Colors.black.withValues(alpha: 0.1), blurRadius: 10, offset: const Offset(0, 4)),
+          ],
+        ),
+        padding: const EdgeInsets.all(12),
+        child: Row(
+          children: [
+            Container(
+              width: 96,
+              height: 96,
+              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(18)),
+              clipBehavior: Clip.antiAlias,
+              child: thumb != null && thumb.existsSync()
+                  ? Image.file(thumb, fit: BoxFit.cover)
+                  : const Icon(Icons.collections_rounded, size: 56, color: Color(0xFFFF8A65)),
             ),
-            borderRadius: BorderRadius.circular(24),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.1),
-                blurRadius: 10,
-                offset: const Offset(0, 4),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Text(
+                label,
+                // Dark text: white on the yellow-orange gradient was below 2.4:1.
+                style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w800, color: Color(0xFF2D3142)),
               ),
-            ],
-          ),
-          padding: const EdgeInsets.all(12),
-          child: Row(
-            children: [
-              Container(
-                width: 96,
-                height: 96,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(18),
-                ),
-                clipBehavior: Clip.antiAlias,
-                child: thumb != null && thumb.existsSync()
-                    ? Image.file(thumb, fit: BoxFit.cover)
-                    : const Icon(
-                        Icons.collections_rounded,
-                        size: 56,
-                        color: Color(0xFFFF8A65),
-                      ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Text(
-                  label,
-                  style: const TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w800,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-              const Icon(
-                Icons.chevron_right_rounded,
-                size: 48,
-                color: Colors.white,
-              ),
-            ],
-          ),
+            ),
+            const Icon(Icons.chevron_right_rounded, size: 48, color: Color(0xFF2D3142)),
+          ],
         ),
       ),
     );
@@ -226,61 +177,42 @@ class _CategoryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final name = categoryName(AppLocalizations.of(context)!, category);
-    return Semantics(
-      button: true,
-      label: name,
-      child: GestureDetector(
-        onTap: () {
-          SoundService().playClickSound();
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => CategoryScreen(category: category),
+    return PressableCard(
+      semanticLabel: name,
+      onTap: () {
+        SoundService().playClickSound();
+        Navigator.push(context, MaterialPageRoute(builder: (context) => CategoryScreen(category: category)));
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(24),
+          boxShadow: [
+            BoxShadow(color: Colors.black.withValues(alpha: 0.08), blurRadius: 10, offset: const Offset(0, 4)),
+          ],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Expanded(
+              child: FittedBox(
+                child: Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Text(category.icon, style: const TextStyle(fontSize: 72)),
+                ),
+              ),
             ),
-          );
-        },
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(24),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.08),
-                blurRadius: 10,
-                offset: const Offset(0, 4),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(8, 0, 8, 14),
+              child: Text(
+                name,
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppTheme.textPrimary),
               ),
-            ],
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Expanded(
-                child: FittedBox(
-                  child: Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: Text(
-                      category.icon,
-                      style: const TextStyle(fontSize: 72),
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(8, 0, 8, 14),
-                child: Text(
-                  name,
-                  textAlign: TextAlign.center,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: AppTheme.textPrimary,
-                  ),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

@@ -3,10 +3,12 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
+import 'motion.dart';
+
 /// Short confetti burst over the whole screen when a picture is finished.
 /// Skipped when the system asks for reduced motion.
 Future<void> showCelebration(BuildContext context, {Duration duration = const Duration(milliseconds: 1400)}) async {
-  if (MediaQuery.maybeDisableAnimationsOf(context) ?? false) return;
+  if (reduceMotion(context)) return;
   final overlay = Overlay.maybeOf(context);
   if (overlay == null) return;
   final done = Completer<void>();
