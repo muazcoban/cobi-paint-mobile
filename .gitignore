@@ -76,5 +76,6 @@ android/.gradle/
 build/
 .dart_tool/
 
-# Claude Code local settings
-.claude/
+# Claude Code local settings; project skills are shared
+.claude/*
+!.claude/skills/

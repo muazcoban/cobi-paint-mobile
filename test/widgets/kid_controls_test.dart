@@ -93,6 +93,40 @@ void main() {
     });
   }
 
+  testWidgets('buttons and palette meet the tap target, label and contrast guidelines', (tester) async {
+    final handle = tester.ensureSemantics();
+    await tester.pumpWidget(_app(Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            KidButton(icon: Icons.home_rounded, semanticLabel: 'Home', color: const Color(0xFFFFD54F), onTap: () {}),
+            KidButton(icon: Icons.brush_rounded, semanticLabel: 'Brush', selected: true, badgeColor: Colors.yellow, onTap: () {}),
+            KidButton(icon: Icons.undo_rounded, semanticLabel: 'Undo', enabled: false, onTap: () {}),
+          ],
+        ),
+        KidPalette(
+          items: const [
+            PaletteItem.color(Color(0xFFFDD835), label: 'yellow'),
+            PaletteItem.color(Color(0xFF212121), label: 'black'),
+            PaletteItem.glyph(EraserGlyph(), label: 'eraser'),
+          ],
+          columns: 3,
+          cellSize: 70,
+          selectedIndex: 0,
+          onSelected: (_) {},
+        ),
+      ],
+    )));
+
+    await expectLater(tester, meetsGuideline(androidTapTargetGuideline));
+    await expectLater(tester, meetsGuideline(iOSTapTargetGuideline));
+    await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
+    await expectLater(tester, meetsGuideline(textContrastGuideline));
+    handle.dispose();
+  });
+
   group('parental gate', () {
     setUp(resetParentalGateLock);
 

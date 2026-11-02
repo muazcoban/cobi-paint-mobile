@@ -34,12 +34,15 @@ void main() {
     expect(find.byType(KidButton), findsOneWidget, reason: 'one big home button');
   });
 
-  testWidgets('page tiles and the home button meet the tap target guidelines', (tester) async {
+  testWidgets('page tiles and the home button meet the tap target and label guidelines', (tester) async {
     final handle = tester.ensureSemantics();
     await pumpCategory(tester);
 
     await expectLater(tester, meetsGuideline(androidTapTargetGuideline));
     await expectLater(tester, meetsGuideline(iOSTapTargetGuideline));
+    // VoiceOver/TalkBack users hear a name for every tile and button.
+    await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
+    await expectLater(tester, meetsGuideline(textContrastGuideline));
     handle.dispose();
   });
 }
