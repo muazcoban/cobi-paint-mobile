@@ -1,7 +1,8 @@
-import 'package:cobi_paint_mobile/data/builtin_images.dart';
+import 'package:cobi_paint_mobile/l10n/app_localizations.dart';
 import 'package:cobi_paint_mobile/models/category.dart';
 import 'package:cobi_paint_mobile/providers/app_provider.dart';
 import 'package:cobi_paint_mobile/screens/category_screen.dart';
+import 'package:cobi_paint_mobile/widgets/kid_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
@@ -14,20 +15,26 @@ void main() {
     await tester.pumpWidget(
       ChangeNotifierProvider(
         create: (_) => AppProvider(),
-        child: MaterialApp(home: CategoryScreen(category: animals)),
+        child: MaterialApp(
+          locale: const Locale('tr'),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: CategoryScreen(category: animals),
+        ),
       ),
     );
+    await tester.pump();
   }
 
-  testWidgets('shows the built-in pages of the category', (tester) async {
+  testWidgets('shows the category and its page pictures', (tester) async {
     await pumpCategory(tester);
 
-    final firstPage = builtInImages.firstWhere((page) => page.category == 'animals');
-    expect(find.text(animals.name), findsOneWidget);
-    expect(find.text(firstPage.name), findsOneWidget);
+    expect(find.text('Hayvanlar'), findsOneWidget);
+    expect(find.byType(Image), findsWidgets);
+    expect(find.byType(KidButton), findsOneWidget, reason: 'one big home button');
   });
 
-  testWidgets('page tiles meet the minimum tap target size', (tester) async {
+  testWidgets('page tiles and the home button meet the tap target guidelines', (tester) async {
     final handle = tester.ensureSemantics();
     await pumpCategory(tester);
 

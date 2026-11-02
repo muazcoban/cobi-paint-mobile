@@ -1,14 +1,18 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/painting.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
 class ShareService {
-  /// Share an image to social media
+  /// Share an image through the system share sheet. [origin] is the
+  /// global rect of the button that opened it; iPad and Mac need it to
+  /// anchor the share popover and fail without it.
   Future<void> shareImage(
     Uint8List imageData, {
     String? text,
     String? subject,
+    Rect? origin,
   }) async {
     try {
       // Save to temp file
@@ -21,6 +25,7 @@ class ShareService {
           files: [XFile(tempFile.path)],
           text: text ?? 'Cobi Paint ile boyadım! 🎨',
           subject: subject,
+          sharePositionOrigin: origin,
         ),
       );
     } catch (e) {
@@ -34,6 +39,7 @@ class ShareService {
     String imagePath, {
     String? artworkName,
     String? message,
+    Rect? origin,
   }) async {
     try {
       final file = File(imagePath);
@@ -49,6 +55,7 @@ class ShareService {
           files: [XFile(imagePath)],
           text: shareText,
           subject: artworkName ?? 'Benim Boyamam',
+          sharePositionOrigin: origin,
         ),
       );
     } catch (e) {

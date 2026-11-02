@@ -155,7 +155,7 @@ abstract class AppLocalizations {
   /// Nature category
   ///
   /// In tr, this message translates to:
-  /// **'Doga'**
+  /// **'Doğa'**
   String get nature;
 
   /// Food category
@@ -167,13 +167,13 @@ abstract class AppLocalizations {
   /// Import image button
   ///
   /// In tr, this message translates to:
-  /// **'Resim Yukle'**
+  /// **'Resim Yükle'**
   String get importImage;
 
   /// Go pro button
   ///
   /// In tr, this message translates to:
-  /// **'Pro\'ya Gec'**
+  /// **'Pro\'ya Geç'**
   String get goPro;
 
   /// Save button
@@ -191,7 +191,7 @@ abstract class AppLocalizations {
   /// Share button
   ///
   /// In tr, this message translates to:
-  /// **'Paylas'**
+  /// **'Paylaş'**
   String get share;
 
   /// Undo button
@@ -203,7 +203,7 @@ abstract class AppLocalizations {
   /// Redo button
   ///
   /// In tr, this message translates to:
-  /// **'Ileri Al'**
+  /// **'İleri Al'**
   String get redo;
 
   /// Clear button
@@ -221,7 +221,7 @@ abstract class AppLocalizations {
   /// Exit fullscreen button
   ///
   /// In tr, this message translates to:
-  /// **'Tam Ekrandan Cik'**
+  /// **'Tam Ekrandan Çık'**
   String get exitFullscreen;
 
   /// Fill tool
@@ -245,25 +245,25 @@ abstract class AppLocalizations {
   /// Selected label
   ///
   /// In tr, this message translates to:
-  /// **'Secili'**
+  /// **'Seçili'**
   String get selected;
 
   /// Select color dialog title
   ///
   /// In tr, this message translates to:
-  /// **'Renk Sec'**
+  /// **'Renk Seç'**
   String get selectColor;
 
   /// Cancel button
   ///
   /// In tr, this message translates to:
-  /// **'Iptal'**
+  /// **'İptal'**
   String get cancel;
 
   /// Select button
   ///
   /// In tr, this message translates to:
-  /// **'Sec'**
+  /// **'Seç'**
   String get select;
 
   /// Paint texture title
@@ -275,7 +275,7 @@ abstract class AppLocalizations {
   /// Paint texture description
   ///
   /// In tr, this message translates to:
-  /// **'Boyanan alanlarin gorunumunu secin'**
+  /// **'Boyanan alanların görünümünü seçin'**
   String get paintTextureDescription;
 
   /// No texture
@@ -287,7 +287,7 @@ abstract class AppLocalizations {
   /// No texture description
   ///
   /// In tr, this message translates to:
-  /// **'Duz ve puruzsuz boyama'**
+  /// **'Düz ve pürüzsüz boyama'**
   String get textureNoneDesc;
 
   /// Canvas texture
@@ -299,19 +299,19 @@ abstract class AppLocalizations {
   /// Canvas texture description
   ///
   /// In tr, this message translates to:
-  /// **'Gercek tuval dokusu efekti'**
+  /// **'Gerçek tuval dokusu efekti'**
   String get textureCanvasDesc;
 
   /// Paper texture
   ///
   /// In tr, this message translates to:
-  /// **'Kagit'**
+  /// **'Kâğıt'**
   String get texturePaper;
 
   /// Paper texture description
   ///
   /// In tr, this message translates to:
-  /// **'Kagit uzerine boya kalemi hissi'**
+  /// **'Kâğıt üzerine boya kalemi hissi'**
   String get texturePaperDesc;
 
   /// Watercolor texture
@@ -341,7 +341,7 @@ abstract class AppLocalizations {
   /// Clear confirmation message
   ///
   /// In tr, this message translates to:
-  /// **'Tum boyamayi temizlemek istediginize emin misiniz?'**
+  /// **'Tüm boyamayı temizlemek istediğinize emin misiniz?'**
   String get clearConfirmMessage;
 
   /// Image saved message
@@ -353,19 +353,19 @@ abstract class AppLocalizations {
   /// Image load error
   ///
   /// In tr, this message translates to:
-  /// **'Resim yuklenemedi'**
+  /// **'Resim yüklenemedi'**
   String get imageLoadError;
 
   /// Save error
   ///
   /// In tr, this message translates to:
-  /// **'Kaydetme hatasi'**
+  /// **'Kaydetme hatası'**
   String get saveError;
 
   /// Share error
   ///
   /// In tr, this message translates to:
-  /// **'Paylasma hatasi'**
+  /// **'Paylaşma hatası'**
   String get shareError;
 
   /// WhatsApp
@@ -383,7 +383,7 @@ abstract class AppLocalizations {
   /// Reset view button
   ///
   /// In tr, this message translates to:
-  /// **'Gorunumu Sifirla'**
+  /// **'Görünümü Sıfırla'**
   String get resetView;
 
   /// Language setting
@@ -395,19 +395,19 @@ abstract class AppLocalizations {
   /// Turkish language
   ///
   /// In tr, this message translates to:
-  /// **'Turkce'**
+  /// **'Türkçe'**
   String get turkish;
 
   /// English language
   ///
   /// In tr, this message translates to:
-  /// **'Ingilizce'**
+  /// **'İngilizce'**
   String get english;
 
   /// Select language dialog title
   ///
   /// In tr, this message translates to:
-  /// **'Dil Sec'**
+  /// **'Dil Seç'**
   String get selectLanguage;
 
   /// Sound effects setting
@@ -425,31 +425,31 @@ abstract class AppLocalizations {
   /// Rate app button
   ///
   /// In tr, this message translates to:
-  /// **'Uygulamayi Degerlendir'**
+  /// **'Uygulamayı Değerlendir'**
   String get rateApp;
 
   /// Privacy policy button
   ///
   /// In tr, this message translates to:
-  /// **'Gizlilik Politikasi'**
+  /// **'Gizlilik Politikası'**
   String get privacyPolicy;
 
   /// Terms of service button
   ///
   /// In tr, this message translates to:
-  /// **'Kullanim Kosullari'**
+  /// **'Kullanım Koşulları'**
   String get termsOfService;
 
   /// About button
   ///
   /// In tr, this message translates to:
-  /// **'Hakkinda'**
+  /// **'Hakkında'**
   String get about;
 
   /// Version label
   ///
   /// In tr, this message translates to:
-  /// **'Surum'**
+  /// **'Sürüm'**
   String get version;
 
   /// Pro label
@@ -461,37 +461,37 @@ abstract class AppLocalizations {
   /// Pro features title
   ///
   /// In tr, this message translates to:
-  /// **'Pro Ozellikleri'**
+  /// **'Pro Özellikleri'**
   String get proFeatures;
 
   /// Unlimited images feature
   ///
   /// In tr, this message translates to:
-  /// **'Sinirsiz Resim'**
+  /// **'Sınırsız Resim'**
   String get unlimitedImages;
 
   /// No ads feature
   ///
   /// In tr, this message translates to:
-  /// **'Reklamsiz'**
+  /// **'Reklamsız'**
   String get noAds;
 
   /// All categories feature
   ///
   /// In tr, this message translates to:
-  /// **'Tum Kategoriler'**
+  /// **'Tüm Kategoriler'**
   String get allCategories;
 
   /// Buy pro button
   ///
   /// In tr, this message translates to:
-  /// **'Pro Satin Al'**
+  /// **'Pro Satın Al'**
   String get buyPro;
 
   /// Restore purchases button
   ///
   /// In tr, this message translates to:
-  /// **'Satin Alimlari Geri Yukle'**
+  /// **'Satın Alımları Geri Yükle'**
   String get restorePurchases;
 
   /// Pro active label
@@ -503,7 +503,7 @@ abstract class AppLocalizations {
   /// Start coloring button
   ///
   /// In tr, this message translates to:
-  /// **'Boyamaya Basla'**
+  /// **'Boyamaya Başla'**
   String get startColoring;
 
   /// Continue coloring button
@@ -527,19 +527,19 @@ abstract class AppLocalizations {
   /// Delete confirmation message
   ///
   /// In tr, this message translates to:
-  /// **'Bu eseri silmek istediginize emin misiniz?'**
+  /// **'Bu eseri silmek istediğinize emin misiniz?'**
   String get deleteConfirmMessage;
 
   /// No artworks message
   ///
   /// In tr, this message translates to:
-  /// **'Henuz eseriniz yok'**
+  /// **'Henüz eseriniz yok'**
   String get noArtworks;
 
   /// No artworks hint
   ///
   /// In tr, this message translates to:
-  /// **'Bir resim boyayarak baslayabilirsiniz'**
+  /// **'Bir resim boyayarak başlayabilirsiniz'**
   String get noArtworksHint;
 
   /// Recent artworks title
@@ -551,55 +551,55 @@ abstract class AppLocalizations {
   /// See all button
   ///
   /// In tr, this message translates to:
-  /// **'Tumunu Gor'**
+  /// **'Tümünü Gör'**
   String get seeAll;
 
   /// Welcome message
   ///
   /// In tr, this message translates to:
-  /// **'Hosgeldin!'**
+  /// **'Hoş geldin!'**
   String get welcome;
 
   /// Welcome message description
   ///
   /// In tr, this message translates to:
-  /// **'Boyamaya baslamak icin bir kategori sec'**
+  /// **'Boyamaya başlamak için bir kategori seç'**
   String get welcomeMessage;
 
   /// Import from gallery
   ///
   /// In tr, this message translates to:
-  /// **'Galeriden Yukle'**
+  /// **'Galeriden Yükle'**
   String get importFromGallery;
 
   /// Import from camera
   ///
   /// In tr, this message translates to:
-  /// **'Kameradan Cek'**
+  /// **'Kameradan Çek'**
   String get importFromCamera;
 
   /// Processing message
   ///
   /// In tr, this message translates to:
-  /// **'Isleniyor...'**
+  /// **'İşleniyor...'**
   String get processing;
 
   /// Import success message
   ///
   /// In tr, this message translates to:
-  /// **'Resim basariyla yuklendi'**
+  /// **'Resim başarıyla yüklendi'**
   String get importSuccess;
 
   /// Import error message
   ///
   /// In tr, this message translates to:
-  /// **'Resim yuklenemedi'**
+  /// **'Resim yüklenemedi'**
   String get importError;
 
   /// Permission denied message
   ///
   /// In tr, this message translates to:
-  /// **'Izin reddedildi'**
+  /// **'İzin reddedildi'**
   String get permissionDenied;
 
   /// Camera permission message
@@ -629,13 +629,13 @@ abstract class AppLocalizations {
   /// No button
   ///
   /// In tr, this message translates to:
-  /// **'Hayir'**
+  /// **'Hayır'**
   String get no;
 
   /// Loading message
   ///
   /// In tr, this message translates to:
-  /// **'Yukleniyor...'**
+  /// **'Yükleniyor...'**
   String get loading;
 
   /// Error title
@@ -659,7 +659,7 @@ abstract class AppLocalizations {
   /// Appearance settings section
   ///
   /// In tr, this message translates to:
-  /// **'Gorunum'**
+  /// **'Görünüm'**
   String get appearance;
 
   /// Support settings section
@@ -671,14 +671,146 @@ abstract class AppLocalizations {
   /// Contact us button
   ///
   /// In tr, this message translates to:
-  /// **'Bize Ulasin'**
+  /// **'Bize Ulaşın'**
   String get contactUs;
 
   /// FAQ button
   ///
   /// In tr, this message translates to:
-  /// **'Sikca Sorulan Sorular'**
+  /// **'Sıkça Sorulan Sorular'**
   String get faq;
+
+  /// No description provided for @done.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bitti'**
+  String get done;
+
+  /// No description provided for @back.
+  ///
+  /// In tr, this message translates to:
+  /// **'Geri'**
+  String get back;
+
+  /// No description provided for @marker.
+  ///
+  /// In tr, this message translates to:
+  /// **'Keçeli kalem'**
+  String get marker;
+
+  /// No description provided for @brushSize.
+  ///
+  /// In tr, this message translates to:
+  /// **'Fırça boyutu'**
+  String get brushSize;
+
+  /// No description provided for @importedPages.
+  ///
+  /// In tr, this message translates to:
+  /// **'Fotoğraflarım'**
+  String get importedPages;
+
+  /// No description provided for @gateTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ebeveyn kontrolü'**
+  String get gateTitle;
+
+  /// No description provided for @gateInstruction.
+  ///
+  /// In tr, this message translates to:
+  /// **'Devam etmek için bu sayılara sırayla dokunun:'**
+  String get gateInstruction;
+
+  /// No description provided for @gateDigitWords.
+  ///
+  /// In tr, this message translates to:
+  /// **'sıfır,bir,iki,üç,dört,beş,altı,yedi,sekiz,dokuz'**
+  String get gateDigitWords;
+
+  /// No description provided for @gateTryAgain.
+  ///
+  /// In tr, this message translates to:
+  /// **'Olmadı. Yeni sayılarla tekrar deneyin.'**
+  String get gateTryAgain;
+
+  /// No description provided for @parentsArea.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ebeveyn alanı'**
+  String get parentsArea;
+
+  /// No description provided for @parentsHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ayarlar, paylaşım ve silme yalnız buradan yapılır.'**
+  String get parentsHint;
+
+  /// No description provided for @ageMode.
+  ///
+  /// In tr, this message translates to:
+  /// **'Mod'**
+  String get ageMode;
+
+  /// No description provided for @ageModeLittle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Minik (3–5 yaş)'**
+  String get ageModeLittle;
+
+  /// No description provided for @ageModeLittleDesc.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kocaman düğmeler, 8 renk, yakınlaştırma yok. Kalem çizginin dışına taşmaz.'**
+  String get ageModeLittleDesc;
+
+  /// No description provided for @ageModeBig.
+  ///
+  /// In tr, this message translates to:
+  /// **'Büyük (6+ yaş)'**
+  String get ageModeBig;
+
+  /// No description provided for @ageModeBigDesc.
+  ///
+  /// In tr, this message translates to:
+  /// **'16 renk, iki parmakla yakınlaştırma, fırça boyutları, ileri al.'**
+  String get ageModeBigDesc;
+
+  /// No description provided for @soundVolume.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ses seviyesi'**
+  String get soundVolume;
+
+  /// No description provided for @theme.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tema'**
+  String get theme;
+
+  /// No description provided for @privacyPolicyText.
+  ///
+  /// In tr, this message translates to:
+  /// **'Cobi Paint hiçbir kişisel veri toplamaz.\n\n• Hesap, reklam, analiz aracı ve internet bağlantısı yoktur.\n• Çocuğunuzun boyadığı resimler yalnız bu cihazda saklanır ve hiçbir sunucuya gönderilmez.\n• Bir resim yalnız siz ebeveyn kontrolünü geçip paylaşmayı seçtiğinizde, sistemin paylaşım menüsüyle ve sizin seçtiğiniz uygulamaya gönderilir.\n• Kayıtlı bir resmi Ebeveyn alanından silebilirsiniz. Uygulamayı silmek bütün resimleri siler.\n\nSorularınız için: muazcoban@icloud.com'**
+  String get privacyPolicyText;
+
+  /// No description provided for @guidedAccessTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Çocuk uygulamada kalsın'**
+  String get guidedAccessTitle;
+
+  /// No description provided for @guidedAccessText.
+  ///
+  /// In tr, this message translates to:
+  /// **'iPhone ve iPad\'de Rehberli Erişim\'i kullanabilirsiniz: Ayarlar > Erişilebilirlik > Rehberli Erişim\'i açın, sonra uygulama açıkken yan düğmeye üç kez basın. Android\'de Ayarlar > Güvenlik > Uygulama sabitleme\'yi kullanın.'**
+  String get guidedAccessText;
+
+  /// No description provided for @artworkOptions.
+  ///
+  /// In tr, this message translates to:
+  /// **'Eser seçenekleri'**
+  String get artworkOptions;
 }
 
 class _AppLocalizationsDelegate

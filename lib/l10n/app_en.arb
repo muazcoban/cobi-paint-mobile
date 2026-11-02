@@ -1,6 +1,5 @@
 {
   "@@locale": "en",
-
   "appName": "Cobi Paint",
   "home": "Home",
   "categories": "Categories",
@@ -97,5 +96,27 @@
   "appearance": "Appearance",
   "support": "Support",
   "contactUs": "Contact Us",
-  "faq": "FAQ"
+  "faq": "FAQ",
+  "done": "Done",
+  "back": "Back",
+  "marker": "Marker",
+  "brushSize": "Brush size",
+  "importedPages": "My Photos",
+  "gateTitle": "For grown-ups",
+  "gateInstruction": "To continue, tap these numbers in order:",
+  "gateDigitWords": "zero,one,two,three,four,five,six,seven,eight,nine",
+  "gateTryAgain": "Not quite. Try again with the new numbers.",
+  "parentsArea": "Parents",
+  "parentsHint": "Settings, sharing and deleting live here.",
+  "ageMode": "Mode",
+  "ageModeLittle": "Little (ages 3–5)",
+  "ageModeLittleDesc": "Huge buttons, 8 colours, no zoom. The marker stays inside the lines.",
+  "ageModeBig": "Big (ages 6+)",
+  "ageModeBigDesc": "16 colours, pinch to zoom, brush sizes, redo.",
+  "soundVolume": "Volume",
+  "theme": "Theme",
+  "privacyPolicyText": "Cobi Paint collects no personal data.\n\n• There are no accounts, ads, analytics or internet connections.\n• The pictures your child colours are stored only on this device and are never sent to a server.\n• A picture leaves the device only when you pass the grown-up check and choose to share it through the system share sheet, to an app you pick.\n• You can delete a saved picture in the Parents area. Deleting the app deletes all pictures.\n\nQuestions: muazcoban@icloud.com",
+  "guidedAccessTitle": "Keep your child in the app",
+  "guidedAccessText": "On iPhone and iPad use Guided Access: turn on Settings > Accessibility > Guided Access, then triple-click the side button while the app is open. On Android use Settings > Security > App pinning.",
+  "artworkOptions": "Artwork options"
 }

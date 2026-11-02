@@ -1,21 +1,54 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:uuid/uuid.dart';
+
+import '../engine/document/coloring_document.dart';
 import '../l10n/app_localizations.dart';
 import '../models/coloring_image.dart';
 import '../models/saved_artwork.dart';
+import '../models/user_settings.dart';
 import '../providers/app_provider.dart';
-import '../providers/coloring_provider.dart';
-import '../services/share_service.dart';
-import '../services/image_processing_service.dart';
 import '../services/sound_service.dart';
-import '../theme/app_theme.dart';
-import '../utils/paint_textures.dart';
-import '../widgets/color_palette.dart';
-import '../widgets/coloring_canvas.dart';
+import '../widgets/celebration.dart';
+import '../widgets/kid_button.dart';
+import '../widgets/kid_palette.dart';
+import '../widgets/paint_canvas.dart';
+import 'coloring/artwork_autosaver.dart';
+
+/// Nine clearly different colours for Minik mode; the eraser is the tenth cell.
+const littlePalette = <Color>[
+  Color(0xFFE53935), Color(0xFFFB8C00), Color(0xFFFDD835), Color(0xFF43A047), Color(0xFF1E88E5),
+  Color(0xFF8E24AA), Color(0xFFEC407A), Color(0xFF8D6E63), Color(0xFF212121),
+];
+
+/// Büyük mode adds lighter, darker and neutral colours.
+const bigPalette = <Color>[
+  ...littlePalette,
+  Color(0xFF4FC3F7), Color(0xFFAED581), Color(0xFFFFAB91), Color(0xFFFFF59D),
+  Color(0xFF283593), Color(0xFF2E7D32), Color(0xFF9E9E9E),
+];
+
+/// Brush diameters as a share of the page's shorter side.
+const _brushSteps = [0.025, 0.05, 0.09];
+
+/// Control sizes from the toddler research: about 2 cm on a phone where it
+/// fits, larger on tablets; Büyük mode trades size for more controls.
+class _Metrics {
+  _Metrics(Size size, bool big) {
+    final tablet = size.shortestSide >= 600;
+    primary = big ? (tablet ? 96 : 64) : (tablet ? 116 : 82);
+    cell = big ? (tablet ? 88 : 52) : (tablet ? 112 : 70);
+    gap = tablet ? 16 : (big ? 10 : 12);
+  }
+
+  late final double primary;
+  late final double cell;
+  late final double gap;
+}
 
 class ColoringScreen extends StatefulWidget {
   final ColoringImage image;
@@ -31,1306 +64,348 @@ class ColoringScreen extends StatefulWidget {
   State<ColoringScreen> createState() => _ColoringScreenState();
 }
 
-class _ColoringScreenState extends State<ColoringScreen> {
-  final ColoringProvider _coloringProvider = ColoringProvider();
-  final ShareService _shareService = ShareService();
-  final ImageProcessingService _imageProcessingService = ImageProcessingService();
-  final SoundService _soundService = SoundService();
+class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObserver {
+  final SoundService _sound = SoundService();
 
-  bool _isLoading = true;
-  bool _isSaving = false;
-  bool _isFullScreen = false;
-  bool _isPanelCollapsed = false;
-  double _panelWidth = 70; // Genişletilebilir panel (70-150px)
-  String? _artworkId;
+  ColoringDocument? _document;
+  ui.Image? _page;
+  ArtworkAutosaver? _saver;
+  bool _failed = false;
+  bool _leaving = false;
+  int _revisionAtOpen = 0;
+
+  CanvasTool _tool = CanvasTool.fill;
+  Color _color = littlePalette.first;
+  int _brushStep = 1;
 
   @override
   void initState() {
     super.initState();
-    _artworkId = widget.existingArtwork?.id ?? const Uuid().v4();
-    _loadImage();
-  }
-
-  Future<void> _loadImage() async {
-    setState(() => _isLoading = true);
-
-    try {
-      Uint8List imageData;
-
-      if (widget.image.isImported) {
-        // Load from local file
-        final file = File(widget.image.imagePath);
-        imageData = await file.readAsBytes();
-      } else {
-        // Load from assets
-        final byteData = await rootBundle.load(widget.image.imagePath);
-        imageData = byteData.buffer.asUint8List();
-      }
-
-      await _coloringProvider.loadImage(imageData);
-
-      // Load existing artwork colors if editing
-      if (widget.existingArtwork != null) {
-        _coloringProvider.loadExistingArtwork(
-          widget.existingArtwork!.coloredRegions,
-        );
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Resim yüklenemedi: $e')),
-        );
-      }
-    }
-
-    if (mounted) {
-      setState(() => _isLoading = false);
-    }
-  }
-
-  Future<void> _saveArtwork() async {
-    if (_isSaving) return;
-
-    setState(() => _isSaving = true);
-
-    try {
-      final appProvider = context.read<AppProvider>();
-
-      // Generate colored image
-      final coloredImage = await _coloringProvider.generateColoredImage();
-
-      // Create thumbnail
-      final thumbnail = await _imageProcessingService.createThumbnail(coloredImage);
-
-      // Save files
-      final imagePath = await appProvider.storageService.saveArtworkImage(
-        _artworkId!,
-        coloredImage,
-      );
-      final thumbnailPath = await appProvider.storageService.saveThumbnail(
-        _artworkId!,
-        thumbnail,
-      );
-
-      // Create or update artwork
-      final now = DateTime.now();
-      final artwork = SavedArtwork(
-        id: _artworkId!,
-        originalImageId: widget.image.id,
-        originalImagePath: widget.image.imagePath,
-        savedImagePath: imagePath,
-        thumbnailPath: thumbnailPath,
-        name: widget.image.name,
-        createdAt: widget.existingArtwork?.createdAt ?? now,
-        updatedAt: now,
-        coloredRegions: _coloringProvider.getColoredRegionsMap(),
-      );
-
-      await appProvider.saveArtwork(artwork);
-      unawaited(_soundService.playSuccessSound());
-
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Resim kaydedildi! ✓'),
-            backgroundColor: AppTheme.successColor,
-          ),
-        );
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Kaydetme hatası: $e')),
-        );
-      }
-    }
-
-    if (mounted) {
-      setState(() => _isSaving = false);
-    }
-  }
-
-  Future<void> _shareArtwork() async {
-    try {
-      final coloredImage = await _coloringProvider.generateColoredImage();
-      await _shareService.shareImage(
-        coloredImage,
-        text: '${widget.image.name} - Cobi Paint ile boyadım! 🎨',
-      );
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Paylaşma hatası: $e')),
-        );
-      }
-    }
-  }
-
-  void _showShareOptions() {
-    showModalBottomSheet(
-      context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (context) => Container(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              width: 40,
-              height: 4,
-              decoration: BoxDecoration(
-                color: Colors.grey[300],
-                borderRadius: BorderRadius.circular(2),
-              ),
-            ),
-            const SizedBox(height: 20),
-            const Text(
-              'Paylaş',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                _ShareOption(
-                  icon: Icons.share,
-                  label: 'Paylaş',
-                  color: AppTheme.primaryColor,
-                  onTap: () {
-                    Navigator.pop(context);
-                    _shareArtwork();
-                  },
-                ),
-                _ShareOption(
-                  icon: Icons.chat,
-                  label: 'WhatsApp',
-                  color: const Color(0xFF25D366),
-                  onTap: () {
-                    Navigator.pop(context);
-                    _shareArtwork();
-                  },
-                ),
-                _ShareOption(
-                  icon: Icons.camera_alt,
-                  label: 'Instagram',
-                  color: const Color(0xFFE1306C),
-                  onTap: () {
-                    Navigator.pop(context);
-                    _shareArtwork();
-                  },
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
-          ],
-        ),
-      ),
-    );
-  }
-
-  void _toggleFullScreen() {
-    setState(() {
-      _isFullScreen = !_isFullScreen;
-    });
-
-    // Hide/show system UI
-    if (_isFullScreen) {
-      SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
-    } else {
-      SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-    }
+    WidgetsBinding.instance.addObserver(this);
+    unawaited(_load());
+    unawaited(_sound.preload());
   }
 
   @override
   void dispose() {
-    // Restore system UI when leaving
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-    _coloringProvider.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+    final saver = _saver;
+    final page = _page;
+    if (saver != null) {
+      // Finish the last save before letting go of the page image.
+      unawaited(saver.flush().catchError((Object e) => debugPrint('Autosave failed: $e')).whenComplete(() {
+        saver.dispose();
+        page?.dispose();
+      }));
+    } else {
+      page?.dispose();
+    }
     super.dispose();
   }
 
   @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.inactive || state == AppLifecycleState.paused || state == AppLifecycleState.hidden) {
+      unawaited(_flush());
+    }
+  }
 
-    return ChangeNotifierProvider.value(
-      value: _coloringProvider,
+  Future<void> _flush() async {
+    try {
+      await _saver?.flush();
+    } catch (e) {
+      debugPrint('Autosave failed: $e');
+    }
+  }
+
+  Future<void> _load() async {
+    try {
+      final app = context.read<AppProvider>();
+      final bytes = widget.image.isImported
+          ? await File(widget.image.imagePath).readAsBytes()
+          : (await rootBundle.load(widget.image.imagePath)).buffer.asUint8List();
+      final codec = await ui.instantiateImageCodec(bytes);
+      final page = (await codec.getNextFrame()).image;
+      codec.dispose();
+      final map = await app.regionService.labelMapFor(bytes);
+      if (!mounted) {
+        page.dispose();
+        return;
+      }
+
+      final document = ColoringDocument(map);
+      final saver = ArtworkAutosaver(
+        document: document,
+        page: page,
+        image: widget.image,
+        app: app,
+        existing: widget.existingArtwork,
+        delay: const Duration(milliseconds: 400),
+      );
+      final existing = widget.existingArtwork;
+      if (existing != null) {
+        if (existing.schema >= 2) {
+          final json = await app.storageService.readArtworkDocument(existing.id);
+          if (json != null) document.restore(json);
+        } else if (existing.coloredRegions.isNotEmpty) {
+          // A version 1 drawing: convert it and write it in the new format.
+          document.restoreLegacyPixels(existing.coloredRegions);
+          saver.markDirty();
+        }
+      }
+      saver.start();
+      if (!mounted) {
+        saver.dispose();
+        page.dispose();
+        return;
+      }
+      setState(() {
+        _document = document;
+        _page = page;
+        _saver = saver;
+        _revisionAtOpen = document.revision;
+      });
+    } catch (e) {
+      // No error text for the child: a sad face and the home button.
+      debugPrint('Coloring page could not be loaded: $e');
+      if (mounted) setState(() => _failed = true);
+    }
+  }
+
+  // Actions ------------------------------------------------------------------
+
+  void _selectTool(CanvasTool tool) {
+    if (_tool == tool) return;
+    unawaited(_sound.playClickSound());
+    setState(() => _tool = tool);
+  }
+
+  void _selectPaletteItem(int index, List<Color> colors) {
+    if (index < colors.length) {
+      unawaited(_sound.playColorSelectSound());
+      setState(() {
+        _color = colors[index];
+        // Picking a colour while erasing means "I want to paint again".
+        if (_tool == CanvasTool.eraser) _tool = CanvasTool.fill;
+      });
+    } else if (index == colors.length) {
+      unawaited(_sound.playClickSound());
+      setState(() => _tool = CanvasTool.eraser);
+    } else {
+      unawaited(_sound.playClickSound());
+      setState(() => _brushStep = (_brushStep + 1) % _brushSteps.length);
+    }
+  }
+
+  void _undo() {
+    if (_document?.canUndo != true) return;
+    unawaited(_sound.playUndoSound());
+    _document!.undo();
+  }
+
+  void _redo() {
+    if (_document?.canRedo != true) return;
+    unawaited(_sound.playUndoSound());
+    _document!.redo();
+  }
+
+  void _onFilled(int label) {
+    unawaited(_sound.playFillSound());
+    HapticFeedback.lightImpact();
+  }
+
+  /// Home: saves, celebrates when something was added, then leaves.
+  Future<void> _goHome() async {
+    if (_leaving) return;
+    _leaving = true;
+    final navigator = Navigator.of(context);
+    final save = _flush();
+    final changed = (_document?.revision ?? 0) != _revisionAtOpen && !(_document?.isEmpty ?? true);
+    if (changed) {
+      unawaited(_sound.playSuccessSound());
+      await showCelebration(context, duration: const Duration(milliseconds: 1100));
+    } else {
+      unawaited(_sound.playClickSound());
+    }
+    await save;
+    if (mounted) navigator.pop();
+  }
+
+  // Layout -------------------------------------------------------------------
+
+  @override
+  Widget build(BuildContext context) {
+    final mode = context.select<AppProvider, AgeMode>((p) => p.settings.ageMode);
+    final big = mode == AgeMode.big;
+    return PopScope(
+      // A system back or edge swipe goes home the same way as the button,
+      // with the save; it never drops the drawing.
+      canPop: false,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop) unawaited(_goHome());
+      },
       child: Scaffold(
-        backgroundColor: _isFullScreen ? Colors.black : AppTheme.backgroundColor,
-        appBar: _isFullScreen
-            ? null
-            : AppBar(
-                title: Text(widget.image.name),
-                leading: IconButton(
-                  icon: const Icon(Icons.arrow_back_ios),
-                  onPressed: () => Navigator.pop(context),
-                ),
-                actions: [
-                  // Undo
-                  Consumer<ColoringProvider>(
-                    builder: (context, provider, _) => IconButton(
-                      icon: const Icon(Icons.undo),
-                      onPressed: provider.canUndo
-                          ? () {
-                              provider.undo();
-                              _soundService.playUndoSound();
-                            }
-                          : null,
-                      tooltip: l10n.undo,
-                    ),
-                  ),
-                  // Redo
-                  Consumer<ColoringProvider>(
-                    builder: (context, provider, _) => IconButton(
-                      icon: const Icon(Icons.redo),
-                      onPressed: provider.canRedo
-                          ? () {
-                              provider.redo();
-                              _soundService.playUndoSound();
-                            }
-                          : null,
-                      tooltip: l10n.redo,
-                    ),
-                  ),
-                  // Clear all
-                  IconButton(
-                    icon: const Icon(Icons.delete_outline),
-                    onPressed: _showClearConfirmation,
-                    tooltip: l10n.clear,
-                  ),
-                  // Full screen
-                  IconButton(
-                    icon: const Icon(Icons.fullscreen),
-                    onPressed: _toggleFullScreen,
-                    tooltip: l10n.fullscreen,
-                  ),
-                  // Share
-                  IconButton(
-                    icon: const Icon(Icons.share),
-                    onPressed: _showShareOptions,
-                    tooltip: l10n.share,
-                  ),
-                ],
-              ),
-        body: _isLoading
-            ? const Center(child: CircularProgressIndicator())
-            : _isFullScreen
-                ? _buildFullScreenBody()
-                : _buildNormalBody(),
-        floatingActionButton: _isLoading || _isFullScreen
-            ? null
-            : FloatingActionButton.extended(
-                onPressed: _isSaving ? null : _saveArtwork,
-                icon: _isSaving
-                    ? const SizedBox(
-                        width: 20,
-                        height: 20,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          color: Colors.white,
-                        ),
-                      )
-                    : const Icon(Icons.save),
-                label: Text(_isSaving ? l10n.saving : l10n.save),
-              ),
+        backgroundColor: const Color(0xFFFFF4E6),
+        body: SafeArea(
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final metrics = _Metrics(constraints.biggest, big);
+              final wide = constraints.maxWidth > constraints.maxHeight * 1.1;
+              return wide ? _wideLayout(metrics, big) : _tallLayout(metrics, big);
+            },
+          ),
+        ),
       ),
     );
   }
 
-  Widget _buildNormalBody() {
-    return Stack(
+  List<Color> _colors(bool big) => big ? bigPalette : littlePalette;
+
+  Widget _tallLayout(_Metrics m, bool big) {
+    return Column(
       children: [
-        // Canvas area (takes full width)
-        Positioned.fill(
-          child: Consumer<ColoringProvider>(
-            builder: (context, provider, _) {
-              if (provider.originalImageData == null) {
-                return const Center(
-                  child: Text('Resim yüklenemedi'),
-                );
-              }
-              return ColoringCanvas(
-                imageData: provider.originalImageData!,
-                imageWidth: provider.imageWidth,
-                imageHeight: provider.imageHeight,
-                coloredPixels: provider.coloredPixels,
-                coloredPixelsVersion: provider.coloredPixelsVersion,
-                scale: provider.scale,
-                offset: provider.offset,
-                currentTool: provider.currentTool,
-                selectedColor: provider.selectedColor,
-                brushSize: provider.brushSize,
-                paintTexture: provider.paintTexture,
-                onTap: (x, y) {
-                  if (provider.currentTool == DrawingTool.fill) {
-                    final filledPixels = provider.fillArea(x, y);
-                    if (filledPixels > 0) {
-                      // Play splash for large areas (>5000 pixels), pop for small
-                      if (filledPixels > 5000) {
-                        _soundService.playSplashSound();
-                      } else {
-                        _soundService.playFillSound();
-                      }
-                    }
-                  }
-                },
-                onScaleChanged: (scale) => provider.setScale(scale),
-                onOffsetChanged: (offset) => provider.setOffset(offset),
-                onDraw: (points, color, size) {
-                  provider.drawStroke(points, color, size);
-                  _soundService.playDrawSound();
-                },
-                onErase: (points, size) {
-                  provider.erase(points, size);
-                },
-              );
-            },
-          ),
-        ),
-        // Zoom buttons (bottom right, semi-transparent)
-        Positioned(
-          right: 16,
-          bottom: 100,
-          child: _buildZoomButtons(),
-        ),
-        // Panel expand button (shown when collapsed)
-        if (_isPanelCollapsed)
-          Positioned(
-            left: 8,
-            top: MediaQuery.of(context).size.height / 2 - 24,
-            child: GestureDetector(
-              onTap: () => setState(() => _isPanelCollapsed = false),
-              child: Container(
-                width: 48,
-                height: 48,
-                decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.95),
-                  borderRadius: BorderRadius.circular(12),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.15),
-                      blurRadius: 8,
-                      offset: const Offset(2, 2),
-                    ),
-                  ],
-                ),
-                child: Icon(
-                  Icons.chevron_right,
-                  color: AppTheme.primaryColor,
-                  size: 28,
-                ),
-              ),
-            ),
-          ),
-        // Collapsible & resizable left panel
-        AnimatedPositioned(
-          duration: const Duration(milliseconds: 200),
-          curve: Curves.easeInOut,
-          left: _isPanelCollapsed ? -_panelWidth : 0,
-          top: 0,
-          bottom: 0,
+        Padding(
+          padding: EdgeInsets.fromLTRB(12, 8, 12, 0),
           child: Row(
-            children: [
-              // Panel content
-              Container(
-                width: _panelWidth,
-                decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.95),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.1),
-                      blurRadius: 8,
-                      offset: const Offset(2, 0),
-                    ),
-                  ],
-                ),
-                child: Column(
-                  children: [
-                    // Drawing tools
-                    _buildToolSelector(),
-                    // Brush size slider (only for pencil/eraser)
-                    Consumer<ColoringProvider>(
-                      builder: (context, provider, _) {
-                        if (provider.currentTool == DrawingTool.fill) {
-                          return const SizedBox.shrink();
-                        }
-                        return _buildBrushSizeSlider();
-                      },
-                    ),
-                    // Texture button (opens popup)
-                    _buildTextureButton(),
-                    // Color palette
-                    Expanded(child: ColorPalette(width: _panelWidth)),
-                    // Toggle button (at bottom of panel)
-                    _buildPanelToggleButton(),
-                  ],
-                ),
-              ),
-              // Resize handle (drag to expand/shrink panel)
-              if (!_isPanelCollapsed)
-                GestureDetector(
-                  onHorizontalDragUpdate: (details) {
-                    setState(() {
-                      _panelWidth = (_panelWidth + details.delta.dx).clamp(70.0, 150.0);
-                    });
-                  },
-                  child: MouseRegion(
-                    cursor: SystemMouseCursors.resizeColumn,
-                    child: Container(
-                      width: 8,
-                      color: Colors.transparent,
-                      child: Center(
-                        child: Container(
-                          width: 3,
-                          height: 40,
-                          decoration: BoxDecoration(
-                            color: Colors.grey.withValues(alpha: 0.5),
-                            borderRadius: BorderRadius.circular(2),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-            ],
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: _controls(m, big),
           ),
+        ),
+        Expanded(child: Padding(padding: const EdgeInsets.all(12), child: _canvasArea(big))),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 12),
+          child: _palette(m, big, columns: big ? 6 : 5),
         ),
       ],
     );
   }
 
-  Widget _buildPanelToggleButton() {
-    return GestureDetector(
-      onTap: () => setState(() => _isPanelCollapsed = !_isPanelCollapsed),
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(vertical: 12),
-        decoration: BoxDecoration(
-          color: AppTheme.primaryColor.withValues(alpha: 0.1),
-          border: Border(
-            top: BorderSide(color: Colors.grey.withValues(alpha: 0.2)),
-          ),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.chevron_left,
-              color: AppTheme.primaryColor,
-              size: 20,
-            ),
-            const SizedBox(width: 4),
-            Text(
-              AppLocalizations.of(context)!.hide,
-              style: TextStyle(
-                color: AppTheme.primaryColor,
-                fontSize: 12,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildToolSelector() {
-    final l10n = AppLocalizations.of(context)!;
-    return Consumer<ColoringProvider>(
-      builder: (context, provider, _) {
-        return Container(
-          width: 70,
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              _ToolButton(
-                icon: Icons.format_color_fill,
-                label: l10n.fill,
-                isSelected: provider.currentTool == DrawingTool.fill,
-                onTap: () => provider.setCurrentTool(DrawingTool.fill),
-              ),
-              const SizedBox(height: 8),
-              _ToolButton(
-                icon: Icons.edit,
-                label: l10n.pencil,
-                isSelected: provider.currentTool == DrawingTool.pencil,
-                onTap: () => provider.setCurrentTool(DrawingTool.pencil),
-              ),
-              const SizedBox(height: 8),
-              _ToolButton(
-                icon: Icons.auto_fix_high,
-                label: l10n.eraser,
-                isSelected: provider.currentTool == DrawingTool.eraser,
-                onTap: () => provider.setCurrentTool(DrawingTool.eraser),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildBrushSizeSlider() {
-    return Consumer<ColoringProvider>(
-      builder: (context, provider, _) {
-        return Container(
-          width: 70,
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                provider.brushSize < 1 ? '0.5px' : '${provider.brushSize.round()}px',
-                style: const TextStyle(fontSize: 10, color: AppTheme.textSecondary),
-              ),
-              RotatedBox(
-                quarterTurns: 3,
-                child: SizedBox(
-                  width: 80,
-                  child: Slider(
-                    value: provider.brushSize,
-                    min: 0.5,
-                    max: 30,
-                    activeColor: AppTheme.primaryColor,
-                    onChanged: (value) => provider.setBrushSize(value),
-                  ),
-                ),
-              ),
-              const Icon(Icons.brush, size: 16, color: AppTheme.textSecondary),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildTextureButton() {
-    return Consumer<ColoringProvider>(
-      builder: (context, provider, _) {
-        return Container(
-          width: _panelWidth,
-          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-          child: GestureDetector(
-            onTap: () => _showTexturePopup(context, provider),
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-              decoration: BoxDecoration(
-                color: Colors.grey.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(
-                  color: Colors.grey.withValues(alpha: 0.3),
-                ),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    provider.paintTexture.icon,
-                    style: const TextStyle(fontSize: 16),
-                  ),
-                  const SizedBox(width: 6),
-                  Flexible(
-                    child: Text(
-                      provider.paintTexture.displayName,
-                      style: const TextStyle(
-                        fontSize: 11,
-                        color: AppTheme.textSecondary,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                  const SizedBox(width: 4),
-                  Icon(
-                    Icons.arrow_drop_down,
-                    size: 16,
-                    color: AppTheme.textSecondary,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  void _showTexturePopup(BuildContext context, ColoringProvider provider) {
-    final l10n = AppLocalizations.of(context)!;
-    showDialog(
-      context: context,
-      builder: (context) => Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                l10n.paintTexture,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                l10n.paintTextureDescription,
-                style: TextStyle(
-                  fontSize: 13,
-                  color: AppTheme.textSecondary,
-                ),
-              ),
-              const SizedBox(height: 16),
-              ...PaintTexture.values.map((texture) {
-                final isSelected = texture == provider.paintTexture;
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 8),
-                  child: InkWell(
-                    onTap: () {
-                      provider.setPaintTexture(texture);
-                      Navigator.pop(context);
-                    },
-                    borderRadius: BorderRadius.circular(12),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-                      decoration: BoxDecoration(
-                        color: isSelected
-                            ? AppTheme.primaryColor.withValues(alpha: 0.15)
-                            : Colors.grey.withValues(alpha: 0.05),
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                          color: isSelected
-                              ? AppTheme.primaryColor
-                              : Colors.grey.withValues(alpha: 0.2),
-                          width: isSelected ? 2 : 1,
-                        ),
-                      ),
-                      child: Row(
-                        children: [
-                          Text(
-                            texture.icon,
-                            style: const TextStyle(fontSize: 28),
-                          ),
-                          const SizedBox(width: 16),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  _getTextureDisplayName(texture, l10n),
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
-                                    color: isSelected ? AppTheme.primaryColor : AppTheme.textPrimary,
-                                  ),
-                                ),
-                                Text(
-                                  _getTextureDescription(texture, l10n),
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: AppTheme.textSecondary,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          if (isSelected)
-                            Icon(
-                              Icons.check_circle,
-                              color: AppTheme.primaryColor,
-                            ),
-                        ],
-                      ),
-                    ),
-                  ),
-                );
-              }),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  String _getTextureDisplayName(PaintTexture texture, AppLocalizations l10n) {
-    switch (texture) {
-      case PaintTexture.none:
-        return l10n.textureNone;
-      case PaintTexture.canvas:
-        return l10n.textureCanvas;
-      case PaintTexture.paper:
-        return l10n.texturePaper;
-      case PaintTexture.watercolor:
-        return l10n.textureWatercolor;
-    }
-  }
-
-  String _getTextureDescription(PaintTexture texture, AppLocalizations l10n) {
-    switch (texture) {
-      case PaintTexture.none:
-        return l10n.textureNoneDesc;
-      case PaintTexture.canvas:
-        return l10n.textureCanvasDesc;
-      case PaintTexture.paper:
-        return l10n.texturePaperDesc;
-      case PaintTexture.watercolor:
-        return l10n.textureWatercolorDesc;
-    }
-  }
-
-  Widget _buildZoomButtons() {
-    return Consumer<ColoringProvider>(
-      builder: (context, provider, _) {
-        return Container(
-          decoration: BoxDecoration(
-            color: Colors.black.withValues(alpha: 0.3),
-            borderRadius: BorderRadius.circular(25),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // Zoom in button
-              _ZoomButton(
-                icon: Icons.add,
-                onTap: provider.scale < 5.0 ? provider.zoomIn : null,
-                isTop: true,
-              ),
-              // Divider
-              Container(
-                width: 30,
-                height: 1,
-                color: Colors.white.withValues(alpha: 0.3),
-              ),
-              // Zoom level indicator
-              Container(
-                padding: const EdgeInsets.symmetric(vertical: 4),
-                child: Text(
-                  '${(provider.scale * 100).round()}%',
-                  style: TextStyle(
-                    color: Colors.white.withValues(alpha: 0.9),
-                    fontSize: 10,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-              // Divider
-              Container(
-                width: 30,
-                height: 1,
-                color: Colors.white.withValues(alpha: 0.3),
-              ),
-              // Zoom out button
-              _ZoomButton(
-                icon: Icons.remove,
-                onTap: provider.scale > 0.5 ? provider.zoomOut : null,
-                isBottom: true,
-              ),
-              // Reset button (only show when zoomed)
-              if (provider.scale != 1.0) ...[
-                Container(
-                  width: 30,
-                  height: 1,
-                  color: Colors.white.withValues(alpha: 0.3),
-                ),
-                _ZoomButton(
-                  icon: Icons.fit_screen,
-                  onTap: provider.resetView,
-                  isBottom: true,
-                ),
-              ],
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildFullScreenBody() {
-    return Stack(
+  Widget _wideLayout(_Metrics m, bool big) {
+    return Row(
       children: [
-        // Canvas takes full screen
-        Consumer<ColoringProvider>(
-          builder: (context, provider, _) {
-            if (provider.originalImageData == null) {
-              return const Center(
-                child: Text('Resim yüklenemedi', style: TextStyle(color: Colors.white)),
-              );
-            }
-            return ColoringCanvas(
-              imageData: provider.originalImageData!,
-              imageWidth: provider.imageWidth,
-              imageHeight: provider.imageHeight,
-              coloredPixels: provider.coloredPixels,
-              coloredPixelsVersion: provider.coloredPixelsVersion,
-              scale: provider.scale,
-              offset: provider.offset,
-              currentTool: provider.currentTool,
-              selectedColor: provider.selectedColor,
-              brushSize: provider.brushSize,
-              paintTexture: provider.paintTexture,
-              onTap: (x, y) {
-                if (provider.currentTool == DrawingTool.fill) {
-                  final filledPixels = provider.fillArea(x, y);
-                  if (filledPixels > 0) {
-                    // Play splash for large areas (>5000 pixels), pop for small
-                    if (filledPixels > 5000) {
-                      _soundService.playSplashSound();
-                    } else {
-                      _soundService.playFillSound();
-                    }
-                  }
-                }
-              },
-              onScaleChanged: (scale) => provider.setScale(scale),
-              onOffsetChanged: (offset) => provider.setOffset(offset),
-              onDraw: (points, color, size) {
-                provider.drawStroke(points, color, size);
-                _soundService.playDrawSound();
-              },
-              onErase: (points, size) {
-                provider.erase(points, size);
-              },
-            );
-          },
+        Padding(
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: _controls(m, big),
+          ),
         ),
-        // Floating toolbar at top
-        Positioned(
-          top: MediaQuery.of(context).padding.top + 8,
-          left: 8,
-          right: 8,
-          child: _buildFullScreenToolbar(),
-        ),
-        // Floating color palette and tools at bottom
-        Positioned(
-          bottom: MediaQuery.of(context).padding.bottom + 8,
-          left: 8,
-          right: 8,
-          child: _buildFloatingBottomBar(),
+        Expanded(child: Padding(padding: const EdgeInsets.symmetric(vertical: 12), child: _canvasArea(big))),
+        Padding(
+          padding: const EdgeInsets.all(12),
+          child: Center(child: _palette(m, big, columns: big ? 3 : 2)),
         ),
       ],
     );
   }
 
-  Widget _buildFullScreenToolbar() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        color: Colors.black54,
-        borderRadius: BorderRadius.circular(30),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          // Exit full screen
-          IconButton(
-            icon: const Icon(Icons.fullscreen_exit, color: Colors.white),
-            onPressed: _toggleFullScreen,
-            tooltip: 'Tam Ekrandan Çık',
-            iconSize: 24,
-          ),
-          const SizedBox(width: 4),
-          // Undo
-          Consumer<ColoringProvider>(
-            builder: (context, provider, _) => IconButton(
-              icon: const Icon(Icons.undo, color: Colors.white),
-              onPressed: provider.canUndo
-                  ? () {
-                      provider.undo();
-                      _soundService.playUndoSound();
-                    }
-                  : null,
-              tooltip: 'Geri Al',
-              iconSize: 24,
-            ),
-          ),
-          // Redo
-          Consumer<ColoringProvider>(
-            builder: (context, provider, _) => IconButton(
-              icon: const Icon(Icons.redo, color: Colors.white),
-              onPressed: provider.canRedo
-                  ? () {
-                      provider.redo();
-                      _soundService.playUndoSound();
-                    }
-                  : null,
-              tooltip: 'İleri Al',
-              iconSize: 24,
-            ),
-          ),
-          // Reset view
-          IconButton(
-            icon: const Icon(Icons.zoom_out_map, color: Colors.white),
-            onPressed: () => _coloringProvider.resetView(),
-            tooltip: 'Görünümü Sıfırla',
-            iconSize: 24,
-          ),
-          const Spacer(),
-          // Save
-          IconButton(
-            icon: _isSaving
-                ? const SizedBox(
-                    width: 20,
-                    height: 20,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      color: Colors.white,
-                    ),
-                  )
-                : const Icon(Icons.save, color: Colors.white),
-            onPressed: _isSaving ? null : _saveArtwork,
-            tooltip: 'Kaydet',
-            iconSize: 24,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildFloatingBottomBar() {
-    return Consumer<ColoringProvider>(
-      builder: (context, provider, _) {
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // Tool selector row
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              decoration: BoxDecoration(
-                color: Colors.black54,
-                borderRadius: BorderRadius.circular(30),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  _FloatingToolButton(
-                    icon: Icons.format_color_fill,
-                    isSelected: provider.currentTool == DrawingTool.fill,
-                    onTap: () => provider.setCurrentTool(DrawingTool.fill),
-                  ),
-                  const SizedBox(width: 8),
-                  _FloatingToolButton(
-                    icon: Icons.edit,
-                    isSelected: provider.currentTool == DrawingTool.pencil,
-                    onTap: () => provider.setCurrentTool(DrawingTool.pencil),
-                  ),
-                  const SizedBox(width: 8),
-                  _FloatingToolButton(
-                    icon: Icons.auto_fix_high,
-                    isSelected: provider.currentTool == DrawingTool.eraser,
-                    onTap: () => provider.setCurrentTool(DrawingTool.eraser),
-                  ),
-                  if (provider.currentTool != DrawingTool.fill) ...[
-                    const SizedBox(width: 16),
-                    SizedBox(
-                      width: 100,
-                      child: Slider(
-                        value: provider.brushSize,
-                        min: 0.5,
-                        max: 30,
-                        activeColor: Colors.white,
-                        inactiveColor: Colors.white30,
-                        onChanged: (value) => provider.setBrushSize(value),
-                      ),
-                    ),
-                    Text(
-                      provider.brushSize < 1 ? '0.5' : '${provider.brushSize.round()}',
-                      style: const TextStyle(color: Colors.white, fontSize: 12),
-                    ),
-                  ],
-                  // Texture selector
-                  const SizedBox(width: 16),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 4),
-                    decoration: BoxDecoration(
-                      border: Border(
-                        left: BorderSide(color: Colors.white30, width: 1),
-                      ),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: PaintTexture.values.map((texture) {
-                        final isSelected = texture == provider.paintTexture;
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 2),
-                          child: GestureDetector(
-                            onTap: () => provider.setPaintTexture(texture),
-                            child: Container(
-                              width: 32,
-                              height: 32,
-                              decoration: BoxDecoration(
-                                color: isSelected
-                                    ? Colors.white.withValues(alpha: 0.3)
-                                    : Colors.transparent,
-                                borderRadius: BorderRadius.circular(6),
-                                border: Border.all(
-                                  color: isSelected
-                                      ? Colors.white
-                                      : Colors.white30,
-                                  width: isSelected ? 2 : 1,
-                                ),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  texture.icon,
-                                  style: const TextStyle(fontSize: 14),
-                                ),
-                              ),
-                            ),
-                          ),
-                        );
-                      }).toList(),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 8),
-            // Color palette row
-            Container(
-              height: 60,
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              decoration: BoxDecoration(
-                color: Colors.black54,
-                borderRadius: BorderRadius.circular(30),
-              ),
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: AppTheme.colorPalette.length,
-                itemBuilder: (context, index) {
-                  final color = AppTheme.colorPalette[index];
-                  final isSelected = provider.selectedColor == color;
-                  return GestureDetector(
-                    onTap: () => provider.setSelectedColor(color),
-                    child: Container(
-                      width: 40,
-                      height: 40,
-                      margin: const EdgeInsets.symmetric(horizontal: 4),
-                      decoration: BoxDecoration(
-                        color: color,
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: isSelected ? Colors.white : Colors.transparent,
-                          width: 3,
-                        ),
-                        boxShadow: isSelected
-                            ? [
-                                BoxShadow(
-                                  color: color.withValues(alpha: 0.6),
-                                  blurRadius: 8,
-                                  spreadRadius: 2,
-                                ),
-                              ]
-                            : null,
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void _showClearConfirmation() {
+  /// Home, fill, brush and undo (plus redo in Büyük mode).
+  List<Widget> _controls(_Metrics m, bool big) {
     final l10n = AppLocalizations.of(context)!;
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(l10n.clearConfirmTitle),
-        content: Text(l10n.clearConfirmMessage),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text(l10n.cancel),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-              _coloringProvider.clearAll();
-            },
-            child: Text(
-              l10n.clear,
-              style: const TextStyle(color: AppTheme.errorColor),
-            ),
-          ),
-        ],
+    final document = _document;
+    final listenable = document ?? const AlwaysStoppedAnimation<double>(0);
+    return [
+      KidButton(
+        icon: Icons.home_rounded,
+        size: m.primary,
+        color: const Color(0xFFFFD54F),
+        semanticLabel: l10n.home,
+        onTap: () => unawaited(_goHome()),
       ),
+      KidButton(
+        icon: Icons.format_color_fill_rounded,
+        size: m.primary * 0.96,
+        selected: _tool == CanvasTool.fill,
+        iconColor: _color,
+        semanticLabel: l10n.fill,
+        onTap: () => _selectTool(CanvasTool.fill),
+      ),
+      KidButton(
+        icon: Icons.brush_rounded,
+        size: m.primary * 0.96,
+        selected: _tool == CanvasTool.marker,
+        iconColor: _color,
+        semanticLabel: l10n.marker,
+        onTap: () => _selectTool(CanvasTool.marker),
+      ),
+      ListenableBuilder(
+        listenable: listenable,
+        builder: (context, _) => KidButton(
+          icon: Icons.undo_rounded,
+          size: m.primary,
+          semanticLabel: l10n.undo,
+          enabled: document?.canUndo ?? false,
+          onTap: _undo,
+        ),
+      ),
+      if (big)
+        ListenableBuilder(
+          listenable: listenable,
+          builder: (context, _) => KidButton(
+            icon: Icons.redo_rounded,
+            size: m.primary,
+            semanticLabel: l10n.redo,
+            enabled: document?.canRedo ?? false,
+            onTap: _redo,
+          ),
+        ),
+    ];
+  }
+
+  Widget _canvasArea(bool big) {
+    final document = _document;
+    final page = _page;
+    Widget child;
+    if (_failed) {
+      child = const Center(child: Icon(Icons.sentiment_dissatisfied_rounded, size: 96, color: Color(0xFFB0B3C6)));
+    } else if (document == null || page == null) {
+      child = const Center(child: CircularProgressIndicator());
+    } else {
+      final side = document.map.width < document.map.height ? document.map.width : document.map.height;
+      child = PaintCanvas(
+        document: document,
+        page: page,
+        tool: _tool,
+        color: _color,
+        brushSize: side * (big ? _brushSteps[_brushStep] : _brushSteps[1]),
+        allowZoom: big,
+        onFilled: _onFilled,
+      );
+    }
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.08), blurRadius: 12, offset: const Offset(0, 4))],
+      ),
+      child: ClipRRect(borderRadius: BorderRadius.circular(24), child: child),
     );
   }
-}
 
-class _ShareOption extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final Color color;
-  final VoidCallback onTap;
-
-  const _ShareOption({
-    required this.icon,
-    required this.label,
-    required this.color,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            width: 60,
-            height: 60,
-            decoration: BoxDecoration(
-              color: color,
-              shape: BoxShape.circle,
+  Widget _palette(_Metrics m, bool big, {required int columns}) {
+    final colors = _colors(big);
+    final items = <PaletteItem>[
+      for (final c in colors) PaletteItem.color(c),
+      const PaletteItem.glyph(EraserGlyph()),
+      if (big)
+        PaletteItem.glyph(
+          Center(
+            child: FractionallySizedBox(
+              widthFactor: 0.35 + _brushStep * 0.3,
+              heightFactor: 0.35 + _brushStep * 0.3,
+              child: DecoratedBox(decoration: BoxDecoration(color: _color, shape: BoxShape.circle)),
             ),
-            child: Icon(icon, color: Colors.white, size: 28),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            label,
-            style: const TextStyle(fontSize: 12),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _ToolButton extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final bool isSelected;
-  final VoidCallback onTap;
-
-  const _ToolButton({
-    required this.icon,
-    required this.label,
-    required this.isSelected,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: 56,
-        padding: const EdgeInsets.symmetric(vertical: 8),
-        decoration: BoxDecoration(
-          color: isSelected ? AppTheme.primaryColor : Colors.grey[200],
-          borderRadius: BorderRadius.circular(12),
-          border: isSelected
-              ? Border.all(color: AppTheme.primaryDark, width: 2)
-              : null,
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              icon,
-              color: isSelected ? Colors.white : AppTheme.textSecondary,
-              size: 24,
-            ),
-            const SizedBox(height: 4),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 9,
-                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                color: isSelected ? Colors.white : AppTheme.textSecondary,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _FloatingToolButton extends StatelessWidget {
-  final IconData icon;
-  final bool isSelected;
-  final VoidCallback onTap;
-
-  const _FloatingToolButton({
-    required this.icon,
-    required this.isSelected,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: 40,
-        height: 40,
-        decoration: BoxDecoration(
-          color: isSelected ? Colors.white : Colors.transparent,
-          shape: BoxShape.circle,
-          border: Border.all(
-            color: isSelected ? Colors.white : Colors.white54,
-            width: 2,
           ),
         ),
-        child: Icon(
-          icon,
-          color: isSelected ? Colors.black87 : Colors.white,
-          size: 20,
-        ),
-      ),
-    );
-  }
-}
-
-class _ZoomButton extends StatelessWidget {
-  final IconData icon;
-  final VoidCallback? onTap;
-  final bool isTop;
-  final bool isBottom;
-
-  const _ZoomButton({
-    required this.icon,
-    this.onTap,
-    this.isTop = false,
-    this.isBottom = false,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final isDisabled = onTap == null;
-
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: 44,
-        height: 44,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.vertical(
-            top: isTop ? const Radius.circular(22) : Radius.zero,
-            bottom: isBottom ? const Radius.circular(22) : Radius.zero,
-          ),
-        ),
-        child: Icon(
-          icon,
-          color: isDisabled
-              ? Colors.white.withValues(alpha: 0.3)
-              : Colors.white.withValues(alpha: 0.9),
-          size: 22,
-        ),
-      ),
+    ];
+    final selectedIndex = _tool == CanvasTool.eraser ? colors.length : colors.indexOf(_color);
+    return KidPalette(
+      items: items,
+      columns: columns,
+      cellSize: m.cell,
+      gap: m.gap,
+      selectedIndex: selectedIndex,
+      onSelected: (i) => _selectPaletteItem(i, colors),
     );
   }
 }

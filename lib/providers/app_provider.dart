@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 import '../data/builtin_images.dart';
+import '../engine/region/region_service.dart';
 import '../models/user_settings.dart';
 import '../models/category.dart';
 import '../models/coloring_image.dart';
@@ -10,6 +12,9 @@ import '../theme/app_theme.dart';
 
 class AppProvider extends ChangeNotifier {
   final StorageService _storageService = StorageService();
+
+  /// Label maps are derived data, so the OS may clear them with the cache.
+  final RegionService regionService = RegionService(cacheDirectory: getApplicationCacheDirectory);
 
   UserSettings _settings = UserSettings();
   List<Category> _categories = [];
@@ -82,6 +87,8 @@ class AppProvider extends ChangeNotifier {
     await _storageService.saveUserSettings(newSettings);
     notifyListeners();
   }
+
+  Future<void> setAgeMode(AgeMode mode) => updateSettings(_settings.copyWith(ageMode: mode));
 
   // Saved artworks management
   Future<void> saveArtwork(SavedArtwork artwork) async {

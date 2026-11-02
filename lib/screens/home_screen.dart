@@ -1,176 +1,218 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../l10n/app_localizations.dart';
-import '../providers/app_provider.dart';
-import '../theme/app_theme.dart';
 import '../models/category.dart';
+import '../models/saved_artwork.dart';
+import '../providers/app_provider.dart';
+import '../services/sound_service.dart';
+import '../theme/app_theme.dart';
+import '../widgets/parental_gate.dart';
 import 'category_screen.dart';
 import 'my_artworks_screen.dart';
-import 'settings_screen.dart';
+import 'parents_screen.dart';
 
-class HomeScreen extends StatefulWidget {
+/// Columns for picture grids: big tiles on phones, more on tablets.
+int gridColumns(double width) => width >= 900 ? 4 : (width >= 560 ? 3 : 2);
+
+/// One screen, no tabs: the child chooses a category or their pictures.
+/// Everything for grown-ups sits behind the small gear and the gate.
+class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  int _currentIndex = 0;
-
-  @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-
-    return Scaffold(
-      body: IndexedStack(
-        index: _currentIndex,
-        children: const [
-          _CategoriesTab(),
-          MyArtworksScreen(),
-          SettingsScreen(),
-        ],
-      ),
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.1),
-              blurRadius: 10,
-              offset: const Offset(0, -5),
-            ),
-          ],
-        ),
-        child: BottomNavigationBar(
-          currentIndex: _currentIndex,
-          onTap: (index) => setState(() => _currentIndex = index),
-          items: [
-            BottomNavigationBarItem(
-              icon: const Icon(Icons.palette_outlined),
-              activeIcon: const Icon(Icons.palette),
-              label: l10n.categories,
-            ),
-            BottomNavigationBarItem(
-              icon: const Icon(Icons.collections_outlined),
-              activeIcon: const Icon(Icons.collections),
-              label: l10n.myArtworks,
-            ),
-            BottomNavigationBarItem(
-              icon: const Icon(Icons.settings_outlined),
-              activeIcon: const Icon(Icons.settings),
-              label: l10n.settings,
-            ),
-          ],
+    // The home screen is the root: a system back must not close the app.
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        backgroundColor: const Color(0xFFFFF4E6),
+        body: SafeArea(
+          child: Consumer<AppProvider>(
+            builder: (context, provider, _) {
+              if (provider.isLoading) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              return LayoutBuilder(
+                builder: (context, constraints) {
+                  final columns = gridColumns(constraints.maxWidth);
+                  return CustomScrollView(
+                    slivers: [
+                      SliverToBoxAdapter(
+                        child: _Header(onParents: () => _openParents(context)),
+                      ),
+                      SliverPadding(
+                        padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
+                        sliver: SliverToBoxAdapter(
+                          child: _GalleryCard(
+                            latest: provider.savedArtworks.isEmpty
+                                ? null
+                                : provider.savedArtworks.first,
+                            label: l10n.myArtworks,
+                          ),
+                        ),
+                      ),
+                      SliverPadding(
+                        padding: const EdgeInsets.all(16),
+                        sliver: SliverGrid(
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: columns,
+                                crossAxisSpacing: 16,
+                                mainAxisSpacing: 16,
+                                childAspectRatio: 0.95,
+                              ),
+                          delegate: SliverChildBuilderDelegate(
+                            (context, index) => _CategoryCard(
+                              category: provider.categories[index],
+                            ),
+                            childCount: provider.categories.length,
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+          ),
         ),
       ),
     );
   }
-}
 
-class _CategoriesTab extends StatelessWidget {
-  const _CategoriesTab();
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Cobi Paint'),
-        centerTitle: true,
-      ),
-      body: Consumer<AppProvider>(
-        builder: (context, provider, _) {
-          if (provider.isLoading) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          return CustomScrollView(
-            slivers: [
-              // Welcome section
-              SliverToBoxAdapter(
-                child: _WelcomeSection(),
-              ),
-              // Categories grid
-              SliverPadding(
-                padding: const EdgeInsets.all(16),
-                sliver: SliverGrid(
-                  gridDelegate:
-                      const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 16,
-                    mainAxisSpacing: 16,
-                    childAspectRatio: 1.0,
-                  ),
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      final category = provider.categories[index];
-                      return _CategoryCard(category: category);
-                    },
-                    childCount: provider.categories.length,
-                  ),
-                ),
-              ),
-              const SliverPadding(padding: EdgeInsets.only(bottom: 20)),
-            ],
-          );
-        },
-      ),
+  Future<void> _openParents(BuildContext context) async {
+    if (!await showParentalGate(context) || !context.mounted) return;
+    await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const ParentsScreen()),
     );
   }
 }
 
-class _WelcomeSection extends StatelessWidget {
+class _Header extends StatelessWidget {
+  const _Header({required this.onParents});
+
+  final VoidCallback onParents;
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-
-    return Container(
-      margin: const EdgeInsets.all(16),
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [AppTheme.secondaryColor, AppTheme.primaryColor],
-        ),
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: AppTheme.primaryColor.withValues(alpha: 0.3),
-            blurRadius: 15,
-            offset: const Offset(0, 8),
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 12, 8, 8),
+      child: Row(
+        children: [
+          ClipOval(
+            child: Image.asset(
+              'assets/images/app_icon.png',
+              width: 64,
+              height: 64,
+            ),
+          ),
+          const SizedBox(width: 12),
+          const Expanded(
+            child: Text(
+              'Cobi Paint',
+              style: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.w800,
+                color: AppTheme.textPrimary,
+              ),
+            ),
+          ),
+          // Grown-up entrance: small, grey and gated on purpose.
+          IconButton(
+            tooltip: l10n.parentsArea,
+            iconSize: 26,
+            icon: const Icon(Icons.settings_rounded, color: Color(0xFFB0B3C6)),
+            onPressed: onParents,
           ),
         ],
       ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  '${l10n.welcome} 👋',
+    );
+  }
+}
+
+class _GalleryCard extends StatelessWidget {
+  const _GalleryCard({required this.latest, required this.label});
+
+  final SavedArtwork? latest;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    final storage = context.read<AppProvider>().storageService;
+    final thumb = latest == null
+        ? null
+        : storage.resolveArtworkFile(
+            latest!.thumbnailPath.isNotEmpty
+                ? latest!.thumbnailPath
+                : latest!.savedImagePath,
+          );
+    return Semantics(
+      button: true,
+      label: label,
+      child: GestureDetector(
+        onTap: () {
+          SoundService().playClickSound();
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const MyArtworksScreen()),
+          );
+        },
+        child: Container(
+          height: 120,
+          decoration: BoxDecoration(
+            gradient: const LinearGradient(
+              colors: [Color(0xFFFFD54F), Color(0xFFFF8A65)],
+            ),
+            borderRadius: BorderRadius.circular(24),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.1),
+                blurRadius: 10,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          padding: const EdgeInsets.all(12),
+          child: Row(
+            children: [
+              Container(
+                width: 96,
+                height: 96,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(18),
+                ),
+                clipBehavior: Clip.antiAlias,
+                child: thumb != null && thumb.existsSync()
+                    ? Image.file(thumb, fit: BoxFit.cover)
+                    : const Icon(
+                        Icons.collections_rounded,
+                        size: 56,
+                        color: Color(0xFFFF8A65),
+                      ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Text(
+                  label,
                   style: const TextStyle(
                     fontSize: 24,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w800,
                     color: Colors.white,
                   ),
                 ),
-                const SizedBox(height: 8),
-                Text(
-                  l10n.welcomeMessage,
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.white.withValues(alpha: 0.9),
-                  ),
-                ),
-              ],
-            ),
+              ),
+              const Icon(
+                Icons.chevron_right_rounded,
+                size: 48,
+                color: Colors.white,
+              ),
+            ],
           ),
-          const Text(
-            '🎨',
-            style: TextStyle(fontSize: 50),
-          ),
-        ],
+        ),
       ),
     );
   }
@@ -183,46 +225,86 @@ class _CategoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => CategoryScreen(category: category),
-          ),
-        );
-      },
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.08),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
+    final name = categoryName(AppLocalizations.of(context)!, category);
+    return Semantics(
+      button: true,
+      label: name,
+      child: GestureDetector(
+        onTap: () {
+          SoundService().playClickSound();
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => CategoryScreen(category: category),
             ),
-          ],
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              category.icon,
-              style: const TextStyle(fontSize: 50),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              category.name,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: AppTheme.textPrimary,
+          );
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(24),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.08),
+                blurRadius: 10,
+                offset: const Offset(0, 4),
               ),
-            ),
-          ],
+            ],
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Expanded(
+                child: FittedBox(
+                  child: Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: Text(
+                      category.icon,
+                      style: const TextStyle(fontSize: 72),
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(8, 0, 8, 14),
+                child: Text(
+                  name,
+                  textAlign: TextAlign.center,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: AppTheme.textPrimary,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
+  }
+}
+
+/// Localised category name; the model only stores Turkish and English.
+String categoryName(AppLocalizations l10n, Category category) {
+  switch (category.id) {
+    case 'animals':
+      return l10n.animals;
+    case 'plants':
+      return l10n.plants;
+    case 'vehicles':
+      return l10n.vehicles;
+    case 'characters':
+      return l10n.characters;
+    case 'nature':
+      return l10n.nature;
+    case 'food':
+      return l10n.food;
+    case 'import':
+      return l10n.importedPages;
+    default:
+      return l10n.localeName.startsWith('tr') ? category.name : category.nameEn;
   }
 }

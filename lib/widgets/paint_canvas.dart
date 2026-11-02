@@ -3,7 +3,6 @@ import 'dart:math' as math;
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import '../engine/document/coloring_document.dart';
@@ -85,7 +84,7 @@ class _PaintCanvasState extends State<PaintCanvas> with SingleTickerProviderStat
   @override
   void initState() {
     super.initState();
-    _reveal = AnimationController(vsync: this, duration: const Duration(milliseconds: 260))
+    _reveal = AnimationController(vsync: this, duration: const Duration(milliseconds: 220))
       ..addListener(_bump)
       ..addStatusListener((status) {
         if (status == AnimationStatus.completed) {
@@ -159,7 +158,7 @@ class _PaintCanvasState extends State<PaintCanvas> with SingleTickerProviderStat
     if (animate && previous != null) {
       _revealFrom?.dispose();
       _revealFrom = previous;
-      _reveal.forward(from: 0);
+      unawaited(_reveal.forward(from: 0));
     } else {
       previous?.dispose();
     }

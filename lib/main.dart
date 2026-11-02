@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -5,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'l10n/app_localizations.dart';
 import 'providers/app_provider.dart';
 import 'providers/locale_provider.dart';
+import 'services/sound_service.dart';
 import 'theme/app_theme.dart';
 import 'screens/splash_screen.dart';
 
@@ -29,7 +33,14 @@ void main() async {
     ),
   );
 
+  // Android: hide the system bars so a stray swipe only reveals them
+  // instead of leaving the app (the first swipe is swallowed).
+  if (defaultTargetPlatform == TargetPlatform.android) {
+    await SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+  }
+
   runApp(const CobiPaintApp());
+  unawaited(SoundService().preload());
 }
 
 class CobiPaintApp extends StatelessWidget {
@@ -48,9 +59,9 @@ class CobiPaintApp extends StatelessWidget {
       ],
       child: Consumer2<AppProvider, LocaleProvider>(
         builder: (context, appProvider, localeProvider, _) {
-          // Rebuild MaterialApp when theme or locale changes
+          // Theme and locale changes rebuild the app in place; no key, so the
+          // navigation stack (and the parents area) survives them.
           return MaterialApp(
-            key: ValueKey('${appProvider.settings.selectedTheme}_${localeProvider.locale.languageCode}'),
             title: 'Cobi Paint',
             debugShowCheckedModeBanner: false,
             theme: AppTheme.lightTheme,

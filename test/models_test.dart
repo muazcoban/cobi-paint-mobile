@@ -1,7 +1,6 @@
 import 'package:cobi_paint_mobile/models/coloring_image.dart';
 import 'package:cobi_paint_mobile/models/saved_artwork.dart';
 import 'package:cobi_paint_mobile/models/user_settings.dart';
-import 'package:cobi_paint_mobile/providers/coloring_provider.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -24,12 +23,18 @@ void main() {
     });
 
     test('survives a save and load round trip', () {
-      final original = UserSettings(selectedTheme: 'forest', soundEnabled: false, soundVolume: 0.3);
+      final original = UserSettings(selectedTheme: 'forest', soundEnabled: false, soundVolume: 0.3, ageMode: AgeMode.big);
       final restored = UserSettings.fromJson(original.toJson());
 
       expect(restored.selectedTheme, 'forest');
       expect(restored.soundEnabled, isFalse);
       expect(restored.soundVolume, 0.3);
+      expect(restored.ageMode, AgeMode.big);
+    });
+
+    test('starts in Minik mode for a 3-year-old', () {
+      expect(UserSettings().ageMode, AgeMode.little);
+      expect(UserSettings.fromJson({'selectedTheme': 'coral'}).ageMode, AgeMode.little);
     });
   });
 
@@ -67,12 +72,22 @@ void main() {
     expect(restored.originalImageId, 'animal_cat');
     expect(restored.coloredRegions, {'5': 0xFFE53935});
     expect(restored.updatedAt, DateTime(2026, 11, 2, 10));
+    expect(restored.schema, 2);
   });
 
-  test('colors keep the saved integer format when an artwork is reopened', () {
-    final provider = ColoringProvider();
-    provider.loadExistingArtwork({'5': 0xFFE53935, '6': 0xFF1E88E5});
-
-    expect(provider.getColoredRegionsMap(), {'5': 0xFFE53935, '6': 0xFF1E88E5});
+  test('artworks saved before version 2 read as schema 1 with their pixel colours', () {
+    final legacy = SavedArtwork.fromJson({
+      'id': 'old',
+      'originalImageId': 'animal_cat',
+      'originalImagePath': 'assets/images/categories/animals/cat.png',
+      'savedImagePath': '/var/mobile/Containers/Data/Application/OLD/Documents/artworks/old.png',
+      'thumbnailPath': '/var/mobile/Containers/Data/Application/OLD/Documents/artworks/old_thumb.png',
+      'name': 'Kedi',
+      'createdAt': '2026-01-18T10:00:00.000',
+      'updatedAt': '2026-01-18T10:00:00.000',
+      'coloredRegions': {'5': 0xFFE53935},
+    });
+    expect(legacy.schema, 1);
+    expect(legacy.coloredRegions, {'5': 0xFFE53935});
   });
 }

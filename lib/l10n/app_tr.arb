@@ -1,294 +1,413 @@
 {
   "@@locale": "tr",
-
   "appName": "Cobi Paint",
-  "@appName": {"description": "App name"},
-
+  "@appName": {
+    "description": "App name"
+  },
   "home": "Ana Sayfa",
-  "@home": {"description": "Home screen title"},
-
+  "@home": {
+    "description": "Home screen title"
+  },
   "categories": "Kategoriler",
-  "@categories": {"description": "Categories title"},
-
+  "@categories": {
+    "description": "Categories title"
+  },
   "myArtworks": "Eserlerim",
-  "@myArtworks": {"description": "My artworks title"},
-
+  "@myArtworks": {
+    "description": "My artworks title"
+  },
   "settings": "Ayarlar",
-  "@settings": {"description": "Settings title"},
-
+  "@settings": {
+    "description": "Settings title"
+  },
   "animals": "Hayvanlar",
-  "@animals": {"description": "Animals category"},
-
+  "@animals": {
+    "description": "Animals category"
+  },
   "plants": "Bitkiler",
-  "@plants": {"description": "Plants category"},
-
+  "@plants": {
+    "description": "Plants category"
+  },
   "vehicles": "Araçlar",
-  "@vehicles": {"description": "Vehicles category"},
-
+  "@vehicles": {
+    "description": "Vehicles category"
+  },
   "characters": "Karakterler",
-  "@characters": {"description": "Characters category"},
-
-  "nature": "Doga",
-  "@nature": {"description": "Nature category"},
-
+  "@characters": {
+    "description": "Characters category"
+  },
+  "nature": "Doğa",
+  "@nature": {
+    "description": "Nature category"
+  },
   "food": "Yiyecekler",
-  "@food": {"description": "Food category"},
-
-  "importImage": "Resim Yukle",
-  "@importImage": {"description": "Import image button"},
-
-  "goPro": "Pro'ya Gec",
-  "@goPro": {"description": "Go pro button"},
-
+  "@food": {
+    "description": "Food category"
+  },
+  "importImage": "Resim Yükle",
+  "@importImage": {
+    "description": "Import image button"
+  },
+  "goPro": "Pro'ya Geç",
+  "@goPro": {
+    "description": "Go pro button"
+  },
   "save": "Kaydet",
-  "@save": {"description": "Save button"},
-
+  "@save": {
+    "description": "Save button"
+  },
   "saving": "Kaydediliyor...",
-  "@saving": {"description": "Saving text"},
-
-  "share": "Paylas",
-  "@share": {"description": "Share button"},
-
+  "@saving": {
+    "description": "Saving text"
+  },
+  "share": "Paylaş",
+  "@share": {
+    "description": "Share button"
+  },
   "undo": "Geri Al",
-  "@undo": {"description": "Undo button"},
-
-  "redo": "Ileri Al",
-  "@redo": {"description": "Redo button"},
-
+  "@undo": {
+    "description": "Undo button"
+  },
+  "redo": "İleri Al",
+  "@redo": {
+    "description": "Redo button"
+  },
   "clear": "Temizle",
-  "@clear": {"description": "Clear button"},
-
+  "@clear": {
+    "description": "Clear button"
+  },
   "fullscreen": "Tam Ekran",
-  "@fullscreen": {"description": "Fullscreen button"},
-
-  "exitFullscreen": "Tam Ekrandan Cik",
-  "@exitFullscreen": {"description": "Exit fullscreen button"},
-
+  "@fullscreen": {
+    "description": "Fullscreen button"
+  },
+  "exitFullscreen": "Tam Ekrandan Çık",
+  "@exitFullscreen": {
+    "description": "Exit fullscreen button"
+  },
   "fill": "Doldur",
-  "@fill": {"description": "Fill tool"},
-
+  "@fill": {
+    "description": "Fill tool"
+  },
   "pencil": "Kalem",
-  "@pencil": {"description": "Pencil tool"},
-
+  "@pencil": {
+    "description": "Pencil tool"
+  },
   "eraser": "Silgi",
-  "@eraser": {"description": "Eraser tool"},
-
-  "selected": "Secili",
-  "@selected": {"description": "Selected label"},
-
-  "selectColor": "Renk Sec",
-  "@selectColor": {"description": "Select color dialog title"},
-
-  "cancel": "Iptal",
-  "@cancel": {"description": "Cancel button"},
-
-  "select": "Sec",
-  "@select": {"description": "Select button"},
-
+  "@eraser": {
+    "description": "Eraser tool"
+  },
+  "selected": "Seçili",
+  "@selected": {
+    "description": "Selected label"
+  },
+  "selectColor": "Renk Seç",
+  "@selectColor": {
+    "description": "Select color dialog title"
+  },
+  "cancel": "İptal",
+  "@cancel": {
+    "description": "Cancel button"
+  },
+  "select": "Seç",
+  "@select": {
+    "description": "Select button"
+  },
   "paintTexture": "Boya Dokusu",
-  "@paintTexture": {"description": "Paint texture title"},
-
-  "paintTextureDescription": "Boyanan alanlarin gorunumunu secin",
-  "@paintTextureDescription": {"description": "Paint texture description"},
-
+  "@paintTexture": {
+    "description": "Paint texture title"
+  },
+  "paintTextureDescription": "Boyanan alanların görünümünü seçin",
+  "@paintTextureDescription": {
+    "description": "Paint texture description"
+  },
   "textureNone": "Normal",
-  "@textureNone": {"description": "No texture"},
-
-  "textureNoneDesc": "Duz ve puruzsuz boyama",
-  "@textureNoneDesc": {"description": "No texture description"},
-
+  "@textureNone": {
+    "description": "No texture"
+  },
+  "textureNoneDesc": "Düz ve pürüzsüz boyama",
+  "@textureNoneDesc": {
+    "description": "No texture description"
+  },
   "textureCanvas": "Tuval",
-  "@textureCanvas": {"description": "Canvas texture"},
-
-  "textureCanvasDesc": "Gercek tuval dokusu efekti",
-  "@textureCanvasDesc": {"description": "Canvas texture description"},
-
-  "texturePaper": "Kagit",
-  "@texturePaper": {"description": "Paper texture"},
-
-  "texturePaperDesc": "Kagit uzerine boya kalemi hissi",
-  "@texturePaperDesc": {"description": "Paper texture description"},
-
+  "@textureCanvas": {
+    "description": "Canvas texture"
+  },
+  "textureCanvasDesc": "Gerçek tuval dokusu efekti",
+  "@textureCanvasDesc": {
+    "description": "Canvas texture description"
+  },
+  "texturePaper": "Kâğıt",
+  "@texturePaper": {
+    "description": "Paper texture"
+  },
+  "texturePaperDesc": "Kâğıt üzerine boya kalemi hissi",
+  "@texturePaperDesc": {
+    "description": "Paper texture description"
+  },
   "textureWatercolor": "Sulu Boya",
-  "@textureWatercolor": {"description": "Watercolor texture"},
-
+  "@textureWatercolor": {
+    "description": "Watercolor texture"
+  },
   "textureWatercolorDesc": "Sulu boya efekti",
-  "@textureWatercolorDesc": {"description": "Watercolor texture description"},
-
+  "@textureWatercolorDesc": {
+    "description": "Watercolor texture description"
+  },
   "hide": "Gizle",
-  "@hide": {"description": "Hide panel button"},
-
+  "@hide": {
+    "description": "Hide panel button"
+  },
   "clearConfirmTitle": "Temizle",
-  "@clearConfirmTitle": {"description": "Clear confirmation title"},
-
-  "clearConfirmMessage": "Tum boyamayi temizlemek istediginize emin misiniz?",
-  "@clearConfirmMessage": {"description": "Clear confirmation message"},
-
+  "@clearConfirmTitle": {
+    "description": "Clear confirmation title"
+  },
+  "clearConfirmMessage": "Tüm boyamayı temizlemek istediğinize emin misiniz?",
+  "@clearConfirmMessage": {
+    "description": "Clear confirmation message"
+  },
   "imageSaved": "Resim kaydedildi!",
-  "@imageSaved": {"description": "Image saved message"},
-
-  "imageLoadError": "Resim yuklenemedi",
-  "@imageLoadError": {"description": "Image load error"},
-
-  "saveError": "Kaydetme hatasi",
-  "@saveError": {"description": "Save error"},
-
-  "shareError": "Paylasma hatasi",
-  "@shareError": {"description": "Share error"},
-
+  "@imageSaved": {
+    "description": "Image saved message"
+  },
+  "imageLoadError": "Resim yüklenemedi",
+  "@imageLoadError": {
+    "description": "Image load error"
+  },
+  "saveError": "Kaydetme hatası",
+  "@saveError": {
+    "description": "Save error"
+  },
+  "shareError": "Paylaşma hatası",
+  "@shareError": {
+    "description": "Share error"
+  },
   "whatsapp": "WhatsApp",
-  "@whatsapp": {"description": "WhatsApp"},
-
+  "@whatsapp": {
+    "description": "WhatsApp"
+  },
   "instagram": "Instagram",
-  "@instagram": {"description": "Instagram"},
-
-  "resetView": "Gorunumu Sifirla",
-  "@resetView": {"description": "Reset view button"},
-
+  "@instagram": {
+    "description": "Instagram"
+  },
+  "resetView": "Görünümü Sıfırla",
+  "@resetView": {
+    "description": "Reset view button"
+  },
   "language": "Dil",
-  "@language": {"description": "Language setting"},
-
-  "turkish": "Turkce",
-  "@turkish": {"description": "Turkish language"},
-
-  "english": "Ingilizce",
-  "@english": {"description": "English language"},
-
-  "selectLanguage": "Dil Sec",
-  "@selectLanguage": {"description": "Select language dialog title"},
-
+  "@language": {
+    "description": "Language setting"
+  },
+  "turkish": "Türkçe",
+  "@turkish": {
+    "description": "Turkish language"
+  },
+  "english": "İngilizce",
+  "@english": {
+    "description": "English language"
+  },
+  "selectLanguage": "Dil Seç",
+  "@selectLanguage": {
+    "description": "Select language dialog title"
+  },
   "soundEffects": "Ses Efektleri",
-  "@soundEffects": {"description": "Sound effects setting"},
-
+  "@soundEffects": {
+    "description": "Sound effects setting"
+  },
   "notifications": "Bildirimler",
-  "@notifications": {"description": "Notifications setting"},
-
-  "rateApp": "Uygulamayi Degerlendir",
-  "@rateApp": {"description": "Rate app button"},
-
-  "privacyPolicy": "Gizlilik Politikasi",
-  "@privacyPolicy": {"description": "Privacy policy button"},
-
-  "termsOfService": "Kullanim Kosullari",
-  "@termsOfService": {"description": "Terms of service button"},
-
-  "about": "Hakkinda",
-  "@about": {"description": "About button"},
-
-  "version": "Surum",
-  "@version": {"description": "Version label"},
-
+  "@notifications": {
+    "description": "Notifications setting"
+  },
+  "rateApp": "Uygulamayı Değerlendir",
+  "@rateApp": {
+    "description": "Rate app button"
+  },
+  "privacyPolicy": "Gizlilik Politikası",
+  "@privacyPolicy": {
+    "description": "Privacy policy button"
+  },
+  "termsOfService": "Kullanım Koşulları",
+  "@termsOfService": {
+    "description": "Terms of service button"
+  },
+  "about": "Hakkında",
+  "@about": {
+    "description": "About button"
+  },
+  "version": "Sürüm",
+  "@version": {
+    "description": "Version label"
+  },
   "pro": "Pro",
-  "@pro": {"description": "Pro label"},
-
-  "proFeatures": "Pro Ozellikleri",
-  "@proFeatures": {"description": "Pro features title"},
-
-  "unlimitedImages": "Sinirsiz Resim",
-  "@unlimitedImages": {"description": "Unlimited images feature"},
-
-  "noAds": "Reklamsiz",
-  "@noAds": {"description": "No ads feature"},
-
-  "allCategories": "Tum Kategoriler",
-  "@allCategories": {"description": "All categories feature"},
-
-  "buyPro": "Pro Satin Al",
-  "@buyPro": {"description": "Buy pro button"},
-
-  "restorePurchases": "Satin Alimlari Geri Yukle",
-  "@restorePurchases": {"description": "Restore purchases button"},
-
+  "@pro": {
+    "description": "Pro label"
+  },
+  "proFeatures": "Pro Özellikleri",
+  "@proFeatures": {
+    "description": "Pro features title"
+  },
+  "unlimitedImages": "Sınırsız Resim",
+  "@unlimitedImages": {
+    "description": "Unlimited images feature"
+  },
+  "noAds": "Reklamsız",
+  "@noAds": {
+    "description": "No ads feature"
+  },
+  "allCategories": "Tüm Kategoriler",
+  "@allCategories": {
+    "description": "All categories feature"
+  },
+  "buyPro": "Pro Satın Al",
+  "@buyPro": {
+    "description": "Buy pro button"
+  },
+  "restorePurchases": "Satın Alımları Geri Yükle",
+  "@restorePurchases": {
+    "description": "Restore purchases button"
+  },
   "proActive": "Pro Aktif",
-  "@proActive": {"description": "Pro active label"},
-
-  "startColoring": "Boyamaya Basla",
-  "@startColoring": {"description": "Start coloring button"},
-
+  "@proActive": {
+    "description": "Pro active label"
+  },
+  "startColoring": "Boyamaya Başla",
+  "@startColoring": {
+    "description": "Start coloring button"
+  },
   "continueColoring": "Boyamaya Devam Et",
-  "@continueColoring": {"description": "Continue coloring button"},
-
+  "@continueColoring": {
+    "description": "Continue coloring button"
+  },
   "delete": "Sil",
-  "@delete": {"description": "Delete button"},
-
+  "@delete": {
+    "description": "Delete button"
+  },
   "deleteConfirmTitle": "Eseri Sil",
-  "@deleteConfirmTitle": {"description": "Delete confirmation title"},
-
-  "deleteConfirmMessage": "Bu eseri silmek istediginize emin misiniz?",
-  "@deleteConfirmMessage": {"description": "Delete confirmation message"},
-
-  "noArtworks": "Henuz eseriniz yok",
-  "@noArtworks": {"description": "No artworks message"},
-
-  "noArtworksHint": "Bir resim boyayarak baslayabilirsiniz",
-  "@noArtworksHint": {"description": "No artworks hint"},
-
+  "@deleteConfirmTitle": {
+    "description": "Delete confirmation title"
+  },
+  "deleteConfirmMessage": "Bu eseri silmek istediğinize emin misiniz?",
+  "@deleteConfirmMessage": {
+    "description": "Delete confirmation message"
+  },
+  "noArtworks": "Henüz eseriniz yok",
+  "@noArtworks": {
+    "description": "No artworks message"
+  },
+  "noArtworksHint": "Bir resim boyayarak başlayabilirsiniz",
+  "@noArtworksHint": {
+    "description": "No artworks hint"
+  },
   "recentArtworks": "Son Eserler",
-  "@recentArtworks": {"description": "Recent artworks title"},
-
-  "seeAll": "Tumunu Gor",
-  "@seeAll": {"description": "See all button"},
-
-  "welcome": "Hosgeldin!",
-  "@welcome": {"description": "Welcome message"},
-
-  "welcomeMessage": "Boyamaya baslamak icin bir kategori sec",
-  "@welcomeMessage": {"description": "Welcome message description"},
-
-  "importFromGallery": "Galeriden Yukle",
-  "@importFromGallery": {"description": "Import from gallery"},
-
-  "importFromCamera": "Kameradan Cek",
-  "@importFromCamera": {"description": "Import from camera"},
-
-  "processing": "Isleniyor...",
-  "@processing": {"description": "Processing message"},
-
-  "importSuccess": "Resim basariyla yuklendi",
-  "@importSuccess": {"description": "Import success message"},
-
-  "importError": "Resim yuklenemedi",
-  "@importError": {"description": "Import error message"},
-
-  "permissionDenied": "Izin reddedildi",
-  "@permissionDenied": {"description": "Permission denied message"},
-
+  "@recentArtworks": {
+    "description": "Recent artworks title"
+  },
+  "seeAll": "Tümünü Gör",
+  "@seeAll": {
+    "description": "See all button"
+  },
+  "welcome": "Hoş geldin!",
+  "@welcome": {
+    "description": "Welcome message"
+  },
+  "welcomeMessage": "Boyamaya başlamak için bir kategori seç",
+  "@welcomeMessage": {
+    "description": "Welcome message description"
+  },
+  "importFromGallery": "Galeriden Yükle",
+  "@importFromGallery": {
+    "description": "Import from gallery"
+  },
+  "importFromCamera": "Kameradan Çek",
+  "@importFromCamera": {
+    "description": "Import from camera"
+  },
+  "processing": "İşleniyor...",
+  "@processing": {
+    "description": "Processing message"
+  },
+  "importSuccess": "Resim başarıyla yüklendi",
+  "@importSuccess": {
+    "description": "Import success message"
+  },
+  "importError": "Resim yüklenemedi",
+  "@importError": {
+    "description": "Import error message"
+  },
+  "permissionDenied": "İzin reddedildi",
+  "@permissionDenied": {
+    "description": "Permission denied message"
+  },
   "cameraPermission": "Kamera izni gerekli",
-  "@cameraPermission": {"description": "Camera permission message"},
-
+  "@cameraPermission": {
+    "description": "Camera permission message"
+  },
   "galleryPermission": "Galeri izni gerekli",
-  "@galleryPermission": {"description": "Gallery permission message"},
-
+  "@galleryPermission": {
+    "description": "Gallery permission message"
+  },
   "ok": "Tamam",
-  "@ok": {"description": "OK button"},
-
+  "@ok": {
+    "description": "OK button"
+  },
   "yes": "Evet",
-  "@yes": {"description": "Yes button"},
-
-  "no": "Hayir",
-  "@no": {"description": "No button"},
-
-  "loading": "Yukleniyor...",
-  "@loading": {"description": "Loading message"},
-
+  "@yes": {
+    "description": "Yes button"
+  },
+  "no": "Hayır",
+  "@no": {
+    "description": "No button"
+  },
+  "loading": "Yükleniyor...",
+  "@loading": {
+    "description": "Loading message"
+  },
   "error": "Hata",
-  "@error": {"description": "Error title"},
-
+  "@error": {
+    "description": "Error title"
+  },
   "retry": "Tekrar Dene",
-  "@retry": {"description": "Retry button"},
-
+  "@retry": {
+    "description": "Retry button"
+  },
   "general": "Genel",
-  "@general": {"description": "General settings section"},
-
-  "appearance": "Gorunum",
-  "@appearance": {"description": "Appearance settings section"},
-
+  "@general": {
+    "description": "General settings section"
+  },
+  "appearance": "Görünüm",
+  "@appearance": {
+    "description": "Appearance settings section"
+  },
   "support": "Destek",
-  "@support": {"description": "Support settings section"},
-
-  "contactUs": "Bize Ulasin",
-  "@contactUs": {"description": "Contact us button"},
-
-  "faq": "Sikca Sorulan Sorular",
-  "@faq": {"description": "FAQ button"}
+  "@support": {
+    "description": "Support settings section"
+  },
+  "contactUs": "Bize Ulaşın",
+  "@contactUs": {
+    "description": "Contact us button"
+  },
+  "faq": "Sıkça Sorulan Sorular",
+  "@faq": {
+    "description": "FAQ button"
+  },
+  "done": "Bitti",
+  "back": "Geri",
+  "marker": "Keçeli kalem",
+  "brushSize": "Fırça boyutu",
+  "importedPages": "Fotoğraflarım",
+  "gateTitle": "Ebeveyn kontrolü",
+  "gateInstruction": "Devam etmek için bu sayılara sırayla dokunun:",
+  "gateDigitWords": "sıfır,bir,iki,üç,dört,beş,altı,yedi,sekiz,dokuz",
+  "gateTryAgain": "Olmadı. Yeni sayılarla tekrar deneyin.",
+  "parentsArea": "Ebeveyn alanı",
+  "parentsHint": "Ayarlar, paylaşım ve silme yalnız buradan yapılır.",
+  "ageMode": "Mod",
+  "ageModeLittle": "Minik (3–5 yaş)",
+  "ageModeLittleDesc": "Kocaman düğmeler, 8 renk, yakınlaştırma yok. Kalem çizginin dışına taşmaz.",
+  "ageModeBig": "Büyük (6+ yaş)",
+  "ageModeBigDesc": "16 renk, iki parmakla yakınlaştırma, fırça boyutları, ileri al.",
+  "soundVolume": "Ses seviyesi",
+  "theme": "Tema",
+  "privacyPolicyText": "Cobi Paint hiçbir kişisel veri toplamaz.\n\n• Hesap, reklam, analiz aracı ve internet bağlantısı yoktur.\n• Çocuğunuzun boyadığı resimler yalnız bu cihazda saklanır ve hiçbir sunucuya gönderilmez.\n• Bir resim yalnız siz ebeveyn kontrolünü geçip paylaşmayı seçtiğinizde, sistemin paylaşım menüsüyle ve sizin seçtiğiniz uygulamaya gönderilir.\n• Kayıtlı bir resmi Ebeveyn alanından silebilirsiniz. Uygulamayı silmek bütün resimleri siler.\n\nSorularınız için: muazcoban@icloud.com",
+  "guidedAccessTitle": "Çocuk uygulamada kalsın",
+  "guidedAccessText": "iPhone ve iPad'de Rehberli Erişim'i kullanabilirsiniz: Ayarlar > Erişilebilirlik > Rehberli Erişim'i açın, sonra uygulama açıkken yan düğmeye üç kez basın. Android'de Ayarlar > Güvenlik > Uygulama sabitleme'yi kullanın.",
+  "artworkOptions": "Eser seçenekleri"
 }

@@ -1,88 +1,88 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../l10n/app_localizations.dart';
 import '../models/saved_artwork.dart';
 import '../models/coloring_image.dart';
 import '../providers/app_provider.dart';
 import '../services/share_service.dart';
-import '../theme/app_theme.dart';
+import '../services/sound_service.dart';
+import '../widgets/kid_button.dart';
+import '../widgets/parental_gate.dart';
 import 'coloring_screen.dart';
+import 'home_screen.dart' show gridColumns;
 
+/// The child's pictures. Opening one continues it; sharing and deleting
+/// need a grown-up (long press, then the parental gate).
 class MyArtworksScreen extends StatelessWidget {
   const MyArtworksScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Resimlerim'),
-        automaticallyImplyLeading: false,
-      ),
-      body: Consumer<AppProvider>(
-        builder: (context, provider, _) {
-          if (provider.savedArtworks.isEmpty) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+      backgroundColor: const Color(0xFFFFF4E6),
+      body: SafeArea(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(12, 8, 12, 4),
+              child: Row(
                 children: [
-                  const Icon(
-                    Icons.collections_outlined,
-                    size: 100,
-                    color: AppTheme.textSecondary,
+                  KidButton(
+                    icon: Icons.home_rounded,
+                    color: const Color(0xFFFFD54F),
+                    semanticLabel: l10n.home,
+                    onTap: () => Navigator.of(context).maybePop(),
                   ),
-                  const SizedBox(height: 20),
-                  const Text(
-                    'Henüz kayıtlı resim yok',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: AppTheme.textPrimary,
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Text(
+                      l10n.myArtworks,
+                      style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w800, color: Color(0xFF2D3142)),
                     ),
-                  ),
-                  const SizedBox(height: 10),
-                  const Text(
-                    'Boyamaya başla ve\neserlerini burada gör!',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: AppTheme.textSecondary,
-                    ),
-                  ),
-                  const SizedBox(height: 30),
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      // Show hint to use bottom navigation
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Boyama sekmesine geçmek için alttaki "Boyama" butonuna tıklayın'),
-                          duration: Duration(seconds: 2),
-                        ),
-                      );
-                    },
-                    icon: const Icon(Icons.palette),
-                    label: const Text('Boyamaya Başla'),
                   ),
                 ],
               ),
-            );
-          }
-
-          return GridView.builder(
-            padding: const EdgeInsets.all(16),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 16,
-              mainAxisSpacing: 16,
-              childAspectRatio: 1.0,
             ),
-            itemCount: provider.savedArtworks.length,
-            itemBuilder: (context, index) {
-              return _ArtworkCard(
-                artwork: provider.savedArtworks[index],
-              );
-            },
-          );
-        },
+            Expanded(
+              child: Consumer<AppProvider>(
+                builder: (context, provider, _) {
+                  if (provider.savedArtworks.isEmpty) {
+                    return Center(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Icons.collections_rounded, size: 120, color: Color(0xFFFFB74D)),
+                          const SizedBox(height: 24),
+                          KidButton(
+                            icon: Icons.palette_rounded,
+                            size: 96,
+                            color: const Color(0xFF43A047),
+                            iconColor: Colors.white,
+                            semanticLabel: l10n.startColoring,
+                            onTap: () => Navigator.of(context).maybePop(),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+                  return LayoutBuilder(
+                    builder: (context, constraints) => GridView.builder(
+                      padding: const EdgeInsets.all(16),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: gridColumns(constraints.maxWidth),
+                        crossAxisSpacing: 16,
+                        mainAxisSpacing: 16,
+                      ),
+                      itemCount: provider.savedArtworks.length,
+                      itemBuilder: (context, index) => _ArtworkCard(artwork: provider.savedArtworks[index]),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -95,322 +95,108 @@ class _ArtworkCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => _openArtwork(context),
-      onLongPress: () => _showOptions(context),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.08),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(16),
-          child: Stack(
-            fit: StackFit.expand,
-            children: [
-              // Thumbnail
-              _buildThumbnail(),
-              // Info overlay
-              Positioned(
-                bottom: 0,
-                left: 0,
-                right: 0,
-                child: Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        Colors.transparent,
-                        Colors.black.withValues(alpha: 0.7),
-                      ],
-                    ),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        artwork.name,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        _formatDate(artwork.updatedAt),
-                        style: TextStyle(
-                          color: Colors.white.withValues(alpha: 0.8),
-                          fontSize: 11,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              // More options button
-              Positioned(
-                top: 8,
-                right: 8,
-                child: GestureDetector(
-                  onTap: () => _showOptions(context),
-                  child: Container(
-                    padding: const EdgeInsets.all(6),
-                    decoration: BoxDecoration(
-                      color: Colors.black.withValues(alpha: 0.3),
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.more_vert,
-                      color: Colors.white,
-                      size: 18,
-                    ),
-                  ),
-                ),
-              ),
+    final storage = context.read<AppProvider>().storageService;
+    final file = storage.resolveArtworkFile(artwork.thumbnailPath.isNotEmpty ? artwork.thumbnailPath : artwork.savedImagePath);
+    return Semantics(
+      button: true,
+      label: artwork.name,
+      child: GestureDetector(
+        onTap: () {
+          SoundService().playClickSound();
+          openArtwork(context, artwork);
+        },
+        onLongPress: () => _showOptions(context),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              BoxShadow(color: Colors.black.withValues(alpha: 0.08), blurRadius: 10, offset: const Offset(0, 4)),
             ],
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildThumbnail() {
-    final file = File(artwork.thumbnailPath.isNotEmpty
-        ? artwork.thumbnailPath
-        : artwork.savedImagePath);
-
-    if (!file.existsSync()) {
-      return Container(
-        color: AppTheme.backgroundColor,
-        child: const Center(
-          child: Icon(
-            Icons.image_not_supported,
-            size: 40,
-            color: AppTheme.textSecondary,
-          ),
-        ),
-      );
-    }
-
-    return Image.file(
-      file,
-      fit: BoxFit.cover,
-      errorBuilder: (context, error, stackTrace) {
-        return Container(
-          color: AppTheme.backgroundColor,
-          child: const Center(
-            child: Icon(
-              Icons.image_not_supported,
-              size: 40,
-              color: AppTheme.textSecondary,
+          clipBehavior: Clip.antiAlias,
+          child: Image.file(
+            file,
+            fit: BoxFit.cover,
+            errorBuilder: (context, error, stackTrace) => const Center(
+              child: Icon(Icons.image_rounded, size: 56, color: Color(0xFFB0B3C6)),
             ),
           ),
-        );
-      },
-    );
-  }
-
-  String _formatDate(DateTime date) {
-    final now = DateTime.now();
-    final diff = now.difference(date);
-
-    if (diff.inDays == 0) {
-      return 'Bugün';
-    } else if (diff.inDays == 1) {
-      return 'Dün';
-    } else if (diff.inDays < 7) {
-      return '${diff.inDays} gün önce';
-    } else {
-      return '${date.day}.${date.month}.${date.year}';
-    }
-  }
-
-  void _openArtwork(BuildContext context) {
-    final appProvider = context.read<AppProvider>();
-
-    // Find original image
-    ColoringImage? originalImage;
-
-    // Check static images
-    for (final img in appProvider.staticImages) {
-      if (img.id == artwork.originalImageId) {
-        originalImage = img;
-        break;
-      }
-    }
-
-    // Check imported images
-    if (originalImage == null) {
-      for (final img in appProvider.importedImages) {
-        if (img.id == artwork.originalImageId) {
-          originalImage = img;
-          break;
-        }
-      }
-    }
-
-    // If not found, create a placeholder
-    originalImage ??= ColoringImage(
-      id: artwork.originalImageId,
-      name: artwork.name,
-      category: '',
-      imagePath: artwork.originalImagePath,
-      isImported: artwork.originalImagePath.contains('/imported/'),
-    );
-
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => ColoringScreen(
-          image: originalImage!,
-          existingArtwork: artwork,
         ),
       ),
     );
   }
 
-  void _showOptions(BuildContext context) {
-    showModalBottomSheet(
+  Future<void> _showOptions(BuildContext context) async {
+    if (!await showParentalGate(context) || !context.mounted) return;
+    final l10n = AppLocalizations.of(context)!;
+    final box = context.findRenderObject() as RenderBox?;
+    final origin = box == null ? null : box.localToGlobal(Offset.zero) & box.size;
+    final action = await showModalBottomSheet<String>(
       context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (context) => Container(
-        padding: const EdgeInsets.all(20),
+      showDragHandle: true,
+      builder: (sheetContext) => SafeArea(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Container(
-              width: 40,
-              height: 4,
-              decoration: BoxDecoration(
-                color: Colors.grey[300],
-                borderRadius: BorderRadius.circular(2),
-              ),
+            ListTile(
+              leading: const Icon(Icons.ios_share_rounded),
+              title: Text(l10n.share),
+              onTap: () => Navigator.pop(sheetContext, 'share'),
             ),
-            const SizedBox(height: 20),
-            Text(
-              artwork.name,
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+            ListTile(
+              leading: const Icon(Icons.delete_outline_rounded, color: Color(0xFFE53935)),
+              title: Text(l10n.delete, style: const TextStyle(color: Color(0xFFE53935))),
+              onTap: () => Navigator.pop(sheetContext, 'delete'),
             ),
-            const SizedBox(height: 20),
-            _OptionTile(
-              icon: Icons.edit,
-              title: 'Düzenle',
-              onTap: () {
-                Navigator.pop(context);
-                _openArtwork(context);
-              },
-            ),
-            _OptionTile(
-              icon: Icons.share,
-              title: 'Paylaş',
-              onTap: () async {
-                Navigator.pop(context);
-                try {
-                  final file = File(artwork.savedImagePath);
-                  if (await file.exists()) {
-                    final shareService = ShareService();
-                    await shareService.shareArtwork(
-                      artwork.savedImagePath,
-                      artworkName: artwork.name,
-                    );
-                  }
-                } catch (e) {
-                  if (context.mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Paylaşma hatası: $e')),
-                    );
-                  }
-                }
-              },
-            ),
-            _OptionTile(
-              icon: Icons.delete_outline,
-              title: 'Sil',
-              color: AppTheme.errorColor,
-              onTap: () {
-                Navigator.pop(context);
-                _confirmDelete(context);
-              },
-            ),
-            const SizedBox(height: 10),
           ],
         ),
       ),
     );
-  }
-
-  void _confirmDelete(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Silmek istediğinize emin misiniz?'),
-        content: Text('"${artwork.name}" kalıcı olarak silinecek.'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('İptal'),
+    if (!context.mounted) return;
+    final app = context.read<AppProvider>();
+    switch (action) {
+      case 'share':
+        try {
+          final path = app.storageService.resolveArtworkFile(artwork.savedImagePath).path;
+          await ShareService().shareArtwork(path, artworkName: artwork.name, origin: origin);
+        } catch (e) {
+          debugPrint('Share failed: $e');
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.shareError)));
+          }
+        }
+      case 'delete':
+        final yes = await showDialog<bool>(
+          context: context,
+          builder: (dialogContext) => AlertDialog(
+            title: Text(l10n.deleteConfirmTitle),
+            content: Text(l10n.deleteConfirmMessage),
+            actions: [
+              TextButton(onPressed: () => Navigator.pop(dialogContext, false), child: Text(l10n.cancel)),
+              TextButton(onPressed: () => Navigator.pop(dialogContext, true), child: Text(l10n.delete)),
+            ],
           ),
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-              context.read<AppProvider>().deleteArtwork(artwork.id);
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Resim silindi'),
-                ),
-              );
-            },
-            child: const Text(
-              'Sil',
-              style: TextStyle(color: AppTheme.errorColor),
-            ),
-          ),
-        ],
-      ),
-    );
+        );
+        if (yes == true) await app.deleteArtwork(artwork.id);
+    }
   }
 }
 
-class _OptionTile extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final VoidCallback onTap;
-  final Color? color;
-
-  const _OptionTile({
-    required this.icon,
-    required this.title,
-    required this.onTap,
-    this.color,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      leading: Icon(icon, color: color),
-      title: Text(
-        title,
-        style: TextStyle(color: color),
-      ),
-      onTap: onTap,
-    );
-  }
+/// Opens a saved artwork on its page. Works for built-in pages, pages
+/// imported before the freeze and pages that no longer exist in the app.
+void openArtwork(BuildContext context, SavedArtwork artwork) {
+  final app = context.read<AppProvider>();
+  final page = [...app.staticImages, ...app.importedImages].where((img) => img.id == artwork.originalImageId).firstOrNull ??
+      ColoringImage(
+        id: artwork.originalImageId,
+        name: artwork.name,
+        category: '',
+        imagePath: artwork.originalImagePath,
+        isImported: artwork.originalImagePath.contains('/imported/'),
+      );
+  Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => ColoringScreen(image: page, existingArtwork: artwork)),
+  );
 }

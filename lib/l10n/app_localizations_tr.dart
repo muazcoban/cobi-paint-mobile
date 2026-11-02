@@ -36,16 +36,16 @@ class AppLocalizationsTr extends AppLocalizations {
   String get characters => 'Karakterler';
 
   @override
-  String get nature => 'Doga';
+  String get nature => 'Doğa';
 
   @override
   String get food => 'Yiyecekler';
 
   @override
-  String get importImage => 'Resim Yukle';
+  String get importImage => 'Resim Yükle';
 
   @override
-  String get goPro => 'Pro\'ya Gec';
+  String get goPro => 'Pro\'ya Geç';
 
   @override
   String get save => 'Kaydet';
@@ -54,13 +54,13 @@ class AppLocalizationsTr extends AppLocalizations {
   String get saving => 'Kaydediliyor...';
 
   @override
-  String get share => 'Paylas';
+  String get share => 'Paylaş';
 
   @override
   String get undo => 'Geri Al';
 
   @override
-  String get redo => 'Ileri Al';
+  String get redo => 'İleri Al';
 
   @override
   String get clear => 'Temizle';
@@ -69,7 +69,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get fullscreen => 'Tam Ekran';
 
   @override
-  String get exitFullscreen => 'Tam Ekrandan Cik';
+  String get exitFullscreen => 'Tam Ekrandan Çık';
 
   @override
   String get fill => 'Doldur';
@@ -81,40 +81,40 @@ class AppLocalizationsTr extends AppLocalizations {
   String get eraser => 'Silgi';
 
   @override
-  String get selected => 'Secili';
+  String get selected => 'Seçili';
 
   @override
-  String get selectColor => 'Renk Sec';
+  String get selectColor => 'Renk Seç';
 
   @override
-  String get cancel => 'Iptal';
+  String get cancel => 'İptal';
 
   @override
-  String get select => 'Sec';
+  String get select => 'Seç';
 
   @override
   String get paintTexture => 'Boya Dokusu';
 
   @override
-  String get paintTextureDescription => 'Boyanan alanlarin gorunumunu secin';
+  String get paintTextureDescription => 'Boyanan alanların görünümünü seçin';
 
   @override
   String get textureNone => 'Normal';
 
   @override
-  String get textureNoneDesc => 'Duz ve puruzsuz boyama';
+  String get textureNoneDesc => 'Düz ve pürüzsüz boyama';
 
   @override
   String get textureCanvas => 'Tuval';
 
   @override
-  String get textureCanvasDesc => 'Gercek tuval dokusu efekti';
+  String get textureCanvasDesc => 'Gerçek tuval dokusu efekti';
 
   @override
-  String get texturePaper => 'Kagit';
+  String get texturePaper => 'Kâğıt';
 
   @override
-  String get texturePaperDesc => 'Kagit uzerine boya kalemi hissi';
+  String get texturePaperDesc => 'Kâğıt üzerine boya kalemi hissi';
 
   @override
   String get textureWatercolor => 'Sulu Boya';
@@ -130,19 +130,19 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get clearConfirmMessage =>
-      'Tum boyamayi temizlemek istediginize emin misiniz?';
+      'Tüm boyamayı temizlemek istediğinize emin misiniz?';
 
   @override
   String get imageSaved => 'Resim kaydedildi!';
 
   @override
-  String get imageLoadError => 'Resim yuklenemedi';
+  String get imageLoadError => 'Resim yüklenemedi';
 
   @override
-  String get saveError => 'Kaydetme hatasi';
+  String get saveError => 'Kaydetme hatası';
 
   @override
-  String get shareError => 'Paylasma hatasi';
+  String get shareError => 'Paylaşma hatası';
 
   @override
   String get whatsapp => 'WhatsApp';
@@ -151,19 +151,19 @@ class AppLocalizationsTr extends AppLocalizations {
   String get instagram => 'Instagram';
 
   @override
-  String get resetView => 'Gorunumu Sifirla';
+  String get resetView => 'Görünümü Sıfırla';
 
   @override
   String get language => 'Dil';
 
   @override
-  String get turkish => 'Turkce';
+  String get turkish => 'Türkçe';
 
   @override
-  String get english => 'Ingilizce';
+  String get english => 'İngilizce';
 
   @override
-  String get selectLanguage => 'Dil Sec';
+  String get selectLanguage => 'Dil Seç';
 
   @override
   String get soundEffects => 'Ses Efektleri';
@@ -172,46 +172,46 @@ class AppLocalizationsTr extends AppLocalizations {
   String get notifications => 'Bildirimler';
 
   @override
-  String get rateApp => 'Uygulamayi Degerlendir';
+  String get rateApp => 'Uygulamayı Değerlendir';
 
   @override
-  String get privacyPolicy => 'Gizlilik Politikasi';
+  String get privacyPolicy => 'Gizlilik Politikası';
 
   @override
-  String get termsOfService => 'Kullanim Kosullari';
+  String get termsOfService => 'Kullanım Koşulları';
 
   @override
-  String get about => 'Hakkinda';
+  String get about => 'Hakkında';
 
   @override
-  String get version => 'Surum';
+  String get version => 'Sürüm';
 
   @override
   String get pro => 'Pro';
 
   @override
-  String get proFeatures => 'Pro Ozellikleri';
+  String get proFeatures => 'Pro Özellikleri';
 
   @override
-  String get unlimitedImages => 'Sinirsiz Resim';
+  String get unlimitedImages => 'Sınırsız Resim';
 
   @override
-  String get noAds => 'Reklamsiz';
+  String get noAds => 'Reklamsız';
 
   @override
-  String get allCategories => 'Tum Kategoriler';
+  String get allCategories => 'Tüm Kategoriler';
 
   @override
-  String get buyPro => 'Pro Satin Al';
+  String get buyPro => 'Pro Satın Al';
 
   @override
-  String get restorePurchases => 'Satin Alimlari Geri Yukle';
+  String get restorePurchases => 'Satın Alımları Geri Yükle';
 
   @override
   String get proActive => 'Pro Aktif';
 
   @override
-  String get startColoring => 'Boyamaya Basla';
+  String get startColoring => 'Boyamaya Başla';
 
   @override
   String get continueColoring => 'Boyamaya Devam Et';
@@ -224,43 +224,43 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get deleteConfirmMessage =>
-      'Bu eseri silmek istediginize emin misiniz?';
+      'Bu eseri silmek istediğinize emin misiniz?';
 
   @override
-  String get noArtworks => 'Henuz eseriniz yok';
+  String get noArtworks => 'Henüz eseriniz yok';
 
   @override
-  String get noArtworksHint => 'Bir resim boyayarak baslayabilirsiniz';
+  String get noArtworksHint => 'Bir resim boyayarak başlayabilirsiniz';
 
   @override
   String get recentArtworks => 'Son Eserler';
 
   @override
-  String get seeAll => 'Tumunu Gor';
+  String get seeAll => 'Tümünü Gör';
 
   @override
-  String get welcome => 'Hosgeldin!';
+  String get welcome => 'Hoş geldin!';
 
   @override
-  String get welcomeMessage => 'Boyamaya baslamak icin bir kategori sec';
+  String get welcomeMessage => 'Boyamaya başlamak için bir kategori seç';
 
   @override
-  String get importFromGallery => 'Galeriden Yukle';
+  String get importFromGallery => 'Galeriden Yükle';
 
   @override
-  String get importFromCamera => 'Kameradan Cek';
+  String get importFromCamera => 'Kameradan Çek';
 
   @override
-  String get processing => 'Isleniyor...';
+  String get processing => 'İşleniyor...';
 
   @override
-  String get importSuccess => 'Resim basariyla yuklendi';
+  String get importSuccess => 'Resim başarıyla yüklendi';
 
   @override
-  String get importError => 'Resim yuklenemedi';
+  String get importError => 'Resim yüklenemedi';
 
   @override
-  String get permissionDenied => 'Izin reddedildi';
+  String get permissionDenied => 'İzin reddedildi';
 
   @override
   String get cameraPermission => 'Kamera izni gerekli';
@@ -275,10 +275,10 @@ class AppLocalizationsTr extends AppLocalizations {
   String get yes => 'Evet';
 
   @override
-  String get no => 'Hayir';
+  String get no => 'Hayır';
 
   @override
-  String get loading => 'Yukleniyor...';
+  String get loading => 'Yükleniyor...';
 
   @override
   String get error => 'Hata';
@@ -290,14 +290,86 @@ class AppLocalizationsTr extends AppLocalizations {
   String get general => 'Genel';
 
   @override
-  String get appearance => 'Gorunum';
+  String get appearance => 'Görünüm';
 
   @override
   String get support => 'Destek';
 
   @override
-  String get contactUs => 'Bize Ulasin';
+  String get contactUs => 'Bize Ulaşın';
 
   @override
-  String get faq => 'Sikca Sorulan Sorular';
+  String get faq => 'Sıkça Sorulan Sorular';
+
+  @override
+  String get done => 'Bitti';
+
+  @override
+  String get back => 'Geri';
+
+  @override
+  String get marker => 'Keçeli kalem';
+
+  @override
+  String get brushSize => 'Fırça boyutu';
+
+  @override
+  String get importedPages => 'Fotoğraflarım';
+
+  @override
+  String get gateTitle => 'Ebeveyn kontrolü';
+
+  @override
+  String get gateInstruction => 'Devam etmek için bu sayılara sırayla dokunun:';
+
+  @override
+  String get gateDigitWords =>
+      'sıfır,bir,iki,üç,dört,beş,altı,yedi,sekiz,dokuz';
+
+  @override
+  String get gateTryAgain => 'Olmadı. Yeni sayılarla tekrar deneyin.';
+
+  @override
+  String get parentsArea => 'Ebeveyn alanı';
+
+  @override
+  String get parentsHint =>
+      'Ayarlar, paylaşım ve silme yalnız buradan yapılır.';
+
+  @override
+  String get ageMode => 'Mod';
+
+  @override
+  String get ageModeLittle => 'Minik (3–5 yaş)';
+
+  @override
+  String get ageModeLittleDesc =>
+      'Kocaman düğmeler, 8 renk, yakınlaştırma yok. Kalem çizginin dışına taşmaz.';
+
+  @override
+  String get ageModeBig => 'Büyük (6+ yaş)';
+
+  @override
+  String get ageModeBigDesc =>
+      '16 renk, iki parmakla yakınlaştırma, fırça boyutları, ileri al.';
+
+  @override
+  String get soundVolume => 'Ses seviyesi';
+
+  @override
+  String get theme => 'Tema';
+
+  @override
+  String get privacyPolicyText =>
+      'Cobi Paint hiçbir kişisel veri toplamaz.\n\n• Hesap, reklam, analiz aracı ve internet bağlantısı yoktur.\n• Çocuğunuzun boyadığı resimler yalnız bu cihazda saklanır ve hiçbir sunucuya gönderilmez.\n• Bir resim yalnız siz ebeveyn kontrolünü geçip paylaşmayı seçtiğinizde, sistemin paylaşım menüsüyle ve sizin seçtiğiniz uygulamaya gönderilir.\n• Kayıtlı bir resmi Ebeveyn alanından silebilirsiniz. Uygulamayı silmek bütün resimleri siler.\n\nSorularınız için: muazcoban@icloud.com';
+
+  @override
+  String get guidedAccessTitle => 'Çocuk uygulamada kalsın';
+
+  @override
+  String get guidedAccessText =>
+      'iPhone ve iPad\'de Rehberli Erişim\'i kullanabilirsiniz: Ayarlar > Erişilebilirlik > Rehberli Erişim\'i açın, sonra uygulama açıkken yan düğmeye üç kez basın. Android\'de Ayarlar > Güvenlik > Uygulama sabitleme\'yi kullanın.';
+
+  @override
+  String get artworkOptions => 'Eser seçenekleri';
 }

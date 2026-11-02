@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:cobi_paint_mobile/engine/input/canvas_gestures.dart';
 import 'package:flutter_test/flutter_test.dart';
 

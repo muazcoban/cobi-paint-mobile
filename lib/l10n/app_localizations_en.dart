@@ -301,4 +301,74 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get faq => 'FAQ';
+
+  @override
+  String get done => 'Done';
+
+  @override
+  String get back => 'Back';
+
+  @override
+  String get marker => 'Marker';
+
+  @override
+  String get brushSize => 'Brush size';
+
+  @override
+  String get importedPages => 'My Photos';
+
+  @override
+  String get gateTitle => 'For grown-ups';
+
+  @override
+  String get gateInstruction => 'To continue, tap these numbers in order:';
+
+  @override
+  String get gateDigitWords =>
+      'zero,one,two,three,four,five,six,seven,eight,nine';
+
+  @override
+  String get gateTryAgain => 'Not quite. Try again with the new numbers.';
+
+  @override
+  String get parentsArea => 'Parents';
+
+  @override
+  String get parentsHint => 'Settings, sharing and deleting live here.';
+
+  @override
+  String get ageMode => 'Mode';
+
+  @override
+  String get ageModeLittle => 'Little (ages 3–5)';
+
+  @override
+  String get ageModeLittleDesc =>
+      'Huge buttons, 8 colours, no zoom. The marker stays inside the lines.';
+
+  @override
+  String get ageModeBig => 'Big (ages 6+)';
+
+  @override
+  String get ageModeBigDesc => '16 colours, pinch to zoom, brush sizes, redo.';
+
+  @override
+  String get soundVolume => 'Volume';
+
+  @override
+  String get theme => 'Theme';
+
+  @override
+  String get privacyPolicyText =>
+      'Cobi Paint collects no personal data.\n\n• There are no accounts, ads, analytics or internet connections.\n• The pictures your child colours are stored only on this device and are never sent to a server.\n• A picture leaves the device only when you pass the grown-up check and choose to share it through the system share sheet, to an app you pick.\n• You can delete a saved picture in the Parents area. Deleting the app deletes all pictures.\n\nQuestions: muazcoban@icloud.com';
+
+  @override
+  String get guidedAccessTitle => 'Keep your child in the app';
+
+  @override
+  String get guidedAccessText =>
+      'On iPhone and iPad use Guided Access: turn on Settings > Accessibility > Guided Access, then triple-click the side button while the app is open. On Android use Settings > Security > App pinning.';
+
+  @override
+  String get artworkOptions => 'Artwork options';
 }

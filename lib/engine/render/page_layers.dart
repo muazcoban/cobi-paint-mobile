@@ -97,7 +97,7 @@ class PageLayers {
         }
       }
       final image = await _imageFromPixels(pixels, w, h);
-      _pendingMasks.remove(label);
+      unawaited(_pendingMasks.remove(label));
       if (_disposed) {
         image.dispose();
       } else {
