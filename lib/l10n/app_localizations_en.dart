@@ -156,7 +156,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get ageModeLittleDesc =>
-      'Huge buttons, 8 colours, no zoom. The marker stays inside the lines.';
+      'Huge buttons, 9 colours, no zoom. The marker stays inside the lines.';
 
   @override
   String get ageModeBig => 'Big (ages 6+)';

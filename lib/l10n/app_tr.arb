@@ -150,7 +150,7 @@
   "parentsHint": "Ayarlar, paylaşım ve silme yalnız buradan yapılır.",
   "ageMode": "Mod",
   "ageModeLittle": "Minik (3–5 yaş)",
-  "ageModeLittleDesc": "Kocaman düğmeler, 8 renk, yakınlaştırma yok. Kalem çizginin dışına taşmaz.",
+  "ageModeLittleDesc": "Kocaman düğmeler, 9 renk, yakınlaştırma yok. Kalem çizginin dışına taşmaz.",
   "ageModeBig": "Büyük (6+ yaş)",
   "ageModeBigDesc": "16 renk, iki parmakla yakınlaştırma, fırça boyutları, ileri al.",
   "soundVolume": "Ses seviyesi",

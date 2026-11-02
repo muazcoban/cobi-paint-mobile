@@ -157,7 +157,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get ageModeLittleDesc =>
-      'Kocaman düğmeler, 8 renk, yakınlaştırma yok. Kalem çizginin dışına taşmaz.';
+      'Kocaman düğmeler, 9 renk, yakınlaştırma yok. Kalem çizginin dışına taşmaz.';
 
   @override
   String get ageModeBig => 'Büyük (6+ yaş)';

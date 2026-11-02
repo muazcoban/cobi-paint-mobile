@@ -389,7 +389,7 @@ abstract class AppLocalizations {
   /// No description provided for @ageModeLittleDesc.
   ///
   /// In tr, this message translates to:
-  /// **'Kocaman düğmeler, 8 renk, yakınlaştırma yok. Kalem çizginin dışına taşmaz.'**
+  /// **'Kocaman düğmeler, 9 renk, yakınlaştırma yok. Kalem çizginin dışına taşmaz.'**
   String get ageModeLittleDesc;
 
   /// No description provided for @ageModeBig.
