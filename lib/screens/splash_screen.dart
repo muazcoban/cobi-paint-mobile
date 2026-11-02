@@ -2,9 +2,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/app_provider.dart';
-import '../theme/app_theme.dart';
+import '../widgets/motion.dart';
 import 'home_screen.dart';
 
+/// The round icon on cream, like the iOS launch screen and the Android 12
+/// splash, so starting up looks like one calm screen: nothing to read.
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
@@ -12,47 +14,31 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _fadeAnimation;
-  late Animation<double> _scaleAnimation;
+class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin {
+  late final AnimationController _controller = AnimationController(
+    duration: const Duration(milliseconds: 450),
+    vsync: this,
+  );
+  late final Animation<double> _scale = Tween<double>(begin: 0.85, end: 1).animate(
+    CurvedAnimation(parent: _controller, curve: Curves.easeOutBack),
+  );
 
   @override
   void initState() {
     super.initState();
-
-    _controller = AnimationController(
-      duration: const Duration(milliseconds: 1500),
-      vsync: this,
-    );
-
-    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(
-        parent: _controller,
-        curve: const Interval(0.0, 0.5, curve: Curves.easeIn),
-      ),
-    );
-
-    _scaleAnimation = Tween<double>(begin: 0.5, end: 1.0).animate(
-      CurvedAnimation(
-        parent: _controller,
-        curve: const Interval(0.0, 0.5, curve: Curves.elasticOut),
-      ),
-    );
-
-    _controller.forward();
-
-    // Delay initialization to after first frame
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _initializeApp();
+      if (reduceMotion(context)) {
+        _controller.value = 1;
+      } else {
+        unawaited(_controller.forward());
+      }
+      unawaited(_initializeApp());
     });
   }
 
   Future<void> _initializeApp() async {
     final appProvider = context.read<AppProvider>();
 
-    // Wait for animation and initialization
     await Future.wait([
       appProvider.init(),
       // Brief, so a child is colouring within a second or two.
@@ -62,15 +48,11 @@ class _SplashScreenState extends State<SplashScreen>
     if (mounted) {
       unawaited(Navigator.of(context).pushReplacement(
         PageRouteBuilder(
-          pageBuilder: (context, animation, secondaryAnimation) =>
-              const HomeScreen(),
+          pageBuilder: (context, animation, secondaryAnimation) => const HomeScreen(),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            return FadeTransition(
-              opacity: animation,
-              child: child,
-            );
+            return FadeTransition(opacity: animation, child: child);
           },
-          transitionDuration: const Duration(milliseconds: 500),
+          transitionDuration: const Duration(milliseconds: 300),
         ),
       ));
     }
@@ -85,88 +67,14 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              AppTheme.primaryLight,
-              AppTheme.primaryColor,
-              AppTheme.secondaryColor,
-            ],
-          ),
-        ),
-        child: SafeArea(
-          child: Center(
-            child: AnimatedBuilder(
-              animation: _controller,
-              builder: (context, child) {
-                return Opacity(
-                  opacity: _fadeAnimation.value,
-                  child: Transform.scale(
-                    scale: _scaleAnimation.value,
-                    child: child,
-                  ),
-                );
-              },
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // Logo/Icon
-                  Container(
-                    width: 150,
-                    height: 150,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(30),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.2),
-                          blurRadius: 20,
-                          offset: const Offset(0, 10),
-                        ),
-                      ],
-                    ),
-                    child: const Center(
-                      child: Text(
-                        '🎨',
-                        style: TextStyle(fontSize: 80),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 30),
-                  // App name
-                  const Text(
-                    'Cobi Paint',
-                    style: TextStyle(
-                      fontSize: 40,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                      letterSpacing: 2,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  const Text(
-                    'Hayallerini Renklendir!',
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.white70,
-                      letterSpacing: 1,
-                    ),
-                  ),
-                  const SizedBox(height: 50),
-                  // Loading indicator
-                  const SizedBox(
-                    width: 40,
-                    height: 40,
-                    child: CircularProgressIndicator(
-                      color: Colors.white,
-                      strokeWidth: 3,
-                    ),
-                  ),
-                ],
-              ),
+      backgroundColor: const Color(0xFFFFF4E6),
+      body: Center(
+        child: FadeTransition(
+          opacity: _controller,
+          child: ScaleTransition(
+            scale: _scale,
+            child: ClipOval(
+              child: Image.asset('assets/images/app_icon.png', width: 160, height: 160, fit: BoxFit.cover),
             ),
           ),
         ),

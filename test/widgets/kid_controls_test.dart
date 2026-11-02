@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:cobi_paint_mobile/l10n/app_localizations.dart';
+import 'package:cobi_paint_mobile/theme/app_theme.dart';
 import 'package:cobi_paint_mobile/widgets/kid_button.dart';
 import 'package:cobi_paint_mobile/widgets/kid_palette.dart';
 import 'package:cobi_paint_mobile/widgets/parental_gate.dart';
@@ -8,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 Widget _app(Widget child) => MaterialApp(
+      // The app's own theme, so contrast checks see the real colours.
+      theme: AppTheme.lightTheme,
       locale: const Locale('en'),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
@@ -174,6 +177,17 @@ void main() {
       await tester.pump(const Duration(milliseconds: 400));
 
       expect(find.byType(ParentalGate), findsOneWidget, reason: 'the gate stays shut');
+    });
+
+    testWidgets('the gate meets the tap target, label and contrast guidelines', (tester) async {
+      final handle = tester.ensureSemantics();
+      await openGate(tester, 3);
+
+      await expectLater(tester, meetsGuideline(androidTapTargetGuideline));
+      await expectLater(tester, meetsGuideline(iOSTapTargetGuideline));
+      await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
+      await expectLater(tester, meetsGuideline(textContrastGuideline));
+      handle.dispose();
     });
 
     testWidgets('closing the gate answers no', (tester) async {

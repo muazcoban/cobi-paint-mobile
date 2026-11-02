@@ -72,7 +72,7 @@ class ParentsScreen extends StatelessWidget {
               for (final entry in AppTheme.themes.entries)
                 ChoiceChip(
                   avatar: Text(entry.value.icon),
-                  label: Text(entry.value.name),
+                  label: Text(_themeName(l10n, entry.key)),
                   selected: settings.selectedTheme == entry.key,
                   onSelected: (_) {
                     AppTheme.setTheme(entry.key);
@@ -145,6 +145,13 @@ class ParentsScreen extends StatelessWidget {
     );
   }
 }
+
+String _themeName(AppLocalizations l10n, String key) => switch (key) {
+      'ocean' => l10n.themeOcean,
+      'forest' => l10n.themeForest,
+      'sunset' => l10n.themeSunset,
+      _ => l10n.themeCoral,
+    };
 
 class _Section extends StatelessWidget {
   const _Section(this.title);

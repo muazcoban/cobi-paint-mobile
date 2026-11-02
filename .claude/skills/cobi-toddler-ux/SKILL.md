@@ -15,7 +15,7 @@ Apple's Human Interface Guidelines (read the current pages; HIG changes every WW
 | # | Rule | Measure |
 |---|---|---|
 | Ç1 | No reading needed | Every control is an icon plus sound; the flow works with all text hidden |
-| Ç2 | Huge targets | Phone: primary controls 80-84 pt, palette dots 68-72 pt; tablet 112-120 pt; never under 64 pt in Minik mode (HIG minimum 44 pt applies everywhere) |
+| Ç2 | Huge targets | Phone: primary controls 80-84 pt, palette dots 68-72 pt; tablet 112-120 pt. On a 375 pt phone the dots shrink to about 61 pt, but each dot takes taps across its whole grid pitch (about 73 pt). A hit area is never under 64 pt in Minik mode (HIG minimum 44 pt applies everywhere) |
 | Ç3 | No pinch, two-finger or double-tap requirement | Zoom only in Büyük mode |
 | Ç4 | Forgiving taps | A finger that slides still taps if it lifts within 12 lp of the control (`ForgivingTap`); the palette picks the dot under the lifted finger |
 | Ç5 | Palms and extra fingers do nothing | The first finger owns the canvas (`CanvasGestureMachine`) |

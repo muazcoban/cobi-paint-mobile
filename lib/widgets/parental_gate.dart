@@ -192,6 +192,12 @@ class _ParentalGateState extends State<ParentalGate> with SingleTickerProviderSt
                   for (var d = 1; d <= 9; d++)
                     OutlinedButton(
                       key: ValueKey('gate-digit-$d'),
+                      // Dark digits: the theme's coral on the tinted dialog
+                      // measured 2.2:1, below the 3:1 HIG minimum.
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: const Color(0xFF2D3142),
+                        side: const BorderSide(color: Color(0x662D3142)),
+                      ),
                       onPressed: locked > 0 ? null : () => _press(d),
                       child: Text('$d', style: const TextStyle(fontSize: 26)),
                     ),

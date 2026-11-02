@@ -2,6 +2,7 @@ import 'package:cobi_paint_mobile/l10n/app_localizations.dart';
 import 'package:cobi_paint_mobile/models/category.dart';
 import 'package:cobi_paint_mobile/providers/app_provider.dart';
 import 'package:cobi_paint_mobile/screens/category_screen.dart';
+import 'package:cobi_paint_mobile/theme/app_theme.dart';
 import 'package:cobi_paint_mobile/widgets/kid_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -16,6 +17,7 @@ void main() {
       ChangeNotifierProvider(
         create: (_) => AppProvider(),
         child: MaterialApp(
+          theme: AppTheme.lightTheme,
           locale: const Locale('tr'),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,

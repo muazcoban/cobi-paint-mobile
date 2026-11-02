@@ -84,6 +84,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get soundEffects => 'Sound Effects';
 
   @override
+  String get themeCoral => 'Coral';
+
+  @override
+  String get themeOcean => 'Ocean';
+
+  @override
+  String get themeForest => 'Forest';
+
+  @override
+  String get themeSunset => 'Sunset';
+
+  @override
+  String get shareText => 'I coloured this in Cobi Paint! 🎨';
+
+  @override
   String get haptics => 'Vibration';
 
   @override

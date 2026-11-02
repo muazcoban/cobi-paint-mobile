@@ -157,7 +157,7 @@ class _ArtworkCard extends StatelessWidget {
       case 'share':
         try {
           final path = app.storageService.resolveArtworkFile(artwork.savedImagePath).path;
-          await ShareService().shareArtwork(path, artworkName: artwork.name, origin: origin);
+          await ShareService().shareArtwork(path, text: l10n.shareText, subject: artwork.name, origin: origin);
         } catch (e) {
           debugPrint('Share failed: $e');
           if (context.mounted) {

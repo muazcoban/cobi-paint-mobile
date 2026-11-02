@@ -97,6 +97,14 @@
     "description": "English language"
   },
   "soundEffects": "Ses Efektleri",
+  "themeCoral": "Mercan",
+  "themeOcean": "Okyanus",
+  "themeForest": "Orman",
+  "themeSunset": "Gün Batımı",
+  "shareText": "Cobi Paint ile boyadım! 🎨",
+  "@shareText": {
+    "description": "Text that goes with a shared artwork"
+  },
   "haptics": "Titreşim",
   "@haptics": {
     "description": "Parents area switch for haptic feedback"

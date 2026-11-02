@@ -248,6 +248,36 @@ abstract class AppLocalizations {
   /// **'Ses Efektleri'**
   String get soundEffects;
 
+  /// No description provided for @themeCoral.
+  ///
+  /// In tr, this message translates to:
+  /// **'Mercan'**
+  String get themeCoral;
+
+  /// No description provided for @themeOcean.
+  ///
+  /// In tr, this message translates to:
+  /// **'Okyanus'**
+  String get themeOcean;
+
+  /// No description provided for @themeForest.
+  ///
+  /// In tr, this message translates to:
+  /// **'Orman'**
+  String get themeForest;
+
+  /// No description provided for @themeSunset.
+  ///
+  /// In tr, this message translates to:
+  /// **'Gün Batımı'**
+  String get themeSunset;
+
+  /// Text that goes with a shared artwork
+  ///
+  /// In tr, this message translates to:
+  /// **'Cobi Paint ile boyadım! 🎨'**
+  String get shareText;
+
   /// Parents area switch for haptic feedback
   ///
   /// In tr, this message translates to:

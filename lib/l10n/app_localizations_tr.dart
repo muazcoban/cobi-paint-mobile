@@ -84,6 +84,21 @@ class AppLocalizationsTr extends AppLocalizations {
   String get soundEffects => 'Ses Efektleri';
 
   @override
+  String get themeCoral => 'Mercan';
+
+  @override
+  String get themeOcean => 'Okyanus';
+
+  @override
+  String get themeForest => 'Orman';
+
+  @override
+  String get themeSunset => 'Gün Batımı';
+
+  @override
+  String get shareText => 'Cobi Paint ile boyadım! 🎨';
+
+  @override
   String get haptics => 'Titreşim';
 
   @override
