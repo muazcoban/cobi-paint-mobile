@@ -98,12 +98,6 @@ abstract class AppLocalizations {
     Locale('tr'),
   ];
 
-  /// App name
-  ///
-  /// In tr, this message translates to:
-  /// **'Cobi Paint'**
-  String get appName;
-
   /// Home screen title
   ///
   /// In tr, this message translates to:
@@ -164,29 +158,11 @@ abstract class AppLocalizations {
   /// **'Yiyecekler'**
   String get food;
 
-  /// Import image button
-  ///
-  /// In tr, this message translates to:
-  /// **'Resim Yükle'**
-  String get importImage;
-
-  /// Go pro button
-  ///
-  /// In tr, this message translates to:
-  /// **'Pro\'ya Geç'**
-  String get goPro;
-
   /// Save button
   ///
   /// In tr, this message translates to:
   /// **'Kaydet'**
   String get save;
-
-  /// Saving text
-  ///
-  /// In tr, this message translates to:
-  /// **'Kaydediliyor...'**
-  String get saving;
 
   /// Share button
   ///
@@ -212,29 +188,11 @@ abstract class AppLocalizations {
   /// **'Temizle'**
   String get clear;
 
-  /// Fullscreen button
-  ///
-  /// In tr, this message translates to:
-  /// **'Tam Ekran'**
-  String get fullscreen;
-
-  /// Exit fullscreen button
-  ///
-  /// In tr, this message translates to:
-  /// **'Tam Ekrandan Çık'**
-  String get exitFullscreen;
-
   /// Fill tool
   ///
   /// In tr, this message translates to:
   /// **'Doldur'**
   String get fill;
-
-  /// Pencil tool
-  ///
-  /// In tr, this message translates to:
-  /// **'Kalem'**
-  String get pencil;
 
   /// Eraser tool
   ///
@@ -248,12 +206,6 @@ abstract class AppLocalizations {
   /// **'Seçili'**
   String get selected;
 
-  /// Select color dialog title
-  ///
-  /// In tr, this message translates to:
-  /// **'Renk Seç'**
-  String get selectColor;
-
   /// Cancel button
   ///
   /// In tr, this message translates to:
@@ -266,125 +218,11 @@ abstract class AppLocalizations {
   /// **'Seç'**
   String get select;
 
-  /// Paint texture title
-  ///
-  /// In tr, this message translates to:
-  /// **'Boya Dokusu'**
-  String get paintTexture;
-
-  /// Paint texture description
-  ///
-  /// In tr, this message translates to:
-  /// **'Boyanan alanların görünümünü seçin'**
-  String get paintTextureDescription;
-
-  /// No texture
-  ///
-  /// In tr, this message translates to:
-  /// **'Normal'**
-  String get textureNone;
-
-  /// No texture description
-  ///
-  /// In tr, this message translates to:
-  /// **'Düz ve pürüzsüz boyama'**
-  String get textureNoneDesc;
-
-  /// Canvas texture
-  ///
-  /// In tr, this message translates to:
-  /// **'Tuval'**
-  String get textureCanvas;
-
-  /// Canvas texture description
-  ///
-  /// In tr, this message translates to:
-  /// **'Gerçek tuval dokusu efekti'**
-  String get textureCanvasDesc;
-
-  /// Paper texture
-  ///
-  /// In tr, this message translates to:
-  /// **'Kâğıt'**
-  String get texturePaper;
-
-  /// Paper texture description
-  ///
-  /// In tr, this message translates to:
-  /// **'Kâğıt üzerine boya kalemi hissi'**
-  String get texturePaperDesc;
-
-  /// Watercolor texture
-  ///
-  /// In tr, this message translates to:
-  /// **'Sulu Boya'**
-  String get textureWatercolor;
-
-  /// Watercolor texture description
-  ///
-  /// In tr, this message translates to:
-  /// **'Sulu boya efekti'**
-  String get textureWatercolorDesc;
-
-  /// Hide panel button
-  ///
-  /// In tr, this message translates to:
-  /// **'Gizle'**
-  String get hide;
-
-  /// Clear confirmation title
-  ///
-  /// In tr, this message translates to:
-  /// **'Temizle'**
-  String get clearConfirmTitle;
-
-  /// Clear confirmation message
-  ///
-  /// In tr, this message translates to:
-  /// **'Tüm boyamayı temizlemek istediğinize emin misiniz?'**
-  String get clearConfirmMessage;
-
-  /// Image saved message
-  ///
-  /// In tr, this message translates to:
-  /// **'Resim kaydedildi!'**
-  String get imageSaved;
-
-  /// Image load error
-  ///
-  /// In tr, this message translates to:
-  /// **'Resim yüklenemedi'**
-  String get imageLoadError;
-
-  /// Save error
-  ///
-  /// In tr, this message translates to:
-  /// **'Kaydetme hatası'**
-  String get saveError;
-
   /// Share error
   ///
   /// In tr, this message translates to:
   /// **'Paylaşma hatası'**
   String get shareError;
-
-  /// WhatsApp
-  ///
-  /// In tr, this message translates to:
-  /// **'WhatsApp'**
-  String get whatsapp;
-
-  /// Instagram
-  ///
-  /// In tr, this message translates to:
-  /// **'Instagram'**
-  String get instagram;
-
-  /// Reset view button
-  ///
-  /// In tr, this message translates to:
-  /// **'Görünümü Sıfırla'**
-  String get resetView;
 
   /// Language setting
   ///
@@ -404,29 +242,11 @@ abstract class AppLocalizations {
   /// **'İngilizce'**
   String get english;
 
-  /// Select language dialog title
-  ///
-  /// In tr, this message translates to:
-  /// **'Dil Seç'**
-  String get selectLanguage;
-
   /// Sound effects setting
   ///
   /// In tr, this message translates to:
   /// **'Ses Efektleri'**
   String get soundEffects;
-
-  /// Notifications setting
-  ///
-  /// In tr, this message translates to:
-  /// **'Bildirimler'**
-  String get notifications;
-
-  /// Rate app button
-  ///
-  /// In tr, this message translates to:
-  /// **'Uygulamayı Değerlendir'**
-  String get rateApp;
 
   /// Privacy policy button
   ///
@@ -434,83 +254,17 @@ abstract class AppLocalizations {
   /// **'Gizlilik Politikası'**
   String get privacyPolicy;
 
-  /// Terms of service button
-  ///
-  /// In tr, this message translates to:
-  /// **'Kullanım Koşulları'**
-  String get termsOfService;
-
   /// About button
   ///
   /// In tr, this message translates to:
   /// **'Hakkında'**
   String get about;
 
-  /// Version label
-  ///
-  /// In tr, this message translates to:
-  /// **'Sürüm'**
-  String get version;
-
-  /// Pro label
-  ///
-  /// In tr, this message translates to:
-  /// **'Pro'**
-  String get pro;
-
-  /// Pro features title
-  ///
-  /// In tr, this message translates to:
-  /// **'Pro Özellikleri'**
-  String get proFeatures;
-
-  /// Unlimited images feature
-  ///
-  /// In tr, this message translates to:
-  /// **'Sınırsız Resim'**
-  String get unlimitedImages;
-
-  /// No ads feature
-  ///
-  /// In tr, this message translates to:
-  /// **'Reklamsız'**
-  String get noAds;
-
-  /// All categories feature
-  ///
-  /// In tr, this message translates to:
-  /// **'Tüm Kategoriler'**
-  String get allCategories;
-
-  /// Buy pro button
-  ///
-  /// In tr, this message translates to:
-  /// **'Pro Satın Al'**
-  String get buyPro;
-
-  /// Restore purchases button
-  ///
-  /// In tr, this message translates to:
-  /// **'Satın Alımları Geri Yükle'**
-  String get restorePurchases;
-
-  /// Pro active label
-  ///
-  /// In tr, this message translates to:
-  /// **'Pro Aktif'**
-  String get proActive;
-
   /// Start coloring button
   ///
   /// In tr, this message translates to:
   /// **'Boyamaya Başla'**
   String get startColoring;
-
-  /// Continue coloring button
-  ///
-  /// In tr, this message translates to:
-  /// **'Boyamaya Devam Et'**
-  String get continueColoring;
 
   /// Delete button
   ///
@@ -530,167 +284,11 @@ abstract class AppLocalizations {
   /// **'Bu eseri silmek istediğinize emin misiniz?'**
   String get deleteConfirmMessage;
 
-  /// No artworks message
-  ///
-  /// In tr, this message translates to:
-  /// **'Henüz eseriniz yok'**
-  String get noArtworks;
-
-  /// No artworks hint
-  ///
-  /// In tr, this message translates to:
-  /// **'Bir resim boyayarak başlayabilirsiniz'**
-  String get noArtworksHint;
-
-  /// Recent artworks title
-  ///
-  /// In tr, this message translates to:
-  /// **'Son Eserler'**
-  String get recentArtworks;
-
-  /// See all button
-  ///
-  /// In tr, this message translates to:
-  /// **'Tümünü Gör'**
-  String get seeAll;
-
-  /// Welcome message
-  ///
-  /// In tr, this message translates to:
-  /// **'Hoş geldin!'**
-  String get welcome;
-
-  /// Welcome message description
-  ///
-  /// In tr, this message translates to:
-  /// **'Boyamaya başlamak için bir kategori seç'**
-  String get welcomeMessage;
-
-  /// Import from gallery
-  ///
-  /// In tr, this message translates to:
-  /// **'Galeriden Yükle'**
-  String get importFromGallery;
-
-  /// Import from camera
-  ///
-  /// In tr, this message translates to:
-  /// **'Kameradan Çek'**
-  String get importFromCamera;
-
-  /// Processing message
-  ///
-  /// In tr, this message translates to:
-  /// **'İşleniyor...'**
-  String get processing;
-
-  /// Import success message
-  ///
-  /// In tr, this message translates to:
-  /// **'Resim başarıyla yüklendi'**
-  String get importSuccess;
-
-  /// Import error message
-  ///
-  /// In tr, this message translates to:
-  /// **'Resim yüklenemedi'**
-  String get importError;
-
-  /// Permission denied message
-  ///
-  /// In tr, this message translates to:
-  /// **'İzin reddedildi'**
-  String get permissionDenied;
-
-  /// Camera permission message
-  ///
-  /// In tr, this message translates to:
-  /// **'Kamera izni gerekli'**
-  String get cameraPermission;
-
-  /// Gallery permission message
-  ///
-  /// In tr, this message translates to:
-  /// **'Galeri izni gerekli'**
-  String get galleryPermission;
-
-  /// OK button
-  ///
-  /// In tr, this message translates to:
-  /// **'Tamam'**
-  String get ok;
-
-  /// Yes button
-  ///
-  /// In tr, this message translates to:
-  /// **'Evet'**
-  String get yes;
-
-  /// No button
-  ///
-  /// In tr, this message translates to:
-  /// **'Hayır'**
-  String get no;
-
-  /// Loading message
-  ///
-  /// In tr, this message translates to:
-  /// **'Yükleniyor...'**
-  String get loading;
-
-  /// Error title
-  ///
-  /// In tr, this message translates to:
-  /// **'Hata'**
-  String get error;
-
-  /// Retry button
-  ///
-  /// In tr, this message translates to:
-  /// **'Tekrar Dene'**
-  String get retry;
-
-  /// General settings section
-  ///
-  /// In tr, this message translates to:
-  /// **'Genel'**
-  String get general;
-
-  /// Appearance settings section
-  ///
-  /// In tr, this message translates to:
-  /// **'Görünüm'**
-  String get appearance;
-
-  /// Support settings section
-  ///
-  /// In tr, this message translates to:
-  /// **'Destek'**
-  String get support;
-
   /// Contact us button
   ///
   /// In tr, this message translates to:
   /// **'Bize Ulaşın'**
   String get contactUs;
-
-  /// FAQ button
-  ///
-  /// In tr, this message translates to:
-  /// **'Sıkça Sorulan Sorular'**
-  String get faq;
-
-  /// No description provided for @done.
-  ///
-  /// In tr, this message translates to:
-  /// **'Bitti'**
-  String get done;
-
-  /// No description provided for @back.
-  ///
-  /// In tr, this message translates to:
-  /// **'Geri'**
-  String get back;
 
   /// No description provided for @marker.
   ///
@@ -727,12 +325,6 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'sıfır,bir,iki,üç,dört,beş,altı,yedi,sekiz,dokuz'**
   String get gateDigitWords;
-
-  /// No description provided for @gateTryAgain.
-  ///
-  /// In tr, this message translates to:
-  /// **'Olmadı. Yeni sayılarla tekrar deneyin.'**
-  String get gateTryAgain;
 
   /// No description provided for @parentsArea.
   ///
@@ -805,12 +397,6 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'iPhone ve iPad\'de Rehberli Erişim\'i kullanabilirsiniz: Ayarlar > Erişilebilirlik > Rehberli Erişim\'i açın, sonra uygulama açıkken yan düğmeye üç kez basın. Android\'de Ayarlar > Güvenlik > Uygulama sabitleme\'yi kullanın.'**
   String get guidedAccessText;
-
-  /// No description provided for @artworkOptions.
-  ///
-  /// In tr, this message translates to:
-  /// **'Eser seçenekleri'**
-  String get artworkOptions;
 
   /// No description provided for @colorNames.
   ///

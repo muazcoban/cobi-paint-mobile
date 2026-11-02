@@ -9,9 +9,6 @@ class AppLocalizationsTr extends AppLocalizations {
   AppLocalizationsTr([String locale = 'tr']) : super(locale);
 
   @override
-  String get appName => 'Cobi Paint';
-
-  @override
   String get home => 'Ana Sayfa';
 
   @override
@@ -42,16 +39,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get food => 'Yiyecekler';
 
   @override
-  String get importImage => 'Resim Yükle';
-
-  @override
-  String get goPro => 'Pro\'ya Geç';
-
-  @override
   String get save => 'Kaydet';
-
-  @override
-  String get saving => 'Kaydediliyor...';
 
   @override
   String get share => 'Paylaş';
@@ -66,16 +54,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get clear => 'Temizle';
 
   @override
-  String get fullscreen => 'Tam Ekran';
-
-  @override
-  String get exitFullscreen => 'Tam Ekrandan Çık';
-
-  @override
   String get fill => 'Doldur';
-
-  @override
-  String get pencil => 'Kalem';
 
   @override
   String get eraser => 'Silgi';
@@ -84,74 +63,13 @@ class AppLocalizationsTr extends AppLocalizations {
   String get selected => 'Seçili';
 
   @override
-  String get selectColor => 'Renk Seç';
-
-  @override
   String get cancel => 'İptal';
 
   @override
   String get select => 'Seç';
 
   @override
-  String get paintTexture => 'Boya Dokusu';
-
-  @override
-  String get paintTextureDescription => 'Boyanan alanların görünümünü seçin';
-
-  @override
-  String get textureNone => 'Normal';
-
-  @override
-  String get textureNoneDesc => 'Düz ve pürüzsüz boyama';
-
-  @override
-  String get textureCanvas => 'Tuval';
-
-  @override
-  String get textureCanvasDesc => 'Gerçek tuval dokusu efekti';
-
-  @override
-  String get texturePaper => 'Kâğıt';
-
-  @override
-  String get texturePaperDesc => 'Kâğıt üzerine boya kalemi hissi';
-
-  @override
-  String get textureWatercolor => 'Sulu Boya';
-
-  @override
-  String get textureWatercolorDesc => 'Sulu boya efekti';
-
-  @override
-  String get hide => 'Gizle';
-
-  @override
-  String get clearConfirmTitle => 'Temizle';
-
-  @override
-  String get clearConfirmMessage =>
-      'Tüm boyamayı temizlemek istediğinize emin misiniz?';
-
-  @override
-  String get imageSaved => 'Resim kaydedildi!';
-
-  @override
-  String get imageLoadError => 'Resim yüklenemedi';
-
-  @override
-  String get saveError => 'Kaydetme hatası';
-
-  @override
   String get shareError => 'Paylaşma hatası';
-
-  @override
-  String get whatsapp => 'WhatsApp';
-
-  @override
-  String get instagram => 'Instagram';
-
-  @override
-  String get resetView => 'Görünümü Sıfırla';
 
   @override
   String get language => 'Dil';
@@ -163,58 +81,16 @@ class AppLocalizationsTr extends AppLocalizations {
   String get english => 'İngilizce';
 
   @override
-  String get selectLanguage => 'Dil Seç';
-
-  @override
   String get soundEffects => 'Ses Efektleri';
-
-  @override
-  String get notifications => 'Bildirimler';
-
-  @override
-  String get rateApp => 'Uygulamayı Değerlendir';
 
   @override
   String get privacyPolicy => 'Gizlilik Politikası';
 
   @override
-  String get termsOfService => 'Kullanım Koşulları';
-
-  @override
   String get about => 'Hakkında';
 
   @override
-  String get version => 'Sürüm';
-
-  @override
-  String get pro => 'Pro';
-
-  @override
-  String get proFeatures => 'Pro Özellikleri';
-
-  @override
-  String get unlimitedImages => 'Sınırsız Resim';
-
-  @override
-  String get noAds => 'Reklamsız';
-
-  @override
-  String get allCategories => 'Tüm Kategoriler';
-
-  @override
-  String get buyPro => 'Pro Satın Al';
-
-  @override
-  String get restorePurchases => 'Satın Alımları Geri Yükle';
-
-  @override
-  String get proActive => 'Pro Aktif';
-
-  @override
   String get startColoring => 'Boyamaya Başla';
-
-  @override
-  String get continueColoring => 'Boyamaya Devam Et';
 
   @override
   String get delete => 'Sil';
@@ -227,85 +103,7 @@ class AppLocalizationsTr extends AppLocalizations {
       'Bu eseri silmek istediğinize emin misiniz?';
 
   @override
-  String get noArtworks => 'Henüz eseriniz yok';
-
-  @override
-  String get noArtworksHint => 'Bir resim boyayarak başlayabilirsiniz';
-
-  @override
-  String get recentArtworks => 'Son Eserler';
-
-  @override
-  String get seeAll => 'Tümünü Gör';
-
-  @override
-  String get welcome => 'Hoş geldin!';
-
-  @override
-  String get welcomeMessage => 'Boyamaya başlamak için bir kategori seç';
-
-  @override
-  String get importFromGallery => 'Galeriden Yükle';
-
-  @override
-  String get importFromCamera => 'Kameradan Çek';
-
-  @override
-  String get processing => 'İşleniyor...';
-
-  @override
-  String get importSuccess => 'Resim başarıyla yüklendi';
-
-  @override
-  String get importError => 'Resim yüklenemedi';
-
-  @override
-  String get permissionDenied => 'İzin reddedildi';
-
-  @override
-  String get cameraPermission => 'Kamera izni gerekli';
-
-  @override
-  String get galleryPermission => 'Galeri izni gerekli';
-
-  @override
-  String get ok => 'Tamam';
-
-  @override
-  String get yes => 'Evet';
-
-  @override
-  String get no => 'Hayır';
-
-  @override
-  String get loading => 'Yükleniyor...';
-
-  @override
-  String get error => 'Hata';
-
-  @override
-  String get retry => 'Tekrar Dene';
-
-  @override
-  String get general => 'Genel';
-
-  @override
-  String get appearance => 'Görünüm';
-
-  @override
-  String get support => 'Destek';
-
-  @override
   String get contactUs => 'Bize Ulaşın';
-
-  @override
-  String get faq => 'Sıkça Sorulan Sorular';
-
-  @override
-  String get done => 'Bitti';
-
-  @override
-  String get back => 'Geri';
 
   @override
   String get marker => 'Keçeli kalem';
@@ -325,9 +123,6 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String get gateDigitWords =>
       'sıfır,bir,iki,üç,dört,beş,altı,yedi,sekiz,dokuz';
-
-  @override
-  String get gateTryAgain => 'Olmadı. Yeni sayılarla tekrar deneyin.';
 
   @override
   String get parentsArea => 'Ebeveyn alanı';
@@ -369,9 +164,6 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String get guidedAccessText =>
       'iPhone ve iPad\'de Rehberli Erişim\'i kullanabilirsiniz: Ayarlar > Erişilebilirlik > Rehberli Erişim\'i açın, sonra uygulama açıkken yan düğmeye üç kez basın. Android\'de Ayarlar > Güvenlik > Uygulama sabitleme\'yi kullanın.';
-
-  @override
-  String get artworkOptions => 'Eser seçenekleri';
 
   @override
   String get colorNames =>
