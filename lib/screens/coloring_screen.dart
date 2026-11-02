@@ -14,6 +14,7 @@ import '../models/user_settings.dart';
 import '../providers/app_provider.dart';
 import '../services/haptics.dart';
 import '../services/sound_service.dart';
+import '../services/system_gestures.dart';
 import '../widgets/celebration.dart';
 import '../widgets/kid_button.dart';
 import '../widgets/kid_palette.dart';
@@ -93,11 +94,13 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
     WidgetsBinding.instance.addObserver(this);
     unawaited(_load());
     unawaited(_sound.preload());
+    unawaited(SystemGestures.deferEdgeGestures(true));
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    unawaited(SystemGestures.deferEdgeGestures(false));
     final saver = _saver;
     final page = _page;
     if (saver != null) {
