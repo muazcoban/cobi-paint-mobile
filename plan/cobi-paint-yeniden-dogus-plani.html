@@ -1,0 +1,763 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cobi Paint Yeniden Doğuş Planı</title>
+<style>
+:root {
+  --bg: #fbfaf7; --surface: #ffffff; --surface-2: #f3f1ec; --text: #1f2328; --muted: #5d6470;
+  --border: #e2ded6; --accent: #d9480f; --accent-soft: #fff1e8; --link: #0b62c4;
+  --p0: #c92a2a; --p0-soft: #ffe9e9; --p1: #b35c00; --p1-soft: #fff3e0; --p2: #2f6f3e; --p2-soft: #e8f5ec;
+  --info: #1864ab; --info-soft: #e7f1fb; --code-bg: #f1efe9;
+  --d-fill: #e7f1fb; --d-stroke: #1864ab; --d-fill-2: #fff1e8; --d-stroke-2: #d9480f; --d-fill-3: #e8f5ec; --d-stroke-3: #2f6f3e; --d-line: #5d6470;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #15171a; --surface: #1d2024; --surface-2: #24282d; --text: #e8e6e3; --muted: #a3a9b3;
+    --border: #343a41; --accent: #ff8a4c; --accent-soft: #3a2418; --link: #6cb4ff;
+    --p0: #ff8787; --p0-soft: #3b1f1f; --p1: #ffb84d; --p1-soft: #3a2c16; --p2: #8ce99a; --p2-soft: #1d3324;
+    --info: #74c0fc; --info-soft: #182a3b; --code-bg: #26292e;
+    --d-fill: #182a3b; --d-stroke: #74c0fc; --d-fill-2: #3a2418; --d-stroke-2: #ff8a4c; --d-fill-3: #1d3324; --d-stroke-3: #8ce99a; --d-line: #a3a9b3;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #15171a; --surface: #1d2024; --surface-2: #24282d; --text: #e8e6e3; --muted: #a3a9b3;
+  --border: #343a41; --accent: #ff8a4c; --accent-soft: #3a2418; --link: #6cb4ff;
+  --p0: #ff8787; --p0-soft: #3b1f1f; --p1: #ffb84d; --p1-soft: #3a2c16; --p2: #8ce99a; --p2-soft: #1d3324;
+  --info: #74c0fc; --info-soft: #182a3b; --code-bg: #26292e;
+  --d-fill: #182a3b; --d-stroke: #74c0fc; --d-fill-2: #3a2418; --d-stroke-2: #ff8a4c; --d-fill-3: #1d3324; --d-stroke-3: #8ce99a; --d-line: #a3a9b3;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+.wrap { max-width: 1080px; margin: 0 auto; padding: 32px 16px 80px; }
+header.top { border-bottom: 1px solid var(--border); padding-bottom: 20px; margin-bottom: 28px; }
+header.top h1 { font-size: 2rem; line-height: 1.2; margin: 0 0 8px; }
+.meta { color: var(--muted); font-size: .92rem; }
+nav.toc { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; margin: 0 0 32px; }
+nav.toc ol { margin: 0; padding-left: 20px; columns: 2; column-gap: 32px; }
+nav.toc li { break-inside: avoid; margin: 2px 0; }
+a { color: var(--link); }
+h2 { font-size: 1.5rem; margin: 48px 0 12px; padding-top: 8px; border-top: 1px solid var(--border); }
+h3 { font-size: 1.15rem; margin: 28px 0 8px; }
+p { margin: 8px 0 12px; }
+.lead { font-size: 1.08rem; }
+.callout { background: var(--accent-soft); border-left: 4px solid var(--accent); border-radius: 8px; padding: 14px 18px; margin: 16px 0; }
+.callout.info { background: var(--info-soft); border-left-color: var(--info); }
+.callout ul, .callout ol { margin: 6px 0; padding-left: 20px; }
+.table-wrap { overflow-x: auto; margin: 12px 0 20px; border: 1px solid var(--border); border-radius: 10px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: .93rem; }
+th, td { text-align: left; vertical-align: top; padding: 9px 12px; border-bottom: 1px solid var(--border); }
+th { background: var(--surface-2); font-weight: 600; white-space: nowrap; }
+tr:last-child td { border-bottom: 0; }
+td:first-child { white-space: nowrap; }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+code { background: var(--code-bg); padding: 1px 5px; border-radius: 4px; font: .86em/1.4 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; word-break: break-word; }
+.badge { display: inline-block; font-size: .75rem; font-weight: 700; padding: 2px 8px; border-radius: 999px; white-space: nowrap; }
+.b-p0 { background: var(--p0-soft); color: var(--p0); }
+.b-p1 { background: var(--p1-soft); color: var(--p1); }
+.b-p2 { background: var(--p2-soft); color: var(--p2); }
+.b-info { background: var(--info-soft); color: var(--info); }
+.grid { display: grid; gap: 16px; align-items: start; }
+.g3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.g2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+figure { margin: 0; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 10px; }
+figure img { width: 100%; height: auto; display: block; border-radius: 6px; background: #fff; }
+figcaption { font-size: .86rem; color: var(--muted); margin-top: 8px; }
+.diagram { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 12px; margin: 12px 0 20px; overflow-x: auto; }
+.diagram svg { display: block; width: 100%; min-width: 640px; height: auto; }
+.diagram svg text { fill: var(--text); font-family: inherit; }
+.diagram .box { fill: var(--d-fill); stroke: var(--d-stroke); stroke-width: 1.5; }
+.diagram .box2 { fill: var(--d-fill-2); stroke: var(--d-stroke-2); stroke-width: 1.5; }
+.diagram .box3 { fill: var(--d-fill-3); stroke: var(--d-stroke-3); stroke-width: 1.5; }
+.diagram .edge { stroke: var(--d-line); stroke-width: 1.5; fill: none; }
+.diagram .lbl { font-size: 12px; fill: var(--muted); }
+.diagram .ttl { font-size: 14px; font-weight: 600; }
+.diagram .sm { font-size: 12px; }
+.diagram .gridline { stroke: var(--border); stroke-width: 1; }
+.kv { display: grid; grid-template-columns: max-content 1fr; gap: 4px 16px; }
+.kv dt { font-weight: 600; }
+.kv dd { margin: 0; }
+details { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 10px 14px; margin: 12px 0; }
+details summary { cursor: pointer; font-weight: 600; }
+.small { font-size: .88rem; color: var(--muted); }
+ul.tight li, ol.tight li { margin: 3px 0; }
+@media (max-width: 760px) {
+  .g3, .g2 { grid-template-columns: minmax(0, 1fr); }
+  nav.toc ol { columns: 1; }
+  header.top h1 { font-size: 1.6rem; }
+  .kv { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <h1>Cobi Paint Yeniden Doğuş Planı</h1>
+  <div class="meta">2 Kasım 2026 · Proje: <code>Cobi.Paint.Mobile</code> · Branch: <code>plan/yeniden-dogus</code> · Kod tabanı: 37 Dart dosyası, 12.239 satır, 8 commit</div>
+</header>
+
+<nav class="toc">
+  <ol>
+    <li><a href="#ozet">Karar özeti</a></li>
+    <li><a href="#kok">Şikâyetlerin kök nedenleri</a></li>
+    <li><a href="#kanit">Kanıtlar: ekranlar ve ölçümler</a></li>
+    <li><a href="#duzeltme">Düzeltme listesi (P0/P1/P2)</a></li>
+    <li><a href="#mimari">Hedef boyama motoru</a></li>
+    <li><a href="#firca">Fırça motoru</a></li>
+    <li><a href="#gorsel">Görsel yeniden tasarım</a></li>
+    <li><a href="#icerik">İçerik hattı (boyama sayfaları)</a></li>
+    <li><a href="#ozellik">Yeni özellikler</a></li>
+    <li><a href="#uyum">Mağaza uyumu ve gelir modeli</a></li>
+    <li><a href="#yol">Yol haritası</a></li>
+    <li><a href="#ucyas">3 yaş kontrol listesi</a></li>
+    <li><a href="#karar">Senin vermen gereken kararlar</a></li>
+    <li><a href="#yontem">Yöntem ve sınırlar</a></li>
+    <li><a href="#ek">Ek: 76 resmin ölçümü</a></li>
+  </ol>
+</nav>
+
+<section id="ozet">
+<h2>1. Karar özeti</h2>
+<div class="callout info">
+<strong>Birinci ölçüt (2 Kasım 2026'da eklendi):</strong> Her işte önce şu soru sorulur: 3 yaşındaki bir çocuk bunu kullanabilir mi? Bu ölçüt yaş bandı kararını "5 ve altı" yaptı ve Minik modunu varsayılan deneyim yaptı. Her fazda uygulanacak kontrol listesi <a href="#ucyas">bölüm 12</a>'de.
+</div>
+<p class="lead">Uygulama yamalarla düzelmez. Boyama motorunu ve boyama sayfalarını baştan kurmanı öneriyorum. Ekranların görsel dili de yenilenmeli. Mevcut uygulamadan kategori yapısı, ses dosyaları, uygulama ikonu ve maskot kalabilir.</p>
+<div class="callout">
+<ol class="tight">
+  <li><strong>Boyanın taşması ve piksel boşlukları motordan ve resimlerden geliyor.</strong> Dolgu 8 yönlü komşuluk kullanıyor ve çapraz boşluklardan sızıyor. Kenar maskesi her çizginin iki yanında 1 piksellik şeridi hiç boyamıyor. 76 resmin 7'sinde kontur noktalı. Çözüm, resim açılırken bir kez hesaplanan bölge etiket haritası (her piksele "hangi bölgeye ait" numarası veren tablo) ve kapalı konturlu yeni çizimler.</li>
+  <li><strong>Dokunma, yakınlaştırma ve kazara çizgi sorunu jest katmanından geliyor.</strong> Flutter'ın ölçek tanıyıcısı tek parmak hareketini 36 mantıksal piksel geç başlatıyor. İkinci parmak gelince yarım çizgiyi kaydediyor. Her yakınlaştırma karesinde yaklaşık 10 widget iki kez yeniden çiziliyor. Çözüm, <code>Listener</code> üstünde kendi jest durum makinesi.</li>
+  <li><strong>Fırçayla düzgün çizim için ayrı bir fırça katmanı gerekiyor.</strong> Bugünkü "Kalem" 400 piksellik resmin içine kenar yumuşatması (anti-aliasing) olmadan piksel basıyor. Yeni fırça <code>perfect_freehand</code> ile vektör çizgi üretecek. Çizgi resim her zaman en üst katmanda kalacak.</li>
+  <li><strong>Yayından önce mağaza uyumu ve veri kaybı riskleri kapanmalı.</strong> Çocuk ekranında AdMob banner'ı var. Ebeveyn kapısı (parental gate) yok. Eserler SharedPreferences'ta tek bir JSON metni olarak duruyor. Geri tuşu eseri sormadan siliyor. iOS derlemesi şu an bağlama (link) aşamasında kırılıyor.</li>
+  <li><strong>Sıra:</strong> Faz 0 zemin (1 hafta) → Faz 1 motor (3 hafta) → Faz 2 fırça (2 hafta). Faz 3 içerik ve tasarım işi, Faz 1 ile paralel başlar. Faz 4 uyum işi de Faz 1 ile paralel yürür. Faz 5 keyif özellikleridir. Süreler tek geliştirici ve Claude oturumları için tahmindir, ölçülmüş değildir.</li>
+</ol>
+</div>
+</section>
+
+<section id="kok">
+<h2>2. Şikâyetlerin kök nedenleri</h2>
+<p>Her satırda senin şikâyetin, kodda doğruladığım ya da ölçtüğüm neden ve çözümün yer aldığı faz var.</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Şikâyet</th><th>Doğrulanmış neden</th><th>Çözüm</th><th>Faz</th></tr></thead>
+<tbody>
+<tr><td><strong>Tıklamalar kötü</strong></td>
+<td>Dolgu <code>onTapUp</code> ile tetikleniyor ve ölçek tanıyıcısıyla yarışıyor (<code>coloring_canvas.dart:213-313</code>). Parmak 18 mantıksal pikselden (<code>kTouchSlop</code>) fazla kayarsa dokunma düşüyor. Çift dokunma kontrolü ilk dokunuşta dolgu yapıyor, ikincide yakınlaştırıyor. Ses servisi her çalışta dosyayı yeniden yüklüyor (<code>sound_service.dart:60-66</code>).</td>
+<td>Jest durum makinesi: parmak 10 lp'den az hareketle ve 250 ms içinde kalkarsa dokunma sayılır. Çift dokunmayla yakınlaştırma kalkar. Sesler önceden yüklenir.</td><td>1</td></tr>
+<tr><td><strong>İki parmakla yakınlaştırma kötü</strong></td>
+<td>Her karede <code>setScale</code> ve <code>setOffset</code> ayrı ayrı <code>notifyListeners</code> çağırıyor (<code>coloring_screen.dart:408-409</code>). Yaklaşık 10 <code>Consumer</code> karede iki kez yeniden kuruluyor. Dama tahtası arka planı her karede hücre hücre <code>drawRect</code> ile çiziliyor. <code>RepaintBoundary</code> yok. Butonlar 5×'te, jest 10×'te duruyor. Dolgu modunda yakınken tek parmakla kaydırma yok. Kaydırmada atalet (fling) yok.</td>
+<td><code>TransformationController</code> yalnız tuvali yeniden boyar. Geri kalan widget'lar <code>Selector</code> ile yalnız kendi verisini dinler. 1–8× tek sınır olur. Fling eklenir.</td><td>1</td></tr>
+<tr><td><strong>Kazara çizgi</strong></td>
+<td>İkinci parmak inince Flutter <code>ScaleGestureRecognizer._reconfigure</code> önce <code>onEnd</code> çağırıyor. Uygulama burada yarım çizgiyi kaydediyor (<code>_finishStroke</code>). Tek parmakta <code>onStart</code> ancak 36 lp (<code>kPanSlop</code>) hareketten sonra geliyor; çizginin ilk 36 lp'si kayboluyor. İkisini de Flutter 3.38.3 kaynağında doğruladım.</td>
+<td>"Bekleme" durumu: çizgi ekranda görünür ama 120 ms ya da 8 lp hareket dolmadan kaydedilmez. Bu sürede ikinci parmak gelirse çizgi atılır.</td><td>1</td></tr>
+<tr><td><strong>Boya taşıyor</strong></td>
+<td>(1) Dolgu 8 yönlü komşuluk kullanıyor; 1 piksellik çapraz basamaklardan sızıyor. Sızan resim sayısı benim ölçümümde 7, motor ajanının ölçümünde 14 (eşik farkı). (2) 45 resmi üreten <code>tool/generate_sample_images.dart</code> daireyi 360 noktayla çiziyor (satır 1681-1692). Yarıçap büyüyünce kontur noktalı kalıyor. Gökkuşağının çizgisi 509 ayrı parçadan oluşuyor. (3) 14 resimde arka plan bölgesi resmin %85'inden fazlası; kar tanesinde boyanacak bölge yok.</td>
+<td>4 yönlü komşulukla bölge etiket haritası. Resim başına boşluk kapatma ayarı (<code>gapPx</code>). Yeni, kapalı konturlu vektör çizimler. Her derlemede çalışan resim doğrulayıcı.</td><td>1, 3</td></tr>
+<tr><td><strong>Pixel boşlukları</strong></td>
+<td>Kenar maskesi Sobel gradyanını da kenar sayıyor. Her çizginin iki yanında 1 piksellik şerit hiç boyanmıyor. Bu şerit resim alanının ortanca %3,2'si, en çok %6,9'u. Noktalı konturların aralarındaki cepler boş kalıyor. Resim <code>FilterQuality.none</code> ile yaklaşık 3,5 kat büyütülüyor, kenarlar tırtıklı görünüyor.</td>
+<td>Etiketler çizgi piksellerinin altına kadar büyütülür, çizgi resim en üstte çizilir. Böylece hale kalmaz. Katmanlarda bilinear filtre kullanılır. Kaynak çözünürlük 2048 piksel olur.</td><td>1, 3</td></tr>
+<tr><td><strong>Görseller çirkin</strong></td>
+<td>76 resmin 45'i 400 piksel, 31'i 512 piksel. Resimlerin hepsi kodla üretilmiş, üst üste binen daire ve çizgilerden oluşuyor. Bölge sayısı ortanca 13. Arayüzde başlık ve butonlarda beyaz metin kontrastı 1,6–2,7:1. Metinlerde Türkçe karakter eksik ("Hosgeldin", "Secili"). Boyama ekranında taşma uyarısı görünüyor.</td>
+<td>Yeni içerik hattı: SVG kaynak, 2048 px, 200+ sayfa. Yeni tasarım sistemi.</td><td>3</td></tr>
+<tr><td><strong>Fırçayla çizim yok</strong></td>
+<td>"Kalem" Bresenham daireleriyle resmin içine piksel basıyor; kenar yumuşatması yok. Nokta listesi her noktada kopyalanıyor (O(n²)). Silgi yalnız dokunma noktalarına damga basıyor; hızlı çekişte noktalar kalıyor.</td>
+<td><code>perfect_freehand</code> ile vektör fırça. Ayrı fırça katmanı. "Çizginin içinde kal" seçeneği. Sihirli fırçalar.</td><td>2</td></tr>
+</tbody></table></div>
+</section>
+
+<section id="kanit">
+<h2>3. Kanıtlar: ekranlar ve ölçümler</h2>
+<p>Ekran görüntülerini Android emülatöründe (Pixel 6 Pro profili, API 34) çalışan debug derlemesinden aldım. Pinch'i test edemedim; <code>adb</code> çok parmaklı dokunma göndermiyor.</p>
+<div class="grid g3">
+  <figure><img src="img/ekran-ana.jpg" alt="Ana ekran: mercan başlık, emoji ikonlu kategori kartları"><figcaption>Ana ekran. "Hosgeldin", "baslamak icin", "sec" metinleri Türkçe karakter içermiyor. İkonlar emoji. Başlıkta beyaz metin kontrastı 2,73:1.</figcaption></figure>
+  <figure><img src="img/ekran-kategori.jpg" alt="Hayvanlar kategorisi: kaba, noktalı çizimler"><figcaption>Hayvanlar kategorisi. Çizimler üst üste binen dairelerden oluşuyor; konturlar noktalı. Kart etiketinin gri gradyanı üzerinde beyaz metin kontrastı 1,6–2,1:1.</figcaption></figure>
+  <figure><img src="img/ekran-boyama.jpg" alt="Boyama ekranı: sol panelde taşma uyarısı"><figcaption>Boyama ekranı. Sol panelde "OVERFLOWED BY 18 PIXELS" taşma uyarısı var. Kedi pikselli büyütülüyor. Kaydet butonunda beyaz metin kontrastı 1,93:1.</figcaption></figure>
+</div>
+<div class="grid g2" style="margin-top:16px">
+  <figure><img src="img/canli-hale.jpg" alt="Kedinin yüzü sarıya boyanmış, çizgilerin etrafında beyaz hale"><figcaption>Canlı test: yüze bir kez dokundum. Gözlerin, bıyıkların ve burnun etrafında beyaz hale kaldı. Noktalı kafa çizgisinin aralarındaki cepler boyanmadı. Burun çizgisinin içindeki küçük kırmızı nokta, ilk dokunuşta yalnız birkaç piksellik bir cebin boyandığını gösteriyor.</figcaption></figure>
+  <figure><img src="img/bolge-haritasi.png" alt="Dört resmin bölge haritası"><figcaption>Uygulamanın dolgu mantığıyla çıkardığım bölge haritası. Her renk tek dokunuşta boyanan alanı gösteriyor. Kırmızı alan arka plan. Pizzanın kabuğu ve gökkuşağının dış bantları arka planla birleşiyor. Kar tanesinde boyanacak bölge yok.</figcaption></figure>
+</div>
+<div class="grid g2" style="margin-top:16px">
+  <figure><img src="img/mevcut-resimler.jpg" alt="Mevcut boyama sayfalarından sekiz örnek"><figcaption>Mevcut 76 sayfadan 8 örnek: kedi, aslan, ejderha, pizza, araba, gökkuşağı, gül, prenses.</figcaption></figure>
+  <figure><img src="img/reklam-banner.jpg" alt="Kategori ekranının üstünde AdMob test banner'ı"><figcaption>Kategori ekranının üstünde AdMob banner'ı (görüntü, o anda açık olan bir sistem diyaloğu yüzünden karanlık). Bu, çocuğun gördüğü ekranda reklam demek. Apple Kids Category bunu büyük olasılıkla reddeder (bkz. bölüm 10).</figcaption></figure>
+</div>
+
+<h3>Resim ölçümlerinin özeti</h3>
+<p>Ölçüm, uygulamanın kendi kenar maskesini (gri eşik + Sobel, Otsu ile otomatik eşik) birebir taklit eden bir Dart betiğiyle yapıldı. Tam tablo <a href="#ek">ekte</a> ve <code>plan/resim-olcumleri.csv</code> dosyasında.</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Ölçü</th><th class="num">Değer</th><th>Anlamı</th></tr></thead>
+<tbody>
+<tr><td>Resim sayısı</td><td class="num">76</td><td>45'i 400 px, 31'i 512 px. README 6 kategori diyor; her kategoride 12–13 resim var.</td></tr>
+<tr><td>Bölge sayısı (ortanca)</td><td class="num">13</td><td>En az 1 (kar tanesi), en çok 47 (motosiklet). Rakip uygulamalarda küçük çocuk sayfası 8–15, büyük çocuk sayfası 20–60 bölge öneriliyor.</td></tr>
+<tr><td>8 bölgeden az ya da eşit</td><td class="num">23</td><td>Resimlerin üçte biri birkaç dokunuşta bitiyor.</td></tr>
+<tr><td>Arka plan ≥ %85</td><td class="num">14</td><td>Ana gövde arka planla birleşmiş ya da çizim çok küçük.</td></tr>
+<tr><td>Noktalı kontur (≥ 30 siyah parça)</td><td class="num">7</td><td>Gökkuşağı 509, otobüs 104, kurabiye 99, pizza 87, uçak 68, ay 48, kedi 35 parça.</td></tr>
+<tr><td>Boyanmayan hale şeridi (ortanca)</td><td class="num">%3,2</td><td>Resim alanının bu kadarı hiçbir dokunuşla boyanmıyor. En kötüsü gökkuşağında %6,9.</td></tr>
+</tbody></table></div>
+</section>
+
+<section id="duzeltme">
+<h2>4. Düzeltme listesi</h2>
+<p><span class="badge b-p0">P0</span> çökme, veri kaybı ya da mağaza reddi. <span class="badge b-p1">P1</span> büyük UX ya da performans sorunu. <span class="badge b-p2">P2</span> cila. Satır numaraları bugünkü <code>master</code> içindir. "Kaynak" sütunu bulguyu kimin doğruladığını söyler: <em>ben</em> = kodda ya da emülatörde kendim gördüm, <em>ajan</em> = kod denetimi ajanı okudu.</p>
+
+<h3>P0: önce bunlar</h3>
+<div class="table-wrap"><table>
+<thead><tr><th>#</th><th>Sorun</th><th>Yer</th><th>Çözüm</th><th>Faz</th><th>Kaynak</th></tr></thead>
+<tbody>
+<tr><td>P0-1</td><td>iOS simülatör derlemesi bağlama aşamasında 14 tanımsız <code>GRPC_OBJ_*</code> sembolüyle kırılıyor. Sembolleri <code>cloud_firestore</code> üzerinden gelen BoringSSL-GRPC 0.0.37 getiriyor (Firebase 12.6.0, Xcode 16.4).</td><td><code>ios/Podfile.lock</code></td><td>Firebase kullanılmıyorsa (P0-8) tamamen çıkar; sorun kendiliğinden kalkar. Kalacaksa pod'ları ve FlutterFire'ı güncelle.</td><td>0</td><td>ben</td></tr>
+<tr><td>P0-2</td><td>Eserler piksel başına <code>"indeks": renk</code> olarak tek bir SharedPreferences metninde saklanıyor. Dolu bir 512×512 sayfa yaklaşık 4 MB JSON eder. iOS bu boyutta UserDefaults kaydını reddedebilir; bu durumda tüm liste kaybolur (cihazda doğrulanmadı).</td><td><code>coloring_provider.dart:612</code>, <code>storage_service.dart:59-73</code></td><td>Eser başına klasör: <code>doc.json</code> (bölge renkleri + fırça çizgileri), <code>brush.png</code>, <code>thumb.png</code>. Eski kayıtlar için tek seferlik taşıma.</td><td>1</td><td>ajan + ben</td></tr>
+<tr><td>P0-3</td><td>Kayıtta mutlak dosya yolu tutuluyor. iOS uygulama konteyner yolu her güncellemede değişir; güncellemeden sonra tüm küçük resimler ve içe aktarılan sayfalar kaybolur.</td><td><code>storage_service.dart:97-115</code></td><td>Yalnız dosya adını sakla, çalışırken belgeler klasörüne göre çöz.</td><td>1</td><td>ben</td></tr>
+<tr><td>P0-4</td><td>Kaydetmeden çıkışta eser sessizce kayboluyor. Projede <code>PopScope</code> yok. Emülatörde geri tuşu boyanmış kediyi sormadan kapattı.</td><td><code>coloring_screen.dart:295</code></td><td>Otomatik kayıt: her işlemden 2 sn sonra, uygulama arka plana geçince ve ekrandan çıkınca.</td><td>1</td><td>ben</td></tr>
+<tr><td>P0-5</td><td>Çocuk kategorisi uyumsuzlukları: kategori ekranında banner, her 2. kayıtta interstitial reklam. Info.plist'te ATT izni metni (<code>NSUserTrackingUsageDescription</code>). Manifest'te <code>AD_ID</code>, <code>READ_MEDIA_IMAGES</code> ve <code>CAMERA</code> izinleri. Paylaşım, Pro ekranı ve Ayarlar için ebeveyn kapısı yok. <code>PrivacyInfo.xcprivacy</code> yok.</td><td><code>category_screen.dart:100-109</code>, <code>Info.plist:75</code>, <code>AndroidManifest.xml:7,14,20</code></td><td>Bölüm 10'daki kontrol listesi.</td><td>4</td><td>ben</td></tr>
+<tr><td>P0-6</td><td>Mağaza metni "Reklam içermez / No ads" diyor, uygulama reklam gösteriyor.</td><td><code>store_listing.md:53,57,101</code></td><td>Reklam kalkınca metin doğru olur. Kalkmazsa metni düzelt.</td><td>4</td><td>ben</td></tr>
+<tr><td>P0-7</td><td>Android, iOS reklam birimi kimliklerini kullanıyor; iki platformda kimlikler aynı.</td><td><code>ad_service.dart:27-30</code></td><td>Reklam kalkarsa konu kapanır. Kalırsa Android için ayrı birim aç.</td><td>4</td><td>ben</td></tr>
+<tr><td>P0-8</td><td>Firebase yapılandırılmamış: <code>GoogleService-Info.plist</code> ve <code>google-services.json</code> yok. Uygulama açılışta "Failed to load FirebaseOptions" hatası veriyor. Firebase kod yolu da tutarsız: <code>imagePath</code> bir yerde URL, bir yerde Storage yolu.</td><td><code>main.dart</code>, <code>firebase_service.dart:103</code>, <code>category_screen.dart:230</code></td><td>Karar 2'ye bağlı. Önerim: tamamen çıkar.</td><td>0</td><td>ben (log)</td></tr>
+<tr><td>P0-9</td><td>Satın alma güvensiz. <code>buyNonConsumable</code> yalnız ödeme sayfasının açıldığını bildiriyor, ama kod bu dönüşte hemen <code>setPro(true)</code> çağırıyor. Kullanıcı iptal etse de Pro olur. Restore sonucu beklenmeden okunuyor. Fiyatlar koda gömülü (₺29,99, ₺149,99). IAP arayüzü şu an TODO ile gizli.</td><td><code>pro_screen.dart:202-206, 225-232</code></td><td>Satın alma akışını (<code>purchaseStream</code>) dinle, yalnız <code>purchased</code>/<code>restored</code> durumunda Pro aç. Fiyatı mağazadan oku. Yıllık SKU ekle.</td><td>4</td><td>ben + ajan</td></tr>
+</tbody></table></div>
+
+<h3>P1: büyük UX ve performans</h3>
+<div class="table-wrap"><table>
+<thead><tr><th>#</th><th>Sorun</th><th>Yer</th><th>Çözüm</th><th>Faz</th></tr></thead>
+<tbody>
+<tr><td>P1-1</td><td>Renk durumu <code>Map&lt;int,Color&gt;</code> içinde piksel başına tutuluyor. Undo için 50 tam kopya saklanıyor. Dolgu UI thread'inde çalışıyor. Her değişiklikte tüm katman yeniden kuruluyor.</td><td><code>coloring_provider.dart</code></td><td>Bölge→renk tablosu (<code>Uint32List</code>) ve komut tabanlı undo.</td><td>1</td></tr>
+<tr><td>P1-2</td><td>Boyama ekranının sol paneli taşıyor (emülatörde görüldü). Tam ekranda kalem seçiliyken alt satır yaklaşık 459 px'e çıkıyor, sığan genişlik 374 px. iPhone SE'de renk listesine yer kalmıyor (koddan hesap).</td><td><code>coloring_screen.dart:457-528, 1029-1119</code></td><td>Yeni araç çubuğu düzeni (bölüm 7).</td><td>3</td></tr>
+<tr><td>P1-3</td><td>Panel resmin üstüne biniyor. Tuval tam genişlikte, panel üstünde duruyor.</td><td><code>coloring_screen.dart:375</code></td><td>Tuvalin görünür alanını panelden sonra hesapla.</td><td>3</td></tr>
+<tr><td>P1-4</td><td>Doku (texture) üreticisi UI thread'inde çalışıyor; 1024×1024 resimde yaklaşık 550 milyon işlem (ajan hesabı). Doku kayıtta yok, PNG'ye de çıkmıyor.</td><td><code>paint_textures.dart:124-178</code></td><td>Küçük, tekrarlanan doku resmi ve <code>ImageShader</code>.</td><td>2</td></tr>
+<tr><td>P1-5</td><td>Kaydet ve Paylaş UI'ı donduruyor: PNG saf Dart'ta kodlanıyor, sonra küçük resim için tekrar çözülüp kodlanıyor.</td><td><code>image_processing_service.dart:273</code></td><td><code>PictureRecorder</code> → <code>toImage</code> → <code>toByteData(png)</code>; ağır iş isolate'te.</td><td>1</td></tr>
+<tr><td>P1-6</td><td>Tema ya da dil değişince uygulama baştan açılıyor (splash 2 sn, ilk sekme). Varsayılan dil cihaz dilini yok sayıp <code>tr</code> oluyor.</td><td><code>main.dart:65</code>, <code>locale_provider.dart:7</code></td><td>MaterialApp key'inden tema/dili çıkar. Cihaz dilini varsayılan yap.</td><td>3</td></tr>
+<tr><td>P1-7</td><td>Eser yeniden açılınca kalemle çizilen siyah duvarlar geri gelmiyor; dolgu sızıyor. Silgi rengi siliyor ama duvarı bırakıyor.</td><td><code>coloring_provider.dart:296, 552-579</code></td><td>Yeni belge modeliyle kendiliğinden kalkar.</td><td>1</td></tr>
+<tr><td>P1-8</td><td>Fotoğraftan çizgi resim: Canny + 15×15'e kadar 10 kapatma geçişi dokuları birbirine yapıştırıyor. Her kaydırıcı değişikliği yeni isolate başlatıyor; eski sonuç yenisini ezebiliyor. OpenCV <code>Mat</code>'ları serbest bırakılmıyor.</td><td><code>opencv_image_service.dart:77-141</code>, <code>import_screen.dart:86-97</code></td><td>Karar 3'e bağlı. Tutulursa: debounce + nesil sayacı, posterize + bölge sınırı, küçük bölgeleri at.</td><td>5</td></tr>
+<tr><td>P1-9</td><td>Çizgi editöründe undo/redo/temizle ekrana yansımıyor (<code>shouldRepaint</code> aynı listenin uzunluğunu karşılaştırıyor).</td><td><code>drawing_canvas.dart:309-314</code></td><td>Sürüm sayacıyla repaint.</td><td>5</td></tr>
+</tbody></table></div>
+
+<h3>P2: cila</h3>
+<ul class="tight">
+<li><strong>Yerelleştirme yarım.</strong> 84 sabit metin var, l10n kullanımı 47. Kategori ve resim adları yalnız Türkçe. Çocuğa ham hata metni (<code>$e</code>) gösteriliyor. Türkçe metinlerde diakritik eksik.</li>
+<li><strong>Sahte paylaşım hedefleri.</strong> WhatsApp ve Instagram butonları aynı genel paylaşımı açıyor (<code>coloring_screen.dart:235-252</code>).</li>
+<li><strong>Dokunma hedefleri küçük.</strong> Doku butonu 32 px, yüzen araçlar 40 px, yakınlaştırma 44 px, boyut tutamacı 8 px.</li>
+<li><strong>Tablet düzeni yok.</strong> Izgaralar her ekranda sabit 2 sütun.</li>
+<li><strong>Eserlerim ekranı.</strong> Yeniden kaydedilen eserin küçük resmi eski kalıyor (<code>FileImage</code> yol bazlı önbellek). <code>build</code> içinde <code>existsSync</code> çağrılıyor.</li>
+<li><strong>Tutarsızlıklar.</strong> Ayarlar sürümü 1.0.0 gösteriyor, pubspec 1.1.0+3 diyor. iOS dağıtım hedefi Xcode'da 13.0, Podfile'da 15.0. Release derlemesi debug imzasına düşüyor. <code>usesCleartextTraffic</code> açık.</li>
+<li><strong>Kod sağlığı.</strong> Kullanılmayan paketler: <code>permission_handler</code>, <code>photo_manager</code>, <code>firebase_auth</code>. <code>opencv_dart 2.1.0</code> Dart 3.10 istiyor, pubspec <code>^3.0.0</code> diyor. 18 <code>print(</code>, 22 <code>withOpacity</code> var. Tek test tüm uygulamayı açan bir duman testi; büyük olasılıkla kırık (çalıştırmadım).</li>
+<li><strong>Ölü kod (Faz 0'da silinecek).</strong>
+  <ul class="tight">
+    <li>Hiç import edilmeyen dosyalar: <code>enhanced_image_service.dart</code> (566 satır), <code>texture_selector.dart</code>, <code>constants.dart</code>.</li>
+    <li><code>ImageProcessingService</code> içinde <code>createThumbnail</code> dışındaki her şey.</li>
+    <li><code>ShareService.shareToWhatsApp</code>, <code>shareMultipleImages</code>, <code>shareText</code>.</li>
+    <li><code>FirebaseService</code>: <code>getImagesForCategory</code>, <code>getImageUrl</code>, <code>getImagesStream</code>, <code>getLastUpdateTime</code>, <code>uploadArtwork</code>. Sonuncusu çocuğun çizimini kullanıcı kimliğiyle sunucuya yüklüyor; gizlilik riski.</li>
+    <li><code>AppProvider</code>: <code>canImportImage</code>, <code>getArtworkById</code>, <code>shouldShowAd</code>. <code>ColoringProvider</code>: <code>processedImageData</code>, <code>setEdgeThreshold</code>, <code>setGradientThreshold</code>, <code>reset</code>.</li>
+    <li><code>LineSmoother.decimate</code>, <code>movingAverage</code>; <code>DrawnLine.smoothed</code>, <code>copyWith</code>; <code>LocaleProvider.getLanguageName</code>, <code>getLanguageFlag</code>; <code>UserSettings.language</code>.</li>
+    <li><code>assets/sounds/backup/</code>, boş <code>assets/fonts/</code>, kökteki <code>index.html</code> ve <code>privacy_policy.html</code> (<code>docs/</code> ile aynı). Yeni çizimler gelince <code>tool/generate_sample_images.dart</code>.</li>
+  </ul>
+</li>
+<li><strong>Android release anahtarı yalnız bu makinede.</strong> Keystore git dışında. Yedeğini al.</li>
+</ul>
+</section>
+
+<section id="mimari">
+<h2>5. Hedef boyama motoru</h2>
+<p>Motor dört parçadan oluşur: jest durum makinesi, bölge oluşturucu, belge (renk tablosu + komut yığını) ve katmanlı çizici. Bölge oluşturucu resim açılırken bir kez çalışır. Dokunma anında flood fill çalışmaz; dolgu tek bir tablo güncellemesidir.</p>
+
+<div class="diagram">
+<svg viewBox="0 0 960 430" role="img" aria-label="Hedef mimari şeması">
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--d-line)"/></marker></defs>
+  <!-- Asset -->
+  <rect class="box3" x="20" y="30" width="200" height="74" rx="10"/>
+  <text class="ttl" x="120" y="58" text-anchor="middle">Boyama sayfası</text>
+  <text class="sm" x="120" y="80" text-anchor="middle">SVG → 2048 px çizgi + ID haritası</text>
+  <!-- RegionBuilder -->
+  <rect class="box" x="20" y="150" width="200" height="96" rx="10"/>
+  <text class="ttl" x="120" y="176" text-anchor="middle">Bölge oluşturucu</text>
+  <text class="sm" x="120" y="198" text-anchor="middle">Isolate.run · 4 yönlü CCL</text>
+  <text class="sm" x="120" y="216" text-anchor="middle">boşluk kapatma · çizgi altına</text>
+  <text class="sm" x="120" y="234" text-anchor="middle">büyütme · diske önbellek</text>
+  <!-- Input -->
+  <rect class="box2" x="20" y="300" width="200" height="96" rx="10"/>
+  <text class="ttl" x="120" y="326" text-anchor="middle">Girdi</text>
+  <text class="sm" x="120" y="348" text-anchor="middle">Listener → jest durum</text>
+  <text class="sm" x="120" y="366" text-anchor="middle">makinesi → Dokunma |</text>
+  <text class="sm" x="120" y="384" text-anchor="middle">Çizgi | Dönüşüm</text>
+  <!-- Document -->
+  <rect class="box" x="330" y="120" width="260" height="190" rx="10"/>
+  <text class="ttl" x="460" y="148" text-anchor="middle">Belge (ColoringDocument)</text>
+  <text class="sm" x="350" y="176">etiket haritası  Uint16List</text>
+  <text class="sm" x="350" y="198">renk tablosu  Uint32List[etiket]</text>
+  <text class="sm" x="350" y="220">fırça çizgileri  List&lt;Stroke&gt;</text>
+  <text class="sm" x="350" y="242">komut yığını  Fill · Stroke · Clear</text>
+  <text class="sm" x="350" y="264">3 fırça kontrol noktası (ui.Image)</text>
+  <text class="sm" x="350" y="290">undo/redo = komut geri al</text>
+  <!-- Renderer -->
+  <rect class="box2" x="700" y="30" width="240" height="270" rx="10"/>
+  <text class="ttl" x="820" y="58" text-anchor="middle">Katmanlı çizici</text>
+  <rect class="box3" x="720" y="74" width="200" height="30" rx="6"/><text class="sm" x="820" y="94" text-anchor="middle">5 · çizgi resim (en üst)</text>
+  <rect class="box3" x="720" y="110" width="200" height="30" rx="6"/><text class="sm" x="820" y="130" text-anchor="middle">4 · canlı çizgi (kırpılmış)</text>
+  <rect class="box3" x="720" y="146" width="200" height="30" rx="6"/><text class="sm" x="820" y="166" text-anchor="middle">3 · fırça katmanı</text>
+  <rect class="box3" x="720" y="182" width="200" height="30" rx="6"/><text class="sm" x="820" y="202" text-anchor="middle">2 · dolgu katmanı</text>
+  <rect class="box3" x="720" y="218" width="200" height="30" rx="6"/><text class="sm" x="820" y="238" text-anchor="middle">1 · kâğıt dokusu</text>
+  <text class="lbl" x="820" y="270" text-anchor="middle">RepaintBoundary +</text>
+  <text class="lbl" x="820" y="286" text-anchor="middle">TransformationController</text>
+  <!-- Save -->
+  <rect class="box3" x="700" y="320" width="240" height="76" rx="10"/>
+  <text class="ttl" x="820" y="346" text-anchor="middle">Kayıt (eser klasörü)</text>
+  <text class="sm" x="820" y="370" text-anchor="middle">doc.json · brush.png · thumb.png</text>
+  <!-- edges -->
+  <path class="edge" d="M120 104 V150" marker-end="url(#ar)"/>
+  <path class="edge" d="M220 198 H330" marker-end="url(#ar)"/>
+  <text class="lbl" x="275" y="190" text-anchor="middle">etiketler</text>
+  <path class="edge" d="M220 348 H280 V270 H330" marker-end="url(#ar)"/>
+  <text class="lbl" x="252" y="340" text-anchor="middle">komutlar</text>
+  <path class="edge" d="M590 160 H650 V130 H700" marker-end="url(#ar)"/>
+  <text class="lbl" x="645" y="120" text-anchor="middle">kirli alan</text>
+  <path class="edge" d="M590 280 H650 V358 H700" marker-end="url(#ar)"/>
+  <text class="lbl" x="648" y="380" text-anchor="middle">otomatik kayıt</text>
+</svg>
+</div>
+
+<h3>Dolgu: neden sızmaz, neden hale kalmaz</h3>
+<ol class="tight">
+  <li><strong>Bariyer maskesi.</strong> Alfa kanalı varsa resim beyaz üstüne birleştirilir. Parlaklığı 0,5–0,6'nın altındaki pikseller bariyerdir. Sobel gradyanı kullanılmaz.</li>
+  <li><strong>4 yönlü bağlı bileşen etiketleme (CCL).</strong> Bariyer dışındaki pikseller 4 yönlü komşulukla gruplanır. Çapraz basamaktan sızıntı biter.</li>
+  <li><strong>Boşluk kapatma.</strong> Bariyer resim başına <code>gapPx</code> kadar kalınlaştırılır (varsayılan 0, noktalı resimlerde 2–4). Göz bebeği gibi küçük kapalı alanlar kaybolmaz; bu alanlar kalınlaştırmasız etiketten gelir.</li>
+  <li><strong>Çizgi altına büyütme.</strong> Etiketlenmemiş pikseller (çizgi ve kenar) çok kaynaklı BFS ile en yakın bölgeye dağıtılır. Dolgu çizginin altına kadar uzanır. Çizgi resim en üstte durduğu için beyaz hale kalmaz.</li>
+  <li><strong>Hız.</strong> Motor ajanı 2048×2048 ayçiçeğinde etiketleme + büyütme + r=3 kalınlaştırmayı toplam yaklaşık 117 ms'de ölçtü (Apple Silicon Mac, AOT derleme). Telefonda birkaç kat yavaş olur; bu yüzden iş <code>Isolate.run</code> içinde yapılır ve sonuç diske yazılır.</li>
+</ol>
+
+<h3>Jest durum makinesi</h3>
+<p>Tuval girdisinin tamamı <code>Listener</code> ile alınır. <code>Listener</code> gesture arena'ya (Flutter'ın jest tanıyıcılarının yarıştığı mekanizma) girmez; bu yüzden 36 lp gecikme ve yarım çizgi sorunu oluşmaz. <code>InteractiveViewer</code>'ı önermiyorum: başlamış bir çizgiyi iptal edemiyor ve ölçeği tam 1,0 kalan iki parmak sürüklemesini atıyor.</p>
+<div class="diagram">
+<svg viewBox="0 0 960 380" role="img" aria-label="Jest durum makinesi">
+  <defs><marker id="ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--d-line)"/></marker></defs>
+  <rect class="box" x="20" y="150" width="130" height="56" rx="28"/><text class="ttl" x="85" y="183" text-anchor="middle">Boşta</text>
+  <rect class="box2" x="250" y="150" width="170" height="56" rx="28"/><text class="ttl" x="335" y="175" text-anchor="middle">Bekleme</text><text class="lbl" x="335" y="193" text-anchor="middle">çizgi görünür, kayıt yok</text>
+  <rect class="box3" x="600" y="40" width="180" height="56" rx="28"/><text class="ttl" x="690" y="73" text-anchor="middle">Dokunma → Dolgu</text>
+  <rect class="box3" x="600" y="150" width="180" height="56" rx="28"/><text class="ttl" x="690" y="183" text-anchor="middle">Çizim</text>
+  <rect class="box" x="600" y="260" width="180" height="56" rx="28"/><text class="ttl" x="690" y="285" text-anchor="middle">Dönüşüm</text><text class="lbl" x="690" y="303" text-anchor="middle">pinch · kaydırma · fling</text>
+  <path class="edge" d="M150 178 H250" marker-end="url(#ar2)"/><text class="lbl" x="200" y="170" text-anchor="middle">1 parmak</text>
+  <path class="edge" d="M420 165 H500 V68 H600" marker-end="url(#ar2)"/><text class="lbl" x="510" y="122">kalkış: &lt;250 ms ve &lt;10 lp</text>
+  <path class="edge" d="M420 178 H600" marker-end="url(#ar2)"/><text class="lbl" x="516" y="172">&gt;8 lp / 120 ms</text>
+  <path class="edge" d="M420 191 H500 V288 H600" marker-end="url(#ar2)"/><text class="lbl" x="510" y="236">2. parmak ≤150 ms</text><text class="lbl" x="510" y="252">→ çizgi atılır</text>
+  <path class="edge" d="M85 206 V336 H690 V316" stroke-dasharray="4 4" marker-end="url(#ar2)"/><text class="lbl" x="380" y="330" text-anchor="middle">2 parmak doğrudan</text>
+  <path class="edge" d="M780 68 H880"/><path class="edge" d="M780 178 H880"/><path class="edge" d="M780 288 H880"/>
+  <path class="edge" d="M880 288 V20 H85 V150" stroke-dasharray="4 4" marker-end="url(#ar2)"/><text class="lbl" x="480" y="14" text-anchor="middle">tüm parmaklar kalkınca → Boşta</text>
+  <text class="lbl" x="20" y="368">Çizim sırasında: kalkış → çizgiyi kaydet · 2. parmak → yok say (avuç) · iptal olayı → çizgiyi at</text>
+</svg>
+</div>
+<ul class="tight">
+  <li><strong>Yakınlaştırma aralığı 1–8×.</strong> Resim her zaman ekranı doldurur. Dolgu modunda yakınken tek parmakla kaydırma serbesttir, çünkü bu modda çizgi yoktur.</li>
+  <li><strong>Çift dokunmayla yakınlaştırma kalkar.</strong> <code>onDoubleTap</code> tek dokunuşu 300 ms bekletir (flutter#110300). Çocuklar art arda dokunduğu için kazara tetiklenir. Yerine pinch ve bir "sığdır" butonu gelir.</li>
+  <li><strong>Kalem (stylus).</strong> İlk stylus olayından sonra "kalem çizer, parmak gezinir" moduna geçilir. Bu, avuç reddi (palm rejection) sağlar. Basınç <code>PointerEvent.pressure</code> ile okunur.</li>
+</ul>
+
+<h3>Belge, undo ve kayıt</h3>
+<ul class="tight">
+  <li><code>FillCmd(etiket, eski, yeni)</code> 12 bayt tutar. Aynı bölgeye aynı renk tekrar dokununca komut yazılmaz.</li>
+  <li><code>StrokeCmd</code> noktaları <code>Float32List</code> olarak (x, y, basınç; 0–1 aralığında) saklar. Fırça türü, renk, boyut, rastgelelik tohumu ve kırpma etiketi de komutta durur. Aynı tohum aynı glitter desenini üretir; tekrar oynatma ve kayıt aynı sonucu verir.</li>
+  <li>Fırça katmanı her 8 çizgide bir <code>ui.Image</code> kontrol noktası alır. En çok 3 kontrol noktası tutulur. Undo en yakın kontrol noktasından tekrar oynatır.</li>
+  <li>Bellek katmanı: tablet 2048 px, telefon 1536 px, düşük RAM'li Android 1024 px. 2048 px'te bir RGBA katman 16,8 MB eder. 5 katman + 3 kontrol noktası yaklaşık 130 MB GPU belleği eder (hesap, ölçüm değil).</li>
+</ul>
+</section>
+
+<section id="firca">
+<h2>6. Fırça motoru</h2>
+<p>Fırça <code>perfect_freehand</code> 2.5.2 paketiyle (MIT lisans, Ocak 2026) çizginin dış hattını çokgen olarak üretir. Çizgi parmak kalkınca fırça katmanına pişirilir. Çizgi resim fırçanın da üstünde kalır.</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Fırça</th><th>Nasıl</th><th>Yaş</th><th>Paket</th></tr></thead>
+<tbody>
+<tr><td>Keçeli kalem</td><td><code>perfect_freehand</code>, incelme 0, boyut 12–40</td><td>Hepsi</td><td>Ücretsiz</td></tr>
+<tr><td>Kurşun kalem</td><td>İncelme 0,5 + basınç; parmakta basınç taklidi</td><td>6–10</td><td>Ücretsiz</td></tr>
+<tr><td>Pastel boya</td><td>Aynı çokgen + tekrarlanan tane dokusu (<code>ImageShader</code>)</td><td>Hepsi</td><td>Ücretsiz</td></tr>
+<tr><td>Sprey</td><td>Yolu yeniden örnekle, nokta damgalarını tek <code>drawAtlas</code> ile çiz</td><td>Hepsi</td><td>Pro</td></tr>
+<tr><td>Glitter</td><td>Parıltı damgaları + hafif ışıltı animasyonu</td><td>Hepsi</td><td>Pro</td></tr>
+<tr><td>Gökkuşağı</td><td>Renk tonu yay uzunluğuyla döner</td><td>Hepsi</td><td>Pro</td></tr>
+<tr><td>Neon</td><td>Bulanık dış ışıma + parlak çekirdek</td><td>6–10</td><td>Pro</td></tr>
+<tr><td>Silgi</td><td>Fırça katmanında <code>BlendMode.clear</code>. "Sihirli silgi" dokunulan bölgenin rengini sıfırlar.</td><td>Hepsi</td><td>Ücretsiz</td></tr>
+</tbody></table></div>
+<p><strong>"Çizginin içinde kal" seçeneği.</strong> Parmak indiği anda o noktanın bölge etiketi okunur. Çizgi yalnız o bölgenin maskesi içinde görünür (<code>saveLayer</code> → çizgi → maske ile <code>BlendMode.dstIn</code>). Minik modunda varsayılan olarak açık olmalı.</p>
+<p><strong>Açık karar:</strong> Önerdiğim modelde dolgu fırçanın altında kalır. Yani bir bölgeye fırçayla çizip sonra dolgu yaparsan fırça izi durur. Dolgunun fırçayı da silmesini istersen dolgu komutu bölge içini temizler ve undo tekrar oynatma ister (Karar 6).</p>
+</section>
+
+<section id="gorsel">
+<h2>7. Görsel yeniden tasarım</h2>
+<p>Eleştiriyi <code>design:design-critique</code> çerçevesiyle emülatör ekran görüntüleri üzerinde yaptım. Uygulamanın arayüzü kullanılabilir durumda, ama çocuk uygulaması gibi değil, genel bir Material uygulaması gibi görünüyor. En büyük fırsat boyama ekranında.</p>
+
+<h3>İlk izlenim</h3>
+<p>Ana ekranda göz önce mercan başlığa ve gradyanlı karşılama kartına gidiyor. Bu iki alan, asıl iş olan kategori seçimini aşağı itiyor. Kategori ekranında kaba çizimler ve kartların altındaki gri gradyan "bitmemiş" hissi veriyor. Boyama ekranında resim ekranın yaklaşık üçte birini kaplıyor; geri kalanı boş beyaz alan ve araçlar.</p>
+
+<h3>Kullanılabilirlik</h3>
+<div class="table-wrap"><table>
+<thead><tr><th>Bulgu</th><th>Önem</th><th>Öneri</th></tr></thead>
+<tbody>
+<tr><td>Boyama ekranında resim küçük. 1× ölçekte sayfa ekran yüksekliğinin yaklaşık %38'ini, kedi çiziminin kendisi %25'ini kaplıyor.</td><td><span class="badge b-p0">Kritik</span></td><td>Resim ekranın kullanılabilir alanını doldursun. Araçlar resmin üstüne değil, kenarlara yerleşsin.</td></tr>
+<tr><td>Sol panel taşıyor ve "Silgi" etiketi kesiliyor.</td><td><span class="badge b-p0">Kritik</span></td><td>Telefonda araçlar altta tek sıra, renkler üstte yatay şerit. Tablette araçlar solda, renkler sağda.</td></tr>
+<tr><td>Okuma bilmeyen çocuk için araçlar metinle ayrılıyor ("Doldur", "Kalem", "Silgi").</td><td><span class="badge b-p1">Orta</span></td><td>Büyük, tanınır ikonlar (kova, keçeli kalem, silgi). Seçili araç fiziksel olarak "kalksın" (ölçek + gölge). Dokununca sesli isim.</td></tr>
+<tr><td>Kaydet butonu resmin köşesini kapatıyor. Çocuk için "kaydet" kavramı soyut.</td><td><span class="badge b-p1">Orta</span></td><td>Otomatik kayıt. Kaydet yerine "Bitti" butonu; bitiş ödülünü tetiklesin.</td></tr>
+<tr><td>Çöp kutusu (tümünü temizle) üst çubukta, undo'nun hemen yanında.</td><td><span class="badge b-p1">Orta</span></td><td>Temizleme uzun basma ya da onay ister. Undo büyük ve tek dokunuşla erişilebilir kalır.</td></tr>
+<tr><td>Kategori kartlarında emoji ikonlar platforma göre farklı görünür.</td><td><span class="badge b-p2">Düşük</span></td><td>Kategori başına özel illüstrasyon.</td></tr>
+</tbody></table></div>
+
+<h3>Tutarlılık ve erişilebilirlik</h3>
+<div class="table-wrap"><table>
+<thead><tr><th>Öğe</th><th>Ölçüm</th><th>Öneri</th></tr></thead>
+<tbody>
+<tr><td>Başlıkta beyaz metin (mercan <code>#FF6F61</code>)</td><td class="num">2,73:1</td><td>4,5:1 hedefi. Koyu metin ya da koyulaştırılmış başlık rengi.</td></tr>
+<tr><td>Kart etiketi (beyaz, gri gradyan üstünde)</td><td class="num">1,6–2,1:1</td><td>Gradyanı kaldır; etiket kartın altında koyu metin olsun.</td></tr>
+<tr><td>Kaydet butonu (beyaz, turkuaz <code>#4ECDC4</code>)</td><td class="num">1,93:1</td><td>Koyu metin ya da koyu turkuaz.</td></tr>
+<tr><td>Dokunma hedefleri</td><td>32–56 dp</td><td>NN/g küçük çocuklar için 2×2 cm öneriyor (yaklaşık 100+ pt). Renk, araç ve geri butonlarında buna yaklaş.</td></tr>
+<tr><td>Yazı tipi</td><td>Sistem (Roboto)</td><td>Başlık Baloo 2, gövde Nunito. İkisinde de ı İ ş Ş ğ Ğ tam var. Fredoka ve Sniglet'te İ ş Ş ğ Ğ eksik; kullanma.</td></tr>
+<tr><td>Türkçe metin</td><td>Diakritik eksik</td><td>Tüm metinler ARB dosyasından gelsin. Dart'ın <code>toUpperCase()</code> fonksiyonu Türkçe "i"yi "I" yapar; büyük harfli metinleri ARB'ye hazır yaz.</td></tr>
+</tbody></table></div>
+
+<h3>İyi olanlar</h3>
+<ul class="tight">
+  <li>Uygulama ikonundaki fırça maskotu sevimli ve tutarlı bir karakter. Maskot olarak tüm uygulamaya taşınabilir.</li>
+  <li>Kategori yapısı (hayvanlar, bitkiler, araçlar, karakterler, doğa, yiyecekler) çocuklar için doğru ve anlaşılır.</li>
+  <li>Renk paleti büyük, yuvarlak köşeli karelerden oluşuyor ve seçili renk açıkça işaretleniyor.</li>
+  <li>Ses dosyaları hazır: tıklama, renk seçimi, geri alma, başarı, splash.</li>
+</ul>
+
+<h3>Önerilen stil yönü</h3>
+<div class="table-wrap"><table>
+<thead><tr><th>Yön</th><th>Görsel dil</th><th>Referans</th><th>Önerim</th></tr></thead>
+<tbody>
+<tr><td>A. Dokunsal oyuncak</td><td>Yuvarlak "kil" formlar, krem zemin, metinsiz arayüz</td><td>Pok Pok, Sago Mini</td><td>—</td></tr>
+<tr><td>B. Canlı çıkartma albümü</td><td>Kalın konturlu düz vektör, doygun renkler, esprili maskot</td><td>Bimi Boo, Crayon Club</td><td><strong>Varsayılan</strong></td></tr>
+<tr><td>C. Masal kitabı / atölye</td><td>Kâğıt dokusu, sakin palet</td><td>Lake</td><td>7–10 yaş için "Stüdyo" modu</td></tr>
+</tbody></table></div>
+<p>Arayüz renkleri düşük doygunlukta kalmalı. Böylece çocuğun boyadığı resim ekranda öne çıkar. Boya paleti arayüz renklerinden ayrı tutulur: varsayılan 12–16 renk, "daha fazla" ile genişler.</p>
+</section>
+
+<section id="icerik">
+<h2>8. İçerik hattı (boyama sayfaları)</h2>
+<p>Yeni sayfalar SVG kaynaktan üretilir ve her derlemede otomatik doğrulanır. Hedef yayında 200–300 sayfa, sonra ayda 20–30 yeni sayfa ve sezon paketleri. Rakiplerden Crayon Club 1.000+ sayfa sunuyor ve her ay güncelliyor. Lake ayda 12 sayfa ve günlük sayfa çıkarıyor.</p>
+<h3>Teknik şartname</h3>
+<ul class="tight">
+  <li>Kaynak SVG. Her bölge sınırı kapalı path. Köşe birleşimi yuvarlak.</li>
+  <li>2048 px çıktıda çizgi kalınlığı: 6–10 yaş için 8–12 px, 3–5 yaş için 12–16 px.</li>
+  <li>Kesik ya da noktalı çizgi yalnız bölge içi süs olabilir, sınır olamaz.</li>
+  <li>Minik sayfası 8–15 bölge, büyük çocuk sayfası 20–60 bölge. En küçük bölge parmakla dokunulabilir olmalı.</li>
+  <li>Derleme iki çıktı üretir: kenarı yumuşatılmış çizgi resim ve "ID haritası" (her bölge tek düz renk). Etiket haritası doğrudan ID haritasından gelir; bu sayfalarda boşluk kapatma gerekmez.</li>
+  <li>Küçük resim 512 px WebP. Meta JSON: kategori, yaş, sezon, ücretsiz/Pro, TR/EN ad.</li>
+</ul>
+<h3>Doğrulayıcı (CI)</h3>
+<p>Bugünkü ölçüm betiğim (<code>plan/araclar/resim_olcumu.dart</code>, girdi için <code>plan/araclar/png_to_gray.py</code>) bu doğrulayıcının ilk hâlidir. Son hâli her derlemede şunları kontrol eder ve hata varsa derlemeyi kırar:</p>
+<ol class="tight">
+  <li>Çözünürlük ve kanal.</li>
+  <li>r=1..4 kalınlaştırmadan sonra yeni bölge ayrılıyorsa "en çok 2r piksellik boşluk" uyarısı ve konumu.</li>
+  <li>İskelette tek komşulu uç nokta varsa açık kontur uyarısı (resim kenarı hariç).</li>
+  <li>Çizgi kalınlığı alt sınırın altındaysa uyarı.</li>
+  <li>Dokunulamayacak kadar küçük bölge uyarısı.</li>
+  <li>Çıktı: JSON rapor ve sorunları işaretleyen PNG.</li>
+</ol>
+<h3>Kaynak seçenekleri</h3>
+<div class="table-wrap"><table>
+<thead><tr><th>Kaynak</th><th>Lisans</th><th>Risk</th><th>Önerim</th></tr></thead>
+<tbody>
+<tr><td>İllüstratör siparişi</td><td>Mali hakların yazılı devri gerekir</td><td>Maliyet: basit çizgi resim sayfa başı yaklaşık 15–50 $ (sınırlı kanıt)</td><td><strong>Ana kaynak</strong></td></tr>
+<tr><td>AI eskiz + illüstratör temizliği</td><td>Yalnız prompt ile üretilen çıktı ABD'de telif korumasına girmez</td><td>Rakip kopyalayabilir. Karakter benzerliği riski (Disney/Universal – Midjourney davası, Haziran 2025)</td><td>Yalnız fikir ve eskiz için</td></tr>
+<tr><td>Openclipart, PublicDomainVectors</td><td>CC0 / kamu malı</td><td>Kalite değişken; eski yüklemelerin lisansı tek tek kontrol edilmeli</td><td>Tamamlayıcı</td></tr>
+<tr><td>Adobe Stock</td><td>Ürünün ana değeri sayfa ise muhtemelen Extended lisans</td><td>Paylaş/dışa aktar özelliği "bağımsız dosya dağıtımı" sayılabilir</td><td>Önermiyorum</td></tr>
+<tr><td>Etsy, Creative Fabrica, KDP paketleri</td><td>Uygulama içi kullanım belirsiz ya da yasak</td><td>Yüksek</td><td>Kullanma</td></tr>
+</tbody></table></div>
+</section>
+
+<section id="ozellik">
+<h2>9. Yeni özellikler</h2>
+<p>Liste, pazar araştırması ajanının 9 rakip uygulama incelemesinden geliyor. Rakiplerde ortak örüntü: reklamsız, çevrimdışı çalışan, bitiş anında ödül veren uygulamalar kazanıyor. Olumsuz yorumların ana nedeni ödeme sonrası kilitli kalan içerik ve çalışmayan Restore.</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Öncelik</th><th>Özellik</th><th>Neden</th><th>Faz</th></tr></thead>
+<tbody>
+<tr><td><span class="badge b-p0">Must</span></td><td>Yeni sayfa kütüphanesi: 200+ sayfa, 30–40'ı ücretsiz</td><td>76 sayfa rakiplerin 100–1.500 sayfasının çok altında</td><td>3</td></tr>
+<tr><td><span class="badge b-p0">Must</span></td><td>Dolgu hissi: dokunulan noktadan dalga gibi yayılan animasyon, ses, hafif titreşim</td><td>Tüm rakiplerin çekirdek deneyimi</td><td>1</td></tr>
+<tr><td><span class="badge b-p0">Must</span></td><td>Fırçalar: keçeli, pastel, sprey, glitter, gökkuşağı, neon</td><td>Bimi Boo, Crayon Club ve Lake'te var</td><td>2</td></tr>
+<tr><td><span class="badge b-p0">Must</span></td><td>Bitiş ödülü: konfeti, maskotun sevinmesi, çıkartma ödülü</td><td>Bimi ve Bini'nin ayırt edici özelliği</td><td>5</td></tr>
+<tr><td><span class="badge b-p0">Must</span></td><td>Yaş modu. <em>Minik</em> (3–5, <strong>varsayılan</strong>): 8 renk, kalın çizgi, "çizginin içinde kal" açık, pinch zorunlu değil. <em>Büyük</em> (6–10, ebeveyn kapısının arkasında açılır): zoom, tüm fırçalar.</td><td>Birinci ölçüt 3 yaşındaki çocuk. Geniş yaş aralığı rakiplerde de şikâyet nedeni.</td><td>2</td></tr>
+<tr><td><span class="badge b-p0">Must</span></td><td>Ebeveyn kapısı ve ebeveyn alanı</td><td>Mağaza zorunluluğu (bölüm 10)</td><td>4</td></tr>
+<tr><td><span class="badge b-p0">Must</span></td><td>Sağlam abonelik doğrulama ve Restore</td><td>Rakiplerin 1 yıldızlı yorumlarının ana konusu</td><td>4</td></tr>
+<tr><td><span class="badge b-p1">Should</span></td><td>Çıkartma ve damga</td><td>Crayon Club, Crayola</td><td>5</td></tr>
+<tr><td><span class="badge b-p1">Should</span></td><td>Günün sayfası ve sezon paketleri: 23 Nisan, 29 Ekim, bayramlar, yılbaşı</td><td>Türkiye takvimi yerel bir fark yaratır</td><td>5</td></tr>
+<tr><td><span class="badge b-p1">Should</span></td><td>Sayıyla boyama ve noktadan noktaya (6–10 yaş)</td><td>Bimi, Bini, Happy Color</td><td>5</td></tr>
+<tr><td><span class="badge b-p1">Should</span></td><td>Renk adlarının TR/EN sesli söylenmesi; Türkçe alfabe izleme (ç ğ ı ö ş ü dahil)</td><td>Ebeveyn "eğitici" özelliğe ödeme yapıyor</td><td>5</td></tr>
+<tr><td><span class="badge b-p1">Should</span></td><td>Ayna / kaleydoskop çizimi</td><td>Bimi</td><td>5</td></tr>
+<tr><td><span class="badge b-p1">Should</span></td><td>Fotoğraftan boyama sayfası: cihazda işlenir, ebeveyn kapısı arkasında</td><td>Rakiplerde nadir</td><td>5</td></tr>
+<tr><td><span class="badge b-p2">Nice</span></td><td>Karanlıkta parlayan mod, piksel sanatı, boyamanın hızlandırılmış tekrarı, yazdırma (kapı arkasında)</td><td>Crayon Club, Bimi</td><td>sonra</td></tr>
+<tr><td><span class="badge b-p2">Nice</span></td><td>AR ile canlandırma, 3B boyama</td><td>Quiver; maliyeti yüksek</td><td>sonra</td></tr>
+</tbody></table></div>
+</section>
+
+<section id="uyum">
+<h2>10. Mağaza uyumu ve gelir modeli</h2>
+<p>Reklamı tamamen kaldırmanı ve Apple Kids Category'ye girmeni öneriyorum. Apple 1.3 ve 5.1.4 maddeleri çocuk uygulamasında üçüncü taraf reklama ancak reklam kreatiflerinin insan tarafından incelendiği ve bunun belgelendiği durumda izin veriyor. Forum kayıtları AdMob'lu başvuruların bu gerekçeyle reddedildiğini gösteriyor; kayıtlar 2019–2023 tarihli.</p>
+<h3>Kontrol listesi</h3>
+<div class="table-wrap"><table>
+<thead><tr><th>#</th><th>Yapılacak</th><th>Bugün</th></tr></thead>
+<tbody>
+<tr><td>1</td><td><code>google_mobile_ads</code> paketini kaldır. Android'de tutulacaksa: <code>RequestConfiguration(maxAdContentRating: G)</code>, çocuk işareti, açılışta interstitial yok, bir ekranda tek reklam.</td><td>Banner + her 2. kayıtta interstitial</td></tr>
+<tr><td>2</td><td>Info.plist'ten <code>NSUserTrackingUsageDescription</code> kaldır.</td><td>Var</td></tr>
+<tr><td>3</td><td>Manifest'ten <code>AD_ID</code>, <code>READ_MEDIA_IMAGES</code>, <code>CAMERA</code> kaldır. Fotoğraf için sistem photo picker'ı kullan. Reklam SDK'sı kalırsa <code>AD_ID</code>'yi <code>tools:node="remove"</code> ile çıkar.</td><td>Var</td></tr>
+<tr><td>4</td><td>Ebeveyn kapısı şunların önüne: Pro ekranı ve satın alma, dış linkler (gizlilik politikası, puan ver), paylaşım, Ayarlar, fotoğraf içe aktarma. Kapı yetişkin düzeyinde bir görev olsun ve talimatı sesli versin.</td><td>Yok. README "PIN koruması" diyor, ama kodda PIN yok.</td></tr>
+<tr><td>5</td><td>Üçüncü taraf analitik ve tanımlayıcı gönderen SDK olmasın. Firebase çıkarsa bu madde kapanır.</td><td>Firebase bağımlılığı var</td></tr>
+<tr><td>6</td><td><code>PrivacyInfo.xcprivacy</code> ekle (UserDefaults için gerekçe).</td><td>Yok</td></tr>
+<tr><td>7</td><td>Kids Category tek yaş bandı ister: 5 ve altı, 6–8 ya da 9–11. Kategoriye girmeyen uygulama adında ve açıklamada "çocuklar için" diyemez (2.3.8).</td><td>Karar 4</td></tr>
+<tr><td>8</td><td>Gizlilik politikası ve Türkçe KVKK aydınlatma metni. Fotoğraf ve çizim çocuğa ait kişisel veri sayılır; işlem cihazda kalmalı.</td><td><code>docs/</code> altında politika var; güncellenmeli</td></tr>
+<tr><td>9</td><td>Abonelik ekranı: fiyat mağazadan, süre, deneme süresi, ücretliye geçiş tarihi, iptal yolu, Restore butonu.</td><td>Fiyat koda gömülü</td></tr>
+<tr><td>10</td><td>Mağaza metnini gerçeğe uydur.</td><td>"Reklam içermez" yazıyor</td></tr>
+</tbody></table></div>
+<p class="small">COPPA değişikliği (uyum tarihi 22 Nisan 2026), Apple'ın yeni yaş anketi ve Texas SB2420 gibi hukuki konuları ajan web'den topladı. Bunlar hukuki görüş değildir; yayından önce bir hukukçuya teyit ettir.</p>
+
+<h3>Gelir modeli</h3>
+<div class="table-wrap"><table>
+<thead><tr><th>Ölçüt</th><th>Değer</th></tr></thead>
+<tbody>
+<tr><td>Education kategorisi medyan fiyat (RevenueCat)</td><td>9,99 $/ay, 44,99 $/yıl</td></tr>
+<tr><td>Deneme süresine göre ücretliye dönüşüm</td><td>≤4 gün %25,5 · 5–9 gün %37,4</td></tr>
+<tr><td>Rakipler</td><td>6,99–7,99 $/ay, 39,99–59,99 $/yıl. Lifetime: Pok Pok 89,99 $. Bimi TR: ₺399,99/ay, ₺1.999,99/yıl</td></tr>
+</tbody></table></div>
+<div class="callout info">
+<strong>Önerim (ajanın önerisi, fiyatlar test edilmedi):</strong>
+<ul class="tight">
+  <li>Freemium: 30–40 ücretsiz sayfa, her gün 1 ücretsiz "günün sayfası", temel fırçalar.</li>
+  <li>Pro ile açılanlar: tüm sayfalar ve paketler, sihirli fırçalar, sınırsız fotoğraftan boyama.</li>
+  <li><code>cobi_paint_pro_yearly</code> SKU'su eklensin ve 7 günlük denemeyle varsayılan plan olsun. Mevcut aylık ve lifetime kalır.</li>
+  <li>TR fiyat aralığı: ≈₺149–199/ay, ₺799–999/yıl, lifetime ₺1.499–1.999.</li>
+  <li>Kilitli sayfaya dokunan çocuk paywall görmez. Önce sesli bir "bir büyüğüne sor" ekranı gelir; paywall ebeveyn kapısının arkasında açılır.</li>
+</ul>
+</div>
+</section>
+
+<section id="yol">
+<h2>11. Yol haritası</h2>
+<p>Süreler tek geliştirici ve Claude oturumlarıyla çalışma varsayımına dayanan tahminlerdir. Efor ölçeği: S ≤ 2 gün, M 3–5 gün, L 1–2 hafta.</p>
+<div class="diagram">
+<svg viewBox="0 0 960 356" role="img" aria-label="Fazların haftalara göre zaman çizelgesi">
+  <g class="lbl">
+    <text x="190" y="20">H1</text><text x="250" y="20">H2</text><text x="310" y="20">H3</text><text x="370" y="20">H4</text><text x="430" y="20">H5</text><text x="490" y="20">H6</text><text x="550" y="20">H7</text><text x="610" y="20">H8</text><text x="670" y="20">H9</text><text x="730" y="20">H10</text><text x="790" y="20">H11</text><text x="850" y="20">H12</text>
+  </g>
+  <g>
+    <line class="gridline" x1="180" y1="28" x2="180" y2="350"/><line class="gridline" x1="240" y1="28" x2="240" y2="350"/><line class="gridline" x1="300" y1="28" x2="300" y2="350"/><line class="gridline" x1="360" y1="28" x2="360" y2="350"/><line class="gridline" x1="420" y1="28" x2="420" y2="350"/><line class="gridline" x1="480" y1="28" x2="480" y2="350"/><line class="gridline" x1="540" y1="28" x2="540" y2="350"/><line class="gridline" x1="600" y1="28" x2="600" y2="350"/><line class="gridline" x1="660" y1="28" x2="660" y2="350"/><line class="gridline" x1="720" y1="28" x2="720" y2="350"/><line class="gridline" x1="780" y1="28" x2="780" y2="350"/><line class="gridline" x1="840" y1="28" x2="840" y2="350"/><line class="gridline" x1="900" y1="28" x2="900" y2="350"/>
+  </g>
+  <text class="sm" x="10" y="56">Faz 0 · Zemin</text><rect class="box" x="182" y="38" width="56" height="26" rx="5"/>
+  <text class="sm" x="10" y="96">Faz 1a · Jest</text><rect class="box2" x="242" y="78" width="116" height="26" rx="5"/>
+  <text class="sm" x="10" y="136">Faz 1b · Bölge</text><rect class="box2" x="242" y="118" width="116" height="26" rx="5"/>
+  <text class="lbl" x="366" y="116">← 1a ve 1b paralel</text>
+  <text class="sm" x="10" y="176">Faz 1c–d · Belge</text><rect class="box2" x="302" y="158" width="116" height="26" rx="5"/>
+  <text class="sm" x="10" y="216">Faz 2 · Fırça</text><rect class="box2" x="422" y="198" width="116" height="26" rx="5"/>
+  <text class="sm" x="10" y="256">Faz 3 · İçerik+Tasarım</text><rect class="box3" x="242" y="238" width="416" height="26" rx="5"/>
+  <text class="sm" x="10" y="296">Faz 4 · Uyum+Gelir</text><rect class="box3" x="302" y="278" width="116" height="26" rx="5"/>
+  <text class="sm" x="10" y="336">Faz 5 · Keyif</text><rect class="box" x="662" y="318" width="236" height="26" rx="5"/>
+</svg>
+</div>
+
+<h3>Faz 0: Zemin (tamamlandı, 3 Kasım 2026)</h3>
+<div class="callout info">
+<strong>Sonuç:</strong> Uygulama artık Firebase, reklam, satın alma ve OpenCV olmadan derleniyor. <code>lib</code> 37 dosya / 12.239 satırdan 26 dosya / 7.395 satıra indi.
+<ul class="tight">
+  <li><strong>Firebase çıktı (P0-1, P0-8).</strong> iOS simülatör derlemesi 69 sn'de geçti. Önceden 14 tanımsız <code>GRPC_OBJ_*</code> sembolüyle düşüyordu.</li>
+  <li><strong>Reklam ve satın alma çıktı (Faz 4'ten öne alındı; P0-5, P0-6, P0-7, P0-9).</strong> Kategori ekranındaki banner, her 2. kayıttaki tam ekran reklam ve her açılıştaki satın alma geri yükleme çağrısı kalktı. Satın alma ekranına zaten hiçbir yerden ulaşılamıyordu.</li>
+  <li><strong>Fotoğraftan boyama ve OpenCV donduruldu (Karar 3).</strong> Daha önce içe aktarılmış sayfalar "İçe Aktar" kategorisinde görünmeye devam eder. Bu sayfaların kartları artık doğru açılıyor (<code>Image.asset</code> yerine <code>Image.file</code>).</li>
+  <li><strong>İzinler.</strong> Android release: <code>INTERNET</code>, <code>CAMERA</code>, depolama, <code>READ_MEDIA_IMAGES</code>, <code>BILLING</code>, <code>AD_ID</code> kalktı. iOS: kamera, fotoğraf okuma, ATT ve AdMob anahtarları kalktı. Paylaşım menüsündeki "Resmi Kaydet" için <code>NSPhotoLibraryAddUsageDescription</code> kaldı.</li>
+  <li><strong>Paketler.</strong> 20 doğrudan bağımlılıktan 12'si çıktı; çözümlemede 64 paket eksildi. Dart SDK alt sınırı <code>^3.10.0</code>.</li>
+  <li><strong>Analyzer</strong> 69 bulgudan 0'a indi. 7 doğruluk kuralı eklendi (<code>unawaited_futures</code>, <code>avoid_dynamic_calls</code> vb.).</li>
+  <li><strong>Testler.</strong> Hiç geçemeyen tam uygulama testinin yerine 11 test: gömülü sayfaların varlığı ve <code>pubspec</code> kaydı, eski kayıtların yeni modelle okunması, kategori ekranı ve dokunma hedefi rehberi.</li>
+  <li><strong>CI.</strong> GitHub Actions her pull request'te <code>flutter analyze</code> ve <code>flutter test</code> çalıştırır. Resim doğrulayıcı Faz 3'te eklenecek; bugünkü resimler sızdığı için şimdi eklenirse CI sürekli kırmızı kalır.</li>
+  <li><strong>Emülatörde doğrulandı (Android, ayrı emülatör):</strong> açılış, ana ekran, kategori, dolgu, kaydetme, Eserlerim ve Ayarlar çalışıyor. Açılışta Firebase hatası, kategori ekranında banner, kayıttan sonra reklam yok.</li>
+  <li><strong>Kalan 3 yaş riskleri:</strong> Boyama ekranındaki paylaş butonu çocuğu sistem paylaşım menüsüne götürüyor. Ayarlar sekmesi kapısız (Ç9, Faz 4). "Tümünü temizle" onayı yalnız yazılı butonlardan oluşuyor; geri al bunu telafi ediyor (Ç7, Faz 1/3). Araç ve renk butonları yaklaşık 53–56 dp; hedef yaklaşık 2 cm (Ç2, Faz 3).</li>
+  <li><strong>Açık kalan:</strong> Android release keystore'unun yedeği senin işin. Uygulamanın tamamını açan test, servisler enjekte edilebilir olunca (Faz 1c) eklenecek.</li>
+</ul>
+</div>
+<h3>Faz 1: Boyama motoru (3 hafta)</h3>
+<ul class="tight">
+  <li><strong>1a</strong> Jest durum makinesi + <code>TransformationController</code> + yalnız tuvali yeniden boyayan yapı. Eşikler 3 yaş için ayarlanır: dolgu modunda 20 lp'ye kadar kayma dokunma sayılır, avuç ve fazla parmak yok sayılır (Ç3–Ç5). Efor: M.</li>
+  <li><strong>1b</strong> Bölge oluşturucu: 4 yönlü CCL, çizgi altına büyütme, resim başına <code>gapPx</code>, isolate, disk önbelleği. Bugünkü 76 resimde de çalışır; sızıntıların çoğunu yeni çizimleri beklemeden kapatır. Efor: M.</li>
+  <li><strong>1c</strong> Renk tablosu, komut yığını, kayıt şeması v2, eski kayıtların taşınması, otomatik kayıt, <code>PopScope</code>, göreli dosya yolları (Ç6, Ç7). Servisler enjekte edilebilir hâle gelir; uygulamanın tamamını açan test burada eklenir. Efor: M.</li>
+  <li><strong>1d</strong> Katmanlı çizici: çizgi resim alfa katmanı, kirli alan güncellemesi, bilinear filtre, <code>RepaintBoundary</code>, <code>Selector</code>. Dolgu animasyonu ve sesi. Efor: M.</li>
+</ul>
+<h3>Faz 2: Fırça (2 hafta)</h3>
+<ul class="tight">
+  <li>Keçeli ve kurşun kalem, basınç, "çizginin içinde kal", silgi. Efor: M.</li>
+  <li>Pastel, sprey, glitter, gökkuşağı, neon. Minik/Büyük yaş modu. Efor: M.</li>
+</ul>
+<h3>Faz 3: İçerik ve tasarım (Faz 1 ile paralel, 7 hafta)</h3>
+<ul class="tight">
+  <li>Doğrulayıcı CI ve SVG → 2048 px + ID haritası hattı. Efor: M.</li>
+  <li>Tasarım sistemi: renk token'ları, Baloo 2 + Nunito, ölçüler, ikon seti, maskot. Efor: M.</li>
+  <li>Ekranların yeniden tasarımı: ana ekran, kategori, boyama araç çubuğu, palet, eserlerim, tablet düzenleri. Efor: L.</li>
+  <li>Yerelleştirmenin tamamlanması, Türkçe diakritiklerin düzeltilmesi. Efor: S.</li>
+  <li>İlk 60 yayın kalitesinde sayfa, sonra 200'e tamamlama. Efor: L (illüstratöre bağlı).</li>
+</ul>
+<h3>Faz 4: Uyum ve gelir (Faz 1 ile paralel, 2 hafta)</h3>
+<p class="small">Reklamın kaldırılması, reklam/kamera/depolama/satın alma izinlerinin temizlenmesi ve eski satın alma kodunun silinmesi 3 yaş ölçütü yüzünden Faz 0'a çekildi.</p>
+<ul class="tight">
+  <li>Gizlilik manifesti (<code>PrivacyInfo.xcprivacy</code>). Efor: S.</li>
+  <li>Ebeveyn kapısı ve ebeveyn alanı: paylaşım, ayarlar ve satın alma bunun arkasına girer. Efor: S.</li>
+  <li>Satın almanın baştan kurulması: satın alma akışını dinleyen doğrulama, yıllık SKU, mağazadan fiyat, Restore. Mevcut ürün kimlikleri korunur. Efor: M.</li>
+  <li>Mağaza metni ve gizlilik politikasının güncellenmesi: fotoğraf içe aktarma ve Pro maddeleri bugün gerçeği yansıtmıyor. Efor: S.</li>
+</ul>
+<h3>Faz 5: Keyif özellikleri (4 hafta)</h3>
+<ul class="tight">
+  <li>Bitiş ödülü (Rive maskot + Lottie konfeti), çıkartmalar, günün sayfası, sezon paketleri, sayıyla boyama, sesli renk adları.</li>
+  <li>Karar 3'e göre fotoğraftan boyama akışının yeniden yazılması.</li>
+</ul>
+
+<h3>Paralel çalışma ve kullanılacak ajanlar/skill'ler</h3>
+<p>Aşağıdaki işler birbirinin dosyasına dokunmaz. Her biri ayrı bir Claude oturumunda, kendi worktree'sinde yürüyebilir.</p>
+<div class="table-wrap"><table>
+<thead><tr><th>İş akışı</th><th>Dokunduğu dosyalar</th><th>Yardımcı skill/ajan</th></tr></thead>
+<tbody>
+<tr><td>Faz 1a Jest</td><td><code>lib/widgets/coloring_canvas.dart</code> (yeni <code>input/</code> klasörü)</td><td><code>code-review</code>, <code>simplify</code></td></tr>
+<tr><td>Faz 1b Bölge oluşturucu</td><td>yeni <code>lib/engine/region/</code>, testler</td><td>Motor ajanının prototipi (<code>plan/araclar/bolge_prototipi/</code>: 4 yönlü CCL, büyütme, kalınlaştırma), <code>code-review</code></td></tr>
+<tr><td>Faz 3 Doğrulayıcı + içerik hattı</td><td><code>tool/</code>, <code>assets/</code>, CI</td><td>Bugünkü ölçüm betiği</td></tr>
+<tr><td>Faz 3 Tasarım sistemi</td><td><code>lib/theme/</code>, yeni <code>lib/ui/</code></td><td><code>design:design-system</code>, <code>design:accessibility-review</code>, <code>design:ux-copy</code> (TR/EN çocuk dili)</td></tr>
+<tr><td>Faz 4 Uyum</td><td>yeni ebeveyn kapısı ve satın alma dosyaları, <code>ios/Runner/PrivacyInfo.xcprivacy</code>, <code>store_listing.md</code>, <code>docs/</code></td><td><code>security-review</code>; mağaza metni için <code>humanize-text</code></td></tr>
+</tbody></table></div>
+<p class="small">Fi.* projelerine özel skill'ler (<code>fi-mobile-code-reviewer</code>, <code>mobile-screen-create</code> vb.) bu projeye uygun değil; Fimple bileşen kataloğunu varsayıyorlar.</p>
+</section>
+
+<section id="ucyas">
+<h2>12. 3 yaş kontrol listesi</h2>
+<p>Her fazın sonunda yeni ya da değişen her ekran bu listeyle kontrol edilir. Bir madde karşılanmıyorsa iş bitmiş sayılmaz.</p>
+<div class="table-wrap"><table>
+<thead><tr><th>#</th><th>Kontrol</th><th>Ölçü</th><th>İlgili faz</th></tr></thead>
+<tbody>
+<tr><td>Ç1</td><td>Okuma gerektirmez. Her araç ikon ve dokununca sesli adıyla tanınır.</td><td>Metni gizleyince akış hâlâ tamamlanabiliyor</td><td>3</td></tr>
+<tr><td>Ç2</td><td>Dokunma alanları kocaman.</td><td>Renk, araç, geri al: yaklaşık 2×2 cm (≈100 pt). Hiçbiri 64 pt'nin altında değil.</td><td>3</td></tr>
+<tr><td>Ç3</td><td>Pinch ve iki parmak hareketi zorunlu değil. Çift dokunma kullanılmaz.</td><td>Minik modunda zoom yok ya da tek büyük butonla</td><td>1, 2</td></tr>
+<tr><td>Ç4</td><td>Dokunma toleransı geniş: çocuk dokunurken parmağını kaydırır.</td><td>Dolgu modunda 20 lp'ye kadar kayma hâlâ dokunma sayılır</td><td>1</td></tr>
+<tr><td>Ç5</td><td>Avuç ve fazladan parmak kazara işlem başlatmaz.</td><td>İkinci parmak gelince yarım çizgi atılır; fazla dokunuşlar yok sayılır</td><td>1</td></tr>
+<tr><td>Ç6</td><td>Kazara çıkışta iş kaybolmaz.</td><td>Geri tuşu, kenardan kaydırma ve arka plana geçişte otomatik kayıt</td><td>1</td></tr>
+<tr><td>Ç7</td><td>Geri al her zaman görünür ve tek dokunuşla çalışır. "Tümünü temizle" kazara tetiklenemez.</td><td>Temizleme uzun basma ya da ebeveyn onayı ister</td><td>1, 3</td></tr>
+<tr><td>Ç8</td><td>Sonuç anında görünür, sesle ve hafif titreşimle onaylanır.</td><td>Dokunmadan dolguya 100 ms'nin altında</td><td>1</td></tr>
+<tr><td>Ç9</td><td>Çocuk uygulamadan çıkamaz: reklam, dış link, satın alma ekranı yok. Paylaşım, ayarlar ve satın alma ebeveyn kapısının arkasında.</td><td>Ebeveyn kapısı dışında hiçbir dokunuş uygulamadan çıkarmıyor</td><td>0 (reklam), 4</td></tr>
+<tr><td>Ç10</td><td>Hata durumunda çocuğa metin gösterilmez; görsel ve ses kullanılır.</td><td>Ham hata metni (<code>$e</code>) çocuk ekranında yok</td><td>3</td></tr>
+</tbody></table></div>
+</section>
+
+<section id="karar">
+<h2>13. Senin vermen gereken kararlar</h2>
+<p>Kararların 1–6'sını 2 Kasım 2026'da önerildiği gibi onayladın; 4. karar 3 yaş ölçütüyle değişti. 7. karar hâlâ açık.</p>
+<div class="table-wrap"><table>
+<thead><tr><th>#</th><th>Karar</th><th>Önerim</th><th>Neden</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>Reklam kalsın mı?</td><td><strong>Tamamen kaldır.</strong></td><td>Apple Kids Category, mağaza metni ve rakip örüntüsü aynı yönü gösteriyor. Gelir abonelikten gelir.</td></tr>
+<tr><td>2</td><td>Firebase kalsın mı?</td><td><strong>Tamamen çıkar.</strong></td><td>Yapılandırılmamış ve kullanılmıyor. iOS derlemesini kıran gRPC bağımlılığını getiriyor. Çocuk gizliliği yükü getiriyor. Uzaktan içerik gerekirse sonra statik CDN + JSON manifest yeter.</td></tr>
+<tr><td>3</td><td>Fotoğraftan boyama (OpenCV) kalsın mı?</td><td><strong>Faz 5'e kadar dondur.</strong></td><td>Bugünkü sonuç kalitesi düşük. OpenCV kullanılmayan modüllerle birlikte geliyor. Motor yeniden yazılınca bu akış da etiket haritasından yararlanır.</td></tr>
+<tr><td>4</td><td>Kids Category yaş bandı</td><td><strong>5 ve altı.</strong> Minik modu varsayılan; Büyük modu ebeveyn kapısının arkasındaki bir ayar.</td><td>Birinci ölçüt 3 yaşındaki çocuk. İlk önerim 6–8 idi; 2 Kasım 2026'da bu ölçütle değişti. Apple tek bant istiyor.</td></tr>
+<tr><td>5</td><td>Sayfa kaynağı ve bütçe</td><td><strong>İllüstratör + AI eskiz.</strong></td><td>Haklar sende kalır. 200 sayfa × 15–50 $ = yaklaşık 3.000–10.000 $ aralığı (kaba hesap).</td></tr>
+<tr><td>6</td><td>Dolgu fırça izini silsin mi?</td><td><strong>Hayır, dolgu fırçanın altında kalsın.</strong></td><td>Undo basit kalır. Çocuğun çizdiği şey kaybolmaz.</td></tr>
+<tr><td>7</td><td>Uygulama şu an mağazada yayında mı?</td><td>—</td><td>Yayındaysa eski kayıtların taşınması zorunlu; değilse kayıt formatı temiz başlar ve 1c bir gün kısalır.</td></tr>
+</tbody></table></div>
+</section>
+
+<section id="yontem">
+<h2>14. Yöntem ve sınırlar</h2>
+<dl class="kv">
+  <dt>Kendi incelemem</dt><dd><code>coloring_canvas.dart</code> ve <code>coloring_provider.dart</code> satır satır. 76 resmin uygulamanın dolgu mantığıyla ölçümü. Ajan iddialarının kod ve Flutter SDK kaynağında doğrulanması.</dd>
+  <dt>Ajan 1: Kod denetimi</dt><dd>Kalan tüm <code>lib/</code>, platform yapılandırması, bağımlılıklar. Yalnız okudu, derleme yapmadı.</dd>
+  <dt>Ajan 2: Motor araştırması</dt><dd>Dolgu, render, jest ve fırça mimarisi; Flutter 3.38.3 kaynağı, pub.dev paketleri, Krita/Clip Studio yaklaşımları. Saf Dart prototipiyle hız ölçümü.</dd>
+  <dt>Ajan 3: Pazar araştırması</dt><dd>9 rakip uygulama, mağaza politikaları, içerik lisansları, fiyatlar, font glif kontrolü.</dd>
+  <dt>Skill</dt><dd><code>design:design-critique</code> çerçevesi (bölüm 7).</dd>
+  <dt>Canlı test</dt><dd>Android debug APK, ayrı bir emülatörde (CobiPaint_Pixel, API 34). Ana ekran, kategori, boyama, dolgu ve geri tuşu test edildi.</dd>
+  <dt>Araçlar</dt><dd><code>plan/araclar/</code>: resim ölçüm betiği ve bölge oluşturucu prototipi. Flutter projesinin dışında çalıştırılmalı; proje içinde <code>dart run</code> native asset kancalarına takılıyor. <code>analysis_options.yaml</code> içinde <code>plan/**</code> analiz dışı bırakıldı.</dd>
+</dl>
+<div class="callout info">
+<strong>Doğrulanmayanlar</strong>
+<ul class="tight">
+  <li>iOS'ta çalışma: derleme kırık olduğu için açamadım.</li>
+  <li>Pinch ve kalem çizgisi: <code>adb</code> çok parmak göndermiyor. Emülatörün sistem arayüzü de iki kez yanıt vermedi (host yük ortalaması 23–43). Bu iki konudaki bulgular kod ve SDK kaynağından geliyor.</li>
+  <li>Telefonda performans: ölçmedim. Motor hız rakamları Mac üzerinde ölçüldü.</li>
+  <li>UserDefaults 4 MB sınırı davranışı: cihazda denemedim.</li>
+  <li>Hukuki maddeler ve fiyatlar: web kaynaklı; hukukçu ve mağaza testleriyle teyit edilmeli.</li>
+</ul>
+</div>
+</section>
+
+<section id="ek">
+<h2>15. Ek: 76 resmin ölçümü</h2>
+<p>Sütunlar: <em>bölge</em> = 30 pikselden büyük, tek dokunuşla boyanan alan sayısı (uygulamanın 8 yönlü mantığı). <em>4 yön</em> = aynı ölçüm 4 yönlü komşulukla. <em>arka plan</em> = en büyük bölgenin resim alanına oranı. <em>siyah parça</em> = birbirinden kopuk çizgi parçası sayısı; yüksek değer noktalı kontur demek. <em>hale</em> = hiç boyanmayan kenar şeridinin oranı.</p>
+<details><summary>Tabloyu aç (76 satır)</summary>
+<div class="table-wrap"><table>
+<thead><tr><th>Resim</th><th class="num">px</th><th class="num">bölge</th><th class="num">4 yön</th><th class="num">arka plan</th><th class="num">siyah parça</th><th class="num">hale</th></tr></thead>
+<tbody>
+<tr><td><code>animals/bird</code></td><td class="num">400</td><td class="num">11</td><td class="num">11</td><td class="num">%86</td><td class="num">5</td><td class="num">%2,3</td></tr>
+<tr><td><code>animals/butterfly</code></td><td class="num">400</td><td class="num">15</td><td class="num">15</td><td class="num">%77</td><td class="num">7</td><td class="num">%3,4</td></tr>
+<tr><td><code>animals/cat</code></td><td class="num">400</td><td class="num">8</td><td class="num">8</td><td class="num">%80</td><td class="num">35</td><td class="num">%3,0</td></tr>
+<tr><td><code>animals/dog</code></td><td class="num">400</td><td class="num">11</td><td class="num">11</td><td class="num">%78</td><td class="num">28</td><td class="num">%3,0</td></tr>
+<tr><td><code>animals/dolphin</code></td><td class="num">512</td><td class="num">6</td><td class="num">6</td><td class="num">%81</td><td class="num">21</td><td class="num">%2,2</td></tr>
+<tr><td><code>animals/elephant</code></td><td class="num">400</td><td class="num">9</td><td class="num">9</td><td class="num">%70</td><td class="num">29</td><td class="num">%3,1</td></tr>
+<tr><td><code>animals/fish</code></td><td class="num">400</td><td class="num">8</td><td class="num">6</td><td class="num">%83</td><td class="num">19</td><td class="num">%2,6</td></tr>
+<tr><td><code>animals/giraffe</code></td><td class="num">512</td><td class="num">24</td><td class="num">22</td><td class="num">%75</td><td class="num">12</td><td class="num">%3,5</td></tr>
+<tr><td><code>animals/lion</code></td><td class="num">512</td><td class="num">35</td><td class="num">35</td><td class="num">%67</td><td class="num">7</td><td class="num">%4,7</td></tr>
+<tr><td><code>animals/owl</code></td><td class="num">512</td><td class="num">19</td><td class="num">19</td><td class="num">%64</td><td class="num">11</td><td class="num">%4,9</td></tr>
+<tr><td><code>animals/penguin</code></td><td class="num">512</td><td class="num">16</td><td class="num">16</td><td class="num">%68</td><td class="num">9</td><td class="num">%3,9</td></tr>
+<tr><td><code>animals/rabbit</code></td><td class="num">400</td><td class="num">9</td><td class="num">9</td><td class="num">%79</td><td class="num">19</td><td class="num">%3,2</td></tr>
+<tr><td><code>animals/turtle</code></td><td class="num">400</td><td class="num">25</td><td class="num">25</td><td class="num">%82</td><td class="num">22</td><td class="num">%3,3</td></tr>
+<tr><td><code>characters/astronaut</code></td><td class="num">512</td><td class="num">17</td><td class="num">17</td><td class="num">%77</td><td class="num">10</td><td class="num">%3,7</td></tr>
+<tr><td><code>characters/dragon</code></td><td class="num">512</td><td class="num">7</td><td class="num">7</td><td class="num">%74</td><td class="num">7</td><td class="num">%3,7</td></tr>
+<tr><td><code>characters/fairy</code></td><td class="num">512</td><td class="num">16</td><td class="num">16</td><td class="num">%70</td><td class="num">12</td><td class="num">%3,9</td></tr>
+<tr><td><code>characters/knight</code></td><td class="num">400</td><td class="num">19</td><td class="num">19</td><td class="num">%72</td><td class="num">5</td><td class="num">%3,6</td></tr>
+<tr><td><code>characters/mermaid</code></td><td class="num">400</td><td class="num">12</td><td class="num">12</td><td class="num">%83</td><td class="num">7</td><td class="num">%2,8</td></tr>
+<tr><td><code>characters/ninja</code></td><td class="num">400</td><td class="num">13</td><td class="num">10</td><td class="num">%76</td><td class="num">5</td><td class="num">%3,4</td></tr>
+<tr><td><code>characters/pirate</code></td><td class="num">400</td><td class="num">17</td><td class="num">17</td><td class="num">%76</td><td class="num">3</td><td class="num">%3,2</td></tr>
+<tr><td><code>characters/princess</code></td><td class="num">512</td><td class="num">22</td><td class="num">22</td><td class="num">%66</td><td class="num">9</td><td class="num">%4,0</td></tr>
+<tr><td><code>characters/robot</code></td><td class="num">400</td><td class="num">21</td><td class="num">21</td><td class="num">%68</td><td class="num">9</td><td class="num">%3,7</td></tr>
+<tr><td><code>characters/superhero</code></td><td class="num">400</td><td class="num">28</td><td class="num">28</td><td class="num">%74</td><td class="num">1</td><td class="num">%4,0</td></tr>
+<tr><td><code>characters/unicorn</code></td><td class="num">512</td><td class="num">21</td><td class="num">21</td><td class="num">%66</td><td class="num">7</td><td class="num">%4,0</td></tr>
+<tr><td><code>characters/wizard</code></td><td class="num">400</td><td class="num">7</td><td class="num">7</td><td class="num">%80</td><td class="num">7</td><td class="num">%3,2</td></tr>
+<tr><td><code>food/apple</code></td><td class="num">400</td><td class="num">9</td><td class="num">9</td><td class="num">%78</td><td class="num">15</td><td class="num">%2,4</td></tr>
+<tr><td><code>food/banana</code></td><td class="num">512</td><td class="num">6</td><td class="num">6</td><td class="num">%90</td><td class="num">3</td><td class="num">%2,1</td></tr>
+<tr><td><code>food/cake</code></td><td class="num">512</td><td class="num">14</td><td class="num">14</td><td class="num">%65</td><td class="num">4</td><td class="num">%3,8</td></tr>
+<tr><td><code>food/cookie</code></td><td class="num">400</td><td class="num">10</td><td class="num">10</td><td class="num">%76</td><td class="num">99</td><td class="num">%2,7</td></tr>
+<tr><td><code>food/cupcake</code></td><td class="num">400</td><td class="num">20</td><td class="num">20</td><td class="num">%76</td><td class="num">1</td><td class="num">%3,3</td></tr>
+<tr><td><code>food/donut</code></td><td class="num">512</td><td class="num">6</td><td class="num">6</td><td class="num">%60</td><td class="num">8</td><td class="num">%3,2</td></tr>
+<tr><td><code>food/hamburger</code></td><td class="num">512</td><td class="num">22</td><td class="num">22</td><td class="num">%58</td><td class="num">19</td><td class="num">%5,2</td></tr>
+<tr><td><code>food/icecream</code></td><td class="num">400</td><td class="num">12</td><td class="num">12</td><td class="num">%76</td><td class="num">3</td><td class="num">%3,3</td></tr>
+<tr><td><code>food/lollipop</code></td><td class="num">400</td><td class="num">10</td><td class="num">10</td><td class="num">%80</td><td class="num">27</td><td class="num">%3,1</td></tr>
+<tr><td><code>food/orange</code></td><td class="num">512</td><td class="num">11</td><td class="num">11</td><td class="num">%71</td><td class="num">6</td><td class="num">%2,7</td></tr>
+<tr><td><code>food/pizza</code></td><td class="num">400</td><td class="num">8</td><td class="num">8</td><td class="num">%68</td><td class="num">87</td><td class="num">%3,2</td></tr>
+<tr><td><code>food/strawberry</code></td><td class="num">512</td><td class="num">22</td><td class="num">22</td><td class="num">%72</td><td class="num">18</td><td class="num">%2,8</td></tr>
+<tr><td><code>food/watermelon</code></td><td class="num">512</td><td class="num">6</td><td class="num">6</td><td class="num">%79</td><td class="num">12</td><td class="num">%2,6</td></tr>
+<tr><td><code>nature/cloud</code></td><td class="num">512</td><td class="num">7</td><td class="num">7</td><td class="num">%96</td><td class="num">9</td><td class="num">%2,0</td></tr>
+<tr><td><code>nature/island</code></td><td class="num">512</td><td class="num">13</td><td class="num">13</td><td class="num">%65</td><td class="num">15</td><td class="num">%4,3</td></tr>
+<tr><td><code>nature/lightning</code></td><td class="num">512</td><td class="num">8</td><td class="num">8</td><td class="num">%93</td><td class="num">11</td><td class="num">%2,8</td></tr>
+<tr><td><code>nature/moon</code></td><td class="num">400</td><td class="num">4</td><td class="num">4</td><td class="num">%75</td><td class="num">48</td><td class="num">%2,8</td></tr>
+<tr><td><code>nature/mountain</code></td><td class="num">400</td><td class="num">8</td><td class="num">8</td><td class="num">%66</td><td class="num">10</td><td class="num">%3,6</td></tr>
+<tr><td><code>nature/rainbow</code></td><td class="num">400</td><td class="num">17</td><td class="num">18</td><td class="num">%73</td><td class="num">509</td><td class="num">%6,9</td></tr>
+<tr><td><code>nature/snowflake</code></td><td class="num">400</td><td class="num">1</td><td class="num">1</td><td class="num">%94</td><td class="num">1</td><td class="num">%2,1</td></tr>
+<tr><td><code>nature/star</code></td><td class="num">400</td><td class="num">2</td><td class="num">2</td><td class="num">%87</td><td class="num">4</td><td class="num">%1,9</td></tr>
+<tr><td><code>nature/sun</code></td><td class="num">400</td><td class="num">4</td><td class="num">4</td><td class="num">%87</td><td class="num">23</td><td class="num">%2,5</td></tr>
+<tr><td><code>nature/tornado</code></td><td class="num">512</td><td class="num">7</td><td class="num">7</td><td class="num">%83</td><td class="num">14</td><td class="num">%3,3</td></tr>
+<tr><td><code>nature/volcano</code></td><td class="num">512</td><td class="num">18</td><td class="num">18</td><td class="num">%53</td><td class="num">11</td><td class="num">%4,3</td></tr>
+<tr><td><code>nature/waterfall</code></td><td class="num">400</td><td class="num">18</td><td class="num">18</td><td class="num">%81</td><td class="num">1</td><td class="num">%2,5</td></tr>
+<tr><td><code>nature/wave</code></td><td class="num">400</td><td class="num">6</td><td class="num">6</td><td class="num">%83</td><td class="num">11</td><td class="num">%5,1</td></tr>
+<tr><td><code>plants/cactus</code></td><td class="num">400</td><td class="num">20</td><td class="num">20</td><td class="num">%77</td><td class="num">2</td><td class="num">%2,4</td></tr>
+<tr><td><code>plants/cherry_blossom</code></td><td class="num">512</td><td class="num">27</td><td class="num">27</td><td class="num">%88</td><td class="num">3</td><td class="num">%3,1</td></tr>
+<tr><td><code>plants/clover</code></td><td class="num">512</td><td class="num">6</td><td class="num">6</td><td class="num">%90</td><td class="num">1</td><td class="num">%2,3</td></tr>
+<tr><td><code>plants/daisy</code></td><td class="num">512</td><td class="num">16</td><td class="num">16</td><td class="num">%84</td><td class="num">6</td><td class="num">%2,8</td></tr>
+<tr><td><code>plants/flower</code></td><td class="num">400</td><td class="num">20</td><td class="num">20</td><td class="num">%82</td><td class="num">3</td><td class="num">%3,0</td></tr>
+<tr><td><code>plants/leaf</code></td><td class="num">400</td><td class="num">9</td><td class="num">9</td><td class="num">%84</td><td class="num">5</td><td class="num">%2,1</td></tr>
+<tr><td><code>plants/mushroom</code></td><td class="num">400</td><td class="num">8</td><td class="num">8</td><td class="num">%79</td><td class="num">16</td><td class="num">%2,4</td></tr>
+<tr><td><code>plants/palm</code></td><td class="num">512</td><td class="num">11</td><td class="num">11</td><td class="num">%90</td><td class="num">2</td><td class="num">%3,1</td></tr>
+<tr><td><code>plants/rose</code></td><td class="num">400</td><td class="num">25</td><td class="num">25</td><td class="num">%86</td><td class="num">3</td><td class="num">%2,5</td></tr>
+<tr><td><code>plants/sunflower</code></td><td class="num">400</td><td class="num">30</td><td class="num">30</td><td class="num">%83</td><td class="num">5</td><td class="num">%3,9</td></tr>
+<tr><td><code>plants/tree</code></td><td class="num">400</td><td class="num">12</td><td class="num">9</td><td class="num">%80</td><td class="num">3</td><td class="num">%2,8</td></tr>
+<tr><td><code>plants/tulip</code></td><td class="num">512</td><td class="num">5</td><td class="num">5</td><td class="num">%92</td><td class="num">2</td><td class="num">%2,3</td></tr>
+<tr><td><code>vehicles/ambulance</code></td><td class="num">512</td><td class="num">15</td><td class="num">15</td><td class="num">%82</td><td class="num">7</td><td class="num">%3,4</td></tr>
+<tr><td><code>vehicles/bicycle</code></td><td class="num">400</td><td class="num">25</td><td class="num">19</td><td class="num">%84</td><td class="num">1</td><td class="num">%3,1</td></tr>
+<tr><td><code>vehicles/boat</code></td><td class="num">400</td><td class="num">6</td><td class="num">6</td><td class="num">%79</td><td class="num">8</td><td class="num">%3,0</td></tr>
+<tr><td><code>vehicles/bus</code></td><td class="num">400</td><td class="num">19</td><td class="num">20</td><td class="num">%68</td><td class="num">104</td><td class="num">%4,1</td></tr>
+<tr><td><code>vehicles/car</code></td><td class="num">400</td><td class="num">13</td><td class="num">13</td><td class="num">%75</td><td class="num">2</td><td class="num">%2,8</td></tr>
+<tr><td><code>vehicles/fire_truck</code></td><td class="num">400</td><td class="num">8</td><td class="num">8</td><td class="num">%87</td><td class="num">18</td><td class="num">%2,3</td></tr>
+<tr><td><code>vehicles/helicopter</code></td><td class="num">512</td><td class="num">22</td><td class="num">22</td><td class="num">%77</td><td class="num">3</td><td class="num">%3,4</td></tr>
+<tr><td><code>vehicles/motorcycle</code></td><td class="num">512</td><td class="num">47</td><td class="num">47</td><td class="num">%79</td><td class="num">4</td><td class="num">%4,2</td></tr>
+<tr><td><code>vehicles/plane</code></td><td class="num">400</td><td class="num">13</td><td class="num">13</td><td class="num">%86</td><td class="num">68</td><td class="num">%2,7</td></tr>
+<tr><td><code>vehicles/rocket</code></td><td class="num">400</td><td class="num">10</td><td class="num">10</td><td class="num">%83</td><td class="num">3</td><td class="num">%2,4</td></tr>
+<tr><td><code>vehicles/submarine</code></td><td class="num">512</td><td class="num">26</td><td class="num">26</td><td class="num">%75</td><td class="num">11</td><td class="num">%3,3</td></tr>
+<tr><td><code>vehicles/tractor</code></td><td class="num">400</td><td class="num">15</td><td class="num">15</td><td class="num">%71</td><td class="num">7</td><td class="num">%3,4</td></tr>
+<tr><td><code>vehicles/train</code></td><td class="num">400</td><td class="num">15</td><td class="num">15</td><td class="num">%71</td><td class="num">7</td><td class="num">%3,4</td></tr>
+</tbody></table></div>
+</details>
+</section>
+
+</div>
+</body>
+</html>

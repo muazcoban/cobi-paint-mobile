@@ -1,0 +1,5 @@
+name: bench
+environment:
+  sdk: ^3.0.0
+dependencies:
+  image: ^4.7.2
