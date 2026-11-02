@@ -1,8 +1,8 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
+import '../services/haptics.dart';
 import 'kid_button.dart';
 
 /// One cell of the palette: a colour, the eraser or a custom glyph.
@@ -99,7 +99,7 @@ class _KidPaletteState extends State<KidPalette> {
             final cell = _cellAt(e.localPosition);
             setState(() => _pressed = null);
             if (cell != null) {
-              HapticFeedback.selectionClick();
+              Haptics.selection();
               widget.onSelected(cell);
             }
           },

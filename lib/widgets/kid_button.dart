@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+
+import '../services/haptics.dart';
 
 /// Extra margin around a control in which a lifted finger still counts.
 const double forgivingSlop = 12;
@@ -119,7 +120,7 @@ class _KidButtonState extends State<KidButton> {
         onPressedChanged: (pressed) => setState(() => _pressed = pressed),
         onTap: widget.enabled
             ? () {
-                HapticFeedback.selectionClick();
+                Haptics.selection();
                 widget.onTap();
               }
             : null,
@@ -203,7 +204,7 @@ class _PressableCardState extends State<PressableCard> {
       onPressedChanged: (pressed) => setState(() => _pressed = pressed),
       maxHold: widget.onLongPress == null ? null : const Duration(milliseconds: 450),
       onTap: () {
-        HapticFeedback.selectionClick();
+        Haptics.selection();
         widget.onTap();
       },
       child: AnimatedScale(

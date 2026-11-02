@@ -97,6 +97,10 @@
     "description": "English language"
   },
   "soundEffects": "Ses Efektleri",
+  "haptics": "Titreşim",
+  "@haptics": {
+    "description": "Parents area switch for haptic feedback"
+  },
   "@soundEffects": {
     "description": "Sound effects setting"
   },

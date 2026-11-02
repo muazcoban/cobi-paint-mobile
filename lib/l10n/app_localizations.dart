@@ -248,6 +248,12 @@ abstract class AppLocalizations {
   /// **'Ses Efektleri'**
   String get soundEffects;
 
+  /// Parents area switch for haptic feedback
+  ///
+  /// In tr, this message translates to:
+  /// **'Titreşim'**
+  String get haptics;
+
   /// Privacy policy button
   ///
   /// In tr, this message translates to:

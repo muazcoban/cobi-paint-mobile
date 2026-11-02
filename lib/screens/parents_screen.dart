@@ -6,6 +6,7 @@ import '../l10n/app_localizations.dart';
 import '../models/user_settings.dart';
 import '../providers/app_provider.dart';
 import '../providers/locale_provider.dart';
+import '../services/haptics.dart';
 import '../services/sound_service.dart';
 import '../theme/app_theme.dart';
 
@@ -108,6 +109,16 @@ class ParentsScreen extends StatelessWidget {
               ),
               const Icon(Icons.volume_up_rounded),
             ],
+          ),
+          SwitchListTile(
+            contentPadding: EdgeInsets.zero,
+            title: Text(l10n.haptics),
+            value: settings.hapticsEnabled,
+            onChanged: (enabled) {
+              Haptics.enabled = enabled;
+              app.updateSettings(settings.copyWith(hapticsEnabled: enabled));
+              Haptics.selection();
+            },
           ),
           _Section(l10n.guidedAccessTitle),
           Text(l10n.guidedAccessText),

@@ -5,12 +5,14 @@ enum AgeMode { little, big }
 class UserSettings {
   final String selectedTheme; // 'coral', 'ocean', 'forest', 'sunset'
   final bool soundEnabled;
+  final bool hapticsEnabled;
   final double soundVolume;
   final AgeMode ageMode;
 
   UserSettings({
     this.selectedTheme = 'coral',
     this.soundEnabled = true,
+    this.hapticsEnabled = true,
     this.soundVolume = 0.7,
     this.ageMode = AgeMode.little,
   });
@@ -22,6 +24,7 @@ class UserSettings {
     return UserSettings(
       selectedTheme: json['selectedTheme'] ?? 'coral',
       soundEnabled: json['soundEnabled'] ?? true,
+      hapticsEnabled: json['hapticsEnabled'] ?? true,
       soundVolume: ((json['soundVolume'] as num?) ?? 0.7).toDouble(),
       ageMode: json['ageMode'] == AgeMode.big.name ? AgeMode.big : AgeMode.little,
     );
@@ -31,6 +34,7 @@ class UserSettings {
     return {
       'selectedTheme': selectedTheme,
       'soundEnabled': soundEnabled,
+      'hapticsEnabled': hapticsEnabled,
       'soundVolume': soundVolume,
       'ageMode': ageMode.name,
     };
@@ -39,12 +43,14 @@ class UserSettings {
   UserSettings copyWith({
     String? selectedTheme,
     bool? soundEnabled,
+    bool? hapticsEnabled,
     double? soundVolume,
     AgeMode? ageMode,
   }) {
     return UserSettings(
       selectedTheme: selectedTheme ?? this.selectedTheme,
       soundEnabled: soundEnabled ?? this.soundEnabled,
+      hapticsEnabled: hapticsEnabled ?? this.hapticsEnabled,
       soundVolume: soundVolume ?? this.soundVolume,
       ageMode: ageMode ?? this.ageMode,
     );

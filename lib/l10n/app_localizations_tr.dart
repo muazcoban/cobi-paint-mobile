@@ -84,6 +84,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get soundEffects => 'Ses Efektleri';
 
   @override
+  String get haptics => 'Titreşim';
+
+  @override
   String get privacyPolicy => 'Gizlilik Politikası';
 
   @override

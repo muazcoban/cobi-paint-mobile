@@ -84,6 +84,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get soundEffects => 'Sound Effects';
 
   @override
+  String get haptics => 'Vibration';
+
+  @override
   String get privacyPolicy => 'Privacy Policy';
 
   @override

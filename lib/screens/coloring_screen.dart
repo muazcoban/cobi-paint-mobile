@@ -12,6 +12,7 @@ import '../models/coloring_image.dart';
 import '../models/saved_artwork.dart';
 import '../models/user_settings.dart';
 import '../providers/app_provider.dart';
+import '../services/haptics.dart';
 import '../services/sound_service.dart';
 import '../widgets/celebration.dart';
 import '../widgets/kid_button.dart';
@@ -221,7 +222,7 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
 
   void _onFilled(int label) {
     unawaited(_sound.playFillSound());
-    HapticFeedback.lightImpact();
+    Haptics.light();
   }
 
   /// Home: saves, celebrates when something was added, then leaves.

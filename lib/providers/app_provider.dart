@@ -6,6 +6,7 @@ import '../models/user_settings.dart';
 import '../models/category.dart';
 import '../models/coloring_image.dart';
 import '../models/saved_artwork.dart';
+import '../services/haptics.dart';
 import '../services/storage_service.dart';
 import '../services/sound_service.dart';
 import '../theme/app_theme.dart';
@@ -52,6 +53,7 @@ class AppProvider extends ChangeNotifier {
       // Apply saved sound settings
       SoundService().setSoundEnabled(_settings.soundEnabled);
       SoundService().setVolume(_settings.soundVolume);
+      Haptics.enabled = _settings.hapticsEnabled;
 
       // Photo import is frozen until it is rebuilt on the new coloring engine.
       // Pages imported before the freeze stay reachable through the import category.

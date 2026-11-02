@@ -20,14 +20,22 @@ void main() {
       expect(settings.selectedTheme, 'ocean');
       expect(settings.soundEnabled, isFalse);
       expect(settings.soundVolume, 1.0);
+      expect(settings.hapticsEnabled, isTrue, reason: 'haptics stay on unless a parent turns them off');
     });
 
     test('survives a save and load round trip', () {
-      final original = UserSettings(selectedTheme: 'forest', soundEnabled: false, soundVolume: 0.3, ageMode: AgeMode.big);
+      final original = UserSettings(
+        selectedTheme: 'forest',
+        soundEnabled: false,
+        hapticsEnabled: false,
+        soundVolume: 0.3,
+        ageMode: AgeMode.big,
+      );
       final restored = UserSettings.fromJson(original.toJson());
 
       expect(restored.selectedTheme, 'forest');
       expect(restored.soundEnabled, isFalse);
+      expect(restored.hapticsEnabled, isFalse);
       expect(restored.soundVolume, 0.3);
       expect(restored.ageMode, AgeMode.big);
     });
