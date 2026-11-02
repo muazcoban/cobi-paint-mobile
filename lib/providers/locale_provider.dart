@@ -36,28 +36,4 @@ class LocaleProvider extends ChangeNotifier {
     Locale('tr'), // Turkish
     Locale('en'), // English
   ];
-
-  // Get language name for display
-  String getLanguageName(String code) {
-    switch (code) {
-      case 'tr':
-        return 'Turkce';
-      case 'en':
-        return 'English';
-      default:
-        return code;
-    }
-  }
-
-  // Get flag emoji for language
-  String getLanguageFlag(String code) {
-    switch (code) {
-      case 'tr':
-        return '🇹🇷';
-      case 'en':
-        return '🇺🇸';
-      default:
-        return '🌐';
-    }
-  }
 }

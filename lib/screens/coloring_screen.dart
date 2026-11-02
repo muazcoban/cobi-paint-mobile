@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,7 +12,6 @@ import '../providers/coloring_provider.dart';
 import '../services/share_service.dart';
 import '../services/image_processing_service.dart';
 import '../services/sound_service.dart';
-import '../services/ad_service.dart';
 import '../theme/app_theme.dart';
 import '../utils/paint_textures.dart';
 import '../widgets/color_palette.dart';
@@ -36,7 +36,6 @@ class _ColoringScreenState extends State<ColoringScreen> {
   final ShareService _shareService = ShareService();
   final ImageProcessingService _imageProcessingService = ImageProcessingService();
   final SoundService _soundService = SoundService();
-  final AdService _adService = AdService();
 
   bool _isLoading = true;
   bool _isSaving = false;
@@ -50,8 +49,6 @@ class _ColoringScreenState extends State<ColoringScreen> {
     super.initState();
     _artworkId = widget.existingArtwork?.id ?? const Uuid().v4();
     _loadImage();
-    // Interstitial reklami onceden yukle
-    _adService.loadInterstitialAd();
   }
 
   Future<void> _loadImage() async {
@@ -60,13 +57,7 @@ class _ColoringScreenState extends State<ColoringScreen> {
     try {
       Uint8List imageData;
 
-      if (widget.image.isFromFirebase) {
-        // Download from Firebase
-        final appProvider = context.read<AppProvider>();
-        final data = await appProvider.firebaseService.downloadImage(widget.image.imagePath);
-        if (data == null) throw Exception('Failed to download image');
-        imageData = data;
-      } else if (widget.image.isImported) {
+      if (widget.image.isImported) {
         // Load from local file
         final file = File(widget.image.imagePath);
         imageData = await file.readAsBytes();
@@ -136,7 +127,7 @@ class _ColoringScreenState extends State<ColoringScreen> {
       );
 
       await appProvider.saveArtwork(artwork);
-      _soundService.playSuccessSound();
+      unawaited(_soundService.playSuccessSound());
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -145,23 +136,6 @@ class _ColoringScreenState extends State<ColoringScreen> {
             backgroundColor: AppTheme.successColor,
           ),
         );
-
-        // Boyama sayacini artir ve reklam goster
-        // Pro kullanicilar icin reklam gosterilmez
-        final shouldShowAd = await appProvider.incrementColoringCount();
-        if (shouldShowAd) {
-          // Reklam goster ve sayaci sifirla
-          _adService.showInterstitialAd(
-            onAdShown: () {
-              appProvider.resetColoringCount();
-            },
-            onAdNotReady: () {
-              // Reklam hazir degilse sayaci yine de sifirla
-              // kullanici deneyimini bozmamak icin
-              appProvider.resetColoringCount();
-            },
-          );
-        }
       }
     } catch (e) {
       if (mounted) {

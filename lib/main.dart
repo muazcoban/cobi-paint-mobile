@@ -5,8 +5,6 @@ import 'package:provider/provider.dart';
 import 'l10n/app_localizations.dart';
 import 'providers/app_provider.dart';
 import 'providers/locale_provider.dart';
-import 'services/purchase_service.dart';
-import 'services/ad_service.dart';
 import 'theme/app_theme.dart';
 import 'screens/splash_screen.dart';
 
@@ -31,9 +29,6 @@ void main() async {
     ),
   );
 
-  // AdMob baslatma (COPPA uyumlu)
-  await AdService().initialize();
-
   runApp(const CobiPaintApp());
 }
 
@@ -49,13 +44,6 @@ class CobiPaintApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) => LocaleProvider(),
-        ),
-        ChangeNotifierProvider(
-          create: (_) {
-            final service = PurchaseService();
-            service.init();
-            return service;
-          },
         ),
       ],
       child: Consumer2<AppProvider, LocaleProvider>(

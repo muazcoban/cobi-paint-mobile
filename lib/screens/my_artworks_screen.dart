@@ -104,7 +104,7 @@ class _ArtworkCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.08),
+              color: Colors.black.withValues(alpha: 0.08),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -130,7 +130,7 @@ class _ArtworkCard extends StatelessWidget {
                       end: Alignment.bottomCenter,
                       colors: [
                         Colors.transparent,
-                        Colors.black.withOpacity(0.7),
+                        Colors.black.withValues(alpha: 0.7),
                       ],
                     ),
                   ),
@@ -152,7 +152,7 @@ class _ArtworkCard extends StatelessWidget {
                       Text(
                         _formatDate(artwork.updatedAt),
                         style: TextStyle(
-                          color: Colors.white.withOpacity(0.8),
+                          color: Colors.white.withValues(alpha: 0.8),
                           fontSize: 11,
                         ),
                       ),
@@ -169,7 +169,7 @@ class _ArtworkCard extends StatelessWidget {
                   child: Container(
                     padding: const EdgeInsets.all(6),
                     decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.3),
+                      color: Colors.black.withValues(alpha: 0.3),
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(
@@ -262,26 +262,14 @@ class _ArtworkCard extends StatelessWidget {
       }
     }
 
-    // Check Firebase images
-    if (originalImage == null) {
-      for (final img in appProvider.firebaseImages) {
-        if (img.id == artwork.originalImageId) {
-          originalImage = img;
-          break;
-        }
-      }
-    }
-
     // If not found, create a placeholder
-    if (originalImage == null) {
-      originalImage = ColoringImage(
-        id: artwork.originalImageId,
-        name: artwork.name,
-        category: '',
-        imagePath: artwork.originalImagePath,
-        isImported: artwork.originalImagePath.contains('/imported/'),
-      );
-    }
+    originalImage ??= ColoringImage(
+      id: artwork.originalImageId,
+      name: artwork.name,
+      category: '',
+      imagePath: artwork.originalImagePath,
+      isImported: artwork.originalImagePath.contains('/imported/'),
+    );
 
     Navigator.push(
       context,

@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'dart:typed_data';
+import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -16,34 +16,15 @@ class ShareService {
       final tempFile = File('${tempDir.path}/share_image.png');
       await tempFile.writeAsBytes(imageData);
 
-      await Share.shareXFiles(
-        [XFile(tempFile.path)],
-        text: text ?? 'Cobi Paint ile boyadım! 🎨',
-        subject: subject,
+      await SharePlus.instance.share(
+        ShareParams(
+          files: [XFile(tempFile.path)],
+          text: text ?? 'Cobi Paint ile boyadım! 🎨',
+          subject: subject,
+        ),
       );
     } catch (e) {
-      print('Error sharing image: $e');
-      rethrow;
-    }
-  }
-
-  /// Share to WhatsApp specifically
-  Future<void> shareToWhatsApp(
-    Uint8List imageData, {
-    String? text,
-  }) async {
-    try {
-      // Save to temp file
-      final tempDir = await getTemporaryDirectory();
-      final tempFile = File('${tempDir.path}/share_whatsapp.png');
-      await tempFile.writeAsBytes(imageData);
-
-      await Share.shareXFiles(
-        [XFile(tempFile.path)],
-        text: text ?? 'Cobi Paint ile boyadım! 🎨',
-      );
-    } catch (e) {
-      print('Error sharing to WhatsApp: $e');
+      debugPrint('Error sharing image: $e');
       rethrow;
     }
   }
@@ -63,51 +44,15 @@ class ShareService {
       final shareText = message ??
           '${artworkName != null ? '"$artworkName" - ' : ''}Cobi Paint ile boyadım! 🎨\n\nÇocuklar için eğlenceli boyama uygulaması!';
 
-      await Share.shareXFiles(
-        [XFile(imagePath)],
-        text: shareText,
-        subject: artworkName ?? 'Benim Boyamam',
+      await SharePlus.instance.share(
+        ShareParams(
+          files: [XFile(imagePath)],
+          text: shareText,
+          subject: artworkName ?? 'Benim Boyamam',
+        ),
       );
     } catch (e) {
-      print('Error sharing artwork: $e');
-      rethrow;
-    }
-  }
-
-  /// Share multiple images
-  Future<void> shareMultipleImages(
-    List<String> imagePaths, {
-    String? text,
-  }) async {
-    try {
-      final xFiles = <XFile>[];
-      for (final path in imagePaths) {
-        final file = File(path);
-        if (await file.exists()) {
-          xFiles.add(XFile(path));
-        }
-      }
-
-      if (xFiles.isEmpty) {
-        throw Exception('No valid images to share');
-      }
-
-      await Share.shareXFiles(
-        xFiles,
-        text: text ?? 'Cobi Paint ile boyadım! 🎨',
-      );
-    } catch (e) {
-      print('Error sharing multiple images: $e');
-      rethrow;
-    }
-  }
-
-  /// Share text only
-  Future<void> shareText(String text, {String? subject}) async {
-    try {
-      await Share.share(text, subject: subject);
-    } catch (e) {
-      print('Error sharing text: $e');
+      debugPrint('Error sharing artwork: $e');
       rethrow;
     }
   }

@@ -46,33 +46,8 @@
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 
-	<!-- Camera Permission -->
-	<key>NSCameraUsageDescription</key>
-	<string>Kendi çizimlerini fotoğraflamak için kameraya erişim izni gerekli</string>
-
-	<!-- Photo Library Permission -->
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Boyama için resim seçmek ve boyadığın resimleri kaydetmek için fotoğraf kütüphanesine erişim izni gerekli</string>
-
-	<!-- Photo Library Add Permission -->
+	<!-- Photo Library Add Permission (the share sheet's "Save Image" action) -->
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>Boyadığın resimleri galeriye kaydetmek için izin gerekli</string>
-
-	<!-- In-App Purchase -->
-	<key>SKAdNetworkItems</key>
-	<array>
-		<dict>
-			<key>SKAdNetworkIdentifier</key>
-			<string>cstr6suwn9.skadnetwork</string>
-		</dict>
-	</array>
-
-	<!-- Google Mobile Ads -->
-	<key>GADApplicationIdentifier</key>
-	<string>ca-app-pub-5547492389514605~7682406592</string>
-
-	<!-- App Tracking Transparency -->
-	<key>NSUserTrackingUsageDescription</key>
-	<string>Size daha iyi reklamlar gostermek icin izin gerekli</string>
 </dict>
 </plist>

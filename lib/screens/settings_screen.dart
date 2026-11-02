@@ -1,13 +1,10 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../l10n/app_localizations.dart';
 import '../providers/app_provider.dart';
 import '../providers/locale_provider.dart';
-import '../services/purchase_service.dart';
 import '../services/sound_service.dart';
 import '../theme/app_theme.dart';
-import 'pro_screen.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -27,11 +24,6 @@ class SettingsScreen extends StatelessWidget {
           return ListView(
             padding: const EdgeInsets.all(16),
             children: [
-              // Pro Status Card - temporarily hidden for initial launch
-              // TODO: Uncomment when ready to enable in-app purchases
-              // _ProStatusCard(isPro: provider.settings.isPro),
-              // const SizedBox(height: 20),
-
               // Language Selection
               _SectionTitle(title: l10n.language),
               _LanguageSelector(
@@ -92,54 +84,6 @@ class SettingsScreen extends StatelessWidget {
                 subtitle: '${l10n.version} 1.0.0',
                 onTap: () => _showAboutDialog(context),
               ),
-              // Restore purchases - temporarily hidden for initial launch
-              // TODO: Uncomment when ready to enable in-app purchases
-              // _SettingsTile(
-              //   icon: Icons.restore,
-              //   title: 'Satın Alımları Geri Yükle',
-              //   onTap: () => _restorePurchases(context),
-              // ),
-
-              const SizedBox(height: 20),
-
-              // Debug section (only visible in debug builds)
-              if (kDebugMode) ...[
-                _SectionTitle(title: 'Test (Debug)'),
-                _SettingsTile(
-                  icon: Icons.bug_report,
-                  title: 'Pro Durumunu Değiştir',
-                  subtitle: provider.settings.isPro ? 'Pro Aktif' : 'Free',
-                  onTap: () {
-                    provider.setPro(!provider.settings.isPro);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                          provider.settings.isPro
-                              ? 'Pro devre dışı bırakıldı'
-                              : 'Pro aktif edildi',
-                        ),
-                      ),
-                    );
-                  },
-                ),
-                _SettingsTile(
-                  icon: Icons.refresh,
-                  title: 'İçe Aktarma Sayacını Sıfırla',
-                  onTap: () {
-                    provider.updateSettings(
-                      provider.settings.copyWith(
-                        dailyImportCount: 0,
-                        lastImportDate: DateTime.now().subtract(
-                          const Duration(days: 1),
-                        ),
-                      ),
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Sayaç sıfırlandı')),
-                    );
-                  },
-                ),
-              ],
             ],
           );
         },
@@ -178,157 +122,6 @@ class SettingsScreen extends StatelessWidget {
           TextButton(
             onPressed: () => Navigator.pop(context),
             child: const Text('Tamam'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _restorePurchases(BuildContext context) async {
-    final purchaseService = context.read<PurchaseService>();
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Satın alımlar kontrol ediliyor...')),
-    );
-
-    try {
-      await purchaseService.restorePurchases();
-
-      if (context.mounted) {
-        if (purchaseService.isPro) {
-          context.read<AppProvider>().setPro(true);
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Pro üyelik geri yüklendi!'),
-              backgroundColor: AppTheme.successColor,
-            ),
-          );
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Geri yüklenecek satın alım bulunamadı'),
-            ),
-          );
-        }
-      }
-    } catch (e) {
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Hata: $e')),
-        );
-      }
-    }
-  }
-}
-
-class _ProStatusCard extends StatelessWidget {
-  final bool isPro;
-
-  const _ProStatusCard({required this.isPro});
-
-  @override
-  Widget build(BuildContext context) {
-    if (isPro) {
-      return Container(
-        padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            colors: [Colors.amber, Colors.orange],
-          ),
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: const Row(
-          children: [
-            Icon(Icons.star, color: Colors.white, size: 40),
-            SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Pro Üyesiniz!',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(
-                    'Tüm özellikler aktif',
-                    style: TextStyle(color: Colors.white70),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      );
-    }
-
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: AppTheme.primaryColor.withOpacity(0.1),
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(
-                  Icons.star_outline,
-                  color: AppTheme.primaryColor,
-                  size: 30,
-                ),
-              ),
-              const SizedBox(width: 16),
-              const Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Pro\'ya Yükselt',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(
-                      'Sınırsız içe aktarma ve daha fazlası!',
-                      style: TextStyle(color: AppTheme.textSecondary),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const ProScreen()),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.amber,
-              ),
-              child: const Text('Pro\'yu İncele'),
-            ),
           ),
         ],
       ),
@@ -564,7 +357,7 @@ class _SoundSettingsTile extends StatelessWidget {
               Switch(
                 value: soundEnabled,
                 onChanged: onSoundToggle,
-                activeColor: AppTheme.primaryColor,
+                activeThumbColor: AppTheme.primaryColor,
               ),
             ],
           ),

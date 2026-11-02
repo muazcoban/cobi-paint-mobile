@@ -3,7 +3,6 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:uuid/uuid.dart';
 import '../models/saved_artwork.dart';
 import '../models/user_settings.dart';
 import '../models/coloring_image.dart';
@@ -16,20 +15,15 @@ class StorageService {
   late SharedPreferences _prefs;
   late Directory _appDir;
   late Directory _artworksDir;
-  late Directory _importedDir;
 
   Future<void> init() async {
     _prefs = await SharedPreferences.getInstance();
     _appDir = await getApplicationDocumentsDirectory();
 
     _artworksDir = Directory('${_appDir.path}/artworks');
-    _importedDir = Directory('${_appDir.path}/imported');
 
     if (!await _artworksDir.exists()) {
       await _artworksDir.create(recursive: true);
-    }
-    if (!await _importedDir.exists()) {
-      await _importedDir.create(recursive: true);
     }
   }
 
@@ -106,15 +100,7 @@ class StorageService {
     return file.path;
   }
 
-  Future<String> saveImportedImage(Uint8List imageData) async {
-    final uuid = const Uuid();
-    final id = uuid.v4();
-    final file = File('${_importedDir.path}/$id.png');
-    await file.writeAsBytes(imageData);
-    return file.path;
-  }
-
-  // Imported Images
+  // Pages imported before the photo import freeze (read-only)
   Future<List<ColoringImage>> getImportedImages() async {
     final data = _prefs.getString(_importedImagesKey);
     if (data != null) {
@@ -123,35 +109,4 @@ class StorageService {
     }
     return [];
   }
-
-  Future<void> saveImportedImageMetadata(ColoringImage image) async {
-    final images = await getImportedImages();
-    images.insert(0, image);
-
-    await _prefs.setString(
-      _importedImagesKey,
-      jsonEncode(images.map((i) => i.toJson()).toList()),
-    );
-  }
-
-  Future<void> deleteImportedImage(String id) async {
-    final images = await getImportedImages();
-    final image = images.firstWhere((i) => i.id == id, orElse: () => ColoringImage(id: '', name: '', category: '', imagePath: ''));
-
-    if (image.id.isNotEmpty) {
-      final file = File(image.imagePath);
-      if (await file.exists()) {
-        await file.delete();
-      }
-    }
-
-    images.removeWhere((i) => i.id == id);
-    await _prefs.setString(
-      _importedImagesKey,
-      jsonEncode(images.map((i) => i.toJson()).toList()),
-    );
-  }
-
-  String get artworksPath => _artworksDir.path;
-  String get importedPath => _importedDir.path;
 }

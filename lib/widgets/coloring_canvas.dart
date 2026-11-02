@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
@@ -104,8 +105,9 @@ class _ColoringCanvasState extends State<ColoringCanvas> {
       setState(() {
         _image = frame.image;
       });
-      _buildColoredOverlay();
-      _buildTextureImage();
+      // Both layers build in parallel; each calls setState when ready
+      unawaited(_buildColoredOverlay());
+      unawaited(_buildTextureImage());
     }
   }
 
@@ -164,10 +166,11 @@ class _ColoringCanvasState extends State<ColoringCanvas> {
       final byteIndex = index * 4;
 
       if (byteIndex >= 0 && byteIndex + 3 < pixels.length) {
-        pixels[byteIndex] = color.red;
-        pixels[byteIndex + 1] = color.green;
-        pixels[byteIndex + 2] = color.blue;
-        pixels[byteIndex + 3] = color.alpha;
+        final argb = color.toARGB32();
+        pixels[byteIndex] = (argb >> 16) & 0xFF;
+        pixels[byteIndex + 1] = (argb >> 8) & 0xFF;
+        pixels[byteIndex + 2] = argb & 0xFF;
+        pixels[byteIndex + 3] = (argb >> 24) & 0xFF;
       }
     }
 
@@ -708,7 +711,7 @@ class _ColoringPainter extends CustomPainter {
     // Draw current stroke preview
     if (currentStroke.length >= 2) {
       final strokePaint = Paint()
-        ..color = isEraser ? Colors.white.withOpacity(0.7) : strokeColor
+        ..color = isEraser ? Colors.white.withValues(alpha: 0.7) : strokeColor
         ..strokeWidth = brushSize * scale * (displayWidth / imageWidth)
         ..strokeCap = StrokeCap.round
         ..strokeJoin = StrokeJoin.round

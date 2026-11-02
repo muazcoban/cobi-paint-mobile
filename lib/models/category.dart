@@ -4,7 +4,6 @@ class Category {
   final String nameEn;
   final String icon;
   final int order;
-  final bool isFromFirebase;
   final bool isImportCategory;
 
   Category({
@@ -13,7 +12,6 @@ class Category {
     required this.nameEn,
     required this.icon,
     this.order = 0,
-    this.isFromFirebase = false,
     this.isImportCategory = false,
   });
 
@@ -24,7 +22,6 @@ class Category {
       nameEn: json['nameEn'] ?? json['name'],
       icon: json['icon'] ?? '',
       order: json['order'] ?? 0,
-      isFromFirebase: json['isFromFirebase'] ?? false,
       isImportCategory: json['isImportCategory'] ?? false,
     );
   }
@@ -36,7 +33,6 @@ class Category {
       'nameEn': nameEn,
       'icon': icon,
       'order': order,
-      'isFromFirebase': isFromFirebase,
       'isImportCategory': isImportCategory,
     };
   }

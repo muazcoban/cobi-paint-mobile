@@ -7,7 +7,6 @@ import '../models/category.dart';
 import 'category_screen.dart';
 import 'my_artworks_screen.dart';
 import 'settings_screen.dart';
-import 'import_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -77,43 +76,6 @@ class _CategoriesTab extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Cobi Paint'),
         centerTitle: true,
-        // Pro badge - temporarily hidden for initial launch
-        // TODO: Uncomment when ready to enable in-app purchases
-        // actions: [
-        //   Consumer<AppProvider>(
-        //     builder: (context, provider, _) {
-        //       if (provider.settings.isPro) {
-        //         return Container(
-        //           margin: const EdgeInsets.only(right: 8),
-        //           padding: const EdgeInsets.symmetric(
-        //             horizontal: 12,
-        //             vertical: 4,
-        //           ),
-        //           decoration: BoxDecoration(
-        //             color: Colors.amber,
-        //             borderRadius: BorderRadius.circular(12),
-        //           ),
-        //           child: const Row(
-        //             mainAxisSize: MainAxisSize.min,
-        //             children: [
-        //               Icon(Icons.star, size: 16, color: Colors.white),
-        //               SizedBox(width: 4),
-        //               Text(
-        //                 'PRO',
-        //                 style: TextStyle(
-        //                   color: Colors.white,
-        //                   fontWeight: FontWeight.bold,
-        //                   fontSize: 12,
-        //                 ),
-        //               ),
-        //             ],
-        //           ),
-        //         );
-        //       }
-        //       return const SizedBox.shrink();
-        //     },
-        //   ),
-        // ],
       ),
       body: Consumer<AppProvider>(
         builder: (context, provider, _) {
@@ -121,37 +83,34 @@ class _CategoriesTab extends StatelessWidget {
             return const Center(child: CircularProgressIndicator());
           }
 
-          return RefreshIndicator(
-            onRefresh: () => provider.refreshFromFirebase(),
-            child: CustomScrollView(
-              slivers: [
-                // Welcome section
-                SliverToBoxAdapter(
-                  child: _WelcomeSection(),
-                ),
-                // Categories grid
-                SliverPadding(
-                  padding: const EdgeInsets.all(16),
-                  sliver: SliverGrid(
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 16,
-                      mainAxisSpacing: 16,
-                      childAspectRatio: 1.0,
-                    ),
-                    delegate: SliverChildBuilderDelegate(
-                      (context, index) {
-                        final category = provider.categories[index];
-                        return _CategoryCard(category: category);
-                      },
-                      childCount: provider.categories.length,
-                    ),
+          return CustomScrollView(
+            slivers: [
+              // Welcome section
+              SliverToBoxAdapter(
+                child: _WelcomeSection(),
+              ),
+              // Categories grid
+              SliverPadding(
+                padding: const EdgeInsets.all(16),
+                sliver: SliverGrid(
+                  gridDelegate:
+                      const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 16,
+                    mainAxisSpacing: 16,
+                    childAspectRatio: 1.0,
+                  ),
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) {
+                      final category = provider.categories[index];
+                      return _CategoryCard(category: category);
+                    },
+                    childCount: provider.categories.length,
                   ),
                 ),
-                const SliverPadding(padding: EdgeInsets.only(bottom: 20)),
-              ],
-            ),
+              ),
+              const SliverPadding(padding: EdgeInsets.only(bottom: 20)),
+            ],
           );
         },
       ),
@@ -226,21 +185,12 @@ class _CategoryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        if (category.isImportCategory) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const ImportScreen(),
-            ),
-          );
-        } else {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => CategoryScreen(category: category),
-            ),
-          );
-        }
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => CategoryScreen(category: category),
+          ),
+        );
       },
       child: Container(
         decoration: BoxDecoration(
@@ -248,7 +198,7 @@ class _CategoryCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.08),
+              color: Colors.black.withValues(alpha: 0.08),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -270,23 +220,6 @@ class _CategoryCard extends StatelessWidget {
                 color: AppTheme.textPrimary,
               ),
             ),
-            if (category.isImportCategory) ...[
-              const SizedBox(height: 4),
-              Consumer<AppProvider>(
-                builder: (context, provider, _) {
-                  final remaining = provider.settings.getRemainingImports();
-                  return Text(
-                    remaining < 0 ? 'Sınırsız' : '$remaining hak',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: remaining == 0
-                          ? AppTheme.errorColor
-                          : AppTheme.textSecondary,
-                    ),
-                  );
-                },
-              ),
-            ],
           ],
         ),
       ),

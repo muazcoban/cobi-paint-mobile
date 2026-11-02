@@ -27,9 +27,6 @@ class ColoringProvider extends ChangeNotifier {
   Uint8List? _originalImageData;
   img.Image? _originalImage;
 
-  // Processed image for display
-  Uint8List? _processedImageData;
-
   // Zoom and pan
   double _scale = 1.0;
   Offset _offset = Offset.zero;
@@ -66,7 +63,6 @@ class ColoringProvider extends ChangeNotifier {
   // Getters
   Color get selectedColor => _selectedColor;
   Uint8List? get originalImageData => _originalImageData;
-  Uint8List? get processedImageData => _processedImageData;
   Map<int, Color> get coloredPixels => _coloredPixels;
   double get scale => _scale;
   Offset get offset => _offset;
@@ -83,16 +79,6 @@ class ColoringProvider extends ChangeNotifier {
 
   void setPaintTexture(PaintTexture texture) {
     _paintTexture = texture;
-    notifyListeners();
-  }
-
-  void setEdgeThreshold(int value) {
-    _edgeThreshold = value.clamp(10, 100);
-    notifyListeners();
-  }
-
-  void setGradientThreshold(int value) {
-    _gradientThreshold = value.clamp(10, 100);
     notifyListeners();
   }
 
@@ -482,7 +468,8 @@ class ColoringProvider extends ChangeNotifier {
     if (points.length < 2) return;
 
     final radius = (size / 2).ceil();
-    final isBlack = color.red < 50 && color.green < 50 && color.blue < 50;
+    // Color.r/g/b are 0-1, so 50/255 matches the old 8-bit threshold of 50
+    final isBlack = color.r < 50 / 255 && color.g < 50 / 255 && color.b < 50 / 255;
 
     for (int i = 0; i < points.length - 1; i++) {
       _drawLineBresenham(
@@ -597,10 +584,11 @@ class ColoringProvider extends ChangeNotifier {
       final y = index ~/ _imageWidth;
 
       if (x >= 0 && x < _imageWidth && y >= 0 && y < _imageHeight) {
+        final argb = color.toARGB32();
         result.setPixel(
           x,
           y,
-          img.ColorRgba8(color.red, color.green, color.blue, 255),
+          img.ColorRgba8((argb >> 16) & 0xFF, (argb >> 8) & 0xFF, argb & 0xFF, 255),
         );
       }
     }
@@ -612,24 +600,9 @@ class ColoringProvider extends ChangeNotifier {
   Map<String, int> getColoredRegionsMap() {
     final map = <String, int>{};
     for (final entry in _coloredPixels.entries) {
-      map[entry.key.toString()] = entry.value.value;
+      map[entry.key.toString()] = entry.value.toARGB32();
     }
     return map;
-  }
-
-  void reset() {
-    _coloredPixels.clear();
-    _manualEdges.clear();
-    _history.clear();
-    _historyIndex = -1;
-    _scale = 1.0;
-    _offset = Offset.zero;
-    _originalImageData = null;
-    _originalImage = null;
-    _grayscaleCache = null;
-    _gradientCache = null;
-    _coloredPixelsVersion = 0;
-    notifyListeners();
   }
 }
 
