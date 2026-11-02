@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:cobi_paint_mobile/data/builtin_images.dart';
 import 'package:cobi_paint_mobile/engine/region/label_map.dart';
+import 'package:cobi_paint_mobile/engine/region/page_check.dart';
 import 'package:cobi_paint_mobile/engine/region/region_builder.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:image/image.dart' as img;
@@ -53,12 +54,28 @@ class _Page {
       );
 }
 
-LabelMap _buildAsset(String path) {
+({Uint8List rgba, int width, int height}) _decodeAsset(String path) {
   final decoded = img.decodePng(File(path).readAsBytesSync())!;
-  final rgbaImage = decoded.convert(numChannels: 4);
-  final rgba = rgbaImage.getBytes(order: img.ChannelOrder.rgba);
-  return RegionBuilder.build(rgba, decoded.width, decoded.height);
+  final rgba = decoded.convert(numChannels: 4).getBytes(order: img.ChannelOrder.rgba);
+  return (rgba: rgba, width: decoded.width, height: decoded.height);
 }
+
+LabelMap _buildAsset(String path) {
+  final page = _decodeAsset(path);
+  return RegionBuilder.build(page.rgba, page.width, page.height);
+}
+
+/// Pages whose art has nothing a toddler's finger can fill: open outlines
+/// (cloud, lightning), bare lines (snowflake) or only tiny parts (palm,
+/// cherry blossom). Redraw them in phase 3; a page leaves this list once
+/// it passes [PageCheck].
+const _pagesToRedraw = [
+  'nature_snowflake',
+  'nature_cloud',
+  'nature_lightning',
+  'plant_palm',
+  'plant_cherry_blossom',
+];
 
 void main() {
   test('a one-pixel diagonal line keeps both sides apart', () {
@@ -159,12 +176,45 @@ void main() {
       expect(map.region(face).area, lessThan(map.width * map.height ~/ 2));
     });
 
-    test('every page builds and has a tappable region', () {
+    test('every page builds, has a tappable region and suits small fingers', () {
+      final failing = <String>[];
       for (final page in builtInImages) {
-        final map = _buildAsset(page.imagePath);
+        final asset = _decodeAsset(page.imagePath);
+        final map = RegionBuilder.build(asset.rgba, asset.width, asset.height);
         expect(map.regionCount, greaterThan(0), reason: page.imagePath);
         expect(map.labels.where((l) => l == 0), isEmpty, reason: page.imagePath);
+        final check = PageCheck.of(map, RegionBuilder.lineMask(asset.rgba, asset.width, asset.height));
+        if (check.problems.isNotEmpty) failing.add(page.id);
       }
+      expect(failing, unorderedEquals(_pagesToRedraw));
+    });
+  });
+
+  group('page check', () {
+    test('closed shapes big enough for a finger pass', () {
+      final page = _Page(100, 100)
+        ..outline(10, 10, 45, 45)
+        ..outline(55, 55, 90, 90);
+      final check = PageCheck.of(page.build(gapPx: 2), RegionBuilder.lineMask(page.rgba, 100, 100));
+
+      expect(check.fingerRegions, 2);
+      expect(check.problems, isEmpty);
+      expect(check.warnings, isEmpty);
+    });
+
+    test('an outline open on one side leaks into the background and fails', () {
+      final page = _Page(100, 100);
+      for (var x = 20; x <= 80; x++) {
+        page.ink(x, 20); // top
+      }
+      for (var y = 20; y <= 80; y++) {
+        page
+          ..ink(20, y) // left
+          ..ink(80, y); // right; the bottom stays open
+      }
+      final check = PageCheck.of(page.build(gapPx: 2), RegionBuilder.lineMask(page.rgba, 100, 100));
+
+      expect(check.problems, contains('no area big enough for a finger'));
     });
   });
 }
