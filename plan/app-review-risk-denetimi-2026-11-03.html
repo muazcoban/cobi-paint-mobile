@@ -312,6 +312,15 @@
 <td>Önce gerçek cihazda VoiceOver ile tam tur (ana ekran → kategori → boyama → Eserlerim → kapı). Sonra VoiceOver, Larger Text, Sufficient Contrast, Reduced Motion'ı işaretle. Emin değilsen boş bırak.</td>
 <td><span class="p2">P2</span></td>
 </tr>
+
+<tr>
+<td>H-09 (4 Kasım eki)</td>
+<td>iPhone Duo (23 Ekim 2026, iOS 27.1). 2.1.0 iOS 26.2 SDK ile derlenecek: Apple'a göre uygulama Duo'da çalışır, açık cihazda ekranın ortasında boşluklu, kapalı cihazda dış ekranda durum çubuğunun solunda görünür. Red nedeni değil. Duo ekran görüntüsü isteğe bağlı; gönderilirse ürün sayfasında "optimized" rozeti çıkar ve görüntü gerçek görünümü yansıtmalı (2.3.3). Nisan 2027'den itibaren her gönderim Duo ekran görüntüsü ve iOS 27 SDK ister.</td>
+<td>2.1 (uyum), 2.3.3 (ekran görüntüleri); Apple "Prepare your app for iPhone Duo"; screenshot-specifications</td>
+<td class="kanit"><code>lib/main.dart:26-31</code> (dört yön serbest; Duo iç ekran yön kilidini zaten yok sayar); <code>lib/screens/coloring_screen.dart</code> LayoutBuilder tall/wide; şartname: Duo 1398×2034 dış, 2007×2853 iç, "optional"; haber kkphp5qo (Nisan 2027).</td>
+<td>2.1.0'da Duo ekran görüntüsü gönderme: iOS 26 SDK görünümünü yansıtmaz, rozet yanıltır. Nisan 2027 öncesi ayrı faz: macOS 26.6 ve üstü, Xcode 27.1, Flutter UIScene geçişi (<code>flutter config --enable-uiscene-migration</code>), Duo simülatöründe dikey çubuk ve menteşe denemesi, iç ve dış ekran görüntüleri.</td>
+<td><span class="p2">P2</span></td>
+</tr>
 </table>
 
 <h2>3. Uyumlu bulunanlar</h2>
