@@ -97,6 +97,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get crayon => 'Crayon';
 
   @override
+  String get mirrorOff => 'Mirror off';
+
+  @override
+  String get mirror2 => 'Two-way mirror';
+
+  @override
+  String get mirror4 => 'Four-way mirror';
+
+  @override
+  String get mirror6 => 'Six-way mirror';
+
+  @override
   String get licenses => 'Licenses';
 
   @override

@@ -30,12 +30,16 @@ boyama ve otomatik kayıt sayesinde çocuğunuz yardım istemeden boyar.
 **✨ Özellikler**
 
 🖼️ **6 kategoride 200'den fazla boyama sayfası, 3 zorluk seviyesi**
-- Hayvanlar, Bitkiler, Araçlar, Karakterler, Doğa, Yiyecekler
+- Hayvanlar, Bitkiler, Yiyecekler, Araçlar, Doğa, Eşyalar
 
 🎨 **Taşmayan boya**
 - Bir bölgeye dokunmak onu anında boyar; boya çizgilerden taşmaz, beyaz kenar kalmaz.
 - Keçeli kalem, başladığı bölgenin içinde kalır.
 - Silgi ve her zaman görünen geri al düğmesi.
+
+✏️ **Serbest çizim**
+- Boş sayfaya keçeli kalem, gökkuşağı ve pastel fırçayla çizim.
+- Ayna: karalama simetrik bir desene dönüşür (Minik'te dört yönlü; Büyük'te iki, dört ya da altı yönlü).
 
 👶 **Küçük eller için**
 - Okuma gerektirmez; düğmeler kocaman ve resimli.
@@ -61,12 +65,16 @@ saving let your child color without asking for help.
 **✨ Features**
 
 🖼️ **200+ coloring pages in 6 categories, 3 difficulty levels**
-- Animals, Plants, Vehicles, Characters, Nature, Food
+- Animals, Plants, Food, Vehicles, Nature, Things
 
 🎨 **Paint that stays in place**
 - Tap an area and it fills straight away; paint never leaks over the lines and leaves no white edges.
 - The marker stays inside the area it started in.
 - An eraser and an undo button that is always visible.
+
+✏️ **Free drawing**
+- A blank page with marker, rainbow and crayon brushes.
+- Mirror: a scribble turns into a symmetric pattern (four-way in Little mode; two, four or six-way in Big mode).
 
 👶 **Made for little hands**
 - No reading needed; big picture buttons.

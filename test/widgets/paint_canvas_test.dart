@@ -33,7 +33,7 @@ void main() {
   late ColoringDocument document;
   late ui.Image page;
 
-  Future<void> pumpCanvas(WidgetTester tester, {CanvasTool tool = CanvasTool.fill, bool allowZoom = false}) async {
+  Future<void> pumpCanvas(WidgetTester tester, {CanvasTool tool = CanvasTool.fill, bool allowZoom = false, int symmetry = 1}) async {
     final rgba = twoRegionPage();
     document = ColoringDocument(RegionBuilder.build(rgba, 200, 100, options: const RegionBuilderOptions(gapPx: 0)));
     page = (await tester.runAsync(() => imageFrom(rgba, 200, 100)))!;
@@ -49,6 +49,7 @@ void main() {
             color: red,
             brushSize: 8,
             allowZoom: allowZoom,
+            symmetry: symmetry,
           ),
         ),
       ),
@@ -102,6 +103,16 @@ void main() {
     expect(stroke.kind, BrushKind.marker);
     expect(stroke.clipLabel, left());
     expect(stroke.pointCount, greaterThan(5));
+  });
+
+  testWidgets('with the mirror on, a drag commits one stroke that carries the symmetry', (tester) async {
+    await pumpCanvas(tester, tool: CanvasTool.marker, symmetry: 2);
+    final gesture = await tester.startGesture(at(tester, 20, 20));
+    await gesture.moveTo(at(tester, 60, 30));
+    await gesture.up();
+
+    expect(document.strokes, hasLength(1));
+    expect(document.strokes.single.symmetry, 2);
   });
 
   testWidgets('a cancelled stroke leaves nothing behind', (tester) async {

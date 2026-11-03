@@ -167,7 +167,7 @@ ul.tight li, ol.tight li { margin: 3px 0; }
 <tr><td>Çıkartma aracı</td><td>4/5</td><td><span class="badge b-p2">Geçti</span></td><td>Sonraya: kütüphane 200 sayfayı geçince yeniden değerlendirilecek (kurul şartı).</td></tr>
 <tr><td>Günün sayfası ve sezon</td><td>4/5</td><td><span class="badge b-p2">Geçti</span></td><td>Sonraya: önce sezon temaları normal kategori olarak.</td></tr>
 <tr><td>Ek fırçalar</td><td>4/5</td><td><span class="badge b-p2">Geçti</span></td><td>Sonraya (L): önce fırça katmanı artımlı pişirmeye geçmeli.</td></tr>
-<tr><td>Ayna çizimi</td><td>4/5</td><td><span class="badge b-p2">Geçti</span></td><td>Sonraya: serbest sayfa yayına girdikten sonra.</td></tr>
+<tr><td>Ayna çizimi</td><td>4/5</td><td><span class="badge b-p2">Geçti</span></td><td>Yapıldı (bölüm 12).</td></tr>
 <tr><td>Renkli örnek ve sihirli boya</td><td>3/5</td><td><span class="badge b-p0">Veto</span></td><td>"Doğru renk bu" baskısı; çocuğun rengi seçme hakkını alır.</td></tr>
 <tr><td>Sayıyla boyama</td><td>1/5</td><td><span class="badge b-p0">Veto</span></td><td>Yanlış renkte boyamayan oyun başarısızlık getirir; hedef 6+.</td></tr>
 <tr><td>Boyamanın tekrarı</td><td>2/5</td><td><span class="badge b-p0">Reddedildi</span></td><td>Kayıt formatı sırayı tutmuyor; çocuğa katkısı yok.</td></tr>
@@ -271,7 +271,35 @@ ul.tight li, ol.tight li { margin: 3px 0; }
 <tr><td>PR #2 (<code>faz2/firca-ve-testler</code> → master)</td><td>Açık: <a href="https://github.com/muazcoban/cobi-paint-mobile/pull/2">github.com/muazcoban/cobi-paint-mobile/pull/2</a>. CI (analyze + test) PR'da koşuyor.</td></tr>
 <tr><td>Mevsim kategorisi</td><td>Atlandı: aday konuların neredeyse hepsi zaten başka kategorilerde; ayrı kategori kopya olurdu. İllüstratör sayfalarıyla birlikte yeniden bakılır.</td></tr>
 </tbody></table></div>
-<p>Sıradaki adaylar (kurul onaylı, yapılmadı): ayna çizimi (serbest sayfada), çıkartmalar, sezon temaları, yaş sinyali API'leri (kilitle birlikte), Android'de doğrudan yazdırma. Senin adımların bölüm 8'de aynen geçerli.</p>
+<p>Sıradaki adaylar (kurul onaylı, yapılmadı): çıkartmalar, sezon temaları, yaş sinyali API'leri (kilitle birlikte), Android'de doğrudan yazdırma. Ayna çizimi bölüm 12'de. Senin adımların bölüm 8'de aynen geçerli.</p>
+
+<h2 id="ayna">12. Faz 3: ayna çizimi</h2>
+<p>Branch <code>faz3/ayna-cizimi</code> (PR #2'nin üstüne kurulu). Serbest çizim sayfasında ayna: bir parmak çizgisi sayfanın ortasındaki ayna çizgilerine göre kopyalanır. Minik'te tek düğme, dört yönlü açık ya da kapalı; Büyük'te aynı düğme kapalı → iki → dört → altı diye döner. Menü ya da yeni satır yok.</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Kurul koşulu (3 Kasım)</th><th>Nasıl karşılandı</th></tr></thead>
+<tbody>
+<tr><td>Yalnız serbest sayfada; boyama sayfalarında yok</td><td>Düğme yalnız <code>freeDraw</code> sayfasında; boyama sayfaları doldur düğmesini koruyor. Uygulama testi iki durumu da denetliyor.</td></tr>
+<tr><td>Ana ekrana yeni kart ya da satır eklenmez</td><td>Hiçbir ekran değişmedi; ayna, Çiz kartının açtığı sayfanın içinde. Serbest sayfada doldur düğmesinin yerine geçti: 375 pt telefona beşinci 82 pt düğme sığmıyor, boş sayfada kova zaten yalnız kâğıdı boyuyordu.</td></tr>
+<tr><td>Minik'te seçim yok, tek sabit simetri</td><td>Minik'te düğme dört yönlü aynayı açıp kapatır. İki ve altı yalnız Büyük'te.</td></tr>
+<tr><td>Bir ayna çizgisi tek geri alma adımı; kopya stroke saklanmaz</td><td><code>Stroke.symmetry</code> alanı (JSON anahtarı <code>m</code>, bilinmeyen değer 1 sayılır). Kopyaları <code>PageLayers.paintStroke</code> çizim anında üretir; belge tek stroke tutar.</td></tr>
+<tr><td>Silgi de aynalı</td><td>Silgi stroke'u aynı simetriyi taşır, dört kopyada birden siler (emülatörde görüldü). Bu arada bir hata düzeldi: silgi yalnız keçeli kalem boyasını sayıyordu, sayfada yalnız gökkuşağı ya da pastel varken silmiyordu.</td></tr>
+<tr><td>Kip ikonla seçilir, VoiceOver etiketi taşır</td><td><code>MirrorGlyph</code>: bir yaprak ve kopyaları (kapalı: tek yaprak; iki: filiz; dört: yonca; altı: çiçek). Etiketler "Ayna kapalı", "İki/Dört/Altı yönlü ayna"; seçili durum semantics'te.</td></tr>
+<tr><td>Altı yönlü çizgi en eski cihazda takılmadan</td><td>Emülatörde akıcı; gerçek cihazda ölçülmedi.</td></tr>
+</tbody></table></div>
+<p>Tuvalde ayna açıkken ince gri ayna çizgileri görünür; boyanın altında kalır ve kaydedilen resme girmez. Kaydedilmiş bir ayna çizimi yeniden açılınca son çizginin simetrisiyle devam eder. Ses listesine <code>mirror</code> ("Ayna" / "Mirror") anahtarı eklendi.</p>
+<p>Testler: 112 (simetri dönüşümleri, dört kadranda boya, aynalı silgi ve tek adımda geri alma, JSON gidiş dönüşü, tuval, uygulama testinde Minik anahtarı ve Büyük döngüsü). Emülatörde (CobiPaint_Pixel) Minik açık/kapalı, dört kopya, geri al, silgi; Büyük'te iki, dört, altı, kapalı ve altı yönlü çizim görüldü. iOS'ta denenmedi (platforma özgü kod yok).</p>
+<div class="table-wrap"><table>
+<thead><tr><th>HIG / App Review maddesi</th><th>Sonuç</th></tr></thead>
+<tbody>
+<tr><td>Dokunma hedefi ≥ 44 pt</td><td>Uyumlu: 79 pt (Minik telefon), 61 pt (Büyük telefon), tablette daha büyük.</td></tr>
+<tr><td>Toggle davranışlı düğme: her durumda farklı görünüm, yalnız renge dayanmaz</td><td>Uyumlu: koyu çerçeve + ölçek + gölge, ayrıca glifin yaprak sayısı değişir.</td></tr>
+<tr><td>HIG iki durumlu toggle tarif eder; Büyük'te dört durum döner</td><td>Gerekçeli sapma: fırça düğmesiyle aynı kalıp, çocuğa menü açtırmamak için; her durumun ikonu ve etiketi ayrı.</td></tr>
+<tr><td>Basılı durum ve geri bildirim</td><td>Uyumlu: KidButton sıkışması, haptik, tık sesi, kopyalar parmağın altında anında.</td></tr>
+<tr><td>VoiceOver etiketi ve durum</td><td>Uyumlu: durum adı etikette, <code>selected</code> özelliği açık.</td></tr>
+<tr><td>Reduce Motion</td><td>Uyumlu: ayna çizgileri animasyonsuz görünür; yeni animasyon yok.</td></tr>
+<tr><td>Kontrast</td><td>Uyumlu: glif 0xFF2D3142 beyaz üstünde (~12:1); kılavuz çizgiler süs, bilgi taşımaz.</td></tr>
+<tr><td>Kids Category 1.3 / 5.1.4</td><td>Uyumlu: veri, ağ, izin, metin eklemiyor.</td></tr>
+</tbody></table></div>
 </div>
 
 </body>

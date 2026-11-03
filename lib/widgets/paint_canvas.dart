@@ -10,6 +10,7 @@ import '../engine/document/coloring_document.dart';
 import '../engine/document/stroke.dart';
 import '../engine/input/canvas_gestures.dart';
 import '../engine/render/page_layers.dart';
+import '../engine/render/symmetry.dart';
 import 'motion.dart';
 
 export '../engine/input/canvas_gestures.dart' show CanvasTool;
@@ -27,6 +28,7 @@ class PaintCanvas extends StatefulWidget {
     this.brush = BrushKind.marker,
     this.stayInside = true,
     this.eraseFills = true,
+    this.symmetry = 1,
     this.allowZoom = false,
     this.paperColor = Colors.white,
     this.onFilled,
@@ -51,6 +53,10 @@ class PaintCanvas extends StatefulWidget {
 
   /// Whether the eraser also clears the fill of the regions it crosses.
   final bool eraseFills;
+
+  /// Mirror copies of every stroke, the eraser included (see
+  /// [symmetryWays]): the free drawing page's mirror. Fills ignore it.
+  final int symmetry;
   final bool allowZoom;
   final Color paperColor;
 
@@ -281,6 +287,7 @@ class _PaintCanvasState extends State<PaintCanvas> with SingleTickerProviderStat
       argb: kind == BrushKind.marker ? widget.color.toARGB32() : 0,
       size: widget.brushSize,
       clipLabel: _liveClip,
+      symmetry: widget.symmetry,
       points: Float32List.fromList(_live),
     );
     _liveKind = null;
@@ -415,8 +422,22 @@ class _CanvasPainter extends CustomPainter {
     canvas.scale(state._scale);
     canvas.clipRect(pageRect);
 
-    // 1. Paper.
+    // 1. Paper, and the mirror lines when the mirror is on, so the child
+    // sees where the copies come from. Paint covers them; they are not
+    // part of the picture.
     canvas.drawRect(pageRect, Paint()..color = state.widget.paperColor);
+    final symmetry = state.widget.symmetry;
+    if (symmetry > 1) {
+      final centre = pageRect.center;
+      final guide = Paint()
+        ..color = const Color(0x332D3142)
+        ..strokeWidth = 2 / state._scale
+        ..strokeCap = StrokeCap.round;
+      for (final angle in symmetryAxes(symmetry)) {
+        final reach = Offset(math.cos(angle), math.sin(angle)) * pageRect.longestSide;
+        canvas.drawLine(centre - reach, centre + reach, guide);
+      }
+    }
 
     // 2. Region fills, revealed as a growing circle from the tap point.
     final smooth = Paint()..filterQuality = FilterQuality.low;
@@ -453,6 +474,7 @@ class _CanvasPainter extends CustomPainter {
             argb: state.widget.color.toARGB32(),
             size: state.widget.brushSize,
             clipLabel: state._liveClip,
+            symmetry: symmetry,
             points: Float32List.fromList(state._live),
           ),
         );

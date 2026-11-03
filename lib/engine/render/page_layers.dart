@@ -8,6 +8,7 @@ import 'package:flutter/painting.dart';
 import '../document/coloring_document.dart';
 import '../document/stroke.dart';
 import '../region/label_map.dart';
+import 'symmetry.dart';
 
 /// Draws black line art with its brightness turned into transparency, so
 /// white paper becomes see-through and the fills underneath show.
@@ -300,9 +301,23 @@ class PageLayers {
     }
   }
 
-  /// Draws one stroke in page coordinates, clipped to its region when it
-  /// has one and the region's mask is ready (bounding box otherwise).
+  /// Draws one stroke in page coordinates, with its mirror copies when it
+  /// has a symmetry, clipped to its region when it has one and the region's
+  /// mask is ready (bounding box otherwise).
   void paintStroke(Canvas canvas, Stroke stroke) {
+    if (stroke.symmetry <= 1) {
+      _paintOne(canvas, stroke);
+      return;
+    }
+    for (final transform in symmetryTransforms(stroke.symmetry, map.width / 2, map.height / 2)) {
+      canvas.save();
+      canvas.transform(transform.storage);
+      _paintOne(canvas, stroke);
+      canvas.restore();
+    }
+  }
+
+  void _paintOne(Canvas canvas, Stroke stroke) {
     final clip = stroke.kind != BrushKind.eraser && stroke.clipLabel > 0 && stroke.clipLabel <= map.regionCount;
     if (!clip) {
       drawStroke(canvas, stroke);

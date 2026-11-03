@@ -97,6 +97,18 @@ class AppLocalizationsTr extends AppLocalizations {
   String get crayon => 'Pastel boya';
 
   @override
+  String get mirrorOff => 'Ayna kapalı';
+
+  @override
+  String get mirror2 => 'İki yönlü ayna';
+
+  @override
+  String get mirror4 => 'Dört yönlü ayna';
+
+  @override
+  String get mirror6 => 'Altı yönlü ayna';
+
+  @override
   String get licenses => 'Lisanslar';
 
   @override
