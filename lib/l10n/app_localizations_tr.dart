@@ -91,6 +91,12 @@ class AppLocalizationsTr extends AppLocalizations {
       'Satın alma onay bekliyor. Onay gelince sayfalar açılır.';
 
   @override
+  String get rainbowBrush => 'Gökkuşağı fırçası';
+
+  @override
+  String get crayon => 'Pastel boya';
+
+  @override
   String get licenses => 'Lisanslar';
 
   @override

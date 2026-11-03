@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../engine/document/coloring_document.dart';
+import '../engine/document/stroke.dart';
 import '../engine/document/page_progress.dart';
 import '../engine/region/label_map.dart';
 import '../l10n/app_localizations.dart';
@@ -89,6 +90,7 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
   int _revisionAtOpen = 0;
 
   CanvasTool _tool = CanvasTool.fill;
+  BrushKind _brush = BrushKind.marker;
   bool _celebrated = false;
   Timer? _hintTimer;
   Offset? _hintAt;
@@ -233,6 +235,23 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
       languageCode: Localizations.localeOf(context).languageCode,
       screenReader: MediaQuery.accessibleNavigationOf(context),
     ));
+  }
+
+  /// The crayon is a Büyük brush; Minik falls back to the marker.
+  BrushKind _brushFor(bool big) => !big && _brush == BrushKind.crayon ? BrushKind.marker : _brush;
+
+  /// First tap picks the brush; the next taps cycle its kind. Minik has the
+  /// marker and the rainbow, Büyük adds the crayon. No menu, no extra button.
+  void _tapBrush(bool big) {
+    if (_tool != CanvasTool.marker) {
+      _selectTool(CanvasTool.marker);
+      return;
+    }
+    final kinds = big
+        ? const [BrushKind.marker, BrushKind.rainbow, BrushKind.crayon]
+        : const [BrushKind.marker, BrushKind.rainbow];
+    unawaited(_sound.playClickSound());
+    setState(() => _brush = kinds[(kinds.indexOf(_brushFor(big)) + 1) % kinds.length]);
   }
 
   void _selectTool(CanvasTool tool) {
@@ -380,6 +399,7 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
   /// Home, fill, brush and undo (plus redo in Büyük mode).
   List<Widget> _controls(_Metrics m, bool big) {
     final l10n = AppLocalizations.of(context)!;
+    final brush = _brushFor(big);
     final document = _document;
     final listenable = document ?? const AlwaysStoppedAnimation<double>(0);
     return [
@@ -399,12 +419,17 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
         onTap: () => _selectTool(CanvasTool.fill),
       ),
       KidButton(
-        icon: Icons.brush_rounded,
+        icon: brush == BrushKind.crayon ? Icons.edit_rounded : Icons.brush_rounded,
         size: m.primary * 0.96,
         selected: _tool == CanvasTool.marker,
-        badgeColor: _color,
-        semanticLabel: l10n.marker,
-        onTap: () => _selectTool(CanvasTool.marker),
+        badgeColor: brush == BrushKind.rainbow ? null : _color,
+        badgeRainbow: brush == BrushKind.rainbow,
+        semanticLabel: switch (brush) {
+          BrushKind.rainbow => l10n.rainbowBrush,
+          BrushKind.crayon => l10n.crayon,
+          _ => l10n.marker,
+        },
+        onTap: () => _tapBrush(big),
       ),
       ListenableBuilder(
         listenable: listenable,
@@ -468,6 +493,7 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
                       tool: _tool,
                       color: _color,
                       brushSize: side * (big ? _brushSteps[_brushStep] : _brushSteps[1]),
+                      brush: _brushFor(big),
                       stayInside: !widget.image.freeDraw,
                       eraseFills: !widget.image.freeDraw,
                       allowZoom: big,

@@ -91,6 +91,12 @@ class AppLocalizationsEn extends AppLocalizations {
       'The purchase is waiting for approval. The pages open once it is approved.';
 
   @override
+  String get rainbowBrush => 'Rainbow brush';
+
+  @override
+  String get crayon => 'Crayon';
+
+  @override
   String get licenses => 'Licenses';
 
   @override

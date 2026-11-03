@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:cobi_paint_mobile/l10n/app_localizations.dart';
 import 'package:cobi_paint_mobile/screens/full_version_screen.dart';
 import 'package:cobi_paint_mobile/services/purchase_service.dart';
@@ -10,17 +8,13 @@ import 'package:in_app_purchase_platform_interface/in_app_purchase_platform_inte
 import 'package:shared_preferences/shared_preferences.dart';
 
 class _FakeStore extends InAppPurchasePlatform {
-  _FakeStore({this.available = true});
-
-  final bool available;
-  final controller = StreamController<List<PurchaseDetails>>.broadcast();
   int restoreCalls = 0;
 
   @override
-  Stream<List<PurchaseDetails>> get purchaseStream => controller.stream;
+  Stream<List<PurchaseDetails>> get purchaseStream => const Stream.empty();
 
   @override
-  Future<bool> isAvailable() async => available;
+  Future<bool> isAvailable() async => true;
 
   @override
   Future<ProductDetailsResponse> queryProductDetails(Set<String> identifiers) async => ProductDetailsResponse(

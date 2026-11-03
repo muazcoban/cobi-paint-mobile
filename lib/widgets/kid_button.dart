@@ -80,6 +80,7 @@ class KidButton extends StatefulWidget {
     this.enabled = true,
     this.semanticLabel,
     this.badgeColor,
+    this.badgeRainbow = false,
   });
 
   final IconData? icon;
@@ -87,6 +88,9 @@ class KidButton extends StatefulWidget {
   /// Small dot in the corner showing e.g. the colour a tool will paint with;
   /// the icon itself stays dark so it is always readable.
   final Color? badgeColor;
+
+  /// A rainbow dot instead of one colour (the rainbow brush).
+  final bool badgeRainbow;
 
   /// Custom glyph used instead of [icon].
   final Widget? child;
@@ -157,7 +161,7 @@ class _KidButtonState extends State<KidButton> {
                       child: widget.child ?? Icon(widget.icon, size: widget.size * 0.5, color: widget.iconColor),
                     ),
                   ),
-                  if (widget.badgeColor != null)
+                  if (widget.badgeColor != null || widget.badgeRainbow)
                     Positioned(
                       right: widget.size * 0.06,
                       bottom: widget.size * 0.06,
@@ -165,7 +169,18 @@ class _KidButtonState extends State<KidButton> {
                         width: widget.size * 0.3,
                         height: widget.size * 0.3,
                         decoration: BoxDecoration(
-                          color: widget.badgeColor,
+                          color: widget.badgeRainbow ? null : widget.badgeColor,
+                          gradient: widget.badgeRainbow
+                              ? const SweepGradient(colors: [
+                                  Color(0xFFE53935),
+                                  Color(0xFFFB8C00),
+                                  Color(0xFFFDD835),
+                                  Color(0xFF43A047),
+                                  Color(0xFF1E88E5),
+                                  Color(0xFF8E24AA),
+                                  Color(0xFFE53935),
+                                ])
+                              : null,
                           shape: BoxShape.circle,
                           border: Border.all(color: const Color(0xFF2D3142), width: 2),
                         ),

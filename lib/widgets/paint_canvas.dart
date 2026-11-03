@@ -23,6 +23,7 @@ class PaintCanvas extends StatefulWidget {
     required this.tool,
     required this.color,
     required this.brushSize,
+    this.brush = BrushKind.marker,
     this.stayInside = true,
     this.eraseFills = true,
     this.allowZoom = false,
@@ -40,6 +41,9 @@ class PaintCanvas extends StatefulWidget {
 
   /// Brush diameter in page pixels.
   final double brushSize;
+
+  /// The brush used while [tool] is [CanvasTool.marker].
+  final BrushKind brush;
 
   /// Marker strokes stay inside the region they started in.
   final bool stayInside;
@@ -234,8 +238,8 @@ class _PaintCanvasState extends State<PaintCanvas> with SingleTickerProviderStat
     _live
       ..clear()
       ..addAll([p.dx, p.dy, 0.5]);
-    _liveKind = widget.tool == CanvasTool.eraser ? BrushKind.eraser : BrushKind.marker;
-    _liveClip = _liveKind == BrushKind.marker && widget.stayInside
+    _liveKind = widget.tool == CanvasTool.eraser ? BrushKind.eraser : widget.brush;
+    _liveClip = _liveKind != BrushKind.eraser && widget.stayInside
         ? widget.document.map.labelAt(p.dx.floor(), p.dy.floor())
         : 0;
     if (_liveClip > 0) _layers.maskIfReady(_liveClip);
@@ -383,9 +387,13 @@ class _CanvasPainter extends CustomPainter {
     // 3. Brush layer plus the stroke under the finger.
     final brush = layers.brushImage;
     final liveKind = state._liveKind;
-    if (brush != null || liveKind != null) {
+    final pending = layers.pendingStrokes();
+    if (brush != null || liveKind != null || pending.isNotEmpty) {
       canvas.saveLayer(pageRect, Paint());
       if (brush != null) canvas.drawImage(brush, Offset.zero, smooth);
+      for (final stroke in pending) {
+        layers.paintStroke(canvas, stroke);
+      }
       if (liveKind != null && state._live.isNotEmpty) {
         layers.paintStroke(
           canvas,

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math;
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
@@ -45,6 +46,66 @@ Paint strokePaint(Stroke stroke) => Paint()
   ..color = stroke.kind == BrushKind.eraser ? const Color(0xFF000000) : Color(stroke.argb)
   ..blendMode = stroke.kind == BrushKind.eraser ? BlendMode.clear : BlendMode.srcOver;
 
+/// Draws [stroke] in its own style. Rainbow and crayon are deterministic:
+/// the same stroke looks the same on every device and after every reload.
+void drawStroke(Canvas canvas, Stroke stroke) {
+  final path = strokePath(stroke.points);
+  switch (stroke.kind) {
+    case BrushKind.marker:
+    case BrushKind.eraser:
+      canvas.drawPath(path, strokePaint(stroke));
+    case BrushKind.rainbow:
+      _drawRainbow(canvas, path, stroke);
+    case BrushKind.crayon:
+      _drawCrayon(canvas, path, stroke);
+  }
+}
+
+void _drawRainbow(Canvas canvas, Path path, Stroke stroke) {
+  final paint = strokePaint(stroke);
+  final step = math.max(3.0, stroke.size * 0.5);
+  final cycle = math.max(160.0, stroke.size * 10);
+  Color hue(double d) => HSVColor.fromAHSV(1, (d / cycle * 360) % 360, 0.85, 0.95).toColor();
+  for (final metric in path.computeMetrics()) {
+    if (metric.length < 0.5) {
+      canvas.drawPath(path, paint..color = hue(0)); // a tap: one dot
+      continue;
+    }
+    for (var d = 0.0; d < metric.length; d += step) {
+      // Segments overlap by a pixel so the seams do not show.
+      canvas.drawPath(metric.extractPath(d, math.min(metric.length, d + step + 1)), paint..color = hue(d));
+    }
+  }
+}
+
+void _drawCrayon(Canvas canvas, Path path, Stroke stroke) {
+  final color = Color(stroke.argb);
+  canvas.drawPath(
+    path,
+    strokePaint(stroke)
+      ..color = color.withValues(alpha: 0.72)
+      ..strokeWidth = stroke.size * 0.9,
+  );
+  // Grainy edges: dots scattered along the path from a seed taken from the
+  // stroke itself, so a replayed stroke gets the same grain.
+  final pts = stroke.points;
+  final random = math.Random(pts.isEmpty ? 1 : (pts[0] * 7919 + pts[1] * 104729 + stroke.size * 31).round());
+  final grain = Paint()..color = color.withValues(alpha: 0.35);
+  final radius = math.max(1.0, stroke.size * 0.11);
+  final spread = stroke.size * 0.5;
+  final step = math.max(2.0, stroke.size * 0.22);
+  for (final metric in path.computeMetrics()) {
+    for (var d = 0.0; d <= metric.length; d += step) {
+      final tangent = metric.getTangentForOffset(d);
+      if (tangent == null) continue;
+      for (var i = 0; i < 2; i++) {
+        final off = Offset((random.nextDouble() * 2 - 1) * spread, (random.nextDouble() * 2 - 1) * spread);
+        canvas.drawCircle(tangent.position + off, radius, grain);
+      }
+    }
+  }
+}
+
 /// The bitmaps behind a coloring page: region fills, committed brush
 /// strokes and per-region masks for strokes that stay inside the lines.
 /// Images are rebuilt off the paint path and swapped in when ready.
@@ -65,6 +126,8 @@ class PageLayers {
   bool _fillAgain = false;
   bool _firstFillSync = true;
   int _brushRevisionDone = -1;
+  int _bakedCount = 0;
+  Stroke? _bakedLast;
   Future<void>? _brushJob;
 
   Rect regionRect(int label) {
@@ -185,11 +248,28 @@ class PageLayers {
     return _brushJob ??= _syncBrush().whenComplete(() => _brushJob = null);
   }
 
+  /// Whether the stroke list only grew since the last bake, so the new
+  /// strokes can go on top of the baked image.
+  bool _grewOnly(List<Stroke> strokes) =>
+      _bakedCount <= strokes.length && (_bakedCount == 0 || identical(strokes[_bakedCount - 1], _bakedLast));
+
+  /// Strokes committed to the document but not yet in [brushImage]. The
+  /// canvas draws them itself, so a finished stroke never blinks away.
+  List<Stroke> pendingStrokes() {
+    if (_brushRevisionDone == document.strokeRevision) return const [];
+    final strokes = document.strokes;
+    return _grewOnly(strokes) ? strokes.sublist(_bakedCount) : const [];
+  }
+
   Future<void> _syncBrush() async {
     while (!_disposed && _brushRevisionDone != document.strokeRevision) {
       final revision = document.strokeRevision;
       final strokes = document.strokes;
-      for (final s in strokes) {
+      // Only the new strokes are drawn when the list merely grew; an undo
+      // or a clear draws everything again.
+      final incremental = brushImage != null && _grewOnly(strokes);
+      final toDraw = incremental ? strokes.sublist(_bakedCount) : strokes;
+      for (final s in toDraw) {
         if (s.clipLabel > 0 && s.clipLabel <= map.regionCount) await maskFor(s.clipLabel);
       }
       if (_disposed) return;
@@ -199,7 +279,8 @@ class PageLayers {
         final recorder = ui.PictureRecorder();
         final canvas = Canvas(recorder, bounds);
         canvas.saveLayer(bounds, Paint());
-        for (final stroke in strokes) {
+        if (incremental) canvas.drawImage(brushImage!, Offset.zero, Paint());
+        for (final stroke in toDraw) {
           paintStroke(canvas, stroke);
         }
         canvas.restore();
@@ -213,6 +294,8 @@ class PageLayers {
       }
       brushImage?.dispose();
       brushImage = image;
+      _bakedCount = strokes.length;
+      _bakedLast = strokes.isEmpty ? null : strokes.last;
       _brushRevisionDone = revision;
     }
   }
@@ -220,11 +303,9 @@ class PageLayers {
   /// Draws one stroke in page coordinates, clipped to its region when it
   /// has one and the region's mask is ready (bounding box otherwise).
   void paintStroke(Canvas canvas, Stroke stroke) {
-    final path = strokePath(stroke.points);
-    final paint = strokePaint(stroke);
-    final clip = stroke.kind == BrushKind.marker && stroke.clipLabel > 0 && stroke.clipLabel <= map.regionCount;
+    final clip = stroke.kind != BrushKind.eraser && stroke.clipLabel > 0 && stroke.clipLabel <= map.regionCount;
     if (!clip) {
-      canvas.drawPath(path, paint);
+      drawStroke(canvas, stroke);
       return;
     }
     final rect = regionRect(stroke.clipLabel);
@@ -232,10 +313,10 @@ class PageLayers {
     canvas.save();
     canvas.clipRect(rect);
     if (mask == null) {
-      canvas.drawPath(path, paint);
+      drawStroke(canvas, stroke);
     } else {
       canvas.saveLayer(rect, Paint());
-      canvas.drawPath(path, paint);
+      drawStroke(canvas, stroke);
       canvas.drawImage(mask, rect.topLeft, Paint()..blendMode = BlendMode.dstIn);
       canvas.restore();
     }

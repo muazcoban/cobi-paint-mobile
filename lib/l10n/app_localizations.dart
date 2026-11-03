@@ -254,6 +254,18 @@ abstract class AppLocalizations {
   /// **'Satın alma onay bekliyor. Onay gelince sayfalar açılır.'**
   String get purchasePending;
 
+  /// No description provided for @rainbowBrush.
+  ///
+  /// In tr, this message translates to:
+  /// **'Gökkuşağı fırçası'**
+  String get rainbowBrush;
+
+  /// No description provided for @crayon.
+  ///
+  /// In tr, this message translates to:
+  /// **'Pastel boya'**
+  String get crayon;
+
   /// No description provided for @licenses.
   ///
   /// In tr, this message translates to:

@@ -1,6 +1,8 @@
 import 'dart:typed_data';
 
-enum BrushKind { marker, eraser }
+/// Marker and eraser came first; rainbow cycles the hue along the stroke,
+/// crayon has grainy edges. Names are stored in saved artworks.
+enum BrushKind { marker, eraser, rainbow, crayon }
 
 /// One finger-down-to-finger-up brush stroke, in page pixel coordinates.
 class Stroke {
