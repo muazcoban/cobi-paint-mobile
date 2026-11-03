@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:ui' as ui;
 
+import 'package:flutter/foundation.dart' show defaultTargetPlatform;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -90,7 +91,7 @@ class ColoringScreen extends StatefulWidget {
   State<ColoringScreen> createState() => _ColoringScreenState();
 }
 
-class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObserver {
+class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObserver, UndoManagerClient {
   final SoundService _sound = SoundService();
 
   ColoringDocument? _document;
@@ -114,6 +115,9 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
   /// The sticker the next stamp uses; the brush button shows it.
   int _stickerIndex = 0;
 
+  /// The age mode the last build saw; Büyük hands undo to the system.
+  bool _big = false;
+
   @override
   void initState() {
     super.initState();
@@ -130,6 +134,8 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
     _hintTimer?.cancel();
     WidgetsBinding.instance.removeObserver(this);
     unawaited(SystemGestures.deferEdgeGestures(false));
+    _document?.removeListener(_syncSystemUndo);
+    _releaseSystemUndo();
     final saver = _saver;
     final page = _page;
     if (saver != null) {
@@ -210,6 +216,8 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
         // A mirror drawing opened again goes on the way it was left.
         if (widget.image.freeDraw) _symmetry = document.strokes.lastOrNull?.symmetry ?? 1;
       });
+      document.addListener(_syncSystemUndo);
+      _syncSystemUndo();
       _scheduleHint(app, document);
     } catch (e) {
       // No error text for the child: a sad face and the home button.
@@ -351,6 +359,63 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
     _document!.redo();
   }
 
+  // System undo ---------------------------------------------------------------
+
+  /// Büyük hands the picture's undo stack to the system: on iPadOS and iOS
+  /// the three-finger gestures, a hardware keyboard's Cmd-Z and the Undo and
+  /// Redo bubble then work the way they do everywhere else. Minik never does,
+  /// so a palm with three fingers on the page changes nothing (Ç5). Shaking
+  /// is off for everyone (AppDelegate).
+  void _syncSystemUndo() {
+    final document = _document;
+    if (_big && document != null && mounted) {
+      UndoManager.client = this;
+      UndoManager.setUndoState(canUndo: document.canUndo, canRedo: document.canRedo);
+    } else {
+      _releaseSystemUndo();
+    }
+  }
+
+  void _releaseSystemUndo() {
+    if (UndoManager.client != this) return;
+    UndoManager.setUndoState();
+    UndoManager.client = null;
+  }
+
+  @override
+  void handlePlatformUndo(UndoDirection direction) {
+    if (direction == UndoDirection.undo) {
+      _undo();
+    } else {
+      _redo();
+    }
+  }
+
+  @override
+  void undo() => _undo();
+
+  @override
+  void redo() => _redo();
+
+  @override
+  bool get canUndo => _document?.canUndo ?? false;
+
+  @override
+  bool get canRedo => _document?.canRedo ?? false;
+
+  /// Hardware keyboard undo in Büyük: Cmd-Z and Shift-Cmd-Z where Apple's
+  /// keyboards are, Ctrl-Z, Ctrl-Shift-Z and Ctrl-Y elsewhere. Minik has no
+  /// bindings: a toddler's keyboard, if any, changes nothing.
+  Map<ShortcutActivator, VoidCallback> _keyboardUndo(bool big) {
+    if (!big) return const {};
+    final apple = defaultTargetPlatform == TargetPlatform.iOS || defaultTargetPlatform == TargetPlatform.macOS;
+    return {
+      SingleActivator(LogicalKeyboardKey.keyZ, control: !apple, meta: apple): _undo,
+      SingleActivator(LogicalKeyboardKey.keyZ, control: !apple, meta: apple, shift: true): _redo,
+      if (!apple) const SingleActivator(LogicalKeyboardKey.keyY, control: true): _redo,
+    };
+  }
+
   void _onFilled(int label) {
     unawaited(_sound.playFillSound());
     Haptics.light();
@@ -394,6 +459,12 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
   Widget build(BuildContext context) {
     final mode = context.select<AppProvider, AgeMode>((p) => p.settings.ageMode);
     final big = mode == AgeMode.big;
+    if (big != _big) {
+      // The mode changes in the Parents area; on a tablet this page can be
+      // open behind it. Only channel calls, no state, so it is fine here.
+      _big = big;
+      _syncSystemUndo();
+    }
     return PopScope(
       // No pop without the save: the iOS edge swipe is off on this screen,
       // and Android back or the VoiceOver escape gesture go home the same
@@ -402,15 +473,21 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
       onPopInvokedWithResult: (didPop, _) {
         if (!didPop) unawaited(_goHome());
       },
-      child: Scaffold(
-        backgroundColor: const Color(0xFFFFF4E6),
-        body: SafeArea(
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              final metrics = _Metrics(constraints.biggest, big);
-              final wide = constraints.maxWidth > constraints.maxHeight * 1.1;
-              return wide ? _wideLayout(metrics, big) : _tallLayout(metrics, big);
-            },
+      child: CallbackShortcuts(
+        bindings: _keyboardUndo(big),
+        child: Focus(
+          autofocus: true,
+          child: Scaffold(
+            backgroundColor: const Color(0xFFFFF4E6),
+            body: SafeArea(
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  final metrics = _Metrics(constraints.biggest, big);
+                  final wide = constraints.maxWidth > constraints.maxHeight * 1.1;
+                  return wide ? _wideLayout(metrics, big) : _tallLayout(metrics, big);
+                },
+              ),
+            ),
           ),
         ),
       ),
