@@ -36,6 +36,7 @@ void main() {
   Future<void> pumpCanvas(
     WidgetTester tester, {
     CanvasTool tool = CanvasTool.fill,
+    BrushKind brush = BrushKind.marker,
     bool allowZoom = false,
     int symmetry = 1,
     List<String> stickers = const [],
@@ -54,6 +55,7 @@ void main() {
             document: document,
             page: page,
             tool: tool,
+            brush: brush,
             color: red,
             brushSize: 8,
             allowZoom: allowZoom,
@@ -114,6 +116,16 @@ void main() {
     expect(stroke.kind, BrushKind.marker);
     expect(stroke.clipLabel, left());
     expect(stroke.pointCount, greaterThan(5));
+  });
+
+  testWidgets('spray, glitter and neon drags commit a stroke of their kind', (tester) async {
+    for (final kind in [BrushKind.spray, BrushKind.glitter, BrushKind.neon]) {
+      await pumpCanvas(tester, tool: CanvasTool.marker, brush: kind);
+      final gesture = await tester.startGesture(at(tester, 20, 20));
+      await gesture.moveTo(at(tester, 60, 30));
+      await gesture.up();
+      expect(document.strokes.single.kind, kind, reason: 'the canvas commits the brush it was given');
+    }
   });
 
   testWidgets('with the mirror on, a drag commits one stroke that carries the symmetry', (tester) async {

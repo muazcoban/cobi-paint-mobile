@@ -123,7 +123,7 @@ void main() {
     });
 
     test('every brush kind lands in all four quadrants with a four-way mirror', () async {
-      for (final kind in [BrushKind.marker, BrushKind.rainbow, BrushKind.crayon]) {
+      for (final kind in BrushKind.values.where((k) => k != BrushKind.eraser)) {
         final document = ColoringDocument(_map());
         final layers = PageLayers(document: document);
         document.addStroke(_stroke(kind, symmetry: 4));

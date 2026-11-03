@@ -37,7 +37,7 @@ void main() {
   });
 
   test('a stroke of a kind this version does not know is dropped, not crashed on', () {
-    expect(Stroke.fromJson({'k': 'glitter', 'c': 0, 's': 10, 'p': [1, 1, 5]}), isNull);
+    expect(Stroke.fromJson({'k': 'lava', 'c': 0, 's': 10, 'p': [1, 1, 5]}), isNull);
     expect(Stroke.fromJson('nonsense'), isNull);
   });
 }

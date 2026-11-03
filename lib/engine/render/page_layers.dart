@@ -47,8 +47,10 @@ Paint strokePaint(Stroke stroke) => Paint()
   ..color = stroke.kind == BrushKind.eraser ? const Color(0xFF000000) : Color(stroke.argb)
   ..blendMode = stroke.kind == BrushKind.eraser ? BlendMode.clear : BlendMode.srcOver;
 
-/// Draws [stroke] in its own style. Rainbow and crayon are deterministic:
-/// the same stroke looks the same on every device and after every reload.
+/// Draws [stroke] in its own style. Every brush is deterministic: the
+/// scattered ones (crayon, spray, glitter) take their randomness from
+/// [_seeded], so the same stroke looks the same on every device, after every
+/// reload and in every mirror copy.
 void drawStroke(Canvas canvas, Stroke stroke) {
   final path = strokePath(stroke.points);
   switch (stroke.kind) {
@@ -59,7 +61,34 @@ void drawStroke(Canvas canvas, Stroke stroke) {
       _drawRainbow(canvas, path, stroke);
     case BrushKind.crayon:
       _drawCrayon(canvas, path, stroke);
+    case BrushKind.spray:
+      _drawSpray(canvas, path, stroke);
+    case BrushKind.glitter:
+      _drawGlitter(canvas, path, stroke);
+    case BrushKind.neon:
+      _drawNeon(canvas, path, stroke);
   }
+}
+
+/// A random source seeded by the stroke itself: a replayed stroke scatters
+/// the same way.
+math.Random _seeded(Stroke stroke) {
+  final pts = stroke.points;
+  return math.Random(pts.isEmpty ? 1 : (pts[0] * 7919 + pts[1] * 104729 + stroke.size * 31).round());
+}
+
+/// Positions along [path] every [step] page pixels; a tap gives its one point.
+Iterable<Offset> _alongPath(Path path, Float32List points, double step) sync* {
+  var any = false;
+  for (final metric in path.computeMetrics()) {
+    for (var d = 0.0; d <= metric.length; d += step) {
+      final tangent = metric.getTangentForOffset(d);
+      if (tangent == null) continue;
+      any = true;
+      yield tangent.position;
+    }
+  }
+  if (!any && points.length >= 2) yield Offset(points[0], points[1]);
 }
 
 void _drawRainbow(Canvas canvas, Path path, Stroke stroke) {
@@ -67,9 +96,11 @@ void _drawRainbow(Canvas canvas, Path path, Stroke stroke) {
   final step = math.max(3.0, stroke.size * 0.5);
   final cycle = math.max(160.0, stroke.size * 10);
   Color hue(double d) => HSVColor.fromAHSV(1, (d / cycle * 360) % 360, 0.85, 0.95).toColor();
+  var any = false;
   for (final metric in path.computeMetrics()) {
+    any = true;
     if (metric.length < 0.5) {
-      canvas.drawPath(path, paint..color = hue(0)); // a tap: one dot
+      canvas.drawPath(path, paint..color = hue(0));
       continue;
     }
     for (var d = 0.0; d < metric.length; d += step) {
@@ -77,6 +108,8 @@ void _drawRainbow(Canvas canvas, Path path, Stroke stroke) {
       canvas.drawPath(metric.extractPath(d, math.min(metric.length, d + step + 1)), paint..color = hue(d));
     }
   }
+  // A tap has no measurable contour at all; it is still one dot.
+  if (!any) canvas.drawPath(path, paint..color = hue(0));
 }
 
 void _drawCrayon(Canvas canvas, Path path, Stroke stroke) {
@@ -89,8 +122,7 @@ void _drawCrayon(Canvas canvas, Path path, Stroke stroke) {
   );
   // Grainy edges: dots scattered along the path from a seed taken from the
   // stroke itself, so a replayed stroke gets the same grain.
-  final pts = stroke.points;
-  final random = math.Random(pts.isEmpty ? 1 : (pts[0] * 7919 + pts[1] * 104729 + stroke.size * 31).round());
+  final random = _seeded(stroke);
   final grain = Paint()..color = color.withValues(alpha: 0.35);
   final radius = math.max(1.0, stroke.size * 0.11);
   final spread = stroke.size * 0.5;
@@ -105,6 +137,134 @@ void _drawCrayon(Canvas canvas, Path path, Stroke stroke) {
       }
     }
   }
+}
+
+/// A cloud of fine dots around the path, thickest in the middle and thinning
+/// out to a finger's width, like a spray can held close to the paper. All the
+/// dots of one size go down in a single drawPoints call.
+void _drawSpray(Canvas canvas, Path path, Stroke stroke) {
+  final random = _seeded(stroke);
+  final reach = stroke.size;
+  final fine = <Offset>[];
+  final coarse = <Offset>[];
+  var first = true;
+  for (final at in _alongPath(path, stroke.points, math.max(2.0, stroke.size * 0.25))) {
+    // The first press lets out a burst, like a real can, so a tap shows.
+    final count = first ? 30 : 10;
+    first = false;
+    for (var i = 0; i < count; i++) {
+      // The distance is drawn evenly, so the dots crowd towards the middle.
+      final r = reach * random.nextDouble();
+      final a = random.nextDouble() * 2 * math.pi;
+      (i % 10 < 7 ? fine : coarse).add(at + Offset(math.cos(a) * r, math.sin(a) * r));
+    }
+  }
+  final color = Color(stroke.argb);
+  final dot = Paint()..strokeCap = StrokeCap.round;
+  if (fine.isNotEmpty) {
+    canvas.drawPoints(
+      ui.PointMode.points,
+      fine,
+      dot
+        ..color = color.withValues(alpha: 0.5)
+        ..strokeWidth = math.max(1.5, stroke.size * 0.12),
+    );
+  }
+  if (coarse.isNotEmpty) {
+    canvas.drawPoints(
+      ui.PointMode.points,
+      coarse,
+      dot
+        ..color = color.withValues(alpha: 0.6)
+        ..strokeWidth = math.max(2.0, stroke.size * 0.2),
+    );
+  }
+}
+
+/// A pale band of the colour with sparkles over it, like glitter glue:
+/// four-point stars in white and in a deeper shade of the colour, and a dust
+/// of tiny white points. The stars of one colour are one path, drawn once.
+void _drawGlitter(Canvas canvas, Path path, Stroke stroke) {
+  final color = Color(stroke.argb);
+  canvas.drawPath(path, strokePaint(stroke)..color = color.withValues(alpha: 0.34));
+  final random = _seeded(stroke);
+  final spread = stroke.size * 0.5;
+  final white = Path();
+  final tinted = Path();
+  final dust = <Offset>[];
+  Offset scatter(Offset at) =>
+      at + Offset((random.nextDouble() * 2 - 1) * spread, (random.nextDouble() * 2 - 1) * spread);
+  for (final at in _alongPath(path, stroke.points, math.max(2.0, stroke.size * 0.35))) {
+    final r = stroke.size * (0.12 + random.nextDouble() * 0.2);
+    _addStar(random.nextDouble() < 0.55 ? white : tinted, scatter(at), r, random.nextDouble() * math.pi / 2);
+    dust.add(scatter(at));
+    dust.add(scatter(at));
+  }
+  if (dust.isNotEmpty) {
+    canvas.drawPoints(
+      ui.PointMode.points,
+      dust,
+      Paint()
+        ..color = const Color(0xFFFFFFFF)
+        ..strokeCap = StrokeCap.round
+        ..strokeWidth = math.max(1.0, stroke.size * 0.08),
+    );
+  }
+  canvas.drawPath(tinted, Paint()..color = _shade(color));
+  canvas.drawPath(white, Paint()..color = const Color(0xFFFFFFFF));
+}
+
+/// Adds a four-point star centred at [c] with outer radius [r] to [path].
+void _addStar(Path path, Offset c, double r, double angle) {
+  for (var i = 0; i < 8; i++) {
+    final a = angle + i * math.pi / 4;
+    final rr = i.isEven ? r : r * 0.3;
+    final p = c + Offset(math.cos(a) * rr, math.sin(a) * rr);
+    if (i == 0) {
+      path.moveTo(p.dx, p.dy);
+    } else {
+      path.lineTo(p.dx, p.dy);
+    }
+  }
+  path.close();
+}
+
+/// A deeper shade of [color] for the glitter facets, so they show on the
+/// pale band whatever the colour.
+Color _shade(Color color) {
+  final hsv = HSVColor.fromColor(color);
+  return hsv.withValue(hsv.value * 0.72).withSaturation(math.min(1.0, hsv.saturation * 1.15 + 0.1)).toColor();
+}
+
+/// A bright core inside a soft halo of the colour, like a glowing tube. The
+/// halo is a few wider, fainter strokes rather than a blur, so it costs
+/// little while the finger draws and looks the same on every renderer.
+void _drawNeon(Canvas canvas, Path path, Stroke stroke) {
+  final color = Color(stroke.argb);
+  final paint = strokePaint(stroke);
+  // Twelve rings from 3x the width down to just outside the tube, each a
+  // little denser than the last, so the glow fades without visible steps.
+  for (var i = 0; i < 12; i++) {
+    final t = i / 11;
+    canvas.drawPath(
+      path,
+      paint
+        ..strokeWidth = stroke.size * (3.0 - 1.85 * t)
+        ..color = color.withValues(alpha: 0.03 + 0.17 * t * t),
+    );
+  }
+  canvas.drawPath(
+    path,
+    paint
+      ..strokeWidth = stroke.size * 0.85
+      ..color = color,
+  );
+  canvas.drawPath(
+    path,
+    paint
+      ..strokeWidth = stroke.size * 0.36
+      ..color = Color.lerp(color, const Color(0xFFFFFFFF), 0.7)!,
+  );
 }
 
 /// The bitmaps behind a coloring page: region fills, committed brush

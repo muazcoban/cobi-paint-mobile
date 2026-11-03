@@ -39,7 +39,7 @@ boyama ve otomatik kayıt sayesinde çocuğunuz yardım istemeden boyar.
 - 16 çıkartma: dokununca yapışır, sürükleyince iz bırakır; silgiyle çıkar.
 
 ✏️ **Serbest çizim**
-- Boş sayfaya keçeli kalem, gökkuşağı ve pastel fırçayla çizim.
+- Fırçalar: keçeli kalem, gökkuşağı, sprey ve simli fırça; Büyük'te pastel ve neon kalem de var.
 - Ayna: karalama simetrik bir desene dönüşür (Minik'te dört yönlü; Büyük'te iki, dört ya da altı yönlü).
 
 👶 **Küçük eller için**
@@ -75,7 +75,7 @@ saving let your child color without asking for help.
 - 16 stickers: tap to stick one, drag for a trail; the eraser peels them off.
 
 ✏️ **Free drawing**
-- A blank page with marker, rainbow and crayon brushes.
+- Brushes: marker, rainbow, spray and glitter; Big mode adds the crayon and the neon pen.
 - Mirror: a scribble turns into a symmetric pattern (four-way in Little mode; two, four or six-way in Big mode).
 
 👶 **Made for little hands**

@@ -97,6 +97,15 @@ class AppLocalizationsTr extends AppLocalizations {
   String get crayon => 'Pastel boya';
 
   @override
+  String get sprayBrush => 'Sprey boya';
+
+  @override
+  String get glitterBrush => 'Simli fırça';
+
+  @override
+  String get neonBrush => 'Neon kalem';
+
+  @override
   String get mirrorOff => 'Ayna kapalı';
 
   @override

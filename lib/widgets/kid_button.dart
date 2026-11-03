@@ -320,3 +320,96 @@ class _EraserPainter extends CustomPainter {
   @override
   bool shouldRepaint(_EraserPainter oldDelegate) => false;
 }
+
+/// A puff of dots, the spray brush's mark.
+class SprayGlyph extends StatelessWidget {
+  const SprayGlyph({super.key, this.color = const Color(0xFF2D3142)});
+
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) => CustomPaint(painter: _SprayPainter(color));
+}
+
+class _SprayPainter extends CustomPainter {
+  _SprayPainter(this.color);
+
+  final Color color;
+
+  /// Dot centres and radii as fractions of the glyph, crowding the middle
+  /// the way the brush does.
+  static const _dots = <(double, double, double)>[
+    (0.50, 0.50, 0.11),
+    (0.36, 0.44, 0.08),
+    (0.63, 0.40, 0.085),
+    (0.45, 0.66, 0.08),
+    (0.62, 0.62, 0.07),
+    (0.28, 0.58, 0.06),
+    (0.52, 0.30, 0.06),
+    (0.72, 0.52, 0.055),
+    (0.36, 0.76, 0.05),
+    (0.20, 0.42, 0.045),
+    (0.78, 0.32, 0.045),
+    (0.66, 0.78, 0.045),
+    (0.24, 0.26, 0.04),
+    (0.82, 0.70, 0.035),
+    (0.50, 0.86, 0.035),
+    (0.14, 0.70, 0.03),
+  ];
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final u = size.shortestSide;
+    final paint = Paint()..color = color;
+    for (final (x, y, r) in _dots) {
+      canvas.drawCircle(Offset(x * u, y * u), r * u, paint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(_SprayPainter oldDelegate) => oldDelegate.color != color;
+}
+
+/// A short glowing line, the neon brush's mark: a core inside a soft halo.
+class NeonGlyph extends StatelessWidget {
+  const NeonGlyph({super.key, this.color = const Color(0xFF2D3142)});
+
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) => CustomPaint(painter: _NeonPainter(color));
+}
+
+class _NeonPainter extends CustomPainter {
+  _NeonPainter(this.color);
+
+  final Color color;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final u = size.shortestSide;
+    final path = Path()
+      ..moveTo(u * 0.12, u * 0.64)
+      ..cubicTo(u * 0.30, u * 0.08, u * 0.52, u * 1.02, u * 0.88, u * 0.36);
+    final paint = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round;
+    for (final (width, alpha) in const <(double, double)>[(0.38, 0.12), (0.27, 0.2), (0.18, 0.34)]) {
+      canvas.drawPath(
+        path,
+        paint
+          ..strokeWidth = u * width
+          ..color = color.withValues(alpha: alpha),
+      );
+    }
+    canvas.drawPath(
+      path,
+      paint
+        ..strokeWidth = u * 0.09
+        ..color = color,
+    );
+  }
+
+  @override
+  bool shouldRepaint(_NeonPainter oldDelegate) => oldDelegate.color != color;
+}

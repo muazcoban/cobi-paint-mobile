@@ -1,8 +1,10 @@
 import 'dart:typed_data';
 
 /// Marker and eraser came first; rainbow cycles the hue along the stroke,
-/// crayon has grainy edges. Names are stored in saved artworks.
-enum BrushKind { marker, eraser, rainbow, crayon }
+/// crayon has grainy edges, spray is a cloud of dots, glitter a pale band
+/// with sparkles, neon a bright core in a halo. Names are stored in saved
+/// artworks, so they never change.
+enum BrushKind { marker, eraser, rainbow, crayon, spray, glitter, neon }
 
 /// Mirror symmetries a stroke can carry: the number of copies the page shows
 /// for one finger stroke. 1 none, 2 a left-right mirror, 4 mirrors down and
