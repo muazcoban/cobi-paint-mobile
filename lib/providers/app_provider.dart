@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import '../data/builtin_images.dart';
@@ -15,10 +17,16 @@ import '../services/sound_service.dart';
 import '../theme/app_theme.dart';
 
 class AppProvider extends ChangeNotifier {
-  final StorageService _storageService = StorageService();
+  /// [storage] and [cacheDirectory] default to the device's own folders;
+  /// tests pass temporary ones.
+  AppProvider({StorageService? storage, Future<Directory> Function()? cacheDirectory})
+      : _storageService = storage ?? StorageService(),
+        regionService = RegionService(cacheDirectory: cacheDirectory ?? getApplicationCacheDirectory);
+
+  final StorageService _storageService;
 
   /// Label maps are derived data, so the OS may clear them with the cache.
-  final RegionService regionService = RegionService(cacheDirectory: getApplicationCacheDirectory);
+  final RegionService regionService;
 
   UserSettings _settings = UserSettings();
   List<Category> _categories = [];

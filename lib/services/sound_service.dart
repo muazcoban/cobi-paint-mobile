@@ -8,6 +8,10 @@ import 'package:flutter/foundation.dart';
 /// Each sound has its own preloaded low-latency player, so a tap is heard at
 /// once and a new sound does not cut off a different one.
 class SoundService {
+  /// Tests run without the audio plugin; nothing is loaded or played.
+  @visibleForTesting
+  static bool disabled = false;
+
   static final SoundService _instance = SoundService._internal();
   factory SoundService() => _instance;
   SoundService._internal();
@@ -32,6 +36,7 @@ class SoundService {
 
   /// Loads every sound ahead of the first tap.
   Future<void> preload() async {
+    if (disabled) return;
     await _configureSession();
     await Future.wait(_sounds.map(_player));
   }
@@ -97,6 +102,7 @@ class SoundService {
   }
 
   Future<void> _playSound(String name) async {
+    if (disabled) return;
     if (!_soundEnabled) return;
     try {
       final player = await _player(name);

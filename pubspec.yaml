@@ -46,6 +46,7 @@ flutter:
 
   assets:
     - assets/images/
+    - assets/images/tools/
     - assets/images/categories/
     - assets/images/categories/animals/
     - assets/images/categories/plants/

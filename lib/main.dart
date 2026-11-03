@@ -57,15 +57,20 @@ void main() async {
 }
 
 class CobiPaintApp extends StatelessWidget {
-  const CobiPaintApp({super.key});
+  const CobiPaintApp({super.key, this.app});
+
+  /// A ready provider; tests pass one that writes to a temporary folder.
+  final AppProvider? app;
 
   @override
   Widget build(BuildContext context) {
+    final app = this.app;
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-          create: (_) => AppProvider(),
-        ),
+        if (app == null)
+          ChangeNotifierProvider(create: (_) => AppProvider())
+        else
+          ChangeNotifierProvider<AppProvider>.value(value: app),
         ChangeNotifierProvider(
           create: (_) => LocaleProvider(),
         ),
