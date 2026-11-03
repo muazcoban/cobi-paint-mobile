@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:cobi_paint_mobile/engine/document/coloring_document.dart';
+import 'package:cobi_paint_mobile/engine/document/sticker.dart';
 import 'package:cobi_paint_mobile/engine/document/stroke.dart';
 import 'package:cobi_paint_mobile/engine/region/label_map.dart';
 import 'package:cobi_paint_mobile/engine/region/region_builder.dart';
@@ -174,5 +175,76 @@ void main() {
     doc.undo();
     expect(doc.strokes, isEmpty);
     expect(doc.canUndo, isFalse);
+  });
+
+  group('stickers', () {
+    Sticker star(double x, double y) => Sticker(code: 'star', x: x, y: y, size: 4);
+    Stroke rub(List<double> xy, {int symmetry = 1}) => Stroke(
+          kind: BrushKind.eraser,
+          argb: 0,
+          size: 2,
+          symmetry: symmetry,
+          points: Float32List.fromList([for (var i = 0; i < xy.length; i += 2) ...[xy[i], xy[i + 1], 0.5]]),
+        );
+
+    test('one finger of stickers is one step; undo takes the whole trail off', () {
+      doc.stamp([star(3, 3), star(8, 3), star(13, 3)]);
+      expect(doc.stickers, hasLength(3));
+      expect(doc.isEmpty, isFalse);
+      doc.undo();
+      expect(doc.stickers, isEmpty);
+      expect(doc.isEmpty, isTrue);
+      doc.redo();
+      expect(doc.stickers, hasLength(3));
+      doc.undo();
+      doc.stamp(const []);
+      expect(doc.canRedo, isTrue, reason: 'an empty stamp is not a step, so the redo stays');
+    });
+
+    test('the eraser peels off the stickers it runs over; undo puts them back in place', () {
+      doc.stamp([star(3, 3), star(16, 3)]);
+      doc.stamp([star(3, 8)]);
+      doc.erase(rub([1, 3, 6, 3]), const {}); // across the top-left sticker only
+      expect(doc.stickers.map((s) => s.center), [const Offset(16, 3), const Offset(3, 8)]);
+      expect(doc.strokes, hasLength(1), reason: 'the rub counts even without paint under it');
+      doc.undo();
+      expect(doc.stickers.map((s) => s.center), [const Offset(3, 3), const Offset(16, 3), const Offset(3, 8)]);
+      doc.redo();
+      expect(doc.stickers, hasLength(2));
+    });
+
+    test('a mirrored eraser peels the sticker under its copy too', () {
+      doc.stamp([star(3, 3), star(17, 3)]); // the page is 20 wide: 17 mirrors 3
+      doc.erase(rub([2, 3, 4, 3], symmetry: 2), const {});
+      expect(doc.stickers, isEmpty);
+    });
+
+    test('an eraser that touches nothing is not a step', () {
+      doc.stamp([star(3, 3)]);
+      doc.erase(rub([15, 8, 18, 8]), const {});
+      expect(doc.strokes, isEmpty);
+      expect(doc.stickers, hasLength(1));
+    });
+
+    test('clear takes the stickers too and undo brings them back', () {
+      doc.stamp([star(3, 3)]);
+      doc.clear();
+      expect(doc.stickers, isEmpty);
+      expect(doc.isEmpty, isTrue);
+      doc.undo();
+      expect(doc.stickers, hasLength(1));
+    });
+
+    test('stickers survive JSON and a page without any stores no list', () {
+      doc.stamp([const Sticker(code: 'red_heart', x: 3.25, y: 4, size: 5, angle: 0.1234)]);
+      final copy = ColoringDocument(twoRegions())..restore(doc.toJson());
+      final s = copy.stickers.single;
+      expect(s.code, 'red_heart');
+      expect(s.x, closeTo(3.3, 1e-9));
+      expect(s.size, 5);
+      expect(s.angle, closeTo(0.123, 1e-9));
+      expect(copy.canUndo, isFalse, reason: 'history starts empty');
+      expect(ColoringDocument(twoRegions()).toJson().containsKey('stickers'), isFalse);
+    });
   });
 }

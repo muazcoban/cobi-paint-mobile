@@ -47,6 +47,7 @@ kararı: her cihazda aynı, sıcak ve lisansı temiz bir ses).
 | fill | Boya | Paint |
 | brush | Fırça | Brush |
 | mirror | Ayna | Mirror |
+| sticker | Çıkartma | Sticker |
 | undo | Geri al | Undo |
 
 Renk sırası `lib/screens/coloring_screen.dart` içindeki `littlePalette` ve `bigPalette` sırasıdır;

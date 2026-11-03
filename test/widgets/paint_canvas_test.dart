@@ -33,7 +33,15 @@ void main() {
   late ColoringDocument document;
   late ui.Image page;
 
-  Future<void> pumpCanvas(WidgetTester tester, {CanvasTool tool = CanvasTool.fill, bool allowZoom = false, int symmetry = 1}) async {
+  Future<void> pumpCanvas(
+    WidgetTester tester, {
+    CanvasTool tool = CanvasTool.fill,
+    bool allowZoom = false,
+    int symmetry = 1,
+    List<String> stickers = const [],
+    double stickerSize = 0,
+    void Function(int count)? onStamped,
+  }) async {
     final rgba = twoRegionPage();
     document = ColoringDocument(RegionBuilder.build(rgba, 200, 100, options: const RegionBuilderOptions(gapPx: 0)));
     page = (await tester.runAsync(() => imageFrom(rgba, 200, 100)))!;
@@ -50,6 +58,9 @@ void main() {
             brushSize: 8,
             allowZoom: allowZoom,
             symmetry: symmetry,
+            stickers: stickers,
+            stickerSize: stickerSize,
+            onStamped: onStamped,
           ),
         ),
       ),
@@ -113,6 +124,56 @@ void main() {
 
     expect(document.strokes, hasLength(1));
     expect(document.strokes.single.symmetry, 2);
+  });
+
+  testWidgets('the sticker tool sticks the next sticker where the finger went down', (tester) async {
+    var stamped = 0;
+    await pumpCanvas(
+      tester,
+      tool: CanvasTool.sticker,
+      stickers: const ['star', 'red_heart'],
+      stickerSize: 20,
+      onStamped: (count) => stamped += count,
+    );
+    await tester.tapAt(at(tester, 50, 50));
+    await tester.pump();
+
+    final sticker = document.stickers.single;
+    expect(sticker.code, 'star');
+    expect((sticker.center - const Offset(50, 50)).distance, lessThan(1));
+    expect(sticker.size, 20);
+    expect(stamped, 1);
+    expect(document.strokes, isEmpty, reason: 'a stamp is not a stroke');
+  });
+
+  testWidgets('a drag leaves a trail of changing stickers that one undo removes', (tester) async {
+    await pumpCanvas(tester, tool: CanvasTool.sticker, stickers: const ['star', 'red_heart'], stickerSize: 20);
+    final gesture = await tester.startGesture(at(tester, 20, 50));
+    for (var i = 1; i <= 8; i++) {
+      await gesture.moveTo(at(tester, 20.0 + i * 20, 50));
+    }
+    await gesture.up();
+    await tester.pump();
+
+    expect(document.stickers.length, inInclusiveRange(3, 8));
+    expect(document.stickers.map((s) => s.code).toSet(), {'star', 'red_heart'});
+    for (var i = 1; i < document.stickers.length; i++) {
+      final gap = (document.stickers[i].center - document.stickers[i - 1].center).distance;
+      expect(gap, greaterThanOrEqualTo(20 * 1.15 - 1), reason: 'stickers do not pile up');
+    }
+    document.undo();
+    expect(document.stickers, isEmpty);
+  });
+
+  testWidgets('with the mirror on, a sticker gets its copy on the other side', (tester) async {
+    await pumpCanvas(tester, tool: CanvasTool.sticker, symmetry: 2, stickers: const ['star'], stickerSize: 20);
+    await tester.tapAt(at(tester, 50, 50));
+    await tester.pump();
+
+    expect(document.stickers, hasLength(2));
+    expect((document.stickers[1].center - const Offset(150, 50)).distance, lessThan(1));
+    document.undo();
+    expect(document.stickers, isEmpty, reason: 'both come off together');
   });
 
   testWidgets('a cancelled stroke leaves nothing behind', (tester) async {

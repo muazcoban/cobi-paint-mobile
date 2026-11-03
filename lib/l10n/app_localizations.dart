@@ -290,6 +290,12 @@ abstract class AppLocalizations {
   /// **'Altı yönlü ayna'**
   String get mirror6;
 
+  /// The brush button while it stamps stickers; VoiceOver adds the next sticker's name
+  ///
+  /// In tr, this message translates to:
+  /// **'Çıkartma'**
+  String get sticker;
+
   /// No description provided for @licenses.
   ///
   /// In tr, this message translates to:

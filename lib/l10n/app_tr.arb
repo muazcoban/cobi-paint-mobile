@@ -62,6 +62,10 @@
   "mirror2": "İki yönlü ayna",
   "mirror4": "Dört yönlü ayna",
   "mirror6": "Altı yönlü ayna",
+  "sticker": "Çıkartma",
+  "@sticker": {
+    "description": "The brush button while it stamps stickers; VoiceOver adds the next sticker's name"
+  },
   "licenses": "Lisanslar",
   "freeDraw": "Çiz",
   "@freeDraw": {

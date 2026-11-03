@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
+import '../data/stickers.dart';
 import '../engine/document/coloring_document.dart';
 import '../engine/document/stroke.dart';
 import '../engine/document/page_progress.dart';
@@ -54,6 +55,12 @@ const bigPalette = <Color>[
 /// Brush diameters as a share of the page's shorter side.
 const _brushSteps = [0.025, 0.05, 0.09];
 
+/// Sticker widths as a share of the page's shorter side; Minik uses the
+/// middle one.
+const _stickerSteps = [0.12, 0.18, 0.26];
+
+final _stickerCodes = [for (final s in stickers) s.code];
+
 /// Control sizes from the toddler research: about 2 cm on a phone where it
 /// fits, larger on tablets; Büyük mode trades size for more controls.
 class _Metrics {
@@ -99,6 +106,9 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
 
   /// Mirror copies per stroke on the free drawing page (see [symmetryWays]).
   int _symmetry = 1;
+
+  /// The sticker the next stamp uses; the brush button shows it.
+  int _stickerIndex = 0;
 
   @override
   void initState() {
@@ -245,18 +255,34 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
   /// The crayon is a Büyük brush; Minik falls back to the marker.
   BrushKind _brushFor(bool big) => !big && _brush == BrushKind.crayon ? BrushKind.marker : _brush;
 
-  /// First tap picks the brush; the next taps cycle its kind. Minik has the
-  /// marker and the rainbow, Büyük adds the crayon. No menu, no extra button.
+  /// First tap picks the brush; the next taps cycle what it does: marker,
+  /// rainbow, crayon (Büyük only), then stickers. No menu, no extra button.
   void _tapBrush(bool big) {
-    if (_tool != CanvasTool.marker) {
+    if (_tool != CanvasTool.marker && _tool != CanvasTool.sticker) {
       _selectTool(CanvasTool.marker);
       return;
     }
-    final kinds = big
-        ? const [BrushKind.marker, BrushKind.rainbow, BrushKind.crayon]
-        : const [BrushKind.marker, BrushKind.rainbow];
+    // null stands for the sticker tool.
+    final modes = <BrushKind?>[BrushKind.marker, BrushKind.rainbow, if (big) BrushKind.crayon, null];
+    final current = _tool == CanvasTool.sticker ? null : _brushFor(big);
+    final next = modes[(modes.indexOf(current) + 1) % modes.length];
     unawaited(_sound.playClickSound());
-    setState(() => _brush = kinds[(kinds.indexOf(_brushFor(big)) + 1) % kinds.length]);
+    if (next == null) _say('sticker');
+    setState(() {
+      if (next == null) {
+        _tool = CanvasTool.sticker;
+      } else {
+        _tool = CanvasTool.marker;
+        _brush = next;
+      }
+    });
+  }
+
+  void _onStamped(int count) {
+    unawaited(_sound.playFillSound());
+    Haptics.light();
+    _hideHint();
+    setState(() => _stickerIndex = (_stickerIndex + count) % stickers.length);
   }
 
   /// The mirror on the free drawing page. Minik has one switch: four-way
@@ -284,9 +310,11 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
       _say('color_$index');
       setState(() {
         _color = colors[index];
-        // Picking a colour while erasing means "I want to paint again";
-        // the free drawing page has no fill, so the brush comes back there.
-        if (_tool == CanvasTool.eraser) _tool = widget.image.freeDraw ? CanvasTool.marker : CanvasTool.fill;
+        // Picking a colour while erasing or stamping means "I want to paint
+        // again"; the free drawing page has no fill, so the brush comes back.
+        if (_tool == CanvasTool.eraser || _tool == CanvasTool.sticker) {
+          _tool = widget.image.freeDraw ? CanvasTool.marker : CanvasTool.fill;
+        }
       });
     } else if (index == colors.length) {
       unawaited(_sound.playClickSound());
@@ -452,19 +480,30 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
           semanticLabel: l10n.fill,
           onTap: () => _selectTool(CanvasTool.fill),
         ),
-      KidButton(
-        icon: brush == BrushKind.crayon ? Icons.edit_rounded : Icons.brush_rounded,
-        size: m.primary * 0.96,
-        selected: _tool == CanvasTool.marker,
-        badgeColor: brush == BrushKind.rainbow ? null : _color,
-        badgeRainbow: brush == BrushKind.rainbow,
-        semanticLabel: switch (brush) {
-          BrushKind.rainbow => l10n.rainbowBrush,
-          BrushKind.crayon => l10n.crayon,
-          _ => l10n.marker,
-        },
-        onTap: () => _tapBrush(big),
-      ),
+      if (_tool == CanvasTool.sticker)
+        // The button shows the sticker the next tap on the page will stick.
+        KidButton(
+          size: m.primary * 0.96,
+          selected: true,
+          semanticLabel:
+              '${l10n.sticker}: ${stickers[_stickerIndex].localizedName(Localizations.localeOf(context).languageCode)}',
+          onTap: () => _tapBrush(big),
+          child: Image.asset(stickers[_stickerIndex].assetPath, filterQuality: FilterQuality.medium),
+        )
+      else
+        KidButton(
+          icon: brush == BrushKind.crayon ? Icons.edit_rounded : Icons.brush_rounded,
+          size: m.primary * 0.96,
+          selected: _tool == CanvasTool.marker,
+          badgeColor: brush == BrushKind.rainbow ? null : _color,
+          badgeRainbow: brush == BrushKind.rainbow,
+          semanticLabel: switch (brush) {
+            BrushKind.rainbow => l10n.rainbowBrush,
+            BrushKind.crayon => l10n.crayon,
+            _ => l10n.marker,
+          },
+          onTap: () => _tapBrush(big),
+        ),
       ListenableBuilder(
         listenable: listenable,
         builder: (context, _) => KidButton(
@@ -532,7 +571,11 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
                       eraseFills: !widget.image.freeDraw,
                       symmetry: widget.image.freeDraw ? _symmetry : 1,
                       allowZoom: big,
+                      stickers: _stickerCodes,
+                      stickerIndex: _stickerIndex,
+                      stickerSize: side * (big ? _stickerSteps[_brushStep] : _stickerSteps[1]),
                       onFilled: _onFilled,
+                      onStamped: _onStamped,
                     ),
                   ),
                   if (_hintAt != null) IdleHint(at: _hintAt!),
