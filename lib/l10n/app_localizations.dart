@@ -470,6 +470,42 @@ abstract class AppLocalizations {
   /// **'Boş sayfayı paylaş'**
   String get shareBlankPage;
 
+  /// Grown-up sheet in My Artworks, Android only: saves the picture to the device gallery
+  ///
+  /// In tr, this message translates to:
+  /// **'Galeriye kaydet'**
+  String get saveToGallery;
+
+  /// No description provided for @savedToGallery.
+  ///
+  /// In tr, this message translates to:
+  /// **'Galeriye kaydedildi'**
+  String get savedToGallery;
+
+  /// No description provided for @saveError.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kaydedilemedi'**
+  String get saveError;
+
+  /// Grown-up sheet in My Artworks, Android only: opens the system print dialog with the picture
+  ///
+  /// In tr, this message translates to:
+  /// **'Yazdır'**
+  String get printPicture;
+
+  /// Grown-up sheet in My Artworks, Android only: prints the uncoloured line art to colour on paper
+  ///
+  /// In tr, this message translates to:
+  /// **'Boş sayfayı yazdır'**
+  String get printBlankPage;
+
+  /// No description provided for @printError.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yazdırılamadı'**
+  String get printError;
+
   /// Privacy policy button
   ///
   /// In tr, this message translates to:
@@ -599,7 +635,7 @@ abstract class AppLocalizations {
   /// No description provided for @privacyPolicyText.
   ///
   /// In tr, this message translates to:
-  /// **'Cobi Paint hiçbir kişisel veri toplamaz.\n\n• Hesap, reklam, analiz aracı ve internet bağlantısı yoktur.\n• Çocuğunuzun boyadığı resimler yalnız bu cihazda saklanır ve hiçbir sunucuya gönderilmez.\n• Bir resim yalnız siz ebeveyn kontrolünü geçip paylaşmayı seçtiğinizde, sistemin paylaşım menüsüyle ve sizin seçtiğiniz uygulamaya gönderilir.\n• Kayıtlı bir resmi Eserlerim\'de basılı tutup ebeveyn kontrolünü geçerek silebilirsiniz. Uygulamayı silmek bütün resimleri siler.\n\nSorularınız için: cobipaint@gmail.com Tam Sürüm satın alımı Apple ya da Google hesabınızla yapılır; uygulama ödeme bilgisine erişmez ve hiçbir veri toplamaz.'**
+  /// **'Cobi Paint hiçbir kişisel veri toplamaz.\n\n• Hesap, reklam, analiz aracı ve internet bağlantısı yoktur.\n• Çocuğunuzun boyadığı resimler yalnız bu cihazda saklanır ve hiçbir sunucuya gönderilmez.\n• Bir resim yalnız siz ebeveyn kontrolünü geçip paylaşmayı seçtiğinizde, sistemin paylaşım menüsüyle ve sizin seçtiğiniz uygulamaya gönderilir.\n• Android\'de yazdırma ve galeriye kaydetme de ebeveyn kontrolünün arkasındadır: yazdırma sistemin yazdırma penceresinden geçer, kayıt yalnız bu cihazın galerisine yapılır.\n• Kayıtlı bir resmi Eserlerim\'de basılı tutup ebeveyn kontrolünü geçerek silebilirsiniz. Uygulamayı silmek bütün resimleri siler.\n\nSorularınız için: cobipaint@gmail.com Tam Sürüm satın alımı Apple ya da Google hesabınızla yapılır; uygulama ödeme bilgisine erişmez ve hiçbir veri toplamaz.'**
   String get privacyPolicyText;
 
   /// No description provided for @guidedAccessTitle.

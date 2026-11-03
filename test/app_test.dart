@@ -10,6 +10,7 @@ import 'package:cobi_paint_mobile/services/storage_service.dart';
 import 'package:cobi_paint_mobile/widgets/kid_button.dart';
 import 'package:cobi_paint_mobile/widgets/paint_canvas.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -207,5 +208,80 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.bySemanticsLabel(label), findsOneWidget, reason: 'after a tap the mirror is "$label"');
     }
+  });
+
+  testWidgets('behind the gate a grown-up on Android can save a picture to the gallery and print it', (tester) async {
+    final app = provider();
+    await openHome(tester, app);
+    await tester.tap(find.text('Draw'));
+    await settle(tester, () => find.byType(PaintCanvas).evaluate().isNotEmpty, reason: 'the blank page loaded');
+    await tester.pumpAndSettle();
+    await tester.timedDrag(find.byType(PaintCanvas), const Offset(90, 70), const Duration(milliseconds: 300));
+    await tester.pump(const Duration(milliseconds: 500));
+    await settle(tester, () => app.savedArtworks.isNotEmpty, reason: 'autosave wrote the picture');
+    await tester.tap(find.bySemanticsLabel('Home'));
+    await settle(tester, () => find.text('Animals').evaluate().isNotEmpty, reason: 'back on the home screen');
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('My Artworks'));
+    await tester.pumpAndSettle();
+    final saved = app.savedArtworks.single;
+
+    // A long press asks the multiplication; the answer is read off the screen.
+    Future<void> passGate() async {
+      await tester.longPress(find.bySemanticsLabel(saved.name));
+      await tester.pumpAndSettle();
+      final task = tester.widget<Text>(find.byKey(const ValueKey('gate-task'))).data!;
+      final parts = task.split(' × ');
+      final product = int.parse(parts[0]) * int.parse(parts[1].split(' ').first);
+      for (final d in product.toString().split('')) {
+        await tester.tap(find.byKey(ValueKey('gate-digit-$d')));
+        await tester.pump();
+      }
+      await tester.pumpAndSettle();
+    }
+
+    // The platform says what it can do; a real reply needs the engine, so
+    // the channel is mocked from the start: first a device that can do
+    // neither (the plain sheet, as on iOS), then an Android 10 phone.
+    const channel = MethodChannel('cobi.paint/export');
+    final calls = <MethodCall>[];
+    var canExport = false;
+    tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(channel, (call) async {
+      calls.add(call);
+      return switch (call.method) {
+        'capabilities' => {'gallery': canExport, 'print': canExport},
+        'saveToGallery' => 'content://media/external/images/media/7',
+        _ => null,
+      };
+    });
+    addTearDown(() => tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(channel, null));
+
+    await passGate();
+    expect(find.text('Share'), findsOneWidget);
+    expect(find.text('Print'), findsNothing);
+    expect(find.text('Save to gallery'), findsNothing);
+    await tester.tapAt(const Offset(20, 20)); // closes the sheet
+    await tester.pumpAndSettle();
+
+    canExport = true;
+    await passGate();
+    expect(find.text('Save to gallery'), findsOneWidget);
+    expect(find.text('Print'), findsOneWidget);
+    expect(find.text('Print blank page'), findsNothing, reason: 'a free drawing has no line art to print');
+    await tester.tap(find.text('Save to gallery'));
+    // The picture is read from disk, which only completes on the real loop.
+    await settle(tester, () => find.text('Saved to gallery').evaluate().isNotEmpty,
+        reason: 'the grown-up gets a confirmation');
+    final save = calls.singleWhere((c) => c.method == 'saveToGallery');
+    final saveArgs = save.arguments as Map;
+    expect(saveArgs['bytes'], isA<Uint8List>().having((b) => b.length, 'length', greaterThan(100)));
+    expect(saveArgs['name'], startsWith('cobi_paint_'));
+
+    await passGate();
+    await tester.tap(find.text('Print'));
+    await settle(tester, () => calls.any((c) => c.method == 'print'), reason: 'the print dialog was asked for');
+    final print = calls.singleWhere((c) => c.method == 'print');
+    expect((print.arguments as Map)['name'], saved.name);
+    expect((print.arguments as Map)['bytes'], isA<Uint8List>());
   });
 }

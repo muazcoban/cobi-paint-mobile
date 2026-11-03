@@ -199,6 +199,24 @@ class AppLocalizationsEn extends AppLocalizations {
   String get shareBlankPage => 'Share blank page';
 
   @override
+  String get saveToGallery => 'Save to gallery';
+
+  @override
+  String get savedToGallery => 'Saved to gallery';
+
+  @override
+  String get saveError => 'Could not save';
+
+  @override
+  String get printPicture => 'Print';
+
+  @override
+  String get printBlankPage => 'Print blank page';
+
+  @override
+  String get printError => 'Could not print';
+
+  @override
   String get privacyPolicy => 'Privacy Policy';
 
   @override
@@ -265,7 +283,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get privacyPolicyText =>
-      'Cobi Paint collects no personal data.\n\n• There are no accounts, ads, analytics or internet connections.\n• The pictures your child colours are stored only on this device and are never sent to a server.\n• A picture leaves the device only when you pass the grown-up check and choose to share it through the system share sheet, to an app you pick.\n• You can delete a saved picture by pressing and holding it in My Artworks and passing the grown-up check. Deleting the app deletes all pictures.\n\nQuestions: cobipaint@gmail.com The Full Version purchase goes through your Apple or Google account; the app never sees payment details and collects no data.';
+      'Cobi Paint collects no personal data.\n\n• There are no accounts, ads, analytics or internet connections.\n• The pictures your child colours are stored only on this device and are never sent to a server.\n• A picture leaves the device only when you pass the grown-up check and choose to share it through the system share sheet, to an app you pick.\n• On Android, printing and saving to the gallery are behind the grown-up check too: printing goes through the system print dialog, saving stays in this device\'s gallery.\n• You can delete a saved picture by pressing and holding it in My Artworks and passing the grown-up check. Deleting the app deletes all pictures.\n\nQuestions: cobipaint@gmail.com The Full Version purchase goes through your Apple or Google account; the app never sees payment details and collects no data.';
 
   @override
   String get guidedAccessTitle => 'Keep your child in the app';

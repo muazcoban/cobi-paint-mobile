@@ -22,7 +22,7 @@ Apple's Human Interface Guidelines (read the current pages; HIG changes every WW
 | Ç6 | Nothing is lost | Autosave 400 ms after a change, on leaving and on going to the background; no Save button |
 | Ç7 | Undo always visible; no clear-all button | If a clear-all is ever added, it goes behind the parental gate |
 | Ç8 | Instant feedback | Fill on finger down, reveal 220 ms, sound and light haptic |
-| Ç9 | No way out of the app for the child | Sharing, settings, deleting, links and purchases only behind `showParentalGate`; Android immersive; home ignores system back |
+| Ç9 | No way out of the app for the child | Sharing, saving to the gallery, printing, settings, deleting, links and purchases only behind `showParentalGate`; Android immersive; home ignores system back |
 | Ç10 | No error text for the child | Sad face and the home button; text only in grown-up areas |
 
 ## HIG and App Review points that keep coming up
@@ -48,6 +48,12 @@ Apple's Human Interface Guidelines (read the current pages; HIG changes every WW
   (`free: true`); a page that was free stays free. All of it is off unless the app is built with
   `--dart-define=COBI_IAP=true`.
 - iPad: pass `sharePositionOrigin` to every share, or the popover crashes.
+- Exports (3 Nov 2026): Android's share sheet has no Print or Save, so behind the gate My Artworks
+  offers Save to gallery, Print and Print blank page through `ExportService`
+  (`lib/services/export_service.dart`, channel `cobi.paint/export` in `MainActivity.kt`: MediaStore
+  from Android 10 without any permission, `PrintHelper` for the system print dialog). iOS keeps the
+  share sheet, which has both. The capabilities come from the platform, so iOS and the tests see the
+  plain sheet; the privacy text (ARB and `docs/privacy_policy.html`) names both actions.
 - Mirror drawing (council decision, 3 Nov 2026): only on the free drawing page, where it takes the
   fill button's place (a fifth 82 pt button does not fit a 375 pt phone, and a bucket on a blank
   page only recolours the paper). Minik has one switch: four-way on or off. Büyük cycles off, 2,
