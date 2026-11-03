@@ -248,7 +248,7 @@ ul.tight li, ol.tight li { margin: 3px 0; }
 <tr><td>Çıkartma, ek fırçalar, ayna, sezon</td><td>Kurulun şartlı onayları</td><td>Ayna (bölüm 12), çıkartma (13) ve fırçalar (14) yapıldı; sezon kategorisi atlandı (bölüm 11)</td></tr>
 <tr><td>Entegrasyon testi</td><td>Uygulamanın tamamını açan test yok</td><td><code>integration_test</code>: ana ekran → sayfa → dolgu → eve dönüş</td></tr>
 <tr><td>Tasarım sistemi</td><td>Yazı tipi, ikon seti, maskot pozları</td><td><code>design:design-system</code> skill'iyle</td></tr>
-<tr><td>iPad ayrıntıları</td><td>HIG 8 ve 12</td><td>Cmd-Z, 3 parmak menüsü, Windowed mod denemesi</td></tr>
+<tr><td>iPad ayrıntıları</td><td>HIG 8 ve 12</td><td>Cmd-Z ve üç parmak geri al yapıldı (bölüm 16); Windowed mod denemesi Xcode 26 ister</td></tr>
 </tbody></table></div>
 
 <h2 id="ortam">10. Ortam notları</h2>
@@ -271,7 +271,7 @@ ul.tight li, ol.tight li { margin: 3px 0; }
 <tr><td>PR #2 (<code>faz2/firca-ve-testler</code> → master)</td><td>Açık: <a href="https://github.com/muazcoban/cobi-paint-mobile/pull/2">github.com/muazcoban/cobi-paint-mobile/pull/2</a>. CI (analyze + test) PR'da koşuyor.</td></tr>
 <tr><td>Mevsim kategorisi</td><td>Atlandı: aday konuların neredeyse hepsi zaten başka kategorilerde; ayrı kategori kopya olurdu. İllüstratör sayfalarıyla birlikte yeniden bakılır.</td></tr>
 </tbody></table></div>
-<p>Sıradaki adaylar (kurul onaylı, yapılmadı): yaş sinyali API'leri (kilitle birlikte, Xcode 26 ister), sezon temaları (illüstratör sayfalarıyla); açık iş olarak iPad ayrıntıları. Ayna çizimi bölüm 12'de, çıkartmalar bölüm 13'te, fırçalar bölüm 14'te, Android'de galeri ve yazdırma bölüm 15'te. Senin adımların bölüm 8'de aynen geçerli.</p>
+<p>Sıradaki adaylar (kurul onaylı, yapılmadı): yaş sinyali API'leri (kilitle birlikte, Xcode 26 ister), sezon temaları (illüstratör sayfalarıyla); açık iş olarak iPadOS 26 pencereli kip (Xcode 26). Ayna çizimi bölüm 12'de, çıkartmalar bölüm 13'te, fırçalar bölüm 14'te, Android'de galeri ve yazdırma bölüm 15'te, iPad'de sistem geri al bölüm 16'da. Senin adımların bölüm 8'de aynen geçerli.</p>
 
 <h2 id="ayna">12. Faz 3: ayna çizimi</h2>
 <p>Branch <code>faz3/ayna-cizimi</code> (PR #2'nin üstüne kurulu). Serbest çizim sayfasında ayna: bir parmak çizgisi sayfanın ortasındaki ayna çizgilerine göre kopyalanır. Minik'te tek düğme, dört yönlü açık ya da kapalı; Büyük'te aynı düğme kapalı → iki → dört → altı diye döner. Menü ya da yeni satır yok.</p>
@@ -370,6 +370,24 @@ ul.tight li, ol.tight li { margin: 3px 0; }
 <tr><td>Material: alt sayfa satırları simge + fiil, geri bildirim</td><td>Uyumlu: kaydet ve yazdır simgeleri, "Galeriye kaydedildi", "Kaydedilemedi", "Yazdırılamadı" mesajları.</td></tr>
 <tr><td>HIG (iOS)</td><td>Değişiklik yok: paylaşım menüsü Kaydet ve Yazdır'ı sunmaya devam ediyor.</td></tr>
 <tr><td>Erişilebilirlik</td><td>Uyumlu: her satırın metni ekran okuyucuda okunuyor (semantik dökümünde görüldü).</td></tr>
+</tbody></table></div>
+<h2 id="ipad-geri-al">16. Faz 7: iPad'de sistem geri al ve klavye kısayolları</h2>
+<p>Branch <code>faz7/ipad-geri-al</code>. UX raporunun 8. maddesi açıktı: iPad'de Cmd-Z, üç parmak geri al jestleri ve balonu. Çözüm yaşa göre ikiye ayrıldı. <strong>Büyük</strong>: boyama ekranı sistemin geri al yöneticisine bağlanıyor (<code>UndoManagerClient</code>; her belge değişikliğinde <code>UndoManager.setUndoState</code>). iPadOS'un üç parmak kaydırma ve dokunma jestleri, Geri Al / İleri Al balonu ve sistemden gelen çağrılar resmin kendi adımlarını geri alıp getiriyor. Donanım klavyesi: Apple platformlarında Cmd-Z ve Shift-Cmd-Z, diğerlerinde Ctrl-Z, Ctrl-Shift-Z ve Ctrl-Y; Flutter'ın metin alanları iOS'ta Cmd-Z'yi aynı yolla bağlıyor, sistemle çift geri alma olmuyor. <strong>Minik</strong>: sisteme hiçbir şey bildirilmiyor ve klavye bağlı değil; üç parmaklı bir avuç ya da rastgele tuşlar hiçbir şeyi silmiyor (Ç5, Ç6). Sallayınca geri al herkes için kapalı kalıyor (AppDelegate; çocuk cihazı sallar).</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Madde</th><th>Nasıl karşılandı</th></tr></thead>
+<tbody>
+<tr><td>UX raporu 8: sistem undo (sallama, üç parmak), iPad Cmd-Z</td><td>Büyük'te bağlı, Minik'te kapalı; sallama herkes için kapalı (gerekçeli sapma sürüyor). UX raporunun satırı "Yapıldı" oldu.</td></tr>
+<tr><td>HIG Undo and redo: standart jestleri yeniden tanımlama, sistemin yollarını kullan, sonucu göster</td><td>Sistemin yöneticisi kullanılıyor; sonuç tuvalde anında; geri al düğmesi zaten araç çubuğunda standart simgeyle duruyor.</td></tr>
+<tr><td>UX raporu 12: iPadOS 26 pencereli kip</td><td>Yapılamadı: Xcode 26 ve iPadOS 26 simülatörü bu Mac'te yok. Açık kalıyor; ev düğmesinin pencere denetimlerinin altında kalma riski not edildi.</td></tr>
+</tbody></table></div>
+<p>Testler: 137. Uygulama testi: Minik'te sisteme bildirim yok, istemci boş, Ctrl-Z etkisiz; Büyük'e geçince "geri alınabilir" bildirimi; platformdan gelen geri al ve ileri al çağrıları çizgiyi kaldırıp geri getiriyor; Ctrl-Z ve Ctrl-Shift-Z; Minik'e dönünce sıfırlama. iPad Pro 13" simülatöründe (iOS 18.5) uygulama kuruldu, Minik'te çizim yapıldı; Cmd-Z simülatöre gönderilemedi (araç, Mac'in Türkçe klavye düzeninde Cmd kısayollarını yollamıyor) ve üç parmak jesti simülatörde üretilemiyor. Gerçek iPad'de klavyeyle Cmd-Z ve üç parmakla kaydırma denenmeli.</p>
+<div class="table-wrap"><table>
+<thead><tr><th>HIG / App Review maddesi</th><th>Sonuç</th></tr></thead>
+<tbody>
+<tr><td>Undo and redo: standart jestler ve kısayollar</td><td>Uyumlu (Büyük): sistem yöneticisi. Gerekçeli sapma: sallama kapalı ve Minik'te jestler kapalı; 3 yaşındaki çocuğun avucu ve sallaması resmi silmemeli.</td></tr>
+<tr><td>Klavye kısayolları keşfedilebilir ve standart</td><td>Uyumlu: Cmd-Z / Shift-Cmd-Z, özel tuş yok.</td></tr>
+<tr><td>Kids Category 1.3 / 5.1.4</td><td>Uyumlu: çocuğun ekranında değişiklik yok.</td></tr>
+<tr><td>Erişilebilirlik</td><td>Uyumlu: geri al düğmesi ve etiketi aynı; sistem balonu VoiceOver'la okunur.</td></tr>
 </tbody></table></div>
 </div>
 
