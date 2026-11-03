@@ -2,10 +2,10 @@ name: cobi_paint_mobile
 description: "Cobi Paint - Çocuklar için eğlenceli boyama uygulaması"
 publish_to: 'none'
 
-version: 1.1.0+3
+version: 2.0.0+4
 
 environment:
-  sdk: ^3.0.0
+  sdk: ^3.10.0
 
 dependencies:
   flutter:
@@ -14,26 +14,15 @@ dependencies:
     sdk: flutter
   intl: any
 
-  cupertino_icons: ^1.0.8
   provider: ^6.1.5+1
   shared_preferences: ^2.5.4
   path_provider: ^2.1.5
-  image_picker: ^1.2.1
   share_plus: ^12.0.1
-  firebase_core: ^4.3.0
-  firebase_storage: ^13.0.5
-  cloud_firestore: ^6.1.1
-  firebase_auth: ^6.1.3
-  in_app_purchase: ^3.2.3
   image: ^4.7.2
-  flutter_colorpicker: ^1.1.0
-  permission_handler: ^12.0.1
-  photo_manager: ^3.8.3
   uuid: ^4.5.2
-  cached_network_image: ^3.4.1
   audioplayers: ^6.1.0
-  opencv_dart: ^2.1.0
-  google_mobile_ads: ^5.3.0
+  in_app_purchase: ^3.3.1
+  in_app_purchase_platform_interface: ^1.4.1
 
 dev_dependencies:
   flutter_test:
@@ -64,4 +53,12 @@ flutter:
     - assets/images/categories/characters/
     - assets/images/categories/nature/
     - assets/images/categories/food/
+    - assets/pages/animals/
+    - assets/pages/plants/
+    - assets/pages/food/
+    - assets/pages/vehicles/
+    - assets/pages/nature/
+    - assets/pages/things/
+    - assets/pages/free/
+    - assets/licenses/
     - assets/sounds/

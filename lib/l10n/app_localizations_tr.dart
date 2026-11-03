@@ -9,9 +9,6 @@ class AppLocalizationsTr extends AppLocalizations {
   AppLocalizationsTr([String locale = 'tr']) : super(locale);
 
   @override
-  String get appName => 'Cobi Paint';
-
-  @override
   String get home => 'Ana Sayfa';
 
   @override
@@ -36,185 +33,155 @@ class AppLocalizationsTr extends AppLocalizations {
   String get characters => 'Karakterler';
 
   @override
-  String get nature => 'Doga';
+  String get nature => 'Doğa';
+
+  @override
+  String get things => 'Eşyalar';
+
+  @override
+  String get pageLevel => 'Sayfa zorluğu';
+
+  @override
+  String get pageLevelDesc =>
+      'Çocuk birkaç sayfa boyadıkça daha zor sayfalar öne gelir. Hiçbir sayfa kilitli değildir.';
+
+  @override
+  String get levelAuto => 'Otomatik';
+
+  @override
+  String get level1 => 'Büyük alanlar';
+
+  @override
+  String get level2 => 'Daha çok alan';
+
+  @override
+  String get level3 => 'İnce ayrıntı';
+
+  @override
+  String get fullVersion => 'Tam Sürüm';
+
+  @override
+  String get fullVersionShort => 'Bütün sayfaları aç';
+
+  @override
+  String get fullVersionDesc =>
+      'Ücretsiz sürümde her kategoriden 8 sayfa var. Tam Sürüm, 201 sayfanın hepsini bir kez ödemeyle sonsuza kadar açar. Abonelik yoktur. Çocuğunuzun boyadığı resimler her durumda Resimlerim\'de kalır.';
+
+  @override
+  String get buy => 'Satın al';
+
+  @override
+  String get restorePurchases => 'Satın alımları geri yükle';
+
+  @override
+  String get familySharingNote =>
+      'Aile Paylaşımı ile en fazla 5 aile üyesiyle paylaşılır.';
+
+  @override
+  String get storeUnavailable => 'Mağazaya şu an ulaşılamıyor.';
+
+  @override
+  String get tryAgain => 'Tekrar dene';
+
+  @override
+  String get fullVersionOwned => 'Tam Sürüm açık. Teşekkürler!';
+
+  @override
+  String get purchasePending =>
+      'Satın alma onay bekliyor. Onay gelince sayfalar açılır.';
+
+  @override
+  String get rainbowBrush => 'Gökkuşağı fırçası';
+
+  @override
+  String get crayon => 'Pastel boya';
+
+  @override
+  String get licenses => 'Lisanslar';
+
+  @override
+  String get freeDraw => 'Çiz';
 
   @override
   String get food => 'Yiyecekler';
 
   @override
-  String get importImage => 'Resim Yukle';
-
-  @override
-  String get goPro => 'Pro\'ya Gec';
-
-  @override
   String get save => 'Kaydet';
 
   @override
-  String get saving => 'Kaydediliyor...';
-
-  @override
-  String get share => 'Paylas';
+  String get share => 'Paylaş';
 
   @override
   String get undo => 'Geri Al';
 
   @override
-  String get redo => 'Ileri Al';
+  String get redo => 'İleri Al';
 
   @override
   String get clear => 'Temizle';
 
   @override
-  String get fullscreen => 'Tam Ekran';
-
-  @override
-  String get exitFullscreen => 'Tam Ekrandan Cik';
-
-  @override
   String get fill => 'Doldur';
-
-  @override
-  String get pencil => 'Kalem';
 
   @override
   String get eraser => 'Silgi';
 
   @override
-  String get selected => 'Secili';
+  String get selected => 'Seçili';
 
   @override
-  String get selectColor => 'Renk Sec';
+  String get cancel => 'İptal';
 
   @override
-  String get cancel => 'Iptal';
+  String get select => 'Seç';
 
   @override
-  String get select => 'Sec';
-
-  @override
-  String get paintTexture => 'Boya Dokusu';
-
-  @override
-  String get paintTextureDescription => 'Boyanan alanlarin gorunumunu secin';
-
-  @override
-  String get textureNone => 'Normal';
-
-  @override
-  String get textureNoneDesc => 'Duz ve puruzsuz boyama';
-
-  @override
-  String get textureCanvas => 'Tuval';
-
-  @override
-  String get textureCanvasDesc => 'Gercek tuval dokusu efekti';
-
-  @override
-  String get texturePaper => 'Kagit';
-
-  @override
-  String get texturePaperDesc => 'Kagit uzerine boya kalemi hissi';
-
-  @override
-  String get textureWatercolor => 'Sulu Boya';
-
-  @override
-  String get textureWatercolorDesc => 'Sulu boya efekti';
-
-  @override
-  String get hide => 'Gizle';
-
-  @override
-  String get clearConfirmTitle => 'Temizle';
-
-  @override
-  String get clearConfirmMessage =>
-      'Tum boyamayi temizlemek istediginize emin misiniz?';
-
-  @override
-  String get imageSaved => 'Resim kaydedildi!';
-
-  @override
-  String get imageLoadError => 'Resim yuklenemedi';
-
-  @override
-  String get saveError => 'Kaydetme hatasi';
-
-  @override
-  String get shareError => 'Paylasma hatasi';
-
-  @override
-  String get whatsapp => 'WhatsApp';
-
-  @override
-  String get instagram => 'Instagram';
-
-  @override
-  String get resetView => 'Gorunumu Sifirla';
+  String get shareError => 'Paylaşma hatası';
 
   @override
   String get language => 'Dil';
 
   @override
-  String get turkish => 'Turkce';
+  String get turkish => 'Türkçe';
 
   @override
-  String get english => 'Ingilizce';
-
-  @override
-  String get selectLanguage => 'Dil Sec';
+  String get english => 'İngilizce';
 
   @override
   String get soundEffects => 'Ses Efektleri';
 
   @override
-  String get notifications => 'Bildirimler';
+  String get themeCoral => 'Mercan';
 
   @override
-  String get rateApp => 'Uygulamayi Degerlendir';
+  String get themeOcean => 'Okyanus';
 
   @override
-  String get privacyPolicy => 'Gizlilik Politikasi';
+  String get themeForest => 'Orman';
 
   @override
-  String get termsOfService => 'Kullanim Kosullari';
+  String get themeSunset => 'Gün Batımı';
 
   @override
-  String get about => 'Hakkinda';
+  String get shareText => 'Cobi Paint ile boyadım! 🎨';
 
   @override
-  String get version => 'Surum';
+  String get haptics => 'Titreşim';
 
   @override
-  String get pro => 'Pro';
+  String get voiceNames => 'Sesli adlar';
 
   @override
-  String get proFeatures => 'Pro Ozellikleri';
+  String get shareBlankPage => 'Boş sayfayı paylaş';
 
   @override
-  String get unlimitedImages => 'Sinirsiz Resim';
+  String get privacyPolicy => 'Gizlilik Politikası';
 
   @override
-  String get noAds => 'Reklamsiz';
+  String get about => 'Hakkında';
 
   @override
-  String get allCategories => 'Tum Kategoriler';
-
-  @override
-  String get buyPro => 'Pro Satin Al';
-
-  @override
-  String get restorePurchases => 'Satin Alimlari Geri Yukle';
-
-  @override
-  String get proActive => 'Pro Aktif';
-
-  @override
-  String get startColoring => 'Boyamaya Basla';
-
-  @override
-  String get continueColoring => 'Boyamaya Devam Et';
+  String get startColoring => 'Boyamaya Başla';
 
   @override
   String get delete => 'Sil';
@@ -224,80 +191,71 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get deleteConfirmMessage =>
-      'Bu eseri silmek istediginize emin misiniz?';
+      'Bu eseri silmek istediğinize emin misiniz?';
 
   @override
-  String get noArtworks => 'Henuz eseriniz yok';
+  String get contactUs => 'Bize Ulaşın';
 
   @override
-  String get noArtworksHint => 'Bir resim boyayarak baslayabilirsiniz';
+  String get marker => 'Keçeli kalem';
 
   @override
-  String get recentArtworks => 'Son Eserler';
+  String get brushSize => 'Fırça boyutu';
 
   @override
-  String get seeAll => 'Tumunu Gor';
+  String get importedPages => 'Fotoğraflarım';
 
   @override
-  String get welcome => 'Hosgeldin!';
+  String get gateTitle => 'Ebeveyn kontrolü';
 
   @override
-  String get welcomeMessage => 'Boyamaya baslamak icin bir kategori sec';
+  String get gateInstruction => 'Devam etmek için sonucu yaz:';
 
   @override
-  String get importFromGallery => 'Galeriden Yukle';
+  String get parentsArea => 'Ebeveyn alanı';
 
   @override
-  String get importFromCamera => 'Kameradan Cek';
+  String get parentsHint =>
+      'Ayarlar, paylaşım ve silme yalnız buradan yapılır.';
 
   @override
-  String get processing => 'Isleniyor...';
+  String get ageMode => 'Mod';
 
   @override
-  String get importSuccess => 'Resim basariyla yuklendi';
+  String get ageModeLittle => 'Minik (3–5 yaş)';
 
   @override
-  String get importError => 'Resim yuklenemedi';
+  String get ageModeLittleDesc =>
+      'Kocaman düğmeler, 9 renk, yakınlaştırma yok. Kalem çizginin dışına taşmaz.';
 
   @override
-  String get permissionDenied => 'Izin reddedildi';
+  String get ageModeBig => 'Büyük (6+ yaş)';
 
   @override
-  String get cameraPermission => 'Kamera izni gerekli';
+  String get ageModeBigDesc =>
+      '16 renk, iki parmakla yakınlaştırma, fırça boyutları, ileri al.';
 
   @override
-  String get galleryPermission => 'Galeri izni gerekli';
+  String get soundVolume => 'Ses seviyesi';
 
   @override
-  String get ok => 'Tamam';
+  String get theme => 'Tema';
 
   @override
-  String get yes => 'Evet';
+  String get privacyPolicyText =>
+      'Cobi Paint hiçbir kişisel veri toplamaz.\n\n• Hesap, reklam, analiz aracı ve internet bağlantısı yoktur.\n• Çocuğunuzun boyadığı resimler yalnız bu cihazda saklanır ve hiçbir sunucuya gönderilmez.\n• Bir resim yalnız siz ebeveyn kontrolünü geçip paylaşmayı seçtiğinizde, sistemin paylaşım menüsüyle ve sizin seçtiğiniz uygulamaya gönderilir.\n• Kayıtlı bir resmi Eserlerim\'de basılı tutup ebeveyn kontrolünü geçerek silebilirsiniz. Uygulamayı silmek bütün resimleri siler.\n\nSorularınız için: cobipaint@gmail.com Tam Sürüm satın alımı Apple ya da Google hesabınızla yapılır; uygulama ödeme bilgisine erişmez ve hiçbir veri toplamaz.';
 
   @override
-  String get no => 'Hayir';
+  String get guidedAccessTitle => 'Çocuk uygulamada kalsın';
 
   @override
-  String get loading => 'Yukleniyor...';
+  String get guidedAccessText =>
+      'iPhone ve iPad\'de Rehberli Erişim\'i kullanabilirsiniz: Ayarlar > Erişilebilirlik > Rehberli Erişim\'i açın, sonra uygulama açıkken yan düğmeye üç kez basın. Android\'de Ayarlar > Güvenlik > Uygulama sabitleme\'yi kullanın.';
 
   @override
-  String get error => 'Hata';
+  String get colorNames =>
+      'kırmızı,turuncu,sarı,yeşil,mavi,mor,pembe,kahverengi,siyah,açık mavi,açık yeşil,şeftali,açık sarı,lacivert,koyu yeşil,gri';
 
   @override
-  String get retry => 'Tekrar Dene';
-
-  @override
-  String get general => 'Genel';
-
-  @override
-  String get appearance => 'Gorunum';
-
-  @override
-  String get support => 'Destek';
-
-  @override
-  String get contactUs => 'Bize Ulasin';
-
-  @override
-  String get faq => 'Sikca Sorulan Sorular';
+  String get canvasLabel => 'Boyama sayfası';
 }

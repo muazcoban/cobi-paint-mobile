@@ -1,303 +1,147 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
+import '../l10n/app_localizations.dart';
 import '../providers/app_provider.dart';
 import '../models/category.dart';
 import '../models/coloring_image.dart';
-import '../services/ad_service.dart';
+import '../data/page_order.dart';
+import '../models/saved_artwork.dart';
+import '../services/sound_service.dart';
 import '../theme/app_theme.dart';
+import '../widgets/kid_button.dart';
 import 'coloring_screen.dart';
+import 'home_screen.dart' show categoryName, gridColumns;
+import 'my_artworks_screen.dart' show openArtwork;
 
-class CategoryScreen extends StatefulWidget {
+/// Pages of one category. A page the child already coloured shows their
+/// colours and opens where they left off.
+class CategoryScreen extends StatelessWidget {
   final Category category;
 
   const CategoryScreen({super.key, required this.category});
 
   @override
-  State<CategoryScreen> createState() => _CategoryScreenState();
-}
-
-class _CategoryScreenState extends State<CategoryScreen> {
-  final AdService _adService = AdService();
-  bool _isBannerLoaded = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadBannerAd();
-  }
-
-  @override
-  void dispose() {
-    _adService.disposeBannerAd();
-    super.dispose();
-  }
-
-  void _loadBannerAd() {
-    final provider = context.read<AppProvider>();
-    // Pro kullanicilara reklam gosterme
-    if (provider.settings.isPro) return;
-
-    _adService.loadBannerAd(
-      onAdLoaded: () {
-        if (mounted) {
-          setState(() => _isBannerLoaded = true);
-        }
-      },
-      onAdFailed: () {
-        if (mounted) {
-          setState(() => _isBannerLoaded = false);
-        }
-      },
-    );
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.category.name),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios),
-          onPressed: () => Navigator.pop(context),
-        ),
-      ),
-      body: Consumer<AppProvider>(
-        builder: (context, provider, _) {
-          final images = provider.getImagesForCategory(widget.category.id);
-
-          if (images.isEmpty) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+      backgroundColor: const Color(0xFFFFF4E6),
+      body: SafeArea(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(12, 8, 12, 4),
+              child: Row(
                 children: [
-                  Text(
-                    widget.category.icon,
-                    style: const TextStyle(fontSize: 80),
+                  KidButton(
+                    icon: Icons.home_rounded,
+                    color: const Color(0xFFFFD54F),
+                    semanticLabel: l10n.home,
+                    onTap: () => Navigator.of(context).maybePop(),
                   ),
-                  const SizedBox(height: 20),
-                  const Text(
-                    'Bu kategoride henüz resim yok',
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: AppTheme.textSecondary,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  const Text(
-                    'Yakında yeni resimler eklenecek!',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: AppTheme.textSecondary,
+                  const SizedBox(width: 16),
+                  Text(category.icon, style: const TextStyle(fontSize: 44)),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      categoryName(l10n, category),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w800, color: AppTheme.textPrimary),
                     ),
                   ),
                 ],
               ),
-            );
-          }
-
-          return Column(
-            children: [
-              // Banner reklam alani
-              if (_isBannerLoaded && _adService.bannerAd != null && !provider.settings.isPro)
-                Container(
-                  alignment: Alignment.center,
-                  width: _adService.bannerAd!.size.width.toDouble(),
-                  height: _adService.bannerAd!.size.height.toDouble(),
-                  child: AdWidget(ad: _adService.bannerAd!),
-                ),
-              // Resim gridi
-              Expanded(
-                child: GridView.builder(
-                  padding: const EdgeInsets.all(16),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 16,
-                    mainAxisSpacing: 16,
-                    childAspectRatio: 1.0,
-                  ),
-                  itemCount: images.length,
-                  itemBuilder: (context, index) {
-                    return _ImageCard(image: images[index]);
-                  },
-                ),
+            ),
+            Expanded(
+              child: Consumer<AppProvider>(
+                builder: (context, provider, _) {
+                  final level = currentLevel(provider.settings, provider.savedArtworks, provider.pagesById);
+                  final images = orderPages(provider.getImagesForCategory(category.id), level);
+                  if (images.isEmpty) {
+                    return Center(child: Text(category.icon, style: const TextStyle(fontSize: 96)));
+                  }
+                  // Latest artwork per page: lists are newest first.
+                  final latest = <String, SavedArtwork>{};
+                  for (final a in provider.savedArtworks) {
+                    latest.putIfAbsent(a.originalImageId, () => a);
+                  }
+                  return LayoutBuilder(
+                    builder: (context, constraints) => GridView.builder(
+                      padding: const EdgeInsets.all(16),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: gridColumns(constraints.maxWidth),
+                        crossAxisSpacing: 16,
+                        mainAxisSpacing: 16,
+                      ),
+                      itemCount: images.length,
+                      itemBuilder: (context, index) =>
+                          _PageCard(image: images[index], artwork: latest[images[index].id], highlighted: images[index].level == level),
+                    ),
+                  );
+                },
               ),
-            ],
-          );
-        },
+            ),
+          ],
+        ),
       ),
     );
   }
 }
 
-class _ImageCard extends StatelessWidget {
+class _PageCard extends StatelessWidget {
   final ColoringImage image;
+  final SavedArtwork? artwork;
 
-  const _ImageCard({required this.image});
+  /// Pages of the child's current level get a quiet coloured rim.
+  final bool highlighted;
+
+  const _PageCard({required this.image, this.artwork, this.highlighted = false});
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return PressableCard(
+      semanticLabel: image.name,
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ColoringScreen(image: image),
-          ),
-        );
+        SoundService().playClickSound();
+        final existing = artwork;
+        if (existing != null) {
+          openArtwork(context, existing);
+        } else {
+          Navigator.push(context, MaterialPageRoute(builder: (_) => ColoringScreen(image: image)));
+        }
       },
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(20),
+          border: highlighted ? Border.all(color: const Color(0xFFFFD54F), width: 4) : null,
           boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.08),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
-            ),
+            BoxShadow(color: Colors.black.withValues(alpha: 0.08), blurRadius: 10, offset: const Offset(0, 4)),
           ],
         ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(16),
-          child: Stack(
-            fit: StackFit.expand,
-            children: [
-              // Image
-              _buildImage(),
-              // Overlay gradient
-              Positioned(
-                bottom: 0,
-                left: 0,
-                right: 0,
-                child: Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        Colors.transparent,
-                        Colors.black.withOpacity(0.6),
-                      ],
-                    ),
-                  ),
-                  child: Text(
-                    image.name,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 14,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ),
-              // Firebase badge
-              if (image.isFromFirebase)
-                Positioned(
-                  top: 8,
-                  right: 8,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 4,
-                    ),
-                    decoration: BoxDecoration(
-                      color: AppTheme.primaryColor,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: const Text(
-                      'YENİ',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 10,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-            ],
-          ),
-        ),
+        clipBehavior: Clip.antiAlias,
+        padding: const EdgeInsets.all(8),
+        child: _buildImage(context),
       ),
     );
   }
 
-  Widget _buildImage() {
-    if (image.isFromFirebase) {
-      return CachedNetworkImage(
-        imageUrl: image.imagePath,
-        fit: BoxFit.cover,
-        placeholder: (context, url) => Container(
-          color: AppTheme.backgroundColor,
-          child: const Center(
-            child: CircularProgressIndicator(),
-          ),
-        ),
-        errorWidget: (context, url, error) => Container(
-          color: AppTheme.backgroundColor,
-          child: const Center(
-            child: Icon(Icons.error_outline, size: 40),
-          ),
-        ),
+  Widget _buildImage(BuildContext context) {
+    final placeholder = Center(child: Icon(Icons.image_rounded, size: 56, color: Colors.grey.shade400));
+    final existing = artwork;
+    if (existing != null) {
+      final storage = context.read<AppProvider>().storageService;
+      final file = storage.resolveArtworkFile(
+        existing.thumbnailPath.isNotEmpty ? existing.thumbnailPath : existing.savedImagePath,
       );
-    } else if (image.isImported) {
-      return Image.asset(
-        image.imagePath,
-        fit: BoxFit.cover,
-        errorBuilder: (context, error, stackTrace) {
-          return Container(
-            color: AppTheme.backgroundColor,
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(Icons.image_outlined, size: 40, color: AppTheme.textSecondary),
-                  const SizedBox(height: 8),
-                  Text(
-                    image.name,
-                    style: const TextStyle(
-                      color: AppTheme.textSecondary,
-                      fontSize: 12,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
-      );
-    } else {
-      // Asset image
-      return Image.asset(
-        image.imagePath,
-        fit: BoxFit.cover,
-        errorBuilder: (context, error, stackTrace) {
-          return Container(
-            color: AppTheme.backgroundColor,
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(Icons.image_outlined, size: 40, color: AppTheme.textSecondary),
-                  const SizedBox(height: 8),
-                  Text(
-                    image.name,
-                    style: const TextStyle(
-                      color: AppTheme.textSecondary,
-                      fontSize: 12,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
-      );
+      return Image.file(file, fit: BoxFit.contain, errorBuilder: (context, error, stack) => _page(placeholder));
     }
+    return _page(placeholder);
   }
+
+  // Imported pages are files in the app's documents folder, built-in pages are assets.
+  Widget _page(Widget placeholder) => image.isImported
+      ? Image.file(File(image.imagePath), fit: BoxFit.contain, errorBuilder: (context, error, stack) => placeholder)
+      : Image.asset(image.imagePath, fit: BoxFit.contain, errorBuilder: (context, error, stack) => placeholder);
 }

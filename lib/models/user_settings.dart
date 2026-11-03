@@ -1,122 +1,83 @@
-class UserSettings {
-  final bool isPro;
-  final int dailyImportCount;
-  final DateTime lastImportDate;
-  final String selectedTheme; // 'coral', 'ocean', 'forest', 'sunset'
-  final String language;
-  final bool soundEnabled;
-  final double soundVolume;
-  final int coloringCompletedCount; // Reklam gosterimi icin boyama sayaci
+/// Little: huge buttons, 9 colours, no zoom (the default, for a 3-year-old).
+/// Big: 16 colours, pinch zoom, brush sizes, redo.
+enum AgeMode { little, big }
 
-  static const int maxFreeImportsPerDay = 3;
-  static const int coloringsBeforeAd = 2; // Kac boyamada bir reklam gosterilecek
+class UserSettings {
+  final String selectedTheme; // 'coral', 'ocean', 'forest', 'sunset'
+  final bool soundEnabled;
+  final bool hapticsEnabled;
+
+  /// Spoken names of categories and colours (recorded clips).
+  final bool voiceEnabled;
+
+  /// Page level a parent pinned (1-3); 0 lets the app choose.
+  final int level;
+
+  /// Fills the child has made in the app so far, counted up to 3: the idle
+  /// hint on the coloring screen stops once they know how to tap.
+  final int firstFills;
+  final double soundVolume;
+  final AgeMode ageMode;
 
   UserSettings({
-    this.isPro = false,
-    this.dailyImportCount = 0,
-    DateTime? lastImportDate,
     this.selectedTheme = 'coral',
-    this.language = 'tr',
     this.soundEnabled = true,
+    this.hapticsEnabled = true,
+    this.voiceEnabled = true,
+    this.level = 0,
+    this.firstFills = 0,
     this.soundVolume = 0.7,
-    this.coloringCompletedCount = 0,
-  }) : lastImportDate = lastImportDate ?? DateTime.now();
+    this.ageMode = AgeMode.little,
+  });
 
+  // Settings saved by older versions may carry keys that no longer exist
+  // (isPro, dailyImportCount, lastImportDate, language, coloringCompletedCount);
+  // they are ignored here.
   factory UserSettings.fromJson(Map<String, dynamic> json) {
     return UserSettings(
-      isPro: json['isPro'] ?? false,
-      dailyImportCount: json['dailyImportCount'] ?? 0,
-      lastImportDate: json['lastImportDate'] != null
-          ? DateTime.parse(json['lastImportDate'])
-          : DateTime.now(),
       selectedTheme: json['selectedTheme'] ?? 'coral',
-      language: json['language'] ?? 'tr',
       soundEnabled: json['soundEnabled'] ?? true,
-      soundVolume: (json['soundVolume'] ?? 0.7).toDouble(),
-      coloringCompletedCount: json['coloringCompletedCount'] ?? 0,
+      hapticsEnabled: json['hapticsEnabled'] ?? true,
+      voiceEnabled: json['voiceEnabled'] ?? true,
+      level: (json['level'] as num?)?.toInt() ?? 0,
+      firstFills: (json['firstFills'] as num?)?.toInt() ?? 0,
+      soundVolume: ((json['soundVolume'] as num?) ?? 0.7).toDouble(),
+      ageMode: json['ageMode'] == AgeMode.big.name ? AgeMode.big : AgeMode.little,
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'isPro': isPro,
-      'dailyImportCount': dailyImportCount,
-      'lastImportDate': lastImportDate.toIso8601String(),
       'selectedTheme': selectedTheme,
-      'language': language,
       'soundEnabled': soundEnabled,
+      'hapticsEnabled': hapticsEnabled,
+      'voiceEnabled': voiceEnabled,
+      'level': level,
+      'firstFills': firstFills,
       'soundVolume': soundVolume,
-      'coloringCompletedCount': coloringCompletedCount,
+      'ageMode': ageMode.name,
     };
   }
 
   UserSettings copyWith({
-    bool? isPro,
-    int? dailyImportCount,
-    DateTime? lastImportDate,
     String? selectedTheme,
-    String? language,
     bool? soundEnabled,
+    bool? hapticsEnabled,
+    bool? voiceEnabled,
+    int? level,
+    int? firstFills,
     double? soundVolume,
-    int? coloringCompletedCount,
+    AgeMode? ageMode,
   }) {
     return UserSettings(
-      isPro: isPro ?? this.isPro,
-      dailyImportCount: dailyImportCount ?? this.dailyImportCount,
-      lastImportDate: lastImportDate ?? this.lastImportDate,
       selectedTheme: selectedTheme ?? this.selectedTheme,
-      language: language ?? this.language,
       soundEnabled: soundEnabled ?? this.soundEnabled,
+      hapticsEnabled: hapticsEnabled ?? this.hapticsEnabled,
+      voiceEnabled: voiceEnabled ?? this.voiceEnabled,
+      level: level ?? this.level,
+      firstFills: firstFills ?? this.firstFills,
       soundVolume: soundVolume ?? this.soundVolume,
-      coloringCompletedCount: coloringCompletedCount ?? this.coloringCompletedCount,
+      ageMode: ageMode ?? this.ageMode,
     );
-  }
-
-  /// Reklam gosterilmeli mi kontrol eder
-  /// Pro kullanicilar icin her zaman false doner
-  bool shouldShowAd() {
-    if (isPro) return false;
-    return coloringCompletedCount >= coloringsBeforeAd;
-  }
-
-  bool canImportToday() {
-    // Temporarily allow unlimited imports for initial launch
-    // TODO: Uncomment when ready to enable in-app purchases
-    return true;
-
-    // Original logic:
-    // if (isPro) return true;
-    //
-    // final now = DateTime.now();
-    // final today = DateTime(now.year, now.month, now.day);
-    // final lastDate = DateTime(
-    //   lastImportDate.year,
-    //   lastImportDate.month,
-    //   lastImportDate.day,
-    // );
-    //
-    // if (today.isAfter(lastDate)) {
-    //   return true; // New day, reset count
-    // }
-    //
-    // return dailyImportCount < maxFreeImportsPerDay;
-  }
-
-  int getRemainingImports() {
-    if (isPro) return -1; // Unlimited
-
-    final now = DateTime.now();
-    final today = DateTime(now.year, now.month, now.day);
-    final lastDate = DateTime(
-      lastImportDate.year,
-      lastImportDate.month,
-      lastImportDate.day,
-    );
-
-    if (today.isAfter(lastDate)) {
-      return maxFreeImportsPerDay;
-    }
-
-    return maxFreeImportsPerDay - dailyImportCount;
   }
 }

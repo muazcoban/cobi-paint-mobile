@@ -1,294 +1,191 @@
 {
   "@@locale": "tr",
-
-  "appName": "Cobi Paint",
-  "@appName": {"description": "App name"},
-
   "home": "Ana Sayfa",
-  "@home": {"description": "Home screen title"},
-
+  "@home": {
+    "description": "Home screen title"
+  },
   "categories": "Kategoriler",
-  "@categories": {"description": "Categories title"},
-
+  "@categories": {
+    "description": "Categories title"
+  },
   "myArtworks": "Eserlerim",
-  "@myArtworks": {"description": "My artworks title"},
-
+  "@myArtworks": {
+    "description": "My artworks title"
+  },
   "settings": "Ayarlar",
-  "@settings": {"description": "Settings title"},
-
+  "@settings": {
+    "description": "Settings title"
+  },
   "animals": "Hayvanlar",
-  "@animals": {"description": "Animals category"},
-
+  "@animals": {
+    "description": "Animals category"
+  },
   "plants": "Bitkiler",
-  "@plants": {"description": "Plants category"},
-
+  "@plants": {
+    "description": "Plants category"
+  },
   "vehicles": "Araçlar",
-  "@vehicles": {"description": "Vehicles category"},
-
+  "@vehicles": {
+    "description": "Vehicles category"
+  },
   "characters": "Karakterler",
-  "@characters": {"description": "Characters category"},
-
-  "nature": "Doga",
-  "@nature": {"description": "Nature category"},
-
+  "@characters": {
+    "description": "Characters category"
+  },
+  "nature": "Doğa",
+  "@nature": {
+    "description": "Nature category"
+  },
+  "things": "Eşyalar",
+  "pageLevel": "Sayfa zorluğu",
+  "pageLevelDesc": "Çocuk birkaç sayfa boyadıkça daha zor sayfalar öne gelir. Hiçbir sayfa kilitli değildir.",
+  "levelAuto": "Otomatik",
+  "level1": "Büyük alanlar",
+  "level2": "Daha çok alan",
+  "level3": "İnce ayrıntı",
+  "fullVersion": "Tam Sürüm",
+  "fullVersionShort": "Bütün sayfaları aç",
+  "fullVersionDesc": "Ücretsiz sürümde her kategoriden 8 sayfa var. Tam Sürüm, 201 sayfanın hepsini bir kez ödemeyle sonsuza kadar açar. Abonelik yoktur. Çocuğunuzun boyadığı resimler her durumda Resimlerim'de kalır.",
+  "buy": "Satın al",
+  "restorePurchases": "Satın alımları geri yükle",
+  "familySharingNote": "Aile Paylaşımı ile en fazla 5 aile üyesiyle paylaşılır.",
+  "storeUnavailable": "Mağazaya şu an ulaşılamıyor.",
+  "tryAgain": "Tekrar dene",
+  "fullVersionOwned": "Tam Sürüm açık. Teşekkürler!",
+  "purchasePending": "Satın alma onay bekliyor. Onay gelince sayfalar açılır.",
+  "rainbowBrush": "Gökkuşağı fırçası",
+  "crayon": "Pastel boya",
+  "licenses": "Lisanslar",
+  "freeDraw": "Çiz",
+  "@freeDraw": {
+    "description": "Home card that opens a blank page for free drawing"
+  },
   "food": "Yiyecekler",
-  "@food": {"description": "Food category"},
-
-  "importImage": "Resim Yukle",
-  "@importImage": {"description": "Import image button"},
-
-  "goPro": "Pro'ya Gec",
-  "@goPro": {"description": "Go pro button"},
-
+  "@food": {
+    "description": "Food category"
+  },
   "save": "Kaydet",
-  "@save": {"description": "Save button"},
-
-  "saving": "Kaydediliyor...",
-  "@saving": {"description": "Saving text"},
-
-  "share": "Paylas",
-  "@share": {"description": "Share button"},
-
+  "@save": {
+    "description": "Save button"
+  },
+  "share": "Paylaş",
+  "@share": {
+    "description": "Share button"
+  },
   "undo": "Geri Al",
-  "@undo": {"description": "Undo button"},
-
-  "redo": "Ileri Al",
-  "@redo": {"description": "Redo button"},
-
+  "@undo": {
+    "description": "Undo button"
+  },
+  "redo": "İleri Al",
+  "@redo": {
+    "description": "Redo button"
+  },
   "clear": "Temizle",
-  "@clear": {"description": "Clear button"},
-
-  "fullscreen": "Tam Ekran",
-  "@fullscreen": {"description": "Fullscreen button"},
-
-  "exitFullscreen": "Tam Ekrandan Cik",
-  "@exitFullscreen": {"description": "Exit fullscreen button"},
-
+  "@clear": {
+    "description": "Clear button"
+  },
   "fill": "Doldur",
-  "@fill": {"description": "Fill tool"},
-
-  "pencil": "Kalem",
-  "@pencil": {"description": "Pencil tool"},
-
+  "@fill": {
+    "description": "Fill tool"
+  },
   "eraser": "Silgi",
-  "@eraser": {"description": "Eraser tool"},
-
-  "selected": "Secili",
-  "@selected": {"description": "Selected label"},
-
-  "selectColor": "Renk Sec",
-  "@selectColor": {"description": "Select color dialog title"},
-
-  "cancel": "Iptal",
-  "@cancel": {"description": "Cancel button"},
-
-  "select": "Sec",
-  "@select": {"description": "Select button"},
-
-  "paintTexture": "Boya Dokusu",
-  "@paintTexture": {"description": "Paint texture title"},
-
-  "paintTextureDescription": "Boyanan alanlarin gorunumunu secin",
-  "@paintTextureDescription": {"description": "Paint texture description"},
-
-  "textureNone": "Normal",
-  "@textureNone": {"description": "No texture"},
-
-  "textureNoneDesc": "Duz ve puruzsuz boyama",
-  "@textureNoneDesc": {"description": "No texture description"},
-
-  "textureCanvas": "Tuval",
-  "@textureCanvas": {"description": "Canvas texture"},
-
-  "textureCanvasDesc": "Gercek tuval dokusu efekti",
-  "@textureCanvasDesc": {"description": "Canvas texture description"},
-
-  "texturePaper": "Kagit",
-  "@texturePaper": {"description": "Paper texture"},
-
-  "texturePaperDesc": "Kagit uzerine boya kalemi hissi",
-  "@texturePaperDesc": {"description": "Paper texture description"},
-
-  "textureWatercolor": "Sulu Boya",
-  "@textureWatercolor": {"description": "Watercolor texture"},
-
-  "textureWatercolorDesc": "Sulu boya efekti",
-  "@textureWatercolorDesc": {"description": "Watercolor texture description"},
-
-  "hide": "Gizle",
-  "@hide": {"description": "Hide panel button"},
-
-  "clearConfirmTitle": "Temizle",
-  "@clearConfirmTitle": {"description": "Clear confirmation title"},
-
-  "clearConfirmMessage": "Tum boyamayi temizlemek istediginize emin misiniz?",
-  "@clearConfirmMessage": {"description": "Clear confirmation message"},
-
-  "imageSaved": "Resim kaydedildi!",
-  "@imageSaved": {"description": "Image saved message"},
-
-  "imageLoadError": "Resim yuklenemedi",
-  "@imageLoadError": {"description": "Image load error"},
-
-  "saveError": "Kaydetme hatasi",
-  "@saveError": {"description": "Save error"},
-
-  "shareError": "Paylasma hatasi",
-  "@shareError": {"description": "Share error"},
-
-  "whatsapp": "WhatsApp",
-  "@whatsapp": {"description": "WhatsApp"},
-
-  "instagram": "Instagram",
-  "@instagram": {"description": "Instagram"},
-
-  "resetView": "Gorunumu Sifirla",
-  "@resetView": {"description": "Reset view button"},
-
+  "@eraser": {
+    "description": "Eraser tool"
+  },
+  "selected": "Seçili",
+  "@selected": {
+    "description": "Selected label"
+  },
+  "cancel": "İptal",
+  "@cancel": {
+    "description": "Cancel button"
+  },
+  "select": "Seç",
+  "@select": {
+    "description": "Select button"
+  },
+  "shareError": "Paylaşma hatası",
+  "@shareError": {
+    "description": "Share error"
+  },
   "language": "Dil",
-  "@language": {"description": "Language setting"},
-
-  "turkish": "Turkce",
-  "@turkish": {"description": "Turkish language"},
-
-  "english": "Ingilizce",
-  "@english": {"description": "English language"},
-
-  "selectLanguage": "Dil Sec",
-  "@selectLanguage": {"description": "Select language dialog title"},
-
+  "@language": {
+    "description": "Language setting"
+  },
+  "turkish": "Türkçe",
+  "@turkish": {
+    "description": "Turkish language"
+  },
+  "english": "İngilizce",
+  "@english": {
+    "description": "English language"
+  },
   "soundEffects": "Ses Efektleri",
-  "@soundEffects": {"description": "Sound effects setting"},
-
-  "notifications": "Bildirimler",
-  "@notifications": {"description": "Notifications setting"},
-
-  "rateApp": "Uygulamayi Degerlendir",
-  "@rateApp": {"description": "Rate app button"},
-
-  "privacyPolicy": "Gizlilik Politikasi",
-  "@privacyPolicy": {"description": "Privacy policy button"},
-
-  "termsOfService": "Kullanim Kosullari",
-  "@termsOfService": {"description": "Terms of service button"},
-
-  "about": "Hakkinda",
-  "@about": {"description": "About button"},
-
-  "version": "Surum",
-  "@version": {"description": "Version label"},
-
-  "pro": "Pro",
-  "@pro": {"description": "Pro label"},
-
-  "proFeatures": "Pro Ozellikleri",
-  "@proFeatures": {"description": "Pro features title"},
-
-  "unlimitedImages": "Sinirsiz Resim",
-  "@unlimitedImages": {"description": "Unlimited images feature"},
-
-  "noAds": "Reklamsiz",
-  "@noAds": {"description": "No ads feature"},
-
-  "allCategories": "Tum Kategoriler",
-  "@allCategories": {"description": "All categories feature"},
-
-  "buyPro": "Pro Satin Al",
-  "@buyPro": {"description": "Buy pro button"},
-
-  "restorePurchases": "Satin Alimlari Geri Yukle",
-  "@restorePurchases": {"description": "Restore purchases button"},
-
-  "proActive": "Pro Aktif",
-  "@proActive": {"description": "Pro active label"},
-
-  "startColoring": "Boyamaya Basla",
-  "@startColoring": {"description": "Start coloring button"},
-
-  "continueColoring": "Boyamaya Devam Et",
-  "@continueColoring": {"description": "Continue coloring button"},
-
+  "themeCoral": "Mercan",
+  "themeOcean": "Okyanus",
+  "themeForest": "Orman",
+  "themeSunset": "Gün Batımı",
+  "shareText": "Cobi Paint ile boyadım! 🎨",
+  "@shareText": {
+    "description": "Text that goes with a shared artwork"
+  },
+  "haptics": "Titreşim",
+  "voiceNames": "Sesli adlar",
+  "@voiceNames": {
+    "description": "Parents area switch for spoken category and colour names"
+  },
+  "shareBlankPage": "Boş sayfayı paylaş",
+  "@haptics": {
+    "description": "Parents area switch for haptic feedback"
+  },
+  "@soundEffects": {
+    "description": "Sound effects setting"
+  },
+  "privacyPolicy": "Gizlilik Politikası",
+  "@privacyPolicy": {
+    "description": "Privacy policy button"
+  },
+  "about": "Hakkında",
+  "@about": {
+    "description": "About button"
+  },
+  "startColoring": "Boyamaya Başla",
+  "@startColoring": {
+    "description": "Start coloring button"
+  },
   "delete": "Sil",
-  "@delete": {"description": "Delete button"},
-
+  "@delete": {
+    "description": "Delete button"
+  },
   "deleteConfirmTitle": "Eseri Sil",
-  "@deleteConfirmTitle": {"description": "Delete confirmation title"},
-
-  "deleteConfirmMessage": "Bu eseri silmek istediginize emin misiniz?",
-  "@deleteConfirmMessage": {"description": "Delete confirmation message"},
-
-  "noArtworks": "Henuz eseriniz yok",
-  "@noArtworks": {"description": "No artworks message"},
-
-  "noArtworksHint": "Bir resim boyayarak baslayabilirsiniz",
-  "@noArtworksHint": {"description": "No artworks hint"},
-
-  "recentArtworks": "Son Eserler",
-  "@recentArtworks": {"description": "Recent artworks title"},
-
-  "seeAll": "Tumunu Gor",
-  "@seeAll": {"description": "See all button"},
-
-  "welcome": "Hosgeldin!",
-  "@welcome": {"description": "Welcome message"},
-
-  "welcomeMessage": "Boyamaya baslamak icin bir kategori sec",
-  "@welcomeMessage": {"description": "Welcome message description"},
-
-  "importFromGallery": "Galeriden Yukle",
-  "@importFromGallery": {"description": "Import from gallery"},
-
-  "importFromCamera": "Kameradan Cek",
-  "@importFromCamera": {"description": "Import from camera"},
-
-  "processing": "Isleniyor...",
-  "@processing": {"description": "Processing message"},
-
-  "importSuccess": "Resim basariyla yuklendi",
-  "@importSuccess": {"description": "Import success message"},
-
-  "importError": "Resim yuklenemedi",
-  "@importError": {"description": "Import error message"},
-
-  "permissionDenied": "Izin reddedildi",
-  "@permissionDenied": {"description": "Permission denied message"},
-
-  "cameraPermission": "Kamera izni gerekli",
-  "@cameraPermission": {"description": "Camera permission message"},
-
-  "galleryPermission": "Galeri izni gerekli",
-  "@galleryPermission": {"description": "Gallery permission message"},
-
-  "ok": "Tamam",
-  "@ok": {"description": "OK button"},
-
-  "yes": "Evet",
-  "@yes": {"description": "Yes button"},
-
-  "no": "Hayir",
-  "@no": {"description": "No button"},
-
-  "loading": "Yukleniyor...",
-  "@loading": {"description": "Loading message"},
-
-  "error": "Hata",
-  "@error": {"description": "Error title"},
-
-  "retry": "Tekrar Dene",
-  "@retry": {"description": "Retry button"},
-
-  "general": "Genel",
-  "@general": {"description": "General settings section"},
-
-  "appearance": "Gorunum",
-  "@appearance": {"description": "Appearance settings section"},
-
-  "support": "Destek",
-  "@support": {"description": "Support settings section"},
-
-  "contactUs": "Bize Ulasin",
-  "@contactUs": {"description": "Contact us button"},
-
-  "faq": "Sikca Sorulan Sorular",
-  "@faq": {"description": "FAQ button"}
+  "@deleteConfirmTitle": {
+    "description": "Delete confirmation title"
+  },
+  "deleteConfirmMessage": "Bu eseri silmek istediğinize emin misiniz?",
+  "@deleteConfirmMessage": {
+    "description": "Delete confirmation message"
+  },
+  "contactUs": "Bize Ulaşın",
+  "@contactUs": {
+    "description": "Contact us button"
+  },
+  "marker": "Keçeli kalem",
+  "brushSize": "Fırça boyutu",
+  "importedPages": "Fotoğraflarım",
+  "gateTitle": "Ebeveyn kontrolü",
+  "gateInstruction": "Devam etmek için sonucu yaz:",
+  "parentsArea": "Ebeveyn alanı",
+  "parentsHint": "Ayarlar, paylaşım ve silme yalnız buradan yapılır.",
+  "ageMode": "Mod",
+  "ageModeLittle": "Minik (3–5 yaş)",
+  "ageModeLittleDesc": "Kocaman düğmeler, 9 renk, yakınlaştırma yok. Kalem çizginin dışına taşmaz.",
+  "ageModeBig": "Büyük (6+ yaş)",
+  "ageModeBigDesc": "16 renk, iki parmakla yakınlaştırma, fırça boyutları, ileri al.",
+  "soundVolume": "Ses seviyesi",
+  "theme": "Tema",
+  "privacyPolicyText": "Cobi Paint hiçbir kişisel veri toplamaz.\n\n• Hesap, reklam, analiz aracı ve internet bağlantısı yoktur.\n• Çocuğunuzun boyadığı resimler yalnız bu cihazda saklanır ve hiçbir sunucuya gönderilmez.\n• Bir resim yalnız siz ebeveyn kontrolünü geçip paylaşmayı seçtiğinizde, sistemin paylaşım menüsüyle ve sizin seçtiğiniz uygulamaya gönderilir.\n• Kayıtlı bir resmi Eserlerim'de basılı tutup ebeveyn kontrolünü geçerek silebilirsiniz. Uygulamayı silmek bütün resimleri siler.\n\nSorularınız için: cobipaint@gmail.com Tam Sürüm satın alımı Apple ya da Google hesabınızla yapılır; uygulama ödeme bilgisine erişmez ve hiçbir veri toplamaz.",
+  "guidedAccessTitle": "Çocuk uygulamada kalsın",
+  "guidedAccessText": "iPhone ve iPad'de Rehberli Erişim'i kullanabilirsiniz: Ayarlar > Erişilebilirlik > Rehberli Erişim'i açın, sonra uygulama açıkken yan düğmeye üç kez basın. Android'de Ayarlar > Güvenlik > Uygulama sabitleme'yi kullanın.",
+  "colorNames": "kırmızı,turuncu,sarı,yeşil,mavi,mor,pembe,kahverengi,siyah,açık mavi,açık yeşil,şeftali,açık sarı,lacivert,koyu yeşil,gri",
+  "canvasLabel": "Boyama sayfası"
 }

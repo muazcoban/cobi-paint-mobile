@@ -2,13 +2,23 @@ class SavedArtwork {
   final String id;
   final String originalImageId;
   final String originalImagePath;
+
+  /// Version 2: paths relative to the documents folder
+  /// (`artworks/<id>/image.png`). Version 1 stored absolute paths, which break
+  /// when iOS moves the app container on an update.
   final String savedImagePath;
   final String thumbnailPath;
   final String name;
   final DateTime createdAt;
   final DateTime updatedAt;
-  final Map<String, int> coloredRegions; // regionId -> colorValue
+
+  /// Version 1 only: one colour per pixel index. Version 2 keeps the
+  /// drawing in `artworks/<id>/doc.json` instead.
+  final Map<String, int> coloredRegions;
   final bool isCompleted;
+
+  /// 1 = per-pixel colours in [coloredRegions], 2 = region document on disk.
+  final int schema;
 
   SavedArtwork({
     required this.id,
@@ -19,8 +29,9 @@ class SavedArtwork {
     required this.name,
     required this.createdAt,
     required this.updatedAt,
-    required this.coloredRegions,
+    this.coloredRegions = const {},
     this.isCompleted = false,
+    this.schema = 2,
   });
 
   factory SavedArtwork.fromJson(Map<String, dynamic> json) {
@@ -35,6 +46,7 @@ class SavedArtwork {
       updatedAt: DateTime.parse(json['updatedAt']),
       coloredRegions: Map<String, int>.from(json['coloredRegions'] ?? {}),
       isCompleted: json['isCompleted'] ?? false,
+      schema: (json['schema'] as num?)?.toInt() ?? 1,
     );
   }
 
@@ -48,8 +60,9 @@ class SavedArtwork {
       'name': name,
       'createdAt': createdAt.toIso8601String(),
       'updatedAt': updatedAt.toIso8601String(),
-      'coloredRegions': coloredRegions,
+      if (coloredRegions.isNotEmpty) 'coloredRegions': coloredRegions,
       'isCompleted': isCompleted,
+      'schema': schema,
     };
   }
 
@@ -64,6 +77,7 @@ class SavedArtwork {
     DateTime? updatedAt,
     Map<String, int>? coloredRegions,
     bool? isCompleted,
+    int? schema,
   }) {
     return SavedArtwork(
       id: id ?? this.id,
@@ -76,6 +90,7 @@ class SavedArtwork {
       updatedAt: updatedAt ?? this.updatedAt,
       coloredRegions: coloredRegions ?? this.coloredRegions,
       isCompleted: isCompleted ?? this.isCompleted,
+      schema: schema ?? this.schema,
     );
   }
 }

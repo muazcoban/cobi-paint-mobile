@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -6,12 +9,18 @@ import 'l10n/app_localizations.dart';
 import 'providers/app_provider.dart';
 import 'providers/locale_provider.dart';
 import 'services/purchase_service.dart';
-import 'services/ad_service.dart';
+import 'services/sound_service.dart';
 import 'theme/app_theme.dart';
 import 'screens/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // The coloring pages are drawn from Fluent UI Emoji (MIT); its notice
+  // shows with the other licences in the Parents area.
+  LicenseRegistry.addLicense(() async* {
+    final text = await rootBundle.loadString('assets/licenses/fluentui-emoji.txt');
+    yield LicenseEntryWithLineBreaks(const ['Fluent UI Emoji (coloring pages)'], text);
+  });
 
   // Set preferred orientations
   await SystemChrome.setPreferredOrientations([
@@ -25,16 +34,26 @@ void main() async {
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
-      statusBarIconBrightness: Brightness.light,
+      // Dark status bar content on the light screens (iOS and Android).
+      statusBarBrightness: Brightness.light,
+      statusBarIconBrightness: Brightness.dark,
       systemNavigationBarColor: Colors.white,
       systemNavigationBarIconBrightness: Brightness.dark,
     ),
   );
 
-  // AdMob baslatma (COPPA uyumlu)
-  await AdService().initialize();
-
+  if (PurchaseService.enabled) unawaited(PurchaseService().init());
   runApp(const CobiPaintApp());
+
+  // After the first frame, so neither delays the app appearing:
+  // Android hides the system bars, so a stray swipe only reveals them
+  // instead of leaving the app; sounds load ahead of the first tap.
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    if (defaultTargetPlatform == TargetPlatform.android) {
+      unawaited(SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky));
+    }
+    unawaited(Future<void>.delayed(const Duration(seconds: 1), SoundService().preload));
+  });
 }
 
 class CobiPaintApp extends StatelessWidget {
@@ -50,19 +69,12 @@ class CobiPaintApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => LocaleProvider(),
         ),
-        ChangeNotifierProvider(
-          create: (_) {
-            final service = PurchaseService();
-            service.init();
-            return service;
-          },
-        ),
       ],
       child: Consumer2<AppProvider, LocaleProvider>(
         builder: (context, appProvider, localeProvider, _) {
-          // Rebuild MaterialApp when theme or locale changes
+          // Theme and locale changes rebuild the app in place; no key, so the
+          // navigation stack (and the parents area) survives them.
           return MaterialApp(
-            key: ValueKey('${appProvider.settings.selectedTheme}_${localeProvider.locale.languageCode}'),
             title: 'Cobi Paint',
             debugShowCheckedModeBanner: false,
             theme: AppTheme.lightTheme,
@@ -74,6 +86,9 @@ class CobiPaintApp extends StatelessWidget {
               GlobalCupertinoLocalizations.delegate,
             ],
             supportedLocales: LocaleProvider.supportedLocales,
+            // Text may grow to 200% (HIG) but no further, so big type cannot
+            // break the fixed-size kid layouts.
+            builder: (context, child) => MediaQuery.withClampedTextScaling(maxScaleFactor: 2.0, child: child!),
             home: const SplashScreen(),
           );
         },

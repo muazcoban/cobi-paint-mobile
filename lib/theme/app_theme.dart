@@ -149,15 +149,17 @@ class AppTheme {
         error: errorColor,
       ),
       scaffoldBackgroundColor: backgroundColor,
+      // Grown-up screens: dark text on the page colour. White on the theme
+      // colours measured 2.3-2.9:1, below the HIG minimum of 3:1.
       appBarTheme: AppBarTheme(
-        backgroundColor: primaryColor,
-        foregroundColor: Colors.white,
+        backgroundColor: backgroundColor,
+        foregroundColor: textPrimary,
         elevation: 0,
         centerTitle: true,
         titleTextStyle: const TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.bold,
-          color: Colors.white,
+          color: textPrimary,
         ),
       ),
       cardTheme: CardThemeData(
@@ -170,7 +172,7 @@ class AppTheme {
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: primaryColor,
-          foregroundColor: Colors.white,
+          foregroundColor: textPrimary,
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
@@ -183,12 +185,24 @@ class AppTheme {
       ),
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
-          foregroundColor: primaryColor,
+          foregroundColor: textPrimary,
+        ),
+      ),
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: OutlinedButton.styleFrom(
+          foregroundColor: textPrimary,
+          side: const BorderSide(color: Color(0x662D3142)),
+        ),
+      ),
+      filledButtonTheme: FilledButtonThemeData(
+        style: FilledButton.styleFrom(
+          backgroundColor: primaryColor,
+          foregroundColor: textPrimary,
         ),
       ),
       floatingActionButtonTheme: FloatingActionButtonThemeData(
         backgroundColor: secondaryColor,
-        foregroundColor: Colors.white,
+        foregroundColor: textPrimary,
       ),
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
         backgroundColor: Colors.white,

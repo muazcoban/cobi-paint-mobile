@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cobi Paint UX Araştırması</title>
+<style>
+:root {
+  --bg: #fbfaf7; --surface: #ffffff; --surface-2: #f3f1ec; --text: #1f2328; --muted: #5d6470;
+  --border: #e2ded6; --accent: #d9480f; --accent-soft: #fff1e8; --link: #0b62c4;
+  --p0: #c92a2a; --p0-soft: #ffe9e9; --p1: #b35c00; --p1-soft: #fff3e0; --p2: #2f6f3e; --p2-soft: #e8f5ec;
+  --info: #1864ab; --info-soft: #e7f1fb; --code-bg: #f1efe9;
+  --d-fill: #e7f1fb; --d-stroke: #1864ab; --d-fill-2: #fff1e8; --d-stroke-2: #d9480f; --d-fill-3: #e8f5ec; --d-stroke-3: #2f6f3e; --d-line: #5d6470;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #15171a; --surface: #1d2024; --surface-2: #24282d; --text: #e8e6e3; --muted: #a3a9b3;
+    --border: #343a41; --accent: #ff8a4c; --accent-soft: #3a2418; --link: #6cb4ff;
+    --p0: #ff8787; --p0-soft: #3b1f1f; --p1: #ffb84d; --p1-soft: #3a2c16; --p2: #8ce99a; --p2-soft: #1d3324;
+    --info: #74c0fc; --info-soft: #182a3b; --code-bg: #26292e;
+    --d-fill: #182a3b; --d-stroke: #74c0fc; --d-fill-2: #3a2418; --d-stroke-2: #ff8a4c; --d-fill-3: #1d3324; --d-stroke-3: #8ce99a; --d-line: #a3a9b3;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #15171a; --surface: #1d2024; --surface-2: #24282d; --text: #e8e6e3; --muted: #a3a9b3;
+  --border: #343a41; --accent: #ff8a4c; --accent-soft: #3a2418; --link: #6cb4ff;
+  --p0: #ff8787; --p0-soft: #3b1f1f; --p1: #ffb84d; --p1-soft: #3a2c16; --p2: #8ce99a; --p2-soft: #1d3324;
+  --info: #74c0fc; --info-soft: #182a3b; --code-bg: #26292e;
+  --d-fill: #182a3b; --d-stroke: #74c0fc; --d-fill-2: #3a2418; --d-stroke-2: #ff8a4c; --d-fill-3: #1d3324; --d-stroke-3: #8ce99a; --d-line: #a3a9b3;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+.wrap { max-width: 1080px; margin: 0 auto; padding: 32px 16px 80px; }
+header.top { border-bottom: 1px solid var(--border); padding-bottom: 20px; margin-bottom: 28px; }
+header.top h1 { font-size: 2rem; line-height: 1.2; margin: 0 0 8px; }
+.meta { color: var(--muted); font-size: .92rem; }
+nav.toc { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; margin: 0 0 32px; }
+nav.toc ol { margin: 0; padding-left: 20px; columns: 2; column-gap: 32px; }
+nav.toc li { break-inside: avoid; margin: 2px 0; }
+a { color: var(--link); }
+h2 { font-size: 1.5rem; margin: 48px 0 12px; padding-top: 8px; border-top: 1px solid var(--border); }
+h3 { font-size: 1.15rem; margin: 28px 0 8px; }
+p { margin: 8px 0 12px; }
+.lead { font-size: 1.08rem; }
+.callout { background: var(--accent-soft); border-left: 4px solid var(--accent); border-radius: 8px; padding: 14px 18px; margin: 16px 0; }
+.callout.info { background: var(--info-soft); border-left-color: var(--info); }
+.callout ul, .callout ol { margin: 6px 0; padding-left: 20px; }
+.table-wrap { overflow-x: auto; margin: 12px 0 20px; border: 1px solid var(--border); border-radius: 10px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: .93rem; }
+th, td { text-align: left; vertical-align: top; padding: 9px 12px; border-bottom: 1px solid var(--border); }
+th { background: var(--surface-2); font-weight: 600; white-space: nowrap; }
+tr:last-child td { border-bottom: 0; }
+td:first-child { white-space: nowrap; }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+code { background: var(--code-bg); padding: 1px 5px; border-radius: 4px; font: .86em/1.4 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; word-break: break-word; }
+.badge { display: inline-block; font-size: .75rem; font-weight: 700; padding: 2px 8px; border-radius: 999px; white-space: nowrap; }
+.b-p0 { background: var(--p0-soft); color: var(--p0); }
+.b-p1 { background: var(--p1-soft); color: var(--p1); }
+.b-p2 { background: var(--p2-soft); color: var(--p2); }
+.b-info { background: var(--info-soft); color: var(--info); }
+.grid { display: grid; gap: 16px; align-items: start; }
+.g3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.g2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+figure { margin: 0; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 10px; }
+figure img { width: 100%; height: auto; display: block; border-radius: 6px; background: #fff; }
+figcaption { font-size: .86rem; color: var(--muted); margin-top: 8px; }
+.diagram { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 12px; margin: 12px 0 20px; overflow-x: auto; }
+.diagram svg { display: block; width: 100%; min-width: 640px; height: auto; }
+.diagram svg text { fill: var(--text); font-family: inherit; }
+.diagram .box { fill: var(--d-fill); stroke: var(--d-stroke); stroke-width: 1.5; }
+.diagram .box2 { fill: var(--d-fill-2); stroke: var(--d-stroke-2); stroke-width: 1.5; }
+.diagram .box3 { fill: var(--d-fill-3); stroke: var(--d-stroke-3); stroke-width: 1.5; }
+.diagram .edge { stroke: var(--d-line); stroke-width: 1.5; fill: none; }
+.diagram .lbl { font-size: 12px; fill: var(--muted); }
+.diagram .ttl { font-size: 14px; font-weight: 600; }
+.diagram .sm { font-size: 12px; }
+.diagram .gridline { stroke: var(--border); stroke-width: 1; }
+.kv { display: grid; grid-template-columns: max-content 1fr; gap: 4px 16px; }
+.kv dt { font-weight: 600; }
+.kv dd { margin: 0; }
+details { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 10px 14px; margin: 12px 0; }
+details summary { cursor: pointer; font-weight: 600; }
+.small { font-size: .88rem; color: var(--muted); }
+ul.tight li, ol.tight li { margin: 3px 0; }
+@media (max-width: 760px) {
+  .g3, .g2 { grid-template-columns: minmax(0, 1fr); }
+  nav.toc ol { columns: 1; }
+  header.top h1 { font-size: 1.6rem; }
+  .kv { grid-template-columns: 1fr; }
+}
+</style>
+
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+  <h1>Cobi Paint UX Araştırması ve Apple Uyum Denetimi</h1>
+  <div class="meta">3 Kasım 2026 · branch <code>faz1/boyama-motoru</code> · Kaynaklar: dört araştırma ajanı, Apple HIG'in 3 Kasım 2026 sürümü, CobiPaint_Pixel emülatörü, CobiPaint iPhone simülatörü</div>
+</header>
+
+<nav class="toc">
+  <ol>
+    <li><a href="#sonuc">Sonuç</a></li>
+    <li><a href="#skill">Skill değerlendirmesi</a></li>
+    <li><a href="#ornek">Örnek uygulamalardan desenler</a></li>
+    <li><a href="#olcu">Ölçüler</a></li>
+    <li><a href="#kapi">Ebeveyn kapısı</a></li>
+    <li><a href="#anti">Kaçınılan anti-desenler</a></li>
+    <li><a href="#review">App Review kontrol listesi</a></li>
+    <li><a href="#hig">HIG denetimi (18 madde)</a></li>
+    <li><a href="#acik">Açık kalanlar</a></li>
+    <li><a href="#kaynak">Kaynaklar</a></li>
+  </ol>
+</nav>
+
+<h2 id="sonuc">1. Sonuç</h2>
+<p class="lead">Kodda Apple incelemesini reddettirecek bilinen bir sorun kalmadı. Gönderimi şu an üç şey engelliyor: bu Mac'teki Xcode sürümü, canlı mağaza metni ve yaş bandı sorusu. Üçü de senin adımın.</p>
+<div class="callout">
+  <ul>
+    <li><b>Örnek uygulamalar:</b> Üç desen aldım. Pok Pok'tan hep görünen büyük ev düğmesi ve otomatik kayıt. Sago Mini'den kazara dokunuşu affeden etkileşim. Apple'ın kendi örneğinden kelimeyle yazılmış rakamlı ebeveyn kapısı.</li>
+    <li><b>Skill'ler:</b> 3 yaş UX'ini kapsayan güvenilir bir skill yok. Bu yüzden repoya <code>cobi-toddler-ux</code> proje skill'ini yazdım. Kurman önerilenler: <code>app-store-review-skill</code>, Flutter Skills'ten 5 skill ve PATH düzeltmesinden sonra resmî Dart and Flutter plugin'i.</li>
+    <li><b>HIG:</b> 18 maddenin 4'ü kritik açıktı; dördünü de kapattım. Denetimi testlere bağlarken iki yeni kontrast açığı buldum ve onları da kapattım (kapı rakamları 2,22:1, üst çubuk başlığı 2,73:1).</li>
+    <li><b>Açık kalanlar:</b> Sesli yönlendirme, hareketsizlik ipucu, 6 sayfanın yeniden çizimi, iPad klavye kısayolu ve gerçek cihaz denemeleri (<a href="#acik">bölüm 9</a>).</li>
+  </ul>
+</div>
+
+<h2 id="skill">2. Skill değerlendirmesi</h2>
+<p>Ajan 7 aday ve 9 katalog dışı kaynak taradı. Hiçbirini kurmadı ve indirilen kodu çalıştırmadı. Sıralama, Cobi Paint'in fazlarına katkıya göre.</p>
+<div class="table-wrap"><table>
+<thead><tr><th>#</th><th>Skill / plugin</th><th>Karar</th><th>Neden</th><th>Risk ve önkoşul</th></tr></thead>
+<tbody>
+<tr><td>1</td><td><a href="https://github.com/safaiyeh/app-store-review-skill">app-store-review-skill</a></td><td><span class="badge b-p2">Kur</span></td><td>1.3 ve 5.1.4 maddeleri Apple metniyle uyuşuyor. Apple'ın 16 Ekim 2026 güncellemesini işliyor. Yalnız markdown; hook, MCP ve betik yok.</td><td>Katalog dışı, kurulumu sen yaparsın. Flutter projesinde kendiliğinden tetiklenmeyebilir; adıyla çağır.</td></tr>
+<tr><td>2</td><td><a href="https://github.com/zakariaf/Flutter-Skills">Flutter Skills</a>, 5 skill</td><td><span class="badge b-p2">Kopyala</span></td><td><code>custom-canvas-and-gestures</code>, <code>motion-and-haptics</code>, <code>widget-golden-and-a11y-testing</code>, <code>release-and-store-shipping</code>, <code>design-system-structure</code>. MIT lisanslı.</td><td>40 skill'in hepsi yaklaşık 36,7K karakter bağlam tutar. Riverpod ve Drift skill'leri projenin <code>provider</code> yapısıyla çelişir. <code>SemanticsService.announce</code> önerisi eski.</td></tr>
+<tr><td>3</td><td><a href="https://github.com/flutter/agent-plugins">Dart and Flutter</a> (resmî)</td><td><span class="badge b-p1">Kur, önce PATH</span></td><td>Widget önizleme, yerleşim düzeltme, test skill'leri. Dart MCP: hot reload, widget inspector, çalışma zamanı hataları.</td><td>PATH'teki ilk <code>dart</code> Homebrew 3.8; <code>dart mcp-server</code> 3.9+ ister. <code>pub_dev_search</code> arama metnini pub.dev'e gönderir.</td></tr>
+<tr><td>4</td><td>Very Good AI Flutter Plugin</td><td><span class="badge b-p0">Kurma</span></td><td>İçindeki <code>accessibility</code> skill'i incelenenlerin en doğrusu; yalnız o klasör kopyalanabilir.</td><td>Hook'ları <code>flutter test</code>'i engelliyor, kendi MCP'sine izin sormadan "allow" diyor, her düzenlemeden sonra dosyayı yeniden formatlıyor.</td></tr>
+<tr><td>5</td><td>design-skills</td><td><span class="badge b-p0">Kurma</span></td><td>Etkin <code>design</code> plugin'iyle çakışıyor; web ve Tailwind odaklı.</td><td>Her görsel istekte tetiklenecek şekilde yazılmış.</td></tr>
+<tr><td>6</td><td>UXKIN Mobile App Design</td><td><span class="badge b-p0">Kurma</span></td><td>Yetişkin iOS kontrol listeleri; çocuk içeriği yok.</td><td>Uzak, ücretli bir MCP ekliyor; giden veriyi doğrulayamadık.</td></tr>
+<tr><td>7</td><td>Mobile Design System</td><td><span class="badge b-p0">Kurma</span></td><td>Kendi tanımı "greenfield only".</td><td>—</td></tr>
+</tbody></table></div>
+<div class="callout info">
+  <p><b>Zaten etkin olanlar yetiyor:</b> <code>design:accessibility-review</code> WCAG denetimini, <code>design:design-critique</code> ekran eleştirisini, <code>design:ux-copy</code> ebeveyn metinlerini karşılıyor.</p>
+  <p><b>Yazdığım proje skill'i:</b> <code>.claude/skills/cobi-toddler-ux/SKILL.md</code>. İçinde Ç1–Ç10 kontrol listesi, tekrar eden HIG ve Kids Category noktaları, yeni çizim için sayfa denetimi ve "bitti" demeden önce yapılacaklar var. <code>.gitignore</code>'u proje skill'lerini paylaşacak şekilde değiştirdim; yerel ayar dosyası yine dışarıda.</p>
+</div>
+
+<h2 id="ornek">3. Örnek uygulamalardan desenler</h2>
+<p>Ajan 13 uygulamayı inceledi; çoğu App Store'da "Made for Ages 0–5" bandında. (T) ekran görüntüsünden tahmin edilmiş ölçü demek.</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Uygulama</th><th>Aldığımız ya da kaçındığımız desen</th><th>Cobi Paint'te karşılığı</th></tr></thead>
+<tbody>
+<tr><td>Pok Pok (ADA 2021)</td><td>Dil ve menü yok. Sol üstte hep görünen büyük ev düğmesi, ekran yüksekliğinin %12–14'ü (T). Çizimler kendiliğinden kaydedilir, paylaşım ebeveyn alanından yapılır.</td><td>82 pt sarı ev düğmesi; değişiklikten 400 ms sonra otomatik kayıt; paylaşım kapının arkasında.</td></tr>
+<tr><td>Sago Mini Jinja's Garden (ADA 2026)</td><td>Karakter parmak kalkınca yürür. Önceki "parmağa koş" düzeni kazara dokunuşlarla kaos yarattı.</td><td><code>ForgivingTap</code>: parmak düğmenin 12 lp yakınında kalkarsa dokunuş sayılır. Palet, parmağın kalktığı hücreyi seçer.</td></tr>
+<tr><td>Apple Kids örneği</td><td>Kelimeyle yazılmış rakamlar ve hoparlörden "bir büyüğe sor".</td><td>Dört rakam kelimeyle, 3×3 tuş takımı. Sesli uyarı henüz yok.</td></tr>
+<tr><td>Bimi Boo Drawing</td><td>İyi: seçili renk büyük ve onay işaretli. Kötü: iPhone'da geri al yaklaşık 28 pt (T); bir yorumda renge dokununca resim siliniyor.</td><td>Seçili renk 1,15 kat ve onay işaretli; geri al 82 pt; geri dönülmez işlem kapının arkasında.</td></tr>
+<tr><td>Crayola, Khan Kids, Endless Alphabet</td><td>Sesli anlatım; skor, başarısızlık ve stres yok.</td><td>Skor ve başarısızlık yok. Sesli anlatım açık kaldı.</td></tr>
+<tr><td>Toca Boca, Lingokids, Pok Pok kapıları</td><td>Doğum yılı soran kapı.</td><td>Seçmedim: deneme başına yaklaşık %0,8 aşılır; bekleme yoksa 100 denemede yaklaşık %56.</td></tr>
+</tbody></table></div>
+
+<h2 id="olcu">4. Ölçüler</h2>
+<p>NN/g küçük çocuklar için en az 2×2 cm hedef öneriyor. 2 cm, iPhone'da 120–128 pt eder. Bütün kontroller bu boyda olursa tuval ekranın %40'ının altına düşer. Bu yüzden aşağıdaki boyutları seçtim ve uyguladım. lp, Flutter'ın mantıksal pikselidir: iOS'ta pt, Android'de dp.</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Öğe</th><th class="num">Telefon</th><th class="num">iPad</th><th class="num">HIG alt sınırı</th></tr></thead>
+<tbody>
+<tr><td>Birincil kontroller (ev, doldur, fırça, geri al)</td><td class="num">82 pt</td><td class="num">116 pt</td><td class="num">44 pt</td></tr>
+<tr><td>Palet noktası</td><td class="num">70 pt</td><td class="num">112 pt</td><td class="num">44 pt</td></tr>
+<tr><td>Palet noktası, 375 pt telefon</td><td class="num">≈ 61 pt (dokunma alanı ≈ 73 pt)</td><td class="num">—</td><td class="num">44 pt</td></tr>
+<tr><td>Hücre aralığı</td><td class="num">12 pt</td><td class="num">16 pt</td><td class="num">≈ 12 pt</td></tr>
+<tr><td>Ebeveyn çarkı</td><td class="num">48 pt</td><td class="num">48 pt</td><td class="num">44 pt</td></tr>
+</tbody></table></div>
+<p>Dar telefonda palet noktaları sığmak için küçülür. Her noktanın dokunma alanı ızgara adımının tamamıdır, yani nokta ile aralığın toplamı.</p>
+
+<h2 id="kapi">5. Ebeveyn kapısı</h2>
+<p>Uyguladığım kapı Apple'ın örneğini izliyor: dört rakam kelimeyle yazılır, yetişkin sırayla tuşlar. Rastgele tuşlayan çocuğun tek denemede geçme olasılığı 1/3024, yani yaklaşık %0,03. Üç yanlıştan sonra bekleme 30, 60 ve 120 sn olur. Kapı 20 sn işlem olmazsa kapanır; VoiceOver ya da TalkBack açıkken kapanmaz.</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Kapı türü</th><th>Kim kullanıyor</th><th>3 yaş için aşılma riski</th><th>Ebeveyn için</th></tr></thead>
+<tbody>
+<tr><td>Basılı tut (3 sn)</td><td>Avokiddo</td><td>Yüksek; çocuk oyun sanıyor</td><td>Kolay</td></tr>
+<tr><td>Matematik</td><td>2013'te onaylı örnekler</td><td>Orta; kardeş çözer</td><td>Diskalkuli varsa zor</td></tr>
+<tr><td>Doğum yılı</td><td>Lingokids, Pok Pok, Toca Boca</td><td>Deneme başına ≈ %0,8</td><td>Kolay; kişisel veri gibi algılanabilir</td></tr>
+<tr><td>4 şıklı soru</td><td>Apple örneği</td><td>%25</td><td>Kültüre bağlı</td></tr>
+<tr><td>Şekil sürükle</td><td>Apple örneği</td><td>≈ %17</td><td>Sürükleme becerisi ister</td></tr>
+<tr><td><b>Kelimeyle rakam + ses</b></td><td>Apple örneği, Cobi Paint</td><td><b>≈ %0,03</b></td><td>Kolay</td></tr>
+</tbody></table></div>
+
+<h2 id="anti">6. Kaçınılan anti-desenler</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Anti-desen</th><th>Durum</th><th>Not</th></tr></thead>
+<tbody>
+<tr><td>Çocuk alanında ödeme, kilit ya da reklam</td><td><span class="badge b-p2">Yok</span></td><td>Faz 0'da AdMob, satın alma ve Firebase çıktı.</td></tr>
+<tr><td>Ödül tuzağı (günlük ödül, rozet)</td><td><span class="badge b-p2">Yok</span></td><td>—</td></tr>
+<tr><td>Tek dokunuşla geri dönülmez işlem</td><td><span class="badge b-p2">Yok</span></td><td>Temizle düğmesi yok; silme kapının ve onayın arkasında.</td></tr>
+<tr><td>Küçük kritik düğme</td><td><span class="badge b-p2">Yok</span></td><td>Geri al 82 pt.</td></tr>
+<tr><td>Açılır palet, iç içe menü</td><td><span class="badge b-p2">Yok</span></td><td>Palet hep açık; ana ekran tek ekran.</td></tr>
+<tr><td>Undo ve Redo yan yana</td><td><span class="badge b-p2">Minik'te yok</span></td><td>Redo yalnız Büyük modda.</td></tr>
+<tr><td>Oyun gibi kapı</td><td><span class="badge b-p2">Yok</span></td><td>Basılı tutma ya da kaydırma kapısı kullanılmadı.</td></tr>
+<tr><td>Ebeveyn alanını aşırı gizlemek</td><td><span class="badge b-p2">Yok</span></td><td>Sağ üstte gri çark, 48 pt; Guided Access rehberi içeride.</td></tr>
+<tr><td>Aşırı uyaran</td><td><span class="badge b-p2">Yok</span></td><td>Kısa efekt sesleri, müzik yok, Sessiz moda uyuyor.</td></tr>
+<tr><td>İnternet bağımlılığı</td><td><span class="badge b-p2">Yok</span></td><td>Uygulama tamamen çevrimdışı.</td></tr>
+</tbody></table></div>
+
+<h2 id="review">7. App Review kontrol listesi</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Madde</th><th>Apple ne istiyor</th><th>Durum</th><th>Kanıt ya da yapılacak</th></tr></thead>
+<tbody>
+<tr><td>1.3 Kids</td><td>Dış link, satın alma ve paylaşım ebeveyn kapısının arkasında; reklam ve analitik yok.</td><td><span class="badge b-p2">Uyumlu</span></td><td>Paylaşım, silme, ayarlar ve iletişim kapının arkasında. <code>Podfile.lock</code>'ta reklam ve analitik SDK'sı yok.</td></tr>
+<tr><td>5.1.4, 5.1.1</td><td>Gizlilik politikası uygulamada ve App Store Connect'te; çizimler kişisel veri sayılır.</td><td><span class="badge b-p1">Kod hazır</span></td><td>Politika Ebeveynler alanında. <code>docs/privacy_policy.html</code> yeni sürümle birlikte yayınlanmalı.</td></tr>
+<tr><td>2.1</td><td>Çökme yok; iPad'de paylaşım çalışır.</td><td><span class="badge b-p2">Uyumlu</span></td><td>Her paylaşımda <code>sharePositionOrigin</code>.</td></tr>
+<tr><td>2.3.1</td><td>Metadata yalnız var olan özellikleri anlatır.</td><td><span class="badge b-p0">Açık</span></td><td>Canlı açıklama hâlâ galeriden içe aktarmayı vaat ediyor. Yeni metin <code>store_listing.md</code>'de; App Store Connect'e sen girmelisin.</td></tr>
+<tr><td>4.0 Design</td><td>Her ekran boyutunda düzgün yerleşim.</td><td><span class="badge b-p2">Uyumlu</span></td><td>Palet 375/393 pt testleri; emülatörde dikey, yatay ve %200 metin denendi. Gerçek iPad'de denenmedi.</td></tr>
+<tr><td>4.2, 2.1(a)</td><td>Kalıcı değer; yer tutucu içerik yok.</td><td><span class="badge b-p1">Kısmen</span></td><td>76 sayfanın 5'inde parmağa yetecek alan yok. <code>fire_truck.png</code> itfaiye değil, ikinci bir helikopter çiziyor.</td></tr>
+<tr><td>Yaş derecesi anketi</td><td>Yeni anket ve zorunlu social media sorusu.</td><td><span class="badge b-p0">Açık</span></td><td>App Store Connect'te sen doldurmalısın.</td></tr>
+<tr><td>Privacy manifest</td><td>Required-reason API beyanı.</td><td><span class="badge b-p2">Uyumlu</span></td><td><code>PrivacyInfo.xcprivacy</code>, UserDefaults için CA92.1; derlenmiş pakette var.</td></tr>
+<tr><td>İhracat uyumu</td><td><code>ITSAppUsesNonExemptEncryption</code></td><td><span class="badge b-p2">Uyumlu</span></td><td><code>false</code>.</td></tr>
+<tr><td>Araç zinciri</td><td>28 Nisan 2026'dan beri Xcode 26 ve iOS 26 SDK.</td><td><span class="badge b-p0">Engel</span></td><td>Bu Mac'te Xcode 16.4 ve macOS 15.4.1 var. Xcode 26, macOS 15.6+ ister.</td></tr>
+<tr><td>UIScene</td><td>iOS 27 SDK ile derlenen uygulama UIScene yaşam döngüsüne geçmeli.</td><td><span class="badge b-p1">Açık</span></td><td>Flutter ≥ 3.41'e geç ya da <code>flutter config --enable-uiscene-migration</code> (global ayar; çalıştırmadım).</td></tr>
+<tr><td>Yaş bandı</td><td>Made for Kids bandı onaydan sonra değişmeyebilir.</td><td><span class="badge b-p0">Karar</span></td><td>Canlı sürüm 6–8 bandında; hedef 5 ve altı. App Review'a sor.</td></tr>
+</tbody></table></div>
+
+<h2 id="hig">8. HIG denetimi (18 madde)</h2>
+<p>Kaynak: Apple HIG'in JSON sürümü, 3 Kasım 2026. "Önce" sütunu bu gecenin başındaki durumu, "Şimdi" sütunu son commit'i (<code>18446e2</code>) gösteriyor.</p>
+<div class="table-wrap"><table>
+<thead><tr><th>#</th><th>HIG kuralı</th><th>Önce</th><th>Şimdi</th><th>Kanıt</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>Hedef ≥ 44 pt, çevresinde ≈ 12 pt</td><td><span class="badge b-p1">Küçük açık</span></td><td><span class="badge b-p2">Uyumlu</span></td><td>Büyük modda aralık 10 → 12 pt; dokunma hedefi testleri.</td></tr>
+<tr><td>2</td><td>Her boyuta uyum, kırpılma yok</td><td><span class="badge b-p0">Kritik</span></td><td><span class="badge b-p2">Uyumlu</span></td><td>Palet 375–397 pt'de silgiyi kesiyordu. <code>KidPalette</code> yeniden yazıldı; 375 ve 393 pt testleri; yatay emülatör.</td></tr>
+<tr><td>3</td><td>Kontrast: metin 4,5:1, büyük metin ve ikon 3:1</td><td><span class="badge b-p0">Açık</span></td><td><span class="badge b-p2">Uyumlu</span></td><td>İkon koyu, renk rozette. Galeri etiketi koyu. Palet kenarı. Gecede bulunan iki açık da kapandı: kapı rakamları 2,22:1 ve üst çubuk 2,73:1. Kontrast testleri uygulamanın kendi temasıyla koşuyor.</td></tr>
+<tr><td>4</td><td>Metin %200'e kadar büyüyebilmeli</td><td><span class="badge b-p1">Küçük açık</span></td><td><span class="badge b-p2">Uyumlu</span></td><td>Ölçek 2,0'de sınırlı; emülatörde %200 ile ana ekran, kategori ve kapı taşmadı.</td></tr>
+<tr><td>5</td><td>Reduce Motion</td><td><span class="badge b-p0">Açık</span></td><td><span class="badge b-p2">Uyumlu</span></td><td><code>reduceMotion()</code> iOS bayrağını da okuyor; konfeti, dolgu açılması, kapı sallanması ve açılış animasyonu atlanıyor.</td></tr>
+<tr><td>6</td><td>Haptik isteğe bağlı</td><td><span class="badge b-p1">Kısmen</span></td><td><span class="badge b-p2">Uyumlu</span></td><td>Ebeveynler alanında Titreşim anahtarı.</td></tr>
+<tr><td>7</td><td>Sessiz modda efekt sesi susar</td><td><span class="badge b-p0">Açık</span></td><td><span class="badge b-p2">Uyumlu</span></td><td>Ambient ses oturumu. Gerçek cihazda denenmedi.</td></tr>
+<tr><td>8</td><td>Sistem undo (sallama, 3 parmak)</td><td><span class="badge b-info">Sapma</span></td><td><span class="badge b-p1">Kısmen</span></td><td>Sallayınca geri al kapalı. 3 parmak düzenleme menüsü ve iPad Cmd-Z açık.</td></tr>
+<tr><td>9</td><td>Modal ekranda belirgin çıkış</td><td><span class="badge b-p2">Uyumlu</span></td><td><span class="badge b-p2">Uyumlu</span></td><td>Ev düğmesi hep görünür; otomatik kayıt onayı gereksiz kılıyor.</td></tr>
+<tr><td>10</td><td>Status bar okunur</td><td><span class="badge b-p0">Açık</span></td><td><span class="badge b-p2">Uyumlu</span></td><td><code>UIUserInterfaceStyle</code> Light; simülatörde koyu saat krem zeminde.</td></tr>
+<tr><td>11</td><td>Kazara çıkışta sistem hareketini ertele</td><td><span class="badge b-p0">Açık</span></td><td><span class="badge b-p1">Uygulandı, doğrulanmadı</span></td><td><code>KidFlutterViewController</code> boyama ekranında üst ve alt kenarı erteliyor. Derlenip açıldı; hareket elle denenmedi.</td></tr>
+<tr><td>12</td><td>iPadOS 26 pencereleri</td><td><span class="badge b-p1">Kısmen</span></td><td><span class="badge b-p1">Açık</span></td><td>Windowed modda denenmedi; ev düğmesi pencere kontrollerinin altında kalabilir.</td></tr>
+<tr><td>13</td><td>Liquid Glass</td><td><span class="badge b-info">Sapma</span></td><td><span class="badge b-info">Gerekçeli sapma</span></td><td>Opak, yüksek kontrastlı düğmeler; cam taklidi Reduce Transparency'ye uymaz.</td></tr>
+<tr><td>14</td><td>Launch screen ilk ekrana benzer, metin içermez</td><td><span class="badge b-p1">Küçük açık</span></td><td><span class="badge b-p2">Uyumlu</span></td><td>Krem launch screen; Flutter açılışı yalnız ikon; Android 12 splash krem.</td></tr>
+<tr><td>15</td><td>İzin açıklaması</td><td><span class="badge b-p1">Küçük açık</span></td><td><span class="badge b-p2">Uyumlu</span></td><td>en ve tr <code>InfoPlist.strings</code>, <code>CFBundleLocalizations</code>.</td></tr>
+<tr><td>16</td><td>Kids kapısı yetişkin işi; sesli uyarı önerilir</td><td><span class="badge b-p1">Kısmen</span></td><td><span class="badge b-p1">Kısmen</span></td><td>Erişilebilirlikte zaman aşımı yok. Sesli uyarı yok.</td></tr>
+<tr><td>17</td><td>Basılma durumu, VoiceOver etiketi</td><td><span class="badge b-p1">Kısmen</span></td><td><span class="badge b-p2">Uyumlu</span></td><td><code>PressableCard</code>; renk adları; tuval etiketi; etiket testleri.</td></tr>
+<tr><td>18</td><td>Katlanabilir iPhone</td><td><span class="badge b-info">İzle</span></td><td><span class="badge b-info">İzle</span></td><td>3 sütunlu ızgaranın orta sütunu katlanma çizgisine düşebilir.</td></tr>
+</tbody></table></div>
+
+<h2 id="acik">9. Açık kalanlar</h2>
+<p>Sıra, 3 yaşındaki bir çocuğa katkıya göre.</p>
+<ol>
+  <li><b>Sesli yönlendirme (Ç1, HIG 16).</b> Kategori ve sayfa adını söyleyen ses, kapıda "bir büyüğe sor" sesi. İki yol var: seslendirme kaydı ya da cihazın konuşma motoru (<code>flutter_tts</code>, yeni bağımlılık). macOS'un <code>say</code> çıktısı lisans gereği uygulamada dağıtılamaz.</li>
+  <li><b>Hareketsizlik ipucu.</b> 3 sn işlem olmazsa bir el animasyonu bir bölgeyi doldurur; en fazla iki kez.</li>
+  <li><b>Yeni çizimler.</b> Kar tanesi, bulut, şimşek, palmiye, kiraz çiçeği ve <code>fire_truck.png</code>. Sayfa denetimi testi düzelen sayfanın listeden çıkarılmasını ister.</li>
+  <li><b>iPad.</b> Cmd-Z ve Shift-Cmd-Z kısayolu, 3 parmak düzenleme menüsünün kapatılması, Windowed mod denemesi.</li>
+  <li><b>Gerçek cihaz.</b> Sessiz mod, kenar ertelemesi, haptik ve açılış süresi. Emülatördeki açılış ölçümü 19–33 sn arasında oynadığı için güvenilir değil.</li>
+  <li><b>Google Play Families politikası</b> bu çalışmada incelenmedi.</li>
+</ol>
+
+<h2 id="kaynak">10. Kaynaklar</h2>
+<ul>
+  <li><a href="https://developer.apple.com/design/human-interface-guidelines/">Apple Human Interface Guidelines</a> (accessibility, layout, buttons, gestures, playing-audio, playing-haptics, motion, undo-and-redo, modality, status-bars, going-full-screen, launching, designing-for-iphone-duo)</li>
+  <li><a href="https://developer.apple.com/kids/">Apple Kids apps ve ebeveyn kapısı</a> · <a href="https://developer.apple.com/app-store/review/guidelines/">App Review Guidelines</a> (16 Ekim 2026)</li>
+  <li><a href="https://developer.apple.com/documentation/technotes/tn3187-migrating-to-the-uikit-scene-based-life-cycle">TN3187: UIScene geçişi</a> · <a href="https://developer.apple.com/xcode/system-requirements/">Xcode sistem gereksinimleri</a></li>
+  <li><a href="https://www.nngroup.com/articles/children-ux-physical-development/">NN/g: çocuklar ve fiziksel gelişim</a> · <a href="https://www.nngroup.com/articles/kids-cognition/">NN/g: çocukların bilişi</a></li>
+  <li><a href="https://playpokpok.com/faqs/">Pok Pok SSS</a> · <a href="https://developer.apple.com/news/?id=3t6o5jec">Sago Mini Jinja's Garden tasarım hikâyesi</a></li>
+  <li><a href="https://www.michiganmedicine.org/health-lab/design-tricks-commonly-used-monetize-young-childrens-app-use">Michigan Medicine: çocuk uygulamalarında manipülatif tasarım</a></li>
+</ul>
+<p class="meta">Ajanların tam raporları bu oturumun kaydında. Bu sayfadaki "Şimdi" durumları <code>flutter analyze</code>, 71 test, CobiPaint_Pixel emülatörü ve CobiPaint iPhone simülatörüyle doğrulandı; aksi satırda yazıyor.</p>
+</div>
+
+</body>
+</html>

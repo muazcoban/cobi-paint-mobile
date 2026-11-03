@@ -46,33 +46,22 @@
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 
-	<!-- Camera Permission -->
-	<key>NSCameraUsageDescription</key>
-	<string>Kendi çizimlerini fotoğraflamak için kameraya erişim izni gerekli</string>
-
-	<!-- Photo Library Permission -->
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Boyama için resim seçmek ve boyadığın resimleri kaydetmek için fotoğraf kütüphanesine erişim izni gerekli</string>
-
-	<!-- Photo Library Add Permission -->
+	<!-- Photo Library Add Permission (the share sheet's "Save Image" action); localized in en.lproj/tr.lproj InfoPlist.strings -->
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Boyadığın resimleri galeriye kaydetmek için izin gerekli</string>
+	<string>Saves the pictures your child colours to your photo library when you choose Save Image.</string>
 
-	<!-- In-App Purchase -->
-	<key>SKAdNetworkItems</key>
+	<!-- The app is light-only (the page is white paper); keeps the status bar readable -->
+	<key>UIUserInterfaceStyle</key>
+	<string>Light</string>
+
+	<key>CFBundleLocalizations</key>
 	<array>
-		<dict>
-			<key>SKAdNetworkIdentifier</key>
-			<string>cstr6suwn9.skadnetwork</string>
-		</dict>
+		<string>en</string>
+		<string>tr</string>
 	</array>
 
-	<!-- Google Mobile Ads -->
-	<key>GADApplicationIdentifier</key>
-	<string>ca-app-pub-5547492389514605~7682406592</string>
-
-	<!-- App Tracking Transparency -->
-	<key>NSUserTrackingUsageDescription</key>
-	<string>Size daha iyi reklamlar gostermek icin izin gerekli</string>
+	<!-- No encryption beyond what the OS provides: no export compliance documents needed -->
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 </dict>
 </plist>

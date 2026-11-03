@@ -1,10 +1,13 @@
+import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LocaleProvider extends ChangeNotifier {
   static const String _localeKey = 'selected_locale';
 
-  Locale _locale = const Locale('tr'); // Default Turkish
+  // Until a grown-up picks one: the device language if supported, else English.
+  Locale _locale = ui.PlatformDispatcher.instance.locale.languageCode == 'tr' ? const Locale('tr') : const Locale('en');
 
   Locale get locale => _locale;
 
@@ -36,28 +39,4 @@ class LocaleProvider extends ChangeNotifier {
     Locale('tr'), // Turkish
     Locale('en'), // English
   ];
-
-  // Get language name for display
-  String getLanguageName(String code) {
-    switch (code) {
-      case 'tr':
-        return 'Turkce';
-      case 'en':
-        return 'English';
-      default:
-        return code;
-    }
-  }
-
-  // Get flag emoji for language
-  String getLanguageFlag(String code) {
-    switch (code) {
-      case 'tr':
-        return '🇹🇷';
-      case 'en':
-        return '🇺🇸';
-      default:
-        return '🌐';
-    }
-  }
 }
