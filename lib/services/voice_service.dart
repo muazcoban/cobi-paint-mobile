@@ -16,9 +16,13 @@ class VoiceService {
 
   factory VoiceService() => _instance;
 
-  final AudioPlayer _player = AudioPlayer()..setPlayerMode(PlayerMode.lowLatency);
+  AudioPlayer? _player;
   Set<String>? _assets;
   bool enabled = true;
+
+  /// Created on the first clip, so a build without clips (and the tests)
+  /// never touches the audio plugin.
+  AudioPlayer get _speaker => _player ??= AudioPlayer()..setPlayerMode(PlayerMode.lowLatency);
 
   Future<void> _loadManifest() async {
     try {
@@ -44,12 +48,12 @@ class VoiceService {
     final path = 'assets/voice/$languageCode/$key.mp3';
     if (!_assets!.contains(path)) return;
     try {
-      await _player.stop();
-      await _player.play(AssetSource(path.substring('assets/'.length)));
+      await _speaker.stop();
+      await _speaker.play(AssetSource(path.substring('assets/'.length)));
     } catch (e) {
       debugPrint('Voice clip failed: $e');
     }
   }
 
-  Future<void> stop() => _player.stop();
+  Future<void> stop() async => _player?.stop();
 }
