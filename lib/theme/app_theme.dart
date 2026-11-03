@@ -188,6 +188,18 @@ class AppTheme {
           foregroundColor: textPrimary,
         ),
       ),
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: OutlinedButton.styleFrom(
+          foregroundColor: textPrimary,
+          side: const BorderSide(color: Color(0x662D3142)),
+        ),
+      ),
+      filledButtonTheme: FilledButtonThemeData(
+        style: FilledButton.styleFrom(
+          backgroundColor: primaryColor,
+          foregroundColor: textPrimary,
+        ),
+      ),
       floatingActionButtonTheme: FloatingActionButtonThemeData(
         backgroundColor: secondaryColor,
         foregroundColor: textPrimary,
