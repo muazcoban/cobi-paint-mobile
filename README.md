@@ -87,3 +87,20 @@ Bu proje özel lisans altındadır. Tüm hakları saklıdır.
 ## İletişim
 
 - E-posta: muazcoban@icloud.com
+
+## Xcode Cloud ile TestFlight
+
+App Store ve TestFlight yüklemeleri Xcode 26 ister; geliştirme Mac'inde Xcode 16.4 varsa ikiliyi
+Xcode Cloud derler. Repo tarafı hazır: `ios/ci_scripts/ci_post_clone.sh` bulut makinesine Flutter
+3.38.3'ü kurar, `flutter pub get` ve `pod install` çalıştırır. İlk iş akışı yalnız Xcode'dan açılır:
+
+1. Xcode'da `ios/Runner.xcworkspace` dosyasını aç; Xcode > Settings > Accounts'ta kişisel takım
+   (MUAZ COBAN) oturumu açık olsun.
+2. Product > Xcode Cloud > Create Workflow. Ürün olarak Runner'ı seç, Next.
+3. İş akışı özeti: Archive eylemi, Xcode sürümü "Latest Release" (26.x), dal `master`; Post-Actions'a
+   "TestFlight Internal Testing" ekle. Next.
+4. Kaynak erişimi: GitHub hesabına Xcode Cloud için izin ver (tarayıcıda "Authorize Xcode Cloud"),
+   `muazcoban/cobi-paint-mobile` deposunu seç. Complete.
+5. İlk derleme otomatik başlar (yaklaşık 25-35 dakika). Sonuç App Store Connect > Xcode Cloud ve
+   TestFlight sekmelerinde görünür; iç test grubuna kendini ekle.
+6. Sürüm numarası `pubspec.yaml`'dan gelir (2.1.0+5); her yeni yüklemede derleme numarasını artır.

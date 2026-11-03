@@ -48,6 +48,13 @@ Apple's Human Interface Guidelines (read the current pages; HIG changes every WW
   (`free: true`); a page that was free stays free. All of it is off unless the app is built with
   `--dart-define=COBI_IAP=true`.
 - iPad: pass `sharePositionOrigin` to every share, or the popover crashes.
+- System undo (3 Nov 2026): only Büyük hands the picture's undo stack to the system
+  (`UndoManagerClient` in the coloring screen, `UndoManager.setUndoState` on every document
+  change), so the iPadOS three-finger gestures, a hardware keyboard's Cmd-Z and the Undo/Redo
+  bubble work there. Minik never does: a palm with three fingers changes nothing (Ç5), and Minik
+  has no keyboard bindings either. Büyük binds Cmd-Z / Shift-Cmd-Z on Apple platforms and
+  Ctrl-Z / Ctrl-Shift-Z / Ctrl-Y elsewhere (`_keyboardUndo`). Shake-to-undo stays off for
+  everyone (`applicationSupportsShakeToEdit = false` in AppDelegate): a child shakes the device.
 - Exports (3 Nov 2026): Android's share sheet has no Print or Save, so behind the gate My Artworks
   offers Save to gallery, Print and Print blank page through `ExportService`
   (`lib/services/export_service.dart`, channel `cobi.paint/export` in `MainActivity.kt`: MediaStore

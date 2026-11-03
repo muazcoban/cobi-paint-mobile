@@ -284,4 +284,75 @@ void main() {
     expect((print.arguments as Map)['name'], saved.name);
     expect((print.arguments as Map)['bytes'], isA<Uint8List>());
   });
+
+  testWidgets('Büyük hands undo to the system and the keyboard; Minik keeps it to the button', (tester) async {
+    final undoCalls = <Map<Object?, Object?>>[];
+    tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(SystemChannels.undoManager, (call) async {
+      if (call.method == 'UndoManager.setUndoState') undoCalls.add(Map<Object?, Object?>.from(call.arguments as Map));
+      return null;
+    });
+    addTearDown(() => tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(SystemChannels.undoManager, null));
+
+    final app = provider();
+    await openHome(tester, app);
+    await tester.tap(find.text('Draw'));
+    await settle(tester, () => find.byType(PaintCanvas).evaluate().isNotEmpty, reason: 'the blank page loaded');
+    await tester.pumpAndSettle();
+    final canvas = find.byType(PaintCanvas);
+    await tester.timedDrag(canvas, const Offset(90, 70), const Duration(milliseconds: 300));
+    await tester.pumpAndSettle();
+    final document = tester.widget<PaintCanvas>(canvas).document;
+    expect(document.strokes, hasLength(1));
+    // Minik: the system never hears of the stroke, so three fingers on the
+    // page do nothing and a toddler's keyboard changes nothing.
+    expect(undoCalls.where((c) => c['canUndo'] == true), isEmpty, reason: 'Minik keeps undo to its button');
+    expect(UndoManager.client, isNull);
+    await tester.sendKeyDownEvent(LogicalKeyboardKey.controlLeft);
+    await tester.sendKeyDownEvent(LogicalKeyboardKey.keyZ);
+    await tester.sendKeyUpEvent(LogicalKeyboardKey.keyZ);
+    await tester.sendKeyUpEvent(LogicalKeyboardKey.controlLeft);
+    await tester.pumpAndSettle();
+    expect(document.strokes, hasLength(1), reason: 'no keyboard undo in Minik');
+
+    await app.updateSettings(app.settings.copyWith(ageMode: AgeMode.big));
+    await tester.pumpAndSettle();
+    expect(UndoManager.client, isNotNull, reason: 'Büyük hands the stack to the system');
+    expect(undoCalls.last, {'canUndo': true, 'canRedo': false});
+
+    // A three-finger swipe or the system's Cmd-Z arrives through the channel.
+    Future<void> platformUndo(String direction) async {
+      await tester.binding.defaultBinaryMessenger.handlePlatformMessage(
+        SystemChannels.undoManager.name,
+        SystemChannels.undoManager.codec.encodeMethodCall(MethodCall('UndoManagerClient.handleUndo', [direction])),
+        (_) {},
+      );
+      await tester.pumpAndSettle();
+    }
+
+    await platformUndo('undo');
+    expect(document.strokes, isEmpty);
+    expect(undoCalls.last, {'canUndo': false, 'canRedo': true});
+    await platformUndo('redo');
+    expect(document.strokes, hasLength(1));
+
+    // A hardware keyboard on Android: Ctrl-Z and Ctrl-Shift-Z.
+    await tester.sendKeyDownEvent(LogicalKeyboardKey.controlLeft);
+    await tester.sendKeyDownEvent(LogicalKeyboardKey.keyZ);
+    await tester.sendKeyUpEvent(LogicalKeyboardKey.keyZ);
+    await tester.pumpAndSettle();
+    expect(document.strokes, isEmpty, reason: 'Ctrl-Z undoes');
+    await tester.sendKeyDownEvent(LogicalKeyboardKey.shiftLeft);
+    await tester.sendKeyDownEvent(LogicalKeyboardKey.keyZ);
+    await tester.sendKeyUpEvent(LogicalKeyboardKey.keyZ);
+    await tester.sendKeyUpEvent(LogicalKeyboardKey.shiftLeft);
+    await tester.sendKeyUpEvent(LogicalKeyboardKey.controlLeft);
+    await tester.pumpAndSettle();
+    expect(document.strokes, hasLength(1), reason: 'Ctrl-Shift-Z redoes');
+
+    // Back to Minik: the system is told there is nothing to undo.
+    await app.updateSettings(app.settings.copyWith(ageMode: AgeMode.little));
+    await tester.pumpAndSettle();
+    expect(UndoManager.client, isNull);
+    expect(undoCalls.last, {'canUndo': false, 'canRedo': false});
+  });
 }

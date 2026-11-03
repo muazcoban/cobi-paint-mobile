@@ -1,11 +1,20 @@
 # Cobi Paint - Store Listing
 
-Bu metin uygulamanın 3 Kasım 2026'daki hâlini anlatır. App Store Connect ve Google Play'deki canlı
-metin elle güncellenmeli; canlı metin bugün dondurulmuş "galeriden resim yükleme" özelliğini vaat ediyor
-(App Review 2.3.1 riski).
+Bu metin uygulamanın 3 Kasım 2026'daki hâlini anlatır. App Store Connect'te 2.1.0 sürüm taslağı bu
+metinle dolduruldu (3 Kasım akşamı; Türkçe birincil, İngilizce (ABD) eklendi); canlı 1.0 metni hâlâ eski
+("60+ resim", galeriden yükleme) ve 2.1.0 yayına girince değişir. Google Play kaydı yok.
 
-## App Name
-**Cobi Paint**
+## App Name (30 karakter)
+- TR: **Cobi Paint: Çocuk Boyama** (24)
+- EN: **Cobi Paint: Kids Coloring** (25)
+
+## Subtitle (30 karakter)
+- TR: Küçük eller için boyama kitabı (30)
+- EN: Coloring book for little hands (30)
+
+## Promotional Text (170 karakter)
+- TR: Yepyeni Cobi Paint: 6 kategoride 201 boyama sayfası, taşmayan tek dokunuş dolgu, 6 fırça, 16 çıkartma ve aynalı serbest çizim. Reklam yok, internet yok, hesap yok. (163)
+- EN: New Cobi Paint: 201 coloring pages in 6 categories, one-tap fill that stays in the lines, 6 brushes, 16 stickers and mirror drawing. No ads, no internet, no accounts. (166)
 
 ---
 
@@ -97,18 +106,25 @@ saving let your child color without asking for help.
 
 ## Keywords / Tags
 
-### Turkish
-boyama, çocuk, boyama kitabı, resim boyama, okul öncesi, 3 yaş, çizim, renkler, yaratıcılık, reklamsız
+App Store anahtar kelime alanı 100 karakter, virgülle, boşluksuz; ad ve altyazıdaki kelimeler tekrar
+edilmez (pazarlama incelemesi, 3 Kasım 2026).
 
-### English
-coloring, kids, coloring book, toddler, preschool, drawing, colors, painting, creativity, no ads
+### Turkish (100)
+okul öncesi,bebek,oyunu,oyunları,oyunlar,çizim,3 yaş,eğitici,reklamsız,anaokulu,hayvan,çıkartma,renk
+
+### English (U.S.) (97)
+toddler,preschool,drawing,games,baby,animals,stickers,no ads,learning,kindergarten,offline,colors
+
+### English (U.K.) (99, ileride üçüncü yerelleştirme)
+toddler,preschool,coloring,book,drawing,games,baby,animals,stickers,no ads,learning,nursery,offline
 
 ---
 
 ## Category and age band
-- **App Store:** Kids kategorisi. Canlı kayıt "Made for Kids, 6–8 yaş" bandında. Yeni hedef 3 yaş
-  olduğu için "5 yaş ve altı" bandına geçmek mantıklı, ama bandın onaydan sonra değişip değişemeyeceğini
-  App Review'a sor.
+- **App Store:** Birincil kategori Education, ikincil Games > Family (3 Kasım 2026'da ASC'de ayarlandı).
+  Kids kategorisi: canlı kayıt "Made for Kids, 6–8 yaş" bandında; açıklama "3 yaş ve üstü" dediği için
+  çelişki var. Band onaydan sonra kilitli; "5 yaş ve altı"na geçiş için App Review'a yazılı istek
+  (hazır metin: plan/pazarlama-incelemesi-2026-11-03.html, 4.5).
 - **Google Play:** Families (Ailelere Yönelik) programı, hedef yaş grubu 5 yaş ve altı.
 
 ---
@@ -127,9 +143,12 @@ coloring, kids, coloring book, toddler, preschool, drawing, colors, painting, cr
 
 ---
 
-## Screenshots needed
+## Screenshots
 
-Gerçek cihaz boyutlarında, uygulama kullanılırken çekilmeli (App Review 2.3.3).
+3 Kasım 2026: simülatörden Minik modda çekildi ve 2.1.0 taslağına yüklendi. Dosyalar `build/store_screenshots/`
+altında (iphone61_tr ve iphone61_en 1206×2622, iphone69_* 1320×2868 ham, ipad13_tr 2064×2752). ASC'nin
+zorunlu iPhone boyutu 6,1"/6,3" (1206×2622); 13" iPad zorunlu. Gerçek cihaz boyutlarında, uygulama
+kullanılırken çekilmeli (App Review 2.3.3). Çekilen kareler:
 
 1. Ana ekran: Resimlerim kartı ve kategoriler
 2. Boyama: bir bölge tek dokunuşla doluyor
