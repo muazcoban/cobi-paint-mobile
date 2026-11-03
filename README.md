@@ -88,19 +88,44 @@ Bu proje özel lisans altındadır. Tüm hakları saklıdır.
 
 - E-posta: muazcoban@icloud.com
 
-## Xcode Cloud ile TestFlight
+## TestFlight'a yükleme
 
-App Store ve TestFlight yüklemeleri Xcode 26 ister; geliştirme Mac'inde Xcode 16.4 varsa ikiliyi
-Xcode Cloud derler. Repo tarafı hazır: `ios/ci_scripts/ci_post_clone.sh` bulut makinesine Flutter
-3.38.3'ü kurar, `flutter pub get` ve `pod install` çalıştırır. İlk iş akışı yalnız Xcode'dan açılır:
+App Store Connect, 28 Nisan 2026'dan beri yalnız Xcode 26 ve üstüyle (iOS 26 SDK) derlenmiş ikilileri
+kabul ediyor. Bu Mac'teki Xcode 16.4 günlük işler için kalır; Cobi Paint'i yanına kurulan ikinci bir
+Xcode derler.
 
-1. Xcode'da `ios/Runner.xcworkspace` dosyasını aç; Xcode > Settings > Accounts'ta kişisel takım
-   (MUAZ COBAN) oturumu açık olsun.
-2. Product > Xcode Cloud > Create Workflow. Ürün olarak Runner'ı seç, Next.
-3. İş akışı özeti: Archive eylemi, Xcode sürümü "Latest Release" (26.x), dal `master`; Post-Actions'a
-   "TestFlight Internal Testing" ekle. Next.
-4. Kaynak erişimi: GitHub hesabına Xcode Cloud için izin ver (tarayıcıda "Authorize Xcode Cloud"),
-   `muazcoban/cobi-paint-mobile` deposunu seç. Complete.
-5. İlk derleme otomatik başlar (yaklaşık 25-35 dakika). Sonuç App Store Connect > Xcode Cloud ve
-   TestFlight sekmelerinde görünür; iç test grubuna kendini ekle.
-6. Sürüm numarası `pubspec.yaml`'dan gelir (2.1.0+5); her yeni yüklemede derleme numarasını artır.
+### Yerel Xcode 26 ile (seçilen yol)
+
+Tek seferlik kurulum:
+
+1. macOS en az 15.6 olmalı (Xcode 26.3'ün şartı; 26.4 ve sonrası macOS 26.2 ister). Sistem Ayarları >
+   Genel > Yazılım Güncelleme'den macOS Sequoia 15.8.2'yi kur (3 GB, yeniden başlatma).
+2. developer.apple.com/download/all adresinden `Xcode_26.3_Apple_silicon.xip` dosyasını indir (Apple
+   hesabıyla giriş, yaklaşık 3 GB). Çift tıklayınca açılan `Xcode.app`'i `/Applications/Xcode-26.3.app`
+   adıyla taşı; `xcode-select` 16.4'te kalır, betik 26.3'ü `DEVELOPER_DIR` ile seçer.
+3. `/Applications/Xcode-26.3.app`'i bir kez aç ve ek bileşenleri kur. Xcode > Settings > Accounts'a
+   MUAZ COBAN takımının (5MY44SLWZU) Apple hesabını ekle; Fimple takımındaki hesap yetmez.
+
+Her yüklemede:
+
+1. `pubspec.yaml` içindeki derleme numarasını artır (2.1.0+5 → 2.1.0+6 gibi); aynı sürümde aynı numara
+   ikinci kez yüklenemez.
+2. `tool/release/ios_testflight.sh` IPA'yı üretir (`build/ios/ipa/`); sorun yoksa
+   `tool/release/ios_testflight.sh --upload` App Store Connect'e gönderir. İmza otomatik
+   (`ios/ExportOptions.plist`, `ios/ExportOptionsUpload.plist`).
+3. İşleme 10-30 dakika sürer; derleme App Store Connect > TestFlight'ta görünür. İç test grubuna kendini
+   ekle, sonra sürüm sayfasında "Build" bölümüne bu derlemeyi seç.
+
+### Xcode Cloud ile (yedek yol)
+
+Repo tarafı hazır: `ios/ci_scripts/ci_post_clone.sh` bulut makinesine Flutter 3.38.3'ü kurar,
+`flutter pub get` ve `pod install` çalıştırır. İlk iş akışı yalnız Xcode'dan açılır:
+
+1. Xcode'da `ios/Runner.xcworkspace` dosyasını aç. Xcode > Settings > Accounts'ta MUAZ COBAN takımının
+   Apple hesabı olmalı; sihirbazın karşılama sayfası takımı adıyla yazar, "FIMPLE..." yazıyorsa iptal et.
+2. Report navigator (Cmd-9) > Cloud sekmesi > Get Started (menü yolu: Integrate > Create Workflow).
+   Birden çok takım varsa sorulan takımı MUAZ COBAN seç.
+3. Grant Access: tarayıcıda GitHub'da "Authorize Xcode Cloud", `muazcoban/cobi-paint-mobile` deposunu seç.
+4. İş akışı özeti: Archive eylemi, Xcode sürümü "Latest Release", dal `master`; Post-Actions'a
+   "TestFlight Internal Testing" ekle. Complete; ilk derleme 25-35 dakika sürer.
+5. Sürüm numarası `pubspec.yaml`'dan gelir; her yeni yüklemede derleme numarasını artır.
