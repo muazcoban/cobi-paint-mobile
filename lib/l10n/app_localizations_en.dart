@@ -109,6 +109,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mirror6 => 'Six-way mirror';
 
   @override
+  String get sticker => 'Sticker';
+
+  @override
   String get licenses => 'Licenses';
 
   @override

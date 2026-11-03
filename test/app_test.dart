@@ -126,6 +126,70 @@ void main() {
     expect(find.bySemanticsLabel('Mirror off'), findsNothing, reason: 'the mirror is only on the blank page');
   });
 
+  testWidgets('the brush button cycles to stickers and a tap on the page sticks one', (tester) async {
+    final app = provider();
+    await openHome(tester, app);
+    await tester.tap(find.text('Draw'));
+    await settle(tester, () => find.byType(PaintCanvas).evaluate().isNotEmpty, reason: 'the blank page loaded');
+    await tester.pumpAndSettle();
+
+    // Minik: marker, rainbow, sticker, marker again. No menu anywhere.
+    await tester.tap(find.bySemanticsLabel('Marker'));
+    await tester.pumpAndSettle();
+    expect(find.bySemanticsLabel('Rainbow brush'), findsOneWidget);
+    await tester.tap(find.bySemanticsLabel('Rainbow brush'));
+    await tester.pumpAndSettle();
+    expect(find.bySemanticsLabel('Sticker: star'), findsOneWidget, reason: 'the button shows the next sticker');
+
+    await tester.tapAt(tester.getCenter(find.byType(PaintCanvas)));
+    await tester.pumpAndSettle();
+    final document = tester.widget<PaintCanvas>(find.byType(PaintCanvas)).document;
+    expect(document.stickers, hasLength(1));
+    expect(document.stickers.single.code, 'star');
+    expect(find.bySemanticsLabel('Sticker: heart'), findsOneWidget, reason: 'the next sticker comes up');
+    await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
+
+    await tester.tap(find.bySemanticsLabel('Sticker: heart'));
+    await tester.pumpAndSettle();
+    expect(find.bySemanticsLabel('Marker'), findsOneWidget);
+    await tester.tap(find.bySemanticsLabel('Undo'));
+    await tester.pumpAndSettle();
+    expect(document.stickers, isEmpty);
+  });
+
+  testWidgets('in Büyük mode the brush cycles through the crayon to stickers, and the size cell scales them', (tester) async {
+    final app = provider();
+    await openHome(tester, app);
+    await app.updateSettings(app.settings.copyWith(ageMode: AgeMode.big));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Draw'));
+    await settle(tester, () => find.byType(PaintCanvas).evaluate().isNotEmpty, reason: 'the blank page loaded');
+    await tester.pumpAndSettle();
+
+    var label = 'Marker';
+    for (final next in ['Rainbow brush', 'Crayon', 'Sticker: star']) {
+      await tester.tap(find.bySemanticsLabel(label));
+      await tester.pumpAndSettle();
+      expect(find.bySemanticsLabel(next), findsOneWidget, reason: 'after "$label" comes "$next"');
+      label = next;
+    }
+
+    final canvas = find.byType(PaintCanvas);
+    await tester.tapAt(tester.getCenter(canvas));
+    await tester.pumpAndSettle();
+    final document = tester.widget<PaintCanvas>(canvas).document;
+    final middle = document.stickers.single.size;
+
+    // The brush size cell in the palette sizes stickers as well.
+    await tester.tap(find.bySemanticsLabel('Brush size'));
+    await tester.pumpAndSettle();
+    await tester.tapAt(tester.getCenter(canvas) + const Offset(0, -60));
+    await tester.pumpAndSettle();
+    expect(document.stickers, hasLength(2));
+    expect(document.stickers.last.size, greaterThan(middle));
+    expect(document.stickers.last.code, 'red_heart', reason: 'the next sticker in the order');
+  });
+
   testWidgets('in Büyük mode the mirror cycles two, four, six and off', (tester) async {
     final app = provider();
     await openHome(tester, app);

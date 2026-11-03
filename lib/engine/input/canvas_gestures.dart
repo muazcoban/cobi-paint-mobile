@@ -1,6 +1,8 @@
 import 'dart:ui';
 
-enum CanvasTool { fill, marker, eraser }
+/// Fill taps a region; marker, eraser and sticker follow the finger (the
+/// sticker tool stamps a trail of pictures along the way).
+enum CanvasTool { fill, marker, eraser, sticker }
 
 /// What the canvas should do in response to raw pointer events.
 class CanvasGestureCallbacks {
@@ -92,6 +94,7 @@ class CanvasGestureMachine {
           }
         case CanvasTool.marker:
         case CanvasTool.eraser:
+        case CanvasTool.sticker:
           callbacks.onStrokeStart(position);
           _state = _State.strokePending;
       }

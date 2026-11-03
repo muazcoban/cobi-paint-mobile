@@ -6,6 +6,7 @@ import 'package:flutter/painting.dart';
 
 import '../document/coloring_document.dart';
 import 'page_layers.dart';
+import 'sticker_images.dart';
 
 /// The finished picture as PNG bytes, at page size and as a thumbnail.
 class ArtworkPngs {
@@ -28,6 +29,7 @@ Future<ArtworkPngs> renderArtworkPngs(
   try {
     await layers.syncFills();
     await layers.syncBrush();
+    await StickerImages.ensure(document.stickers.map((s) => s.code));
     final w = document.map.width;
     final h = document.map.height;
     final thumbScale = math.min(1.0, thumbnailSide / math.max(w, h));
@@ -62,6 +64,8 @@ Future<ui.Image> _compose(PageLayers layers, ui.Image page, Color paper, int wid
       ..colorFilter = lineArtFilter
       ..filterQuality = FilterQuality.medium,
   );
+  // Stickers sit on top of the lines, like real ones.
+  StickerImages.draw(canvas, layers.document.stickers);
   final picture = recorder.endRecording();
   return picture.toImage(width, height).whenComplete(picture.dispose);
 }

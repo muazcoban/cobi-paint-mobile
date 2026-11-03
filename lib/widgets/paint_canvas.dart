@@ -7,9 +7,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../engine/document/coloring_document.dart';
+import '../engine/document/sticker.dart';
 import '../engine/document/stroke.dart';
 import '../engine/input/canvas_gestures.dart';
 import '../engine/render/page_layers.dart';
+import '../engine/render/sticker_images.dart';
 import '../engine/render/symmetry.dart';
 import 'motion.dart';
 
@@ -31,8 +33,12 @@ class PaintCanvas extends StatefulWidget {
     this.symmetry = 1,
     this.allowZoom = false,
     this.paperColor = Colors.white,
+    this.stickers = const [],
+    this.stickerIndex = 0,
+    this.stickerSize = 0,
     this.onFilled,
     this.onStrokeCommitted,
+    this.onStamped,
   });
 
   final ColoringDocument document;
@@ -60,9 +66,23 @@ class PaintCanvas extends StatefulWidget {
   final bool allowZoom;
   final Color paperColor;
 
+  /// Sticker codes in stamping order, for [CanvasTool.sticker]; a finger
+  /// down stamps one, a drag leaves a trail.
+  final List<String> stickers;
+
+  /// Which of [stickers] the next stamp uses.
+  final int stickerIndex;
+
+  /// Sticker width in page pixels.
+  final double stickerSize;
+
   /// A region was filled from a tap; good moment for sound and haptics.
   final void Function(int label)? onFilled;
   final void Function(BrushKind kind)? onStrokeCommitted;
+
+  /// One finger stamped [count] stickers; the parent moves [stickerIndex]
+  /// on by that many.
+  final void Function(int count)? onStamped;
 
   @override
   State<PaintCanvas> createState() => _PaintCanvasState();
@@ -115,6 +135,10 @@ class _PaintCanvasState extends State<PaintCanvas> with SingleTickerProviderStat
   BrushKind? _liveKind;
   int _liveClip = 0;
 
+  // Stickers under the finger, committed together when it lifts.
+  final List<Sticker> _liveStamps = [];
+  bool _stamping = false;
+
   static const double maxZoom = 6;
 
   @override
@@ -161,12 +185,21 @@ class _PaintCanvasState extends State<PaintCanvas> with SingleTickerProviderStat
       _layers.dispose();
       _attach(widget.document);
     }
+    if (widget.tool == CanvasTool.sticker) _ensureStickerImages(widget.stickers);
   }
 
   void _attach(ColoringDocument document) {
     _layers = PageLayers(document: document);
     document.addListener(_documentChanged);
+    _ensureStickerImages(document.stickers.map((s) => s.code));
     unawaited(_syncLayers());
+  }
+
+  /// Decodes the sticker pictures that are not loaded yet, then repaints.
+  void _ensureStickerImages(Iterable<String> codes) {
+    final missing = codes.where((code) => StickerImages.of(code) == null).toList();
+    if (missing.isEmpty) return;
+    unawaited(StickerImages.ensure(missing).then((_) => mounted ? _bump() : null));
   }
 
   @override
@@ -181,7 +214,10 @@ class _PaintCanvasState extends State<PaintCanvas> with SingleTickerProviderStat
 
   void _bump() => _repaint.value++;
 
-  void _documentChanged() => unawaited(_syncLayers());
+  void _documentChanged() {
+    _ensureStickerImages(widget.document.stickers.map((s) => s.code));
+    unawaited(_syncLayers());
+  }
 
   Future<void> _syncLayers() async {
     final animate = _revealPending;
@@ -259,6 +295,16 @@ class _PaintCanvasState extends State<PaintCanvas> with SingleTickerProviderStat
 
   void _strokeStart(Offset local) {
     final p = _toPage(local);
+    if (widget.tool == CanvasTool.sticker) {
+      if (widget.stickers.isEmpty || widget.stickerSize <= 0) return;
+      _stamping = true;
+      _liveStamps
+        ..clear()
+        ..add(_stampAt(p, 0));
+      _ensureStickerImages(widget.stickers);
+      _bump();
+      return;
+    }
     _live
       ..clear()
       ..addAll([p.dx, p.dy, 0.5]);
@@ -271,6 +317,15 @@ class _PaintCanvasState extends State<PaintCanvas> with SingleTickerProviderStat
   }
 
   void _strokeUpdate(Offset local) {
+    if (_stamping) {
+      final p = _toPage(local);
+      // The next stamp lands once the finger is a sticker's width away.
+      if ((p - _liveStamps.last.center).distance >= widget.stickerSize * 1.15) {
+        _liveStamps.add(_stampAt(p, _liveStamps.length));
+        _bump();
+      }
+      return;
+    }
     if (_liveKind == null) return;
     final p = _toPage(local);
     final n = _live.length;
@@ -280,6 +335,16 @@ class _PaintCanvasState extends State<PaintCanvas> with SingleTickerProviderStat
   }
 
   void _strokeEnd() {
+    if (_stamping) {
+      _stamping = false;
+      final count = _liveStamps.length;
+      final stamps = _mirrored(_liveStamps);
+      _liveStamps.clear();
+      widget.document.stamp(stamps);
+      widget.onStamped?.call(count);
+      _bump();
+      return;
+    }
     final kind = _liveKind;
     if (kind == null) return;
     final stroke = Stroke(
@@ -303,7 +368,42 @@ class _PaintCanvasState extends State<PaintCanvas> with SingleTickerProviderStat
   void _strokeCancel() {
     _liveKind = null;
     _live.clear();
+    _stamping = false;
+    _liveStamps.clear();
     _bump();
+  }
+
+  /// The [k]th sticker of the current finger, at page point [p].
+  Sticker _stampAt(Offset p, int k) {
+    final index = widget.stickerIndex + k;
+    return Sticker(
+      code: widget.stickers[index % widget.stickers.length],
+      x: p.dx,
+      y: p.dy,
+      size: widget.stickerSize,
+      angle: Sticker.tiltFor(index),
+    );
+  }
+
+  /// [stamps] plus their mirror copies when the mirror is on: the copies
+  /// are placed by the same transforms as a stroke, turned with their
+  /// rotation, and a mirrored copy tilts the other way.
+  List<Sticker> _mirrored(List<Sticker> stamps) {
+    if (widget.symmetry <= 1) return List.of(stamps);
+    final map = widget.document.map;
+    final transforms = symmetryTransforms(widget.symmetry, map.width / 2, map.height / 2);
+    final rotations = widget.symmetry ~/ 2;
+    return [
+      for (final s in stamps)
+        for (var i = 0; i < transforms.length; i++)
+          Sticker(
+            code: s.code,
+            x: transformPoint(transforms[i], s.center).dx,
+            y: transformPoint(transforms[i], s.center).dy,
+            size: s.size,
+            angle: (i.isOdd ? -s.angle : s.angle) + 2 * math.pi * (i ~/ 2) / rotations,
+          ),
+    ];
   }
 
   /// Regions under an eraser path, sampled every few pixels.
@@ -492,7 +592,11 @@ class _CanvasPainter extends CustomPainter {
         ..filterQuality = FilterQuality.medium,
     );
 
-    // 5. The tool in the child's hand: its tip at the finger, the handle up
+    // 5. Stickers on top of the lines, the ones under the finger included.
+    StickerImages.draw(canvas, state.widget.document.stickers);
+    if (state._liveStamps.isNotEmpty) StickerImages.draw(canvas, state._mirrored(state._liveStamps));
+
+    // 6. The tool in the child's hand: its tip at the finger, the handle up
     // and to the right, so the picture reads as "I am holding a brush".
     if (liveKind != null && state._live.length >= 3) {
       final n = state._live.length;

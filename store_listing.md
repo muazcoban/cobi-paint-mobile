@@ -36,6 +36,7 @@ boyama ve otomatik kayıt sayesinde çocuğunuz yardım istemeden boyar.
 - Bir bölgeye dokunmak onu anında boyar; boya çizgilerden taşmaz, beyaz kenar kalmaz.
 - Keçeli kalem, başladığı bölgenin içinde kalır.
 - Silgi ve her zaman görünen geri al düğmesi.
+- 16 çıkartma: dokununca yapışır, sürükleyince iz bırakır; silgiyle çıkar.
 
 ✏️ **Serbest çizim**
 - Boş sayfaya keçeli kalem, gökkuşağı ve pastel fırçayla çizim.
@@ -71,6 +72,7 @@ saving let your child color without asking for help.
 - Tap an area and it fills straight away; paint never leaks over the lines and leaves no white edges.
 - The marker stays inside the area it started in.
 - An eraser and an undo button that is always visible.
+- 16 stickers: tap to stick one, drag for a trail; the eraser peels them off.
 
 ✏️ **Free drawing**
 - A blank page with marker, rainbow and crayon brushes.
