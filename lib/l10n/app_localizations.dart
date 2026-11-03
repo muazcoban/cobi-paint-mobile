@@ -266,6 +266,24 @@ abstract class AppLocalizations {
   /// **'Pastel boya'**
   String get crayon;
 
+  /// The brush button while it sprays a cloud of dots; spray paint, not a spray bottle
+  ///
+  /// In tr, this message translates to:
+  /// **'Sprey boya'**
+  String get sprayBrush;
+
+  /// The brush button while it leaves a sparkling band, like glitter glue
+  ///
+  /// In tr, this message translates to:
+  /// **'Simli fırça'**
+  String get glitterBrush;
+
+  /// The brush button while it draws a glowing line (Büyük mode only)
+  ///
+  /// In tr, this message translates to:
+  /// **'Neon kalem'**
+  String get neonBrush;
+
   /// Mirror button on the free drawing page while the mirror is off; the next three are its on states
   ///
   /// In tr, this message translates to:

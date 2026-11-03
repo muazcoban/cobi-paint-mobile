@@ -63,6 +63,17 @@ Apple's Human Interface Guidelines (read the current pages; HIG changes every WW
   peels the stickers it runs over and the mirror copies stamps too. Stickers live in
   `ColoringDocument.stickers` (optional JSON key `stickers`), draw above the line art and never
   count towards finishing a page.
+- Brushes (council decision, 3 Nov 2026; the extra brushes waited for incremental baking): marker,
+  rainbow, crayon, spray, glitter and neon, all drawn by `drawStroke` in
+  `lib/engine/render/page_layers.dart`. Minik cycles marker, rainbow, spray, glitter, sticker;
+  Büyük adds the crayon after the rainbow and the neon pen after the glitter (`_bigOnlyBrushes` in
+  the coloring screen). No menu: the button's glyph changes with every state (`SprayGlyph`,
+  `NeonGlyph`, the sparkles icon for glitter), the badge keeps the colour and VoiceOver reads the
+  name. Every brush is deterministic: the scattered ones seed their randomness from the stroke's
+  first point and size (`_seeded`), so a saved or mirrored stroke looks the same everywhere. No
+  blur filters, no animation, and a tap with any brush leaves a mark. The picture under the finger
+  is a Fluent UI Emoji tool in `assets/images/tools/` (paintbrush, crayon, extinguisher, wand,
+  flashlight) with its tip at the finger.
 
 ## Coloring pages
 

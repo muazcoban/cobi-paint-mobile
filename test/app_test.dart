@@ -133,13 +133,16 @@ void main() {
     await settle(tester, () => find.byType(PaintCanvas).evaluate().isNotEmpty, reason: 'the blank page loaded');
     await tester.pumpAndSettle();
 
-    // Minik: marker, rainbow, sticker, marker again. No menu anywhere.
-    await tester.tap(find.bySemanticsLabel('Marker'));
-    await tester.pumpAndSettle();
-    expect(find.bySemanticsLabel('Rainbow brush'), findsOneWidget);
-    await tester.tap(find.bySemanticsLabel('Rainbow brush'));
-    await tester.pumpAndSettle();
-    expect(find.bySemanticsLabel('Sticker: star'), findsOneWidget, reason: 'the button shows the next sticker');
+    // Minik: marker, rainbow, spray, glitter, sticker, marker again. No menu
+    // anywhere, and the crayon and the neon pen stay in Büyük.
+    var label = 'Marker';
+    for (final next in ['Rainbow brush', 'Spray paint', 'Glitter brush', 'Sticker: star']) {
+      await tester.tap(find.bySemanticsLabel(label));
+      await tester.pumpAndSettle();
+      expect(find.bySemanticsLabel(next), findsOneWidget, reason: 'after "$label" comes "$next"');
+      expect(find.bySemanticsLabel(RegExp('Crayon|Neon pen')), findsNothing);
+      label = next;
+    }
 
     await tester.tapAt(tester.getCenter(find.byType(PaintCanvas)));
     await tester.pumpAndSettle();
@@ -167,7 +170,7 @@ void main() {
     await tester.pumpAndSettle();
 
     var label = 'Marker';
-    for (final next in ['Rainbow brush', 'Crayon', 'Sticker: star']) {
+    for (final next in ['Rainbow brush', 'Crayon', 'Spray paint', 'Glitter brush', 'Neon pen', 'Sticker: star']) {
       await tester.tap(find.bySemanticsLabel(label));
       await tester.pumpAndSettle();
       expect(find.bySemanticsLabel(next), findsOneWidget, reason: 'after "$label" comes "$next"');

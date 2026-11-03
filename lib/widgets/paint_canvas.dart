@@ -98,6 +98,9 @@ Future<void> _loadToolImages() => _toolImagesLoading ??= () async {
     BrushKind.marker: 'paintbrush',
     BrushKind.rainbow: 'paintbrush',
     BrushKind.crayon: 'crayon',
+    BrushKind.spray: 'extinguisher',
+    BrushKind.glitter: 'wand',
+    BrushKind.neon: 'flashlight',
   }.entries) {
     try {
       final data = await rootBundle.load('assets/images/tools/${entry.value}.png');
@@ -349,7 +352,7 @@ class _PaintCanvasState extends State<PaintCanvas> with SingleTickerProviderStat
     if (kind == null) return;
     final stroke = Stroke(
       kind: kind,
-      argb: kind == BrushKind.marker ? widget.color.toARGB32() : 0,
+      argb: kind == BrushKind.eraser ? 0 : widget.color.toARGB32(),
       size: widget.brushSize,
       clipLabel: _liveClip,
       symmetry: widget.symmetry,
@@ -495,8 +498,15 @@ void _drawTool(Canvas canvas, BrushKind kind, Offset tip, double size) {
   }
   final image = _toolImages[kind];
   if (image == null) return;
-  // Where the tip sits inside each picture, as a fraction of its size.
-  final anchor = kind == BrushKind.crayon ? const Offset(0.14, 0.9) : const Offset(0.17, 0.84);
+  // Where the tip sits inside each picture, as a fraction of its size: the
+  // brush hairs, the crayon point, the nozzle, the wand's star, the lamp.
+  final anchor = switch (kind) {
+    BrushKind.crayon => const Offset(0.14, 0.9),
+    BrushKind.spray => const Offset(0.28, 0.9),
+    BrushKind.glitter => const Offset(0.38, 0.66),
+    BrushKind.neon => const Offset(0.3, 0.66),
+    _ => const Offset(0.17, 0.84),
+  };
   final dst = Rect.fromLTWH(tip.dx - size * anchor.dx, tip.dy - size * anchor.dy, size, size);
   canvas.drawImageRect(
     image,

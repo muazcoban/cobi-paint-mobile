@@ -106,6 +106,8 @@ void main() {
           children: [
             KidButton(icon: Icons.home_rounded, semanticLabel: 'Home', color: const Color(0xFFFFD54F), onTap: () {}),
             KidButton(icon: Icons.brush_rounded, semanticLabel: 'Brush', selected: true, badgeColor: Colors.yellow, onTap: () {}),
+            KidButton(semanticLabel: 'Spray paint', badgeColor: Colors.red, onTap: () {}, child: const SprayGlyph()),
+            KidButton(semanticLabel: 'Neon pen', badgeColor: Colors.blue, onTap: () {}, child: const NeonGlyph()),
             KidButton(icon: Icons.undo_rounded, semanticLabel: 'Undo', enabled: false, onTap: () {}),
           ],
         ),

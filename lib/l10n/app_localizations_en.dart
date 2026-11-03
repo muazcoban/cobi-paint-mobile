@@ -97,6 +97,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get crayon => 'Crayon';
 
   @override
+  String get sprayBrush => 'Spray paint';
+
+  @override
+  String get glitterBrush => 'Glitter brush';
+
+  @override
+  String get neonBrush => 'Neon pen';
+
+  @override
   String get mirrorOff => 'Mirror off';
 
   @override

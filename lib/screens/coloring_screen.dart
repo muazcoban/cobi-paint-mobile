@@ -55,6 +55,10 @@ const bigPalette = <Color>[
 /// Brush diameters as a share of the page's shorter side.
 const _brushSteps = [0.025, 0.05, 0.09];
 
+/// Brushes only Büyük cycles through; Minik keeps to the ones whose mark a
+/// three-year-old reads at a glance.
+const _bigOnlyBrushes = {BrushKind.crayon, BrushKind.neon};
+
 /// Sticker widths as a share of the page's shorter side; Minik uses the
 /// middle one.
 const _stickerSteps = [0.12, 0.18, 0.26];
@@ -252,22 +256,31 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
     ));
   }
 
-  /// The crayon is a Büyük brush; Minik falls back to the marker.
-  BrushKind _brushFor(bool big) => !big && _brush == BrushKind.crayon ? BrushKind.marker : _brush;
+  /// Crayon and neon are Büyük brushes; Minik falls back to the marker.
+  BrushKind _brushFor(bool big) => !big && _bigOnlyBrushes.contains(_brush) ? BrushKind.marker : _brush;
 
   /// First tap picks the brush; the next taps cycle what it does: marker,
-  /// rainbow, crayon (Büyük only), then stickers. No menu, no extra button.
+  /// rainbow, crayon (Büyük), spray, glitter, neon (Büyük), then stickers.
+  /// No menu, no extra button; every state has its own glyph and its name.
   void _tapBrush(bool big) {
     if (_tool != CanvasTool.marker && _tool != CanvasTool.sticker) {
       _selectTool(CanvasTool.marker);
       return;
     }
     // null stands for the sticker tool.
-    final modes = <BrushKind?>[BrushKind.marker, BrushKind.rainbow, if (big) BrushKind.crayon, null];
+    final modes = <BrushKind?>[
+      BrushKind.marker,
+      BrushKind.rainbow,
+      if (big) BrushKind.crayon,
+      BrushKind.spray,
+      BrushKind.glitter,
+      if (big) BrushKind.neon,
+      null,
+    ];
     final current = _tool == CanvasTool.sticker ? null : _brushFor(big);
     final next = modes[(modes.indexOf(current) + 1) % modes.length];
     unawaited(_sound.playClickSound());
-    if (next == null) _say('sticker');
+    _say(next == null ? 'sticker' : (next == BrushKind.marker ? 'brush' : next.name));
     setState(() {
       if (next == null) {
         _tool = CanvasTool.sticker;
@@ -492,7 +505,12 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
         )
       else
         KidButton(
-          icon: brush == BrushKind.crayon ? Icons.edit_rounded : Icons.brush_rounded,
+          icon: switch (brush) {
+            BrushKind.crayon => Icons.edit_rounded,
+            BrushKind.glitter => Icons.auto_awesome_rounded,
+            BrushKind.spray || BrushKind.neon => null,
+            _ => Icons.brush_rounded,
+          },
           size: m.primary * 0.96,
           selected: _tool == CanvasTool.marker,
           badgeColor: brush == BrushKind.rainbow ? null : _color,
@@ -500,9 +518,17 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
           semanticLabel: switch (brush) {
             BrushKind.rainbow => l10n.rainbowBrush,
             BrushKind.crayon => l10n.crayon,
+            BrushKind.spray => l10n.sprayBrush,
+            BrushKind.glitter => l10n.glitterBrush,
+            BrushKind.neon => l10n.neonBrush,
             _ => l10n.marker,
           },
           onTap: () => _tapBrush(big),
+          child: switch (brush) {
+            BrushKind.spray => const SprayGlyph(),
+            BrushKind.neon => const NeonGlyph(),
+            _ => null,
+          },
         ),
       ListenableBuilder(
         listenable: listenable,

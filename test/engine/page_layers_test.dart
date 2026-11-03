@@ -24,6 +24,16 @@ Stroke _stroke(BrushKind kind, double x) => Stroke(
       points: Float32List.fromList([x, 5, 0.5, x + 2, 30, 0.5]),
     );
 
+/// Pixels with any paint in the baked brush image.
+Future<int> _painted(PageLayers layers) async {
+  final bytes = (await layers.brushImage!.toByteData())!.buffer.asUint8List();
+  var painted = 0;
+  for (var i = 3; i < bytes.length; i += 4) {
+    if (bytes[i] > 0) painted++;
+  }
+  return painted;
+}
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -50,7 +60,7 @@ void main() {
 
   test('every brush kind leaves paint on the page', () async {
     final out = Platform.environment['COBI_TEST_OUT'];
-    for (final kind in [BrushKind.marker, BrushKind.rainbow, BrushKind.crayon]) {
+    for (final kind in BrushKind.values.where((k) => k != BrushKind.eraser)) {
       final document = ColoringDocument(_map());
       final layers = PageLayers(document: document);
       document.addStroke(Stroke(
@@ -61,17 +71,44 @@ void main() {
         points: Float32List.fromList([6, 8, 0.5, 20, 30, 0.5, 34, 10, 0.5]),
       ));
       await layers.syncBrush();
-      final bytes = (await layers.brushImage!.toByteData())!.buffer.asUint8List();
-      var painted = 0;
-      for (var i = 3; i < bytes.length; i += 4) {
-        if (bytes[i] > 0) painted++;
-      }
-      expect(painted, greaterThan(100), reason: '$kind paints pixels');
+      expect(await _painted(layers), greaterThan(100), reason: '$kind paints pixels');
       if (out != null) {
         final png = await layers.brushImage!.toByteData(format: ImageByteFormat.png);
         File('$out/brush_${kind.name}.png').writeAsBytesSync(png!.buffer.asUint8List());
       }
       layers.dispose();
+    }
+  });
+
+  test('a tap with every brush leaves a mark', () async {
+    for (final kind in BrushKind.values.where((k) => k != BrushKind.eraser)) {
+      final document = ColoringDocument(_map());
+      final layers = PageLayers(document: document);
+      document.addStroke(Stroke(kind: kind, argb: 0xFF1E88E5, size: 8, points: Float32List.fromList([20, 20, 0.5])));
+      await layers.syncBrush();
+      expect(await _painted(layers), greaterThan(10), reason: 'a $kind tap is a dot, not nothing');
+      layers.dispose();
+    }
+  });
+
+  test('a scattered brush bakes to the same pixels every time', () async {
+    for (final kind in [BrushKind.crayon, BrushKind.spray, BrushKind.glitter]) {
+      Future<List<int>> bake() async {
+        final document = ColoringDocument(_map());
+        final layers = PageLayers(document: document);
+        document.addStroke(Stroke(
+          kind: kind,
+          argb: 0xFF43A047,
+          size: 8,
+          points: Float32List.fromList([6, 8, 0.5, 20, 30, 0.5, 34, 10, 0.5]),
+        ));
+        await layers.syncBrush();
+        final bytes = List<int>.of((await layers.brushImage!.toByteData())!.buffer.asUint8List());
+        layers.dispose();
+        return bytes;
+      }
+
+      expect(await bake(), await bake(), reason: '$kind takes its randomness from the stroke itself');
     }
   });
 

@@ -48,6 +48,11 @@ kararı: her cihazda aynı, sıcak ve lisansı temiz bir ses).
 | brush | Fırça | Brush |
 | mirror | Ayna | Mirror |
 | sticker | Çıkartma | Sticker |
+| rainbow | Gökkuşağı | Rainbow |
+| crayon | Pastel | Crayon |
+| spray | Sprey | Spray |
+| glitter | Sim | Glitter |
+| neon | Neon | Neon |
 | undo | Geri al | Undo |
 
 Renk sırası `lib/screens/coloring_screen.dart` içindeki `littlePalette` ve `bigPalette` sırasıdır;

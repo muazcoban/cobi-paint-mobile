@@ -166,7 +166,7 @@ ul.tight li, ol.tight li { margin: 3px 0; }
 <tr><td>Hareketsizlik ipucu</td><td>5/5</td><td><span class="badge b-p2">Geçti</span></td><td>Yapıldı.</td></tr>
 <tr><td>Çıkartma aracı</td><td>4/5</td><td><span class="badge b-p2">Geçti</span></td><td>Yapıldı (bölüm 13); kütüphane 201 sayfa olduğu için kurulun "200'ü geçince" şartı sağlandı.</td></tr>
 <tr><td>Günün sayfası ve sezon</td><td>4/5</td><td><span class="badge b-p2">Geçti</span></td><td>Sonraya: önce sezon temaları normal kategori olarak.</td></tr>
-<tr><td>Ek fırçalar</td><td>4/5</td><td><span class="badge b-p2">Geçti</span></td><td>Sonraya (L): önce fırça katmanı artımlı pişirmeye geçmeli.</td></tr>
+<tr><td>Ek fırçalar</td><td>4/5</td><td><span class="badge b-p2">Geçti</span></td><td>Yapıldı (bölüm 14): sprey, simli ve neon fırçalar; artımlı pişirme şartı 2. fazda sağlanmıştı.</td></tr>
 <tr><td>Ayna çizimi</td><td>4/5</td><td><span class="badge b-p2">Geçti</span></td><td>Yapıldı (bölüm 12).</td></tr>
 <tr><td>Renkli örnek ve sihirli boya</td><td>3/5</td><td><span class="badge b-p0">Veto</span></td><td>"Doğru renk bu" baskısı; çocuğun rengi seçme hakkını alır.</td></tr>
 <tr><td>Sayıyla boyama</td><td>1/5</td><td><span class="badge b-p0">Veto</span></td><td>Yanlış renkte boyamayan oyun başarısızlık getirir; hedef 6+.</td></tr>
@@ -245,7 +245,7 @@ ul.tight li, ol.tight li { margin: 3px 0; }
 <tr><td>Yaş sinyali API'leri</td><td>Texas/Utah/Louisiana ve Brezilya; yalnız kilitle birlikte</td><td>Declared Age Range + Significant Change (iOS 26.2 SDK), Play Age Signals betadan çıkınca; ayrı PR</td></tr>
 <tr><td>İllüstratör sayfaları</td><td>3. seviye sahneleri ve zamanla emoji sayfalarının yerini alacak özgün çizimler</td><td>İçerik raporunun 6. bölümü: 3 illüstratöre 5'er sayfalık deneme, sonra 180 sayfa</td></tr>
 <tr><td>Android'de doğrudan yazdırma ve galeriye kayıt</td><td>Bugün sistem paylaşım menüsü üzerinden</td><td>MediaStore kaydı ve PrintHelper için küçük kanal</td></tr>
-<tr><td>Çıkartma, ek fırçalar, ayna, sezon</td><td>Kurulun şartlı onayları</td><td>Sıra: sezon temaları → ayna → çıkartma → fırçalar (önce artımlı pişirme)</td></tr>
+<tr><td>Çıkartma, ek fırçalar, ayna, sezon</td><td>Kurulun şartlı onayları</td><td>Ayna (bölüm 12), çıkartma (13) ve fırçalar (14) yapıldı; sezon kategorisi atlandı (bölüm 11)</td></tr>
 <tr><td>Entegrasyon testi</td><td>Uygulamanın tamamını açan test yok</td><td><code>integration_test</code>: ana ekran → sayfa → dolgu → eve dönüş</td></tr>
 <tr><td>Tasarım sistemi</td><td>Yazı tipi, ikon seti, maskot pozları</td><td><code>design:design-system</code> skill'iyle</td></tr>
 <tr><td>iPad ayrıntıları</td><td>HIG 8 ve 12</td><td>Cmd-Z, 3 parmak menüsü, Windowed mod denemesi</td></tr>
@@ -271,7 +271,7 @@ ul.tight li, ol.tight li { margin: 3px 0; }
 <tr><td>PR #2 (<code>faz2/firca-ve-testler</code> → master)</td><td>Açık: <a href="https://github.com/muazcoban/cobi-paint-mobile/pull/2">github.com/muazcoban/cobi-paint-mobile/pull/2</a>. CI (analyze + test) PR'da koşuyor.</td></tr>
 <tr><td>Mevsim kategorisi</td><td>Atlandı: aday konuların neredeyse hepsi zaten başka kategorilerde; ayrı kategori kopya olurdu. İllüstratör sayfalarıyla birlikte yeniden bakılır.</td></tr>
 </tbody></table></div>
-<p>Sıradaki adaylar (kurul onaylı, yapılmadı): sezon temaları, yaş sinyali API'leri (kilitle birlikte), Android'de doğrudan yazdırma. Ayna çizimi bölüm 12'de, çıkartmalar bölüm 13'te. Senin adımların bölüm 8'de aynen geçerli.</p>
+<p>Sıradaki adaylar (kurul onaylı, yapılmadı): sezon temaları, yaş sinyali API'leri (kilitle birlikte), Android'de doğrudan yazdırma. Ayna çizimi bölüm 12'de, çıkartmalar bölüm 13'te, fırçalar bölüm 14'te. Senin adımların bölüm 8'de aynen geçerli.</p>
 
 <h2 id="ayna">12. Faz 3: ayna çizimi</h2>
 <p>Branch <code>faz3/ayna-cizimi</code> (PR #2'nin üstüne kurulu). Serbest çizim sayfasında ayna: bir parmak çizgisi sayfanın ortasındaki ayna çizgilerine göre kopyalanır. Minik'te tek düğme, dört yönlü açık ya da kapalı; Büyük'te aynı düğme kapalı → iki → dört → altı diye döner. Menü ya da yeni satır yok.</p>
@@ -323,6 +323,32 @@ ul.tight li, ol.tight li { margin: 3px 0; }
 <tr><td>Geri bildirim</td><td>Uyumlu: çıkartma parmağın altında anında, dolgu sesi ve hafif haptik.</td></tr>
 <tr><td>Reduce Motion</td><td>Uyumlu: animasyon yok.</td></tr>
 <tr><td>Kontrast / renk körlüğü</td><td>Uyumlu: resimler bilgi taşımıyor, etiketler konuşuyor.</td></tr>
+<tr><td>Kids Category 1.3 / 5.1.4</td><td>Uyumlu: veri, ağ, izin, metin, bağlantı yok.</td></tr>
+</tbody></table></div>
+<h2 id="firca">14. Faz 5: ek fırçalar</h2>
+<p>Branch <code>faz5/ek-fircalar</code> (faz 4'ün üstüne). Üç yeni fırça: <strong>sprey</strong> (parmağın çevresinde ortası yoğun bir nokta bulutu; ilk basışta gerçek kutu gibi bir püskürtme, böylece tek dokunuş da görünür), <strong>simli fırça</strong> (rengin soluk bandı üstünde beyaz ve koyu dört köşeli yıldızlar, ince beyaz toz) ve <strong>neon kalem</strong> (açık çekirdek, renkli tüp, dışa doğru sönen hale). Yeni düğme yok: fırça düğmesinin döngüsü Minik'te keçeli kalem → gökkuşağı → sprey → simli → çıkartma; Büyük'te gökkuşağından sonra pastel, simliden sonra neon gelir, yedi durum. Her durumun kendi glifi var (sprey: nokta bulutu, simli: pırıltı simgesi, neon: haleli çizgi), rozet seçili rengi gösterir, VoiceOver adı okur. Parmağın altındaki araç resmi de fırçaya göre değişir: sprey için yangın söndürücü (ağızlık parmakta), simli için sihirli değnek (yıldızlı ucu parmakta), neon için el feneri (lambası parmakta); üçü de Fluent UI Emoji, sayfalarla aynı commit, <code>assets/images/tools/</code>.</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Kurul koşulu ve plan maddesi</th><th>Nasıl karşılandı</th></tr></thead>
+<tbody>
+<tr><td>Kurul: önce fırça katmanı artımlı pişirmeye geçmeli</td><td>2. fazda yapıldı; yeni fırçalar aynı katmana pişiyor, parmak kalkınca yalnız yeni çizgi çiziliyor.</td></tr>
+<tr><td>Plan: sprey ve simli herkese, neon 6–10 yaşa</td><td>Sprey ve simli iki kipte; neon ve pastel yalnız Büyük'te (<code>_bigOnlyBrushes</code>). Minik'te hiçbir fırça yanlış sonuç vermez: her durum boya bırakır.</td></tr>
+<tr><td>Plan: aynı tohum aynı deseni üretir; kayıt ve tekrar aynı sonucu verir</td><td>Saçılan fırçalar tohumu çizginin ilk noktasından ve boyutundan alıyor (<code>_seeded</code>); test aynı çizgiyi iki kez pişirip pikselleri karşılaştırıyor. Bulanıklık filtresi yok: hale 12 katmanlı yarı saydam çizgi, her çizicide aynı.</td></tr>
+<tr><td>Kurulun genel kuralı: menü yok, 375 pt telefona düğme eklenmez</td><td>Aynı düğme, aynı döngü; glif ve etiket her durumda farklı.</td></tr>
+<tr><td>Plan: simlide "hafif ışıltı animasyonu"</td><td>Yapılmadı: pişmiş katman animasyon taşımaz, Reduce Motion'da zaten kapanacaktı; yıldızlar sabit.</td></tr>
+<tr><td>Plan: kurşun kalem (incelme + basınç taklidi)</td><td>Yapılmadı: parmakta basınç yok, Büyük'teki ince keçeli kalem aynı işi görüyor. Plan durumu "Bitti" olarak işaretlendi, not düşüldü.</td></tr>
+</tbody></table></div>
+<p>İki düzeltme çıktı. Birincisi: gökkuşağı fırçasıyla tek dokunuş hiç iz bırakmıyordu (sıfır uzunluklu yolun metriği yok); şimdi her fırçada dokunuş bir nokta ve test bunu her tür için doğruluyor. İkincisi: tuval, parmak kalkınca çizgiyi belgeye yazarken rengi yalnız keçeli kaleme veriyordu; pastel 2. fazdan beri gri pişiyordu, canlı çizgi renkli olduğu için fark edilmemişti. Şimdi silgi dışında her fırça seçili rengi taşıyor.</p>
+<p>Testler: 132 (her fırça türü boya bırakıyor, her türde dokunuş iz bırakıyor, saçılan fırçalar deterministik, dört kadranda ayna, JSON gidiş dönüşü ve bilinmeyen tür, tuvalde üç fırçanın kendi türüyle kaydı, glifli düğmelerin dokunma hedefi ve etiket kuralı, uygulama testinde Minik beşli ve Büyük yedili döngü). Emülatörde (CobiPaint_Pixel) bu kez iki kip de görüldü. Minik: döngü, sprey bulutu, simli bant, değnek ve söndürücü parmağın altında, tek adımda geri alma. Büyük: gökkuşağı dokunuşunun noktası, renkli pastel, neon, boyut hücresiyle kalın neon, el feneri, yedili döngünün kapanışı. iOS'ta ve gerçek cihazda denenmedi; uzun bir neon çizgisi canlı çizilirken her karede 14 kez çiziliyor, gerçek cihazda akıcılığı ölçülmedi.</p>
+<div class="table-wrap"><table>
+<thead><tr><th>HIG / App Review maddesi</th><th>Sonuç</th></tr></thead>
+<tbody>
+<tr><td>Dokunma hedefi ≥ 44 pt</td><td>Uyumlu: aynı fırça düğmesi (79 pt Minik telefon, 61 pt Büyük telefon).</td></tr>
+<tr><td>Düğme amacını içeriğiyle söyler (Buttons)</td><td>Uyumlu: her fırçanın glifi kendi izini andırıyor, rozet rengi gösteriyor.</td></tr>
+<tr><td>Beş (Minik) ve yedi (Büyük) durumlu döngü; HIG toggle'ı iki durum, çok seçenek için pop-up düğme tarif eder (Toggles)</td><td>Gerekçeli sapma, ayna ve çıkartmayla aynı gerekçe: çocuğa menü açtırmamak. Her durumun glifi ve VoiceOver etiketi ayrı, hiçbir durum "yanlış" değil, tek dokunuşla ilerler. Büyük'teki yedi durum bu kalıbın sınırı; bir fırça daha gelirse Büyük için ayrı bir seçici gerekir.</td></tr>
+<tr><td>Simgeler tanınır, sade, birbiriyle tutarlı (Icons)</td><td>Uyumlu: iki özel glif Material simgeleriyle aynı koyu renkte ve kalınlıkta, simli için sistemin pırıltı simgesi; simgeler seçili renge boyanmıyor.</td></tr>
+<tr><td>Geri bildirim</td><td>Uyumlu: tık sesi, seçim haptiği, parmağın altında anında çizim; ses klibi anahtarları eklendi (<code>rainbow</code>, <code>crayon</code>, <code>spray</code>, <code>glitter</code>, <code>neon</code>).</td></tr>
+<tr><td>Reduce Motion</td><td>Uyumlu: animasyon yok; planın ışıltı animasyonu bilerek yapılmadı.</td></tr>
+<tr><td>Erişilebilirlik etiketleri</td><td>Uyumlu: "Sprey boya", "Simli fırça", "Neon kalem" ve İngilizceleri.</td></tr>
 <tr><td>Kids Category 1.3 / 5.1.4</td><td>Uyumlu: veri, ağ, izin, metin, bağlantı yok.</td></tr>
 </tbody></table></div>
 </div>
