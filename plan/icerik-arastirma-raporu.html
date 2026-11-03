@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cobi Paint İçerik Araştırması</title>
+<style>
+:root {
+  --bg: #fbfaf7; --surface: #ffffff; --surface-2: #f3f1ec; --text: #1f2328; --muted: #5d6470;
+  --border: #e2ded6; --accent: #d9480f; --accent-soft: #fff1e8; --link: #0b62c4;
+  --p0: #c92a2a; --p0-soft: #ffe9e9; --p1: #b35c00; --p1-soft: #fff3e0; --p2: #2f6f3e; --p2-soft: #e8f5ec;
+  --info: #1864ab; --info-soft: #e7f1fb; --code-bg: #f1efe9;
+  --d-fill: #e7f1fb; --d-stroke: #1864ab; --d-fill-2: #fff1e8; --d-stroke-2: #d9480f; --d-fill-3: #e8f5ec; --d-stroke-3: #2f6f3e; --d-line: #5d6470;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #15171a; --surface: #1d2024; --surface-2: #24282d; --text: #e8e6e3; --muted: #a3a9b3;
+    --border: #343a41; --accent: #ff8a4c; --accent-soft: #3a2418; --link: #6cb4ff;
+    --p0: #ff8787; --p0-soft: #3b1f1f; --p1: #ffb84d; --p1-soft: #3a2c16; --p2: #8ce99a; --p2-soft: #1d3324;
+    --info: #74c0fc; --info-soft: #182a3b; --code-bg: #26292e;
+    --d-fill: #182a3b; --d-stroke: #74c0fc; --d-fill-2: #3a2418; --d-stroke-2: #ff8a4c; --d-fill-3: #1d3324; --d-stroke-3: #8ce99a; --d-line: #a3a9b3;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #15171a; --surface: #1d2024; --surface-2: #24282d; --text: #e8e6e3; --muted: #a3a9b3;
+  --border: #343a41; --accent: #ff8a4c; --accent-soft: #3a2418; --link: #6cb4ff;
+  --p0: #ff8787; --p0-soft: #3b1f1f; --p1: #ffb84d; --p1-soft: #3a2c16; --p2: #8ce99a; --p2-soft: #1d3324;
+  --info: #74c0fc; --info-soft: #182a3b; --code-bg: #26292e;
+  --d-fill: #182a3b; --d-stroke: #74c0fc; --d-fill-2: #3a2418; --d-stroke-2: #ff8a4c; --d-fill-3: #1d3324; --d-stroke-3: #8ce99a; --d-line: #a3a9b3;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+.wrap { max-width: 1080px; margin: 0 auto; padding: 32px 16px 80px; }
+header.top { border-bottom: 1px solid var(--border); padding-bottom: 20px; margin-bottom: 28px; }
+header.top h1 { font-size: 2rem; line-height: 1.2; margin: 0 0 8px; }
+.meta { color: var(--muted); font-size: .92rem; }
+nav.toc { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; margin: 0 0 32px; }
+nav.toc ol { margin: 0; padding-left: 20px; columns: 2; column-gap: 32px; }
+nav.toc li { break-inside: avoid; margin: 2px 0; }
+a { color: var(--link); }
+h2 { font-size: 1.5rem; margin: 48px 0 12px; padding-top: 8px; border-top: 1px solid var(--border); }
+h3 { font-size: 1.15rem; margin: 28px 0 8px; }
+p { margin: 8px 0 12px; }
+.lead { font-size: 1.08rem; }
+.callout { background: var(--accent-soft); border-left: 4px solid var(--accent); border-radius: 8px; padding: 14px 18px; margin: 16px 0; }
+.callout.info { background: var(--info-soft); border-left-color: var(--info); }
+.callout ul, .callout ol { margin: 6px 0; padding-left: 20px; }
+.table-wrap { overflow-x: auto; margin: 12px 0 20px; border: 1px solid var(--border); border-radius: 10px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: .93rem; }
+th, td { text-align: left; vertical-align: top; padding: 9px 12px; border-bottom: 1px solid var(--border); }
+th { background: var(--surface-2); font-weight: 600; white-space: nowrap; }
+tr:last-child td { border-bottom: 0; }
+td:first-child { white-space: nowrap; }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+code { background: var(--code-bg); padding: 1px 5px; border-radius: 4px; font: .86em/1.4 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; word-break: break-word; }
+.badge { display: inline-block; font-size: .75rem; font-weight: 700; padding: 2px 8px; border-radius: 999px; white-space: nowrap; }
+.b-p0 { background: var(--p0-soft); color: var(--p0); }
+.b-p1 { background: var(--p1-soft); color: var(--p1); }
+.b-p2 { background: var(--p2-soft); color: var(--p2); }
+.b-info { background: var(--info-soft); color: var(--info); }
+.grid { display: grid; gap: 16px; align-items: start; }
+.g3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.g2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+figure { margin: 0; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 10px; }
+figure img { width: 100%; height: auto; display: block; border-radius: 6px; background: #fff; }
+figcaption { font-size: .86rem; color: var(--muted); margin-top: 8px; }
+.diagram { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 12px; margin: 12px 0 20px; overflow-x: auto; }
+.diagram svg { display: block; width: 100%; min-width: 640px; height: auto; }
+.diagram svg text { fill: var(--text); font-family: inherit; }
+.diagram .box { fill: var(--d-fill); stroke: var(--d-stroke); stroke-width: 1.5; }
+.diagram .box2 { fill: var(--d-fill-2); stroke: var(--d-stroke-2); stroke-width: 1.5; }
+.diagram .box3 { fill: var(--d-fill-3); stroke: var(--d-stroke-3); stroke-width: 1.5; }
+.diagram .edge { stroke: var(--d-line); stroke-width: 1.5; fill: none; }
+.diagram .lbl { font-size: 12px; fill: var(--muted); }
+.diagram .ttl { font-size: 14px; font-weight: 600; }
+.diagram .sm { font-size: 12px; }
+.diagram .gridline { stroke: var(--border); stroke-width: 1; }
+.kv { display: grid; grid-template-columns: max-content 1fr; gap: 4px 16px; }
+.kv dt { font-weight: 600; }
+.kv dd { margin: 0; }
+details { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 10px 14px; margin: 12px 0; }
+details summary { cursor: pointer; font-weight: 600; }
+.small { font-size: .88rem; color: var(--muted); }
+ul.tight li, ol.tight li { margin: 3px 0; }
+@media (max-width: 760px) {
+  .g3, .g2 { grid-template-columns: minmax(0, 1fr); }
+  nav.toc ol { columns: 1; }
+  header.top h1 { font-size: 1.6rem; }
+  .kv { grid-template-columns: 1fr; }
+}
+</style>
+
+</head>
+<body>
+<div class="wrap">
+<header class="top"><h1>Cobi Paint İçerik Araştırması</h1><div class="meta">3 Kasım 2026 · Araştırma ajanının raporu; 201 sayfalık Fluent hattı bu rapora göre kuruldu. Hukuki görüş değildir.</div></header>
+<h2>Cobi Paint: 300 profesyonel boyama sayfası için kaynak, lisans ve seviye araştırması</h2>
+<p>Tarih: 3 Kasım 2026. Bütün kaynaklara bu tarihte eriştim. "(doğrulanamadı)" yazan her bilgi ya resmî sayfasını okuyamadığım ya da yalnız ikincil bir kaynakta gördüğüm bilgidir. Bu rapor hukuki görüş değil. Abonelik eklemeden önce lisans kararlarını bir avukata göstermeni öneririm.</p>
+<h3>1. Sıralı özet</h3>
+<p>En iyi yol hibrit. Seviye 1'i Microsoft Fluent Emoji'nin "Flat" çizimlerinden otomatik dönüştür, Seviye 2 ve 3'ü tek bir illüstratöre ısmarla. Bu yolla ilk 120 sayfa 2–3 haftada hazır olur. Uygulamada tek bir lisans bildirimi (MIT) gösterilir. Kalan 180 sayfanın telifi, yazılı devir sözleşmesiyle sana geçer.</p>
+<div class="table-wrap"><table><thead><tr><th>Sıra</th><th>Yol</th><th>300 sayfanın maliyeti (tahmin)</th><th>Süre (tahmin)</th><th>Uygulamada gereken bildirim</th><th>Ana risk</th></tr></thead><tbody>
+<tr><td>1</td><td>Hibrit: 120 sayfa Fluent Flat dönüşümü + 180 sayfa ısmarlama</td><td>3.600–7.200 $ + 1–2 hafta geliştirme</td><td>İlk 120 sayfa 2–3 hafta, tamamı 11–14 hafta</td><td>MIT metni + Microsoft telif satırı</td><td>İki stil birbirinden farklı durabilir</td></tr>
+<tr><td>2</td><td>300 sayfanın tamamını ısmarlamak</td><td>Serbest çalışanla 6.000–12.000 $, stüdyoyla 15.000–36.000 $</td><td>15–25 hafta</td><td>Yok</td><td>Maliyet ve süre</td></tr>
+<tr><td>3</td><td>AI ile üretim + insan eliyle temizlik</td><td>300–3.000 $</td><td>4–8 hafta</td><td>Yok</td><td>Çıktı telifle korunmayabilir; her sayfanın tek tek kontrolü gerekir</td></tr>
+<tr><td>4</td><td>CC0 ve Pixabay havuzlarından toplama</td><td>~0 $ + seçme emeği</td><td>Belirsiz</td><td>Gerekmez</td><td>Stil tutarsız; yükleyenin gerçekten hak sahibi olup olmadığı belirsiz</td></tr>
+<tr><td>5</td><td>Hazır paket pazarları</td><td>Değişken</td><td>—</td><td>Pakete göre</td><td>Lisans metinleri boyama uygulamasıyla çatışıyor</td></tr>
+</tbody></table></div>
+<p>Twemoji daha sade şekiller, OpenMoji hazır çizgiler veriyor. İkisi de Creative Commons 4.0 lisanslı ve bu lisansın DRM maddesi App Store ile çatışabilir (bkz. 2.2). Fluent'i bu yüzden seçtim.</p>
+<h3>2. Açık lisanslı kaynaklar (Soru 1)</h3>
+<p>Terimler:</p>
+<ul>
+<li><strong>MIT ve Apache 2.0:</strong> telif satırını ve lisans metnini korursan her türlü kullanıma izin veren lisanslar.</li>
+<li><strong>CC0:</strong> yazarın bütün haklarından vazgeçmesi.</li>
+<li><strong>CC BY:</strong> kullanan, yazara atıf yapmak zorunda.</li>
+<li><strong>SA (share-alike):</strong> türettiğin eseri de aynı lisansla yayımlamak zorundasın.</li>
+</ul>
+<div class="table-wrap"><table><thead><tr><th>Kaynak</th><th>Resmî lisans; uygulama paketinde ticari dağıtım</th><th>Gereken bildirim</th><th>SA / marka notu</th><th>Stil; kullanılabilir konu sayısı (tahmin)</th></tr></thead><tbody>
+<tr><td>Fluent UI Emoji [1][2]</td><td>MIT (repodaki LICENSE dosyası); dağıtım serbest</td><td>MIT metni + Copyright (c) Microsoft Corporation</td><td>SA yok. Microsoft bayrakları, Clippy'yi, oyun ve "technologist" emojilerini marka nedeniyle açmadı.</td><td>Flat stil düz renkli ve sade; 1.500+ emoji, 250–350 uygun konu</td></tr>
+<tr><td>Noto Emoji [3][4]</td><td>README'ye göre görsellerin çoğu Apache 2.0, fontlar OFL 1.1, bayraklar kamu malı (kök dizindeki LICENSE dosyası OFL); dağıtım serbest</td><td>Apache metni + değişiklik notu (Bölüm 4)</td><td>SA yok. Apache marka hakkı vermiyor (Bölüm 6).</td><td>En ayrıntılı set, gölge bölgeleri var; 300–400 konu</td></tr>
+<tr><td>Twemoji [5][6]</td><td>Twitter'ın deposu v14'te kaldı; bakımı jdecked/twemoji sürdürüyor (v17.0.3). Grafikler CC BY 4.0.</td><td>Yaratıcının adı, lisans adı ve adresi, değişiklik notu. README mobil uygulamada atfın Ayarlar/Hakkında bölümüne konmasını öneriyor.</td><td>SA yok. DRM maddesi var.</td><td>En sade set, iri şekiller; 300–400 konu</td></tr>
+<tr><td>OpenMoji [7]</td><td>CC BY-SA 4.0; "Black" adlı çizgi seti var</td><td>SSS'deki hazır İngilizce atıf satırı + değişiklik notu</td><td>SA var: dönüştürdüğün sayfalar da CC BY-SA olur. extras-openmoji/brand klasöründe marka logoları var. DRM maddesi var.</td><td>Çizgiler hazır ve kalın (72 birimlik ızgarada 2 birim); 4.495 emoji, 350–450 konu</td></tr>
+<tr><td>Openclipart [10]</td><td>CC0</td><td>Gerekmez</td><td>Marka konusuna değinmiyor. Kaynağı şüpheli yüklemelere "pd_issue" etiketi veriliyor.</td><td>Kalite değişken; "coloring page" araması 130 sonuç verdi</td></tr>
+<tr><td>Public Domain Vectors [11]</td><td>Hakkında sayfasına göre tüm görseller CC0</td><td>Gerekmez</td><td>Kaynak ya da marka için hiçbir uyarı yok</td><td>Kalite değişken; arama 403 verdi, sayı alınamadı</td></tr>
+<tr><td>Wikimedia Commons [12]</td><td>Lisans her dosyada farklı; Wikimedia Vakfı lisansın doğru olduğunu garanti etmiyor</td><td>Dosyaya göre</td><td>Bazı dosyalar CC BY-SA; marka ve kişilik hakları ayrıca geçerli</td><td>"Coloring pages" kategorisinde 211 dosya var, çoğu konu dışı</td></tr>
+<tr><td>Pixabay [13]</td><td>Pixabay Content License. SSS, içeriği bir uygulamaya katmayı yeterli değişiklik sayıyor. Görseli olduğu gibi tek başına dağıtmak yasak.</td><td>Gerekmez</td><td>Marka içeren görsel, mal ya da hizmet için ticari olarak kullanılamaz. Boyama sayfası ürünün ana içeriği olduğu için gri alan (yorumum).</td><td>32.000+ boyama çizimi; ilk 100 sonucun ~55'inde AI etiketi var</td></tr>
+<tr><td>Freepik / Flaticon [14][15]</td><td>Freepik 28.04.2026'da adını Magnific yaptı. Haziran 2026 şartlarının 8.1/5. maddesine göre satılan bir uygulamada içerik ana unsur olamaz; şüpheli durumda ana unsur sayılıyor.</td><td>Ücretsiz planda atıf, Premium'da gerekmiyor</td><td>Boyama sayfası uygulamanın ana unsuru olduğu için uygun değil. Flaticon şartları 403 verdi (doğrulanamadı).</td><td>—</td></tr>
+<tr><td>Icons8 [16]</td><td>Ücretsiz lisans, Hakkında/Ayarlar bölümünde ve mağaza açıklamasında icons8.com bağlantısı istiyor; ücretli lisans istemiyor. Geliştirici lisansı içeriğin uygulamadan ayrı dosya olarak çıkarılmasını yasaklıyor.</td><td>Ücretsiz planda bağlantı; Kids Category'de ebeveyn kapısının arkasında olmalı</td><td>Marka içeren içerik yalnız o markanın sahibini tanıtmak için kullanılabilir</td><td>İkon stili, boyama sayfası değil. "Ana unsur" maddesi bulamadım (doğrulanamadı).</td></tr>
+</tbody></table></div>
+<p>Konu sayıları benim tahminim. Unicode Emoji 18.0'daki kategori sayılarından çıkardım: Hayvanlar ve Doğa 161, Yiyecek 132, Seyahat ve Yerler 221, Etkinlikler 85, Nesneler 268 [36]. Silahları, alkolü, yazılı simgeleri, bayrakları ve tekrarları (ör. saat yüzleri) çıkardım.</p>
+<h4>2.2 CC 4.0 lisansları ve App Store</h4>
+<p>CC BY 4.0 ve CC BY-SA 4.0 iki şeyi yasaklıyor: alıcının haklarını daraltan ek koşulları ve "etkili teknolojik önlemleri" (Bölüm 2(a)(5)(B)) [8]. Etkili teknolojik önlem, DRM gibi kopya korumaları demek. CC'nin wiki sayfası, App Store'un FairPlay korumasının bu maddeyi ihlal edebileceğini yazıyor [9]. CC SSS'si, DRM uygulayan bir platforma yükleme yapmadan önce lisans verenden açık izin alınmasını istiyor [9]. Bu konuda bir mahkeme kararı bulamadım. MIT ve Apache 2.0'da böyle bir madde yok, bu yüzden risk yalnız Twemoji ve OpenMoji için geçerli.</p>
+<h3>3. Emoji'den boyama sayfası (Soru 2)</h3>
+<p>Bunu yapanlar var. App Store'daki "My Emoji coloring book game" (4+) emoji çizimlerini boyatıyor ama çizimlerin nereden geldiğini yazmıyor [29]. Arama sonuçlarına göre "Molly's Studio" 0–5 yaş için emojilerden boyama sayfası üretiyor; mağaza sayfası 404 verdi (doğrulanamadı). OpenMoji'nin Black seti de aynı fikrin hazır hâli. Açık kaynaklı bir dönüştürme aracı bulamadım.</p>
+<p>Karmaşıklığı karşılaştırmak için iki emojinin SVG dosyasını okudum [37]. Tablodaki "öğe", SVG içindeki tek bir çizim parçası (path, circle). İki örnek az; sonuç yalnız bir eğilim gösterir.</p>
+<div class="table-wrap"><table><thead><tr><th>Set</th><th>Köpek yüzü (öğe / renk)</th><th>Otomobil (öğe / renk)</th></tr></thead><tbody>
+<tr><td>Twemoji</td><td>13 / 7</td><td>6 / 4</td></tr>
+<tr><td>Fluent Flat</td><td>9 / 5</td><td>8 / 6</td></tr>
+<tr><td>Noto</td><td>12 / 7</td><td>15 / 9</td></tr>
+<tr><td>OpenMoji Black</td><td>10 çizgi, 8'i kapanmıyor</td><td>6 çizgi, hepsi 2 birim</td></tr>
+</tbody></table></div>
+<ul>
+<li><strong>Twemoji:</strong> 3 yaş için en sade set.</li>
+<li><strong>Fluent Flat:</strong> sadelikte Twemoji'ye çok yakın; lisans riski de düşük olduğu için en iyi seçim.</li>
+<li><strong>Noto:</strong> daha ayrıntılı, Seviye 2'ye uyar.</li>
+<li><strong>OpenMoji Black:</strong> çizgileri hazır veriyor ama bazı çizgileri kapanmıyor. Kapanmayan çizgiden boya taşabilir ve motorun 2 px'lik boşluk kapatması bunu her dosyada önlemeyebilir.</li>
+</ul>
+<p>Önerdiğim dönüşüm hattı:</p>
+<p>SVG → 2048 px düz renkli PNG → renk etiket haritası → eşiğin altındaki küçük bölgeleri komşusuna kat → renk sınırlarına sabit kalınlıkta siyah çizgi → küçük koyu ayrıntılar (ör. göz) siyah kalır → bölgelerin içi beyaz → motorun bölge bulucusuyla doğrula (en az 2 bölge, her biri genişliğin %10'u kadar; taşma yok) → PNG</p>
+<p>Bu hat, SVG'de üst üste binen şekillerin gizli kenarlarını raster aşamasında yok ediyor.</p>
+<p>Her set için gereken bildirim. Hepsi ebeveyn alanında, bağlantısız düz metin olarak gösterilir:</p>
+<ul>
+<li><strong>Fluent:</strong> Copyright (c) Microsoft Corporation satırı ve MIT'nin tam metni (repodaki LICENSE dosyasından).</li>
+<li><strong>Noto:</strong> Apache 2.0'ın tam metni ve görsellerin boyama sayfasına dönüştürüldüğü notu. Repo listesinde NOTICE dosyası görmedim, ama liste eksik görünüyordu (doğrulanamadı).</li>
+<li><strong>Twemoji:</strong> Twitter Inc. ve katkıda bulunanlar (jdecked/twemoji), CC BY 4.0'ın adı ve adresi, dönüştürme notu.</li>
+<li><strong>OpenMoji:</strong> SSS'deki atıf satırı, CC BY-SA 4.0 adresi ve dönüştürülen sayfaların da CC BY-SA 4.0 olduğu notu.</li>
+</ul>
+<p>Uygulamada ebeveyn kapısı (<code>lib/widgets/parental_gate.dart</code>) ve ebeveyn ekranı zaten var, ama <code>lib/</code> altında bir lisans ekranı yok. Bu metinler Flutter'ın <code>LicenseRegistry</code> kaydıyla paket lisanslarıyla aynı ekranda gösterilebilir.</p>
+<h3>4. Ücretli yollar (Soru 3)</h3>
+<h4>4.1 İllüstratör</h4>
+<ul>
+<li><strong>Fiverr:</strong> tek bir basit sayfa için giriş paketleri 5–10 $ [21]. Gig sayfaları 403 verdi, fiyatı arama sonuçlarından aldım (doğrulanamadı). Bu fiyat düzeyinde AI ya da kopya kullanılma riski yüksek.</li>
+<li><strong>Upwork:</strong> illüstratörlerin saat ücreti 15–30 $, medyanı 25 $ [20]. Basit bir sayfa 1–1,5 saat sürerse sayfa başına 25–40 $ eder (tahmin).</li>
+<li><strong>Stüdyo:</strong> basit bir 2D varlık 50–120 $ (Cubix, 24.08.2026; satıcının kendi sayfası) [22].</li>
+<li><strong>Behance:</strong> yayımlanmış bir sayfa fiyatı bulamadım.</li>
+</ul>
+<p>Sözleşmede şunlar bulunmalı: telif devri, AI kullanımı beyanı, özgünlük garantisi, SVG kaynak dosyası ve motorun kriterlerine uyum.</p>
+<h4>4.2 Hazır paketler</h4>
+<ul>
+<li><strong>Envato Elements</strong> (06.10.2026'da güncellenmiş) [17]:</li>
+<li>12c maddesi, son kullanıcının dijital bir ürünü kendine göre özelleştirmesine izin veren uygulamalarda öğe kullanılmasını yasaklıyor. Boyama uygulaması bu tanıma giriyor (yorumum).</li>
+<li>12e maddesi, son kullanıcının öğeyi uygulamadan çıkarıp ayrı kullanmasını yasaklıyor.</li>
+<li>"End Product", öğeden kapsam olarak daha büyük ve nitelik olarak farklı bir eser olmalı.</li>
+<li><strong>Creative Market</strong> [18]:</li>
+<li>Uygulama için Extended Commercial lisans gerekiyor: tek uygulama, en fazla 250.000 indirme.</li>
+<li>Destek makaleleri, öğenin ayrı dosya olarak çıkarılmasını yasaklıyor.</li>
+<li>Lisans sahibi dışında birinin ürünü özelleştirmesini de yasaklıyor. Boyamada çocuk sayfayı özelleştiriyor, yani çatışma var (yorumum).</li>
+<li><strong>Etsy</strong> [19]: standart bir lisans yok, her satıcı kendi lisansını yazıyor. İlanlar PLR/MRR (sayfaları kendi adınla yeniden satma hakkı) vaat ediyor ama çizimlerin kaynağı doğrulanamıyor. Etsy'nin IP sayfası 403 verdi (doğrulanamadı).</li>
+</ul>
+<h4>4.3 AI ile üretim</h4>
+<div class="table-wrap"><table><thead><tr><th>Araç</th><th>Ticari hak</th><th>Çocuk içeriği kuralı</th><th>Çıktı ve fiyat</th></tr></thead><tbody>
+<tr><td>Adobe Firefly [23]</td><td>Adobe kendi modellerini lisanslı içerikle eğittiğini ve ticari kullanıma uygun olduğunu söylüyor. Telif tazminatı yalnız kurumsal müşterilere var. Partner modellerde sorumluluk kullanıcıda.</td><td>Reşit olmayanları cinselleştiren içerik yasak</td><td>Raster çıktı; Illustrator'daki Text to Vector Graphic düzenlenebilir vektör üretiyor. Standard 11,17 €/ay.</td></tr>
+<tr><td>Recraft [24]</td><td>Ücretli planlarda sahiplik, ticari hak ve gizli üretim var. Ücretsiz planda çıktının sahibi Recraft.</td><td>Çocuk istismarı yasak; kullanıcı 18 yaşından büyük olmalı</td><td>SVG çıktı. Basic 12 $/ay, Pro 20 $/ay.</td></tr>
+<tr><td>Midjourney [25]</td><td>Çıktının sahibi kullanıcı. Yıllık geliri 1 milyon $'ın üstündeki şirketler Pro ya da Mega planı almak zorunda. Çıktılar varsayılan olarak herkese açık; Stealth (gizli mod) yalnız Pro (60 $/ay) ve Mega'da.</td><td>PG-13 hedefleniyor; kullanıcı 13 yaşından büyük olmalı</td><td>Raster çıktı. Stüdyoların açtığı dava sürüyor (ikincil kaynak).</td></tr>
+<tr><td>OpenAI GPT Image [26]</td><td>Çıktının sahibi kullanıcı, ama çıktı benzersiz olmayabilir.</td><td>18 yaş altına özel koruma var</td><td>Raster, şeffaf PNG. 1024×1024 görsel orta kalitede 0,053 $, yüksek kalitede 0,211 $.</td></tr>
+</tbody></table></div>
+<p>Hiçbir araç çocuklar için boyama sayfası üretmeyi kısıtlamıyor. Araçların çizgi temizliğini test etmedim.</p>
+<p>ABD Telif Ofisi, 29.01.2025 tarihli raporunda yalnız prompt yazarak üretilen çıktıyı insan eseri saymıyor [27]. İnsanın yaptığı yaratıcı değişiklik ve düzenleme ise korunabiliyor. Yani saf AI sayfalarını başkası kopyalayabilir; illüstratör AI taslağını baştan çizerse koruma güçlenir.</p>
+<p>Vektörleştirme zorunlu değil, çünkü motor PNG okuyor. Ama AI çıktısındaki pürüzlü, kalınlığı değişen çizgileri düzeltmeye yarar:</p>
+<ul>
+<li><strong>Potrace:</strong> yalnız siyah-beyaz görüntüyü izliyor, GPL v2+ lisanslı, son sürümü 1.16 (2019) [28].</li>
+<li><strong>VTracer:</strong> renkli görüntüyü de izliyor, MIT lisanslı [28].</li>
+</ul>
+<p>İkisi de yalnız üretim hattında çalışır, uygulamaya girmez. VTracer MIT lisanslı olduğu için GPL sorusunu baştan ortadan kaldırır.</p>
+<h3>5. Rakipler, gelişim bilgisi ve güvenli ilerleme (Soru 4) [29]</h3>
+<div class="table-wrap"><table><thead><tr><th>Uygulama (yaş bandı)</th><th>İçerik</th><th>İlerleme ve kilit</th><th>Yeni içerik</th></tr></thead><tbody>
+<tr><td>Pok Pok (0–5)</td><td>16 oyuncak, biri çizim</td><td>Seviye, kazanma ya da kaybetme yok; tek abonelik her şeyi açıyor</td><td>1–2 haftada bir güncelleme</td></tr>
+<tr><td>Sago Mini World (0–5)</td><td>20+ oyun</td><td>Seviye ve puan yok; abonelik</td><td>Mevsimsel etkinlikler</td></tr>
+<tr><td>Toca Boca World (6–8)</td><td>Mekânlar ve paketler</td><td>Seviye, süre ve puan yok; paketler 0,99–4,99 $</td><td>Her cuma ücretsiz hediye</td></tr>
+<tr><td>Crayola Create and Play (0–5)</td><td>Boyamanın da olduğu onlarca etkinlik</td><td>Abone olmayana günde 7 dakika; görev bitince ödül</td><td>Her ay yeni etkinlik</td></tr>
+<tr><td>Bimi Boo, iki uygulama (0–5)</td><td>176 ve 165 sayfa, 11'er tema</td><td>Birkaç sayfa ücretsiz; paket 2,99 $; zorluk seviyesi yok; yorumlarda istemeden satın alma şikâyeti</td><td>Halloween ve Noel paketleri</td></tr>
+<tr><td>Game Tunes Coloring (0–5)</td><td>150+ sayfa</td><td>Paket 2,99 $; zorluk seviyesi yok</td><td>Halloween ve Noel</td></tr>
+</tbody></table></div>
+<p>Küçük çocuk boyama uygulamaları 150–180 sayfayı tema paketleriyle düzenliyor. İncelediğim 0–5 yaş bandındaki uygulamaların hiçbirinde zorluk seviyesi yok. Açık uçlu oyunun öncüleri (Pok Pok, Sago Mini, Toca Boca) seviye ya da puan hiç kullanmıyor.</p>
+<p>Gelişim kaynakları:</p>
+<ul>
+<li><strong>CDC</strong> [30]: 2 yaş listesinde çizimle ilgili madde yok. 3 yaşındaki çocuk gösterilince daire çizer. 4 yaşındaki çocuk kalemi parmak uçlarıyla tutar.</li>
+<li><strong>NAEYC, 8. ilke</strong> [31]: çocuk, ustalığının biraz üstündeki bir görevle uğraşınca ve bol tekrar yapınca ilerler.</li>
+<li><strong>Wood, Bruner ve Ross (1976)</strong> [32]: "scaffolding" (iskele) kavramını ortaya attılar. İskele, yetişkinin çocuğun o anki başarısına göre ayarladığı ve zamanla geri çektiği destektir.</li>
+<li><strong>Hirsh-Pasek ve ark. (2015)</strong> [33]: iyi bir uygulama çocuğu düşündürür, ilgisini canlı tutar, günlük hayatıyla bağ kurar ve sosyal etkileşimi destekler.</li>
+<li><strong>Radesky ve ark. (2022)</strong> [34]: 3–5 yaşındaki 160 çocuğun kullandığı uygulamaların beşte dördünde manipülatif tasarım var. Örnekler: karakter baskısı, sahte geri sayım, günlük ödül, satın alma çağrısı.</li>
+<li><strong>Apple</strong> [35]: 1.3. kurala göre çocuk alanında satın alma fırsatı ancak ebeveyn kapısının (çocuğun geçemeyeceği bir yetişkin görevi) arkasında olabilir. 5.6. kural manipülatif uygulamaları yasaklıyor. Kurallar en son 16.10.2026'da güncellendi.</li>
+</ul>
+<p>Kids Category'de güvenli ilerleme için önerilerim:</p>
+<ol>
+<li>Üç seviye de baştan açık olsun. Seviye, kilit değil; bir raf ve 1–3 nokta işareti.</li>
+<li>Çocuk bir seviyede birkaç sayfa bitirince ana ekran bir üst seviyeden bir sayfayı öne çıkarsın, ama zorlamasın.</li>
+<li>Başlangıç seviyesini ebeveyn, ebeveyn alanından seçsin.</li>
+<li>Sayfa bitince kısa bir kutlama ve galeriye kayıt yeter. Para birimi, seri, günlük ödül ve geri sayım olmasın.</li>
+<li>Mevsimsel sayfalar ücretsiz güncellemeyle gelsin ve sezon bitince kaybolmasın.</li>
+<li>Abonelik eklenirse kilitli sayfalar çocuğa hiç gösterilmesin.</li>
+</ol>
+<p>Motor için seviye kriterleri (önerim). Telefondaki tuvalin genişliğini ~390 pt varsaydım. Apple HIG, iOS'ta varsayılan dokunma hedefini 44×44 pt, en küçüğünü 28×28 pt olarak veriyor [35].</p>
+<div class="table-wrap"><table><thead><tr><th>Seviye</th><th>Yaş</th><th>Kapalı bölge sayısı</th><th>En küçük bölge (sayfa genişliğine oranı)</th><th>Çizgi kalınlığı (2048 px'de)</th><th>İçerik</th></tr></thead><tbody>
+<tr><td>1</td><td>2–3</td><td>2–6</td><td>≥ %10 (telefonda ~39 pt)</td><td>~60 px</td><td>Tek nesne, arka plan yok</td></tr>
+<tr><td>2</td><td>3–4</td><td>6–15</td><td>≥ %7 (telefonda ~28 pt)</td><td>~40 px</td><td>Nesne ve basit bir zemin</td></tr>
+<tr><td>3</td><td>4–5</td><td>15–30</td><td>≥ %5 (telefonda yakınlaştırma gerekir)</td><td>~30 px</td><td>2–4 nesneli basit sahne</td></tr>
+</tbody></table></div>
+<h3>6. Öneri: 300 sayfalık plan (Soru 5)</h3>
+<p>Sayfaları seviyelere şöyle dağıt: Seviye 1'de 120, Seviye 2'de 100, Seviye 3'te 80. Temalar bugünkü 6 kategoriyle aynı kalsın.</p>
+<ol>
+<li>yolun adımları:</li>
+<li><strong>Hafta 1–2:</strong> Dönüştürme betiğini yaz. Fluent Flat'ten ~200 aday üret, motorla doğrula ve 120'sini seç. Ebeveyn alanına lisans ekranını ekle.</li>
+<li><strong>Hafta 1–3:</strong> Stil kılavuzunu yaz. Üç illüstratöre 5'er sayfalık ücretli deneme ver (300–600 $, tahmin).</li>
+<li><strong>Hafta 4–14:</strong> Seçtiğin illüstratör 180 sayfayı çizsin (haftada 15–20 sayfa, tahmin). Her teslimi motor testinden ve tersine görsel aramadan geçir.</li>
+<li><strong>Sonra:</strong> emoji sayfalarını zamanla özgün çizimlerle değiştir.</li>
+</ol>
+<p>Riskler ve önlemleri:</p>
+<ul>
+<li><strong>Stil farkı:</strong> illüstratör Fluent sayfalarındaki çizgi kuralına uysun.</li>
+<li><strong>Gizli AI ya da kopya:</strong> sözleşmeye beyan ve garanti maddesi koy.</li>
+<li><strong>MIT bildirimi eksik kalırsa lisans ihlali olur:</strong> lisans ekranı yayından önce hazır olsun.</li>
+<li><strong>Seviye 3 sahneleri bölge sınırlarını zorlayabilir:</strong> her sayfa otomatik testten geçsin.</li>
+</ul>
+<p>Bütçe yeterliyse 2. yol telif açısından en temiz sonucu verir. Bütçe darsa 3. yolu yalnız taslak üretmek için kullan. 5. yoldan uzak dur.</p>
+<h3>7. Doğrulanamayanlar</h3>
+<ul>
+<li>Flaticon şartları, Etsy IP sayfası, Fiverr gig sayfaları ve Public Domain Vectors araması 403 verdi. Molly's Studio sayfası 404 verdi.</li>
+<li>Twemoji 17.0.3'ün yayın tarihinde yıl görünmüyor. Noto deposunda NOTICE dosyası olup olmadığını göremedim.</li>
+<li>Maliyetler, süreler, konu sayıları ve çizerin hızı benim tahminim.</li>
+<li>Midjourney davasının bugünkü durumunu yalnız ikincil kaynakta gördüm.</li>
+<li>FairPlay'in CC 4.0'ı ihlal edip etmediğine dair bir mahkeme kararı yok.</li>
+</ul>
+<h3>Kaynaklar (erişim tarihi: 03.11.2026)</h3>
+<ol>
+<li><a href="https://github.com/microsoft/fluentui-emoji">https://github.com/microsoft/fluentui-emoji</a> ; <a href="https://github.com/microsoft/fluentui-emoji/blob/main/LICENSE">https://github.com/microsoft/fluentui-emoji/blob/main/LICENSE</a></li>
+<li><a href="https://microsoft.design/articles/designing-in-the-opensource/">https://microsoft.design/articles/designing-in-the-opensource/</a> (10.08.2022)</li>
+<li><a href="https://github.com/googlefonts/noto-emoji">https://github.com/googlefonts/noto-emoji</a> ; <a href="https://raw.githubusercontent.com/googlefonts/noto-emoji/main/README.md">https://raw.githubusercontent.com/googlefonts/noto-emoji/main/README.md</a></li>
+<li><a href="https://www.apache.org/licenses/LICENSE-2.0">https://www.apache.org/licenses/LICENSE-2.0</a></li>
+<li><a href="https://github.com/jdecked/twemoji">https://github.com/jdecked/twemoji</a> ; <a href="https://raw.githubusercontent.com/jdecked/twemoji/main/LICENSE-GRAPHICS">https://raw.githubusercontent.com/jdecked/twemoji/main/LICENSE-GRAPHICS</a> ; <a href="https://github.com/jdecked/twemoji/releases">https://github.com/jdecked/twemoji/releases</a></li>
+<li><a href="https://github.com/twitter/twemoji">https://github.com/twitter/twemoji</a></li>
+<li><a href="https://openmoji.org/faq/">https://openmoji.org/faq/</a> ; <a href="https://openmoji.org/">https://openmoji.org/</a> ; <a href="https://openmoji.org/styleguide/">https://openmoji.org/styleguide/</a> ; <a href="https://raw.githubusercontent.com/hfg-gmuend/openmoji/master/LICENSE.txt">https://raw.githubusercontent.com/hfg-gmuend/openmoji/master/LICENSE.txt</a> ; <a href="https://github.com/hfg-gmuend/openmoji/releases">https://github.com/hfg-gmuend/openmoji/releases</a></li>
+<li><a href="https://creativecommons.org/licenses/by/4.0/legalcode.en">https://creativecommons.org/licenses/by/4.0/legalcode.en</a></li>
+<li><a href="https://creativecommons.org/faq/">https://creativecommons.org/faq/</a> ; <a href="https://wiki.creativecommons.org/wiki/4.0/Technical_protection_measures">https://wiki.creativecommons.org/wiki/4.0/Technical_protection_measures</a></li>
+<li><a href="https://openclipart.org/share">https://openclipart.org/share</a> ; <a href="https://openclipart.org/search/?query=coloring+page">https://openclipart.org/search/?query=coloring+page</a></li>
+<li><a href="https://publicdomainvectors.org/en/about-us">https://publicdomainvectors.org/en/about-us</a></li>
+<li><a href="https://commons.wikimedia.org/wiki/Commons:Reusing_content_outside_Wikimedia">https://commons.wikimedia.org/wiki/Commons:Reusing_content_outside_Wikimedia</a> ; <a href="https://commons.wikimedia.org/wiki/Category:Coloring_pages">https://commons.wikimedia.org/wiki/Category:Coloring_pages</a></li>
+<li><a href="https://pixabay.com/service/terms/">https://pixabay.com/service/terms/</a> ; <a href="https://pixabay.com/service/faq/">https://pixabay.com/service/faq/</a> ; <a href="https://pixabay.com/illustrations/search/coloring%20page/">https://pixabay.com/illustrations/search/coloring%20page/</a></li>
+<li><a href="https://www.magnific.com/legal/terms-of-use">https://www.magnific.com/legal/terms-of-use</a> ; <a href="https://en.wikipedia.org/wiki/Magnific">https://en.wikipedia.org/wiki/Magnific</a></li>
+<li><a href="https://www.flaticon.com/terms-of-use">https://www.flaticon.com/terms-of-use</a> (403)</li>
+<li><a href="https://icons8.com/license">https://icons8.com/license</a> ; <a href="https://developers.icons8.com/license">https://developers.icons8.com/license</a></li>
+<li><a href="https://help.elements.envato.com/hc/en-us/articles/360000628966-License-Terms">https://help.elements.envato.com/hc/en-us/articles/360000628966-License-Terms</a></li>
+<li><a href="https://creativemarket.com/licenses">https://creativemarket.com/licenses</a> ; <a href="https://support.creativemarket.com/hc/en-us/articles/360021011614">https://support.creativemarket.com/hc/en-us/articles/360021011614</a> ; <a href="https://support.creativemarket.com/hc/en-us/articles/5921351849883-Which-license-should-I-choose-Commercial-or-Extended-Commercial">https://support.creativemarket.com/hc/en-us/articles/5921351849883-Which-license-should-I-choose-Commercial-or-Extended-Commercial</a></li>
+<li><a href="https://www.etsy.com/listing/4427697028">https://www.etsy.com/listing/4427697028</a> (arama sonucu) ; <a href="https://www.etsy.com/legal/ip/">https://www.etsy.com/legal/ip/</a> (403)</li>
+<li><a href="https://www.upwork.com/hire/illustrators/cost/">https://www.upwork.com/hire/illustrators/cost/</a></li>
+<li><a href="https://www.fiverr.com/gigs/coloring-book-pages">https://www.fiverr.com/gigs/coloring-book-pages</a> (arama sonucu; gig sayfaları 403)</li>
+<li><a href="https://www.cubix.co/ae/blog/game-art-and-design-outsourcing-cost-in-uae/">https://www.cubix.co/ae/blog/game-art-and-design-outsourcing-cost-in-uae/</a></li>
+<li><a href="https://www.adobe.com/ai/overview/firefly/gen-ai-approach.html">https://www.adobe.com/ai/overview/firefly/gen-ai-approach.html</a> ; <a href="https://www.adobe.com/products/firefly/plans.html">https://www.adobe.com/products/firefly/plans.html</a> ; <a href="https://www.adobe.com/legal/licenses-terms/adobe-gen-ai-user-guidelines.html">https://www.adobe.com/legal/licenses-terms/adobe-gen-ai-user-guidelines.html</a> ; <a href="https://www.adobe.com/in/products/illustrator/text-to-vector-graphic.html">https://www.adobe.com/in/products/illustrator/text-to-vector-graphic.html</a></li>
+<li><a href="https://www.recraft.ai/terms">https://www.recraft.ai/terms</a> ; <a href="https://www.recraft.ai/docs/plans-and-billing/paid-plans">https://www.recraft.ai/docs/plans-and-billing/paid-plans</a></li>
+<li><a href="https://docs.midjourney.com/hc/en-us/articles/32083055291277-Terms-of-Service">https://docs.midjourney.com/hc/en-us/articles/32083055291277-Terms-of-Service</a> ; <a href="https://docs.midjourney.com/hc/en-us/articles/27870484040333-Comparing-Midjourney-Plans">https://docs.midjourney.com/hc/en-us/articles/27870484040333-Comparing-Midjourney-Plans</a> ; dava: <a href="https://www.nbcnews.com/business/business-news/disney-universal-sue-ai-image-company-midjourney-unlicensed-star-wars-rcna212369">https://www.nbcnews.com/business/business-news/disney-universal-sue-ai-image-company-midjourney-unlicensed-star-wars-rcna212369</a> (arama sonucu, açılmadı)</li>
+<li><a href="https://openai.com/policies/row-terms-of-use/">https://openai.com/policies/row-terms-of-use/</a> ; <a href="https://openai.com/policies/usage-policies/">https://openai.com/policies/usage-policies/</a> ; <a href="https://developers.openai.com/api/docs/guides/image-generation">https://developers.openai.com/api/docs/guides/image-generation</a></li>
+<li><a href="https://www.copyright.gov/ai/">https://www.copyright.gov/ai/</a> ; <a href="https://copyrightalliance.org/ai-report-part-2-copyrightability/">https://copyrightalliance.org/ai-report-part-2-copyrightability/</a></li>
+<li><a href="https://potrace.sourceforge.net/">https://potrace.sourceforge.net/</a> ; <a href="https://github.com/visioncortex/vtracer">https://github.com/visioncortex/vtracer</a></li>
+<li>App Store: id1550204730, id874425722, id1208138685, id1431955703, id1001555097, id1129192831, id1529257080, id1435793166 (<a href="https://apps.apple.com/us/app/idNNN">https://apps.apple.com/us/app/idNNN</a> biçiminde) ; Molly's Studio id6504165102 (404)</li>
+<li><a href="https://www.cdc.gov/act-early/milestones/2-years.html">https://www.cdc.gov/act-early/milestones/2-years.html</a> ; .../3-years.html ; .../4-years.html</li>
+<li><a href="https://www.naeyc.org/resources/position-statements/dap/principles">https://www.naeyc.org/resources/position-statements/dap/principles</a></li>
+<li><a href="https://pubmed.ncbi.nlm.nih.gov/932126/">https://pubmed.ncbi.nlm.nih.gov/932126/</a></li>
+<li><a href="https://www.psychologicalscience.org/publications/educational-apps.html">https://www.psychologicalscience.org/publications/educational-apps.html</a></li>
+<li><a href="https://michiganmedicine.org/health-lab/design-tricks-commonly-used-monetize-young-childrens-app-use">https://michiganmedicine.org/health-lab/design-tricks-commonly-used-monetize-young-childrens-app-use</a></li>
+<li><a href="https://developer.apple.com/app-store/review/guidelines/">https://developer.apple.com/app-store/review/guidelines/</a> ; <a href="https://developer.apple.com/kids/">https://developer.apple.com/kids/</a> ; <a href="https://developer.apple.com/tutorials/data/design/human-interface-guidelines/accessibility.json">https://developer.apple.com/tutorials/data/design/human-interface-guidelines/accessibility.json</a></li>
+<li><a href="https://www.unicode.org/emoji/charts/emoji-counts.html">https://www.unicode.org/emoji/charts/emoji-counts.html</a></li>
+<li>Okunan SVG'ler (raw.githubusercontent.com): jdecked/twemoji 1f436, 1f697 ; fluentui-emoji "Dog face" ve "Automobile" Flat ; noto-emoji 2D/svg emoji_u1f436, emoji_u1f697 ; openmoji black/svg 1F436, 1F697</li>
+</ol>
+</div>
+</body>
+</html>

@@ -45,16 +45,30 @@ Apple's Human Interface Guidelines (read the current pages; HIG changes every WW
 
 ## Coloring pages
 
-A page works for a toddler when it has closed areas a fingertip can hit. Run new art through
-`tool/page_report.dart` before adding it to `lib/data/builtin_images.dart`:
+A page works for a toddler when it has closed areas a fingertip can hit. The bundled pages are
+generated, never hand-edited: `tool/pages/catalog.json` lists the subjects (Fluent UI Emoji,
+MIT, pinned commit) with Turkish and English names, and `tool/pages/build_pages.py` downloads,
+renders, outlines, measures and writes `assets/pages/<category>/<code>.png` plus
+`lib/data/builtin_images.dart` with each page's level:
 
 ```bash
-flutter/bin/dart run tool/page_report.dart assets/images/categories/<category>/<page>.png
+python3 tool/pages/build_pages.py --work /tmp/cobi-pages --dart ~/flutter/sdk/flutter/bin/dart
+```
+
+Levels come from the page check (same rule in `PageCheck.level` and `level_for`): 1 = up to
+4 finger-sized areas and 10 regions, 3 = 8+ finger areas or 16+ regions, else 2. Pages are never
+locked; a category lists the child's current level first (`lib/data/page_order.dart`).
+
+For hand-drawn art, run the check before adding a page:
+
+```bash
+~/flutter/sdk/flutter/bin/dart run tool/page_report.dart <page.png>
 ```
 
 Use the Flutter SDK's own `dart`; an older Homebrew `dart` on PATH cannot run the tools.
 `PROBLEM` blocks the page; `weak` means redraw when there is time. The built-in page test keeps
-the list of pages to redraw (`_pagesToRedraw` in `test/engine/region_builder_test.dart`) exact.
+the list of failing pages (`_pagesToRedraw` in `test/engine/region_builder_test.dart`) exact and
+checks every catalog level against the page check.
 
 ## Building blocks in the code
 

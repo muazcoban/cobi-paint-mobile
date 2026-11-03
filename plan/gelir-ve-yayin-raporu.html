@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cobi Paint Gelir Modeli ve Çok Ülke Yayını</title>
+<style>
+:root {
+  --bg: #fbfaf7; --surface: #ffffff; --surface-2: #f3f1ec; --text: #1f2328; --muted: #5d6470;
+  --border: #e2ded6; --accent: #d9480f; --accent-soft: #fff1e8; --link: #0b62c4;
+  --p0: #c92a2a; --p0-soft: #ffe9e9; --p1: #b35c00; --p1-soft: #fff3e0; --p2: #2f6f3e; --p2-soft: #e8f5ec;
+  --info: #1864ab; --info-soft: #e7f1fb; --code-bg: #f1efe9;
+  --d-fill: #e7f1fb; --d-stroke: #1864ab; --d-fill-2: #fff1e8; --d-stroke-2: #d9480f; --d-fill-3: #e8f5ec; --d-stroke-3: #2f6f3e; --d-line: #5d6470;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #15171a; --surface: #1d2024; --surface-2: #24282d; --text: #e8e6e3; --muted: #a3a9b3;
+    --border: #343a41; --accent: #ff8a4c; --accent-soft: #3a2418; --link: #6cb4ff;
+    --p0: #ff8787; --p0-soft: #3b1f1f; --p1: #ffb84d; --p1-soft: #3a2c16; --p2: #8ce99a; --p2-soft: #1d3324;
+    --info: #74c0fc; --info-soft: #182a3b; --code-bg: #26292e;
+    --d-fill: #182a3b; --d-stroke: #74c0fc; --d-fill-2: #3a2418; --d-stroke-2: #ff8a4c; --d-fill-3: #1d3324; --d-stroke-3: #8ce99a; --d-line: #a3a9b3;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #15171a; --surface: #1d2024; --surface-2: #24282d; --text: #e8e6e3; --muted: #a3a9b3;
+  --border: #343a41; --accent: #ff8a4c; --accent-soft: #3a2418; --link: #6cb4ff;
+  --p0: #ff8787; --p0-soft: #3b1f1f; --p1: #ffb84d; --p1-soft: #3a2c16; --p2: #8ce99a; --p2-soft: #1d3324;
+  --info: #74c0fc; --info-soft: #182a3b; --code-bg: #26292e;
+  --d-fill: #182a3b; --d-stroke: #74c0fc; --d-fill-2: #3a2418; --d-stroke-2: #ff8a4c; --d-fill-3: #1d3324; --d-stroke-3: #8ce99a; --d-line: #a3a9b3;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+.wrap { max-width: 1080px; margin: 0 auto; padding: 32px 16px 80px; }
+header.top { border-bottom: 1px solid var(--border); padding-bottom: 20px; margin-bottom: 28px; }
+header.top h1 { font-size: 2rem; line-height: 1.2; margin: 0 0 8px; }
+.meta { color: var(--muted); font-size: .92rem; }
+nav.toc { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; margin: 0 0 32px; }
+nav.toc ol { margin: 0; padding-left: 20px; columns: 2; column-gap: 32px; }
+nav.toc li { break-inside: avoid; margin: 2px 0; }
+a { color: var(--link); }
+h2 { font-size: 1.5rem; margin: 48px 0 12px; padding-top: 8px; border-top: 1px solid var(--border); }
+h3 { font-size: 1.15rem; margin: 28px 0 8px; }
+p { margin: 8px 0 12px; }
+.lead { font-size: 1.08rem; }
+.callout { background: var(--accent-soft); border-left: 4px solid var(--accent); border-radius: 8px; padding: 14px 18px; margin: 16px 0; }
+.callout.info { background: var(--info-soft); border-left-color: var(--info); }
+.callout ul, .callout ol { margin: 6px 0; padding-left: 20px; }
+.table-wrap { overflow-x: auto; margin: 12px 0 20px; border: 1px solid var(--border); border-radius: 10px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: .93rem; }
+th, td { text-align: left; vertical-align: top; padding: 9px 12px; border-bottom: 1px solid var(--border); }
+th { background: var(--surface-2); font-weight: 600; white-space: nowrap; }
+tr:last-child td { border-bottom: 0; }
+td:first-child { white-space: nowrap; }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+code { background: var(--code-bg); padding: 1px 5px; border-radius: 4px; font: .86em/1.4 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; word-break: break-word; }
+.badge { display: inline-block; font-size: .75rem; font-weight: 700; padding: 2px 8px; border-radius: 999px; white-space: nowrap; }
+.b-p0 { background: var(--p0-soft); color: var(--p0); }
+.b-p1 { background: var(--p1-soft); color: var(--p1); }
+.b-p2 { background: var(--p2-soft); color: var(--p2); }
+.b-info { background: var(--info-soft); color: var(--info); }
+.grid { display: grid; gap: 16px; align-items: start; }
+.g3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.g2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+figure { margin: 0; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 10px; }
+figure img { width: 100%; height: auto; display: block; border-radius: 6px; background: #fff; }
+figcaption { font-size: .86rem; color: var(--muted); margin-top: 8px; }
+.diagram { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 12px; margin: 12px 0 20px; overflow-x: auto; }
+.diagram svg { display: block; width: 100%; min-width: 640px; height: auto; }
+.diagram svg text { fill: var(--text); font-family: inherit; }
+.diagram .box { fill: var(--d-fill); stroke: var(--d-stroke); stroke-width: 1.5; }
+.diagram .box2 { fill: var(--d-fill-2); stroke: var(--d-stroke-2); stroke-width: 1.5; }
+.diagram .box3 { fill: var(--d-fill-3); stroke: var(--d-stroke-3); stroke-width: 1.5; }
+.diagram .edge { stroke: var(--d-line); stroke-width: 1.5; fill: none; }
+.diagram .lbl { font-size: 12px; fill: var(--muted); }
+.diagram .ttl { font-size: 14px; font-weight: 600; }
+.diagram .sm { font-size: 12px; }
+.diagram .gridline { stroke: var(--border); stroke-width: 1; }
+.kv { display: grid; grid-template-columns: max-content 1fr; gap: 4px 16px; }
+.kv dt { font-weight: 600; }
+.kv dd { margin: 0; }
+details { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 10px 14px; margin: 12px 0; }
+details summary { cursor: pointer; font-weight: 600; }
+.small { font-size: .88rem; color: var(--muted); }
+ul.tight li, ol.tight li { margin: 3px 0; }
+@media (max-width: 760px) {
+  .g3, .g2 { grid-template-columns: minmax(0, 1fr); }
+  nav.toc ol { columns: 1; }
+  header.top h1 { font-size: 1.6rem; }
+  .kv { grid-template-columns: 1fr; }
+}
+</style>
+
+</head>
+<body>
+<div class="wrap">
+<header class="top"><h1>Cobi Paint Gelir Modeli ve Çok Ülke Yayını</h1><div class="meta">3 Kasım 2026 · Araştırma ajanının raporu; kurul kararları gece raporunda. Hukuki ve mali görüş değildir.</div></header>
+<h2>Cobi Paint — gelir modeli ve 10+ ülke açılışı</h2>
+<h3>0. Sıralı öneri</h3>
+<ol>
+<li><strong>Tek seferlik "Tam Sürüm" kilidi (non-consumable IAP), Aile Paylaşımı açık, yalnız ebeveyn alanında.</strong> Ücretsiz sürümde çocuk yalnız ücretsiz sayfaları görür; kilit simgesi, sayaç, uyarı yoktur. Ebeveyn, kapının arkasındaki tek ekrandan 300 sayfayı açar. Taban fiyat ABD 5,99 $; Türkiye elle ₺199,99; diğer vitrinler Apple ve Google'ın otomatik eşitlemesi.</li>
+<li><strong>Yıllık abonelik</strong>, yalnız her ay yeni sayfa paketi çıkaran bir içerik hattı kurulursa. 300 statik sayfayla Apple 3.1.2(a) "sürekli değer" şartı zayıf kalır; ebeveyn tepkisi yüksektir (bkz. 2.3).</li>
+<li><strong>İçerik paketleri</strong> (1,99 $ tematik paket), tam sürüm kilidine ek olarak ve ilk yıl değil: her paket ayrı bir satın alma akışı, ayrı kapı geçişi ve restore karmaşası demektir.</li>
+<li><strong>Ücretli uygulama</strong> yalnız Android'de düşünülebilir: Play Family Library ücretli uygulamayı paylaşır, IAP'yi paylaşmaz [28]. iOS'ta Kids kategorisinde keşif ücretsiz uygulamaya dayandığı için önerilmez.</li>
+<li><strong>Aylık abonelik</strong> önerilmez: okul öncesi kullanım kesintilidir, aylık planın iptal oranı en yüksektir [41].</li>
+<li><strong>Bağış</strong> bir model değildir. Apple'da bağış toplama yalnız onaylı kâr amacı gütmeyen kuruluşlara açıktır; "geliştiriciye bahşiş" ancak IAP ile olur [1]. Google'da yalnız vergiden muaf bağış Play faturalamadan muaftır [25].</li>
+</ol>
+<p>Gerekçe: (a) Kurallar: iki mağaza da çocuk uygulamasında satın almayı kapı arkasına koyar; tek ekranlı tek seferlik kilit en az inceleme riskidir [1][27]. (b) Veri: okul öncesi setinde en çok puan alan uygulama tek seferlik 6,99 $ kilitli Bimi Boo'dur (326 bin puan); abonelikli rakiplerin yorumlarında "game pass olduğunu bilmiyordum" tepkisi var [50][51]. (c) Komisyon: ilk 1 M$'a kadar iki mağazada da fiilen %15 (2.2). (d) Çocuk uygulamasında satın almaların ~%80'i ilk iki günde oluyor [44]; bu, uzun deneme ve abonelik hunisi yerine kurulum anında net bir tek seferlik teklifi destekler.</p>
+<h3>1. Bugünkü durum (3 Kasım 2026)</h3>
+<ul>
+<li><strong>App Store ABD vitrini</strong> [54]: satıcı MUAZ COBAN, 4+, "Made for Ages 6–8", birincil kategori <strong>Games</strong>, ücretsiz, "Data Not Collected". Dil alanı "English" ama açıklama Türkçe; "60+ resim" ve "galeriden resim içe aktarma" vaadi; iOS 13 gereksinimi. <code>store_listing.md</code>'deki 2.3.1 riski doğrulandı: vitrin metni uygulamanın bugünkü hâliyle uyuşmuyor.</li>
+<li><strong>Google Play</strong>: <code>com.cobi.paint.cobi_paint_mobile</code> paket adıyla mağaza sayfası yok (HTTP 404) [55]. Kayıt ya yayımlanmamış ya da farklı paket adında. Repo'daki <code>app-ads.txt</code> hâlâ AdMob yayıncı kimliği taşıyor; reklam yoksa dosya da kaldırılmalı.</li>
+</ul>
+<h3>2. Bölüm A — gelir modeli</h3>
+<h4>2.1 Mağaza kuralları</h4>
+<div class="table-wrap"><table><thead><tr><th>Konu</th><th>Apple (App Store)</th><th>Google (Play)</th></tr></thead><tbody>
+<tr><td>Satın alma yeri</td><td>1.3: link ve satın alma fırsatı yalnız ebeveyn kapısı arkasında [1]</td><td>Families: "overly aggressive commercial tactics" kaldırma sebebi; manipülatif taktik yasak; sanal para / gerçek para ayrımı [27]</td></tr>
+<tr><td>Ödeme sistemi</td><td>3.1.1: kilit açma IAP ile; restore mekanizması zorunlu [1][4]</td><td>Play faturalama zorunlu; uygulama içi fiyat Play diyaloğuyla aynı; şartlar ve fiyat açık [25]</td></tr>
+<tr><td>Promoted IAP</td><td>Ürün sayfası ve aramada görünür; Kids'e özel kısıt yok (uygulama dışı) [4]</td><td>Yok</td></tr>
+<tr><td>Ebeveyn onayı</td><td>Ask to Buy: indirme, IAP, paylaşılan uygulama; bölgeye göre varsayılan açık ve 18 altı için kapatılamaz [6]</td><td>Family Link "purchase approvals" ebeveyn ayarı [30]</td></tr>
+<tr><td>Aile paylaşımı</td><td>Non-consumable ve abonelikte, 5 ek üye; ASC'de açılır, geri alınamaz [3][4]</td><td>Family Library ücretli uygulamayı paylaşır, IAP'yi paylaşmaz [28]</td></tr>
+<tr><td>Deneme</td><td>Abonelik dışı: "XX-day Trial" adlı tier 0 non-consumable; abonelikte free trial / pay as you go / pay up front [1][3]</td><td>Deneme→ücretli dönüşüm, fiyat ve iptal yolu önceden açıklanır [26]</td></tr>
+<tr><td>Fiyat gösterimi</td><td>Faturalanan tutar en belirgin; aylık karşılık ikincil; deneme süresi ve sonrası fiyat [3]</td><td>Yıllık planı aylık fiyatla öne çıkarmak ihlal; fiyat ve şartlar yerelleştirilmiş [26]</td></tr>
+<tr><td>Belgeler</td><td>Her uygulamada gizlilik politikası (5.1.1, 5.1.4); abonelikte uygulama içi ve metadata'da Terms of Use + Privacy linki [1][3]</td><td>Data safety; trader'dan uygulama başına ToS linki istenir [29]</td></tr>
+<tr><td>Aboneliği yönet</td><td>Açık şart yok (Schedule 2) [1]</td><td>Uygulama içinde kolay iptal yolu (Subscription Center linki) zorunlu [26]</td></tr>
+</tbody></table></div>
+<h4>2.2 Komisyon ve vergi</h4>
+<ul>
+<li><strong>Apple Small Business Program</strong>: ücretli uygulama ve IAP'de %15; önceki yıl 1 M$ hasılat eşiği; aşılırsa standart orana döner [2]. Standart abonelik ilk yıl %30, sonra %15; programda hep %15 [3].</li>
+<li><strong>Google</strong>: Türkiye dâhil "kalan pazarlar"da ilk 1 M$ %15, üstü %30, abonelik %15 [23]. Yeni yapı kullanıcının bölgesine göre: EEA/UK/ABD 30 Haziran 2026, AU/JP 30 Eylül 2026, Kore 31 Aralık 2026, diğerleri 30 Eylül 2027'den itibaren ilk 1 M$ <strong>%10 + Play faturalama ücreti %5</strong> (AU/JP/US/UK/EEA; diğer bölgeler için ücret "forthcoming"), abonelik %10 [22]. Sonuç: iki mağazada da ilk 1 M$'a kadar yaklaşık %15.</li>
+<li><strong>Vergi</strong>: Apple fiyatı vergi dâhil gösterir, hasılatı vergi hariç fiyattan hesaplar [10]. Türkiye'de KDV %20 (10 Temmuz 2023'ten beri) [60]; dijital hizmet vergisi 29 Ocak 2026'da %7,5'ten %5'e indi, hasılat buna göre değişti [8]. Google Türkiye'de KDV için merchant of record'dur; AB/UK'de de; JP, KR, SA, BAE, AU, CA, MX'te yurt dışı geliştirici için vergiyi Google yönetir [24].</li>
+<li><strong>Kaba hesap, ₺199,99 kilit</strong>: Apple'da ≈ 199,99 / 1,20 / 1,05 × 0,85 ≈ <strong>₺135</strong>; Google'da ≈ 199,99 / 1,20 × 0,85 ≈ <strong>₺142</strong>. DST'nin Apple fiyatına nasıl yansıdığı ASC'de teyit edilmeli (DOĞRULANAMADI).</li>
+</ul>
+<h4>2.3 Ebeveynler ne ödüyor</h4>
+<div class="table-wrap"><table><thead><tr><th>Uygulama (band, puan)</th><th>ABD fiyatı</th><th>Türkiye fiyatı</th><th>Not</th></tr></thead><tbody>
+<tr><td>Pok Pok (0–5; 26 bin, 4,7)</td><td>aylık 6,99–12,99 $, yıllık 45,99–79,99 $, ömür boyu 89,99 $; 7 gün deneme</td><td>aylık ₺159,99–499,99, yıllık ₺1.099,99–2.999,99</td><td>Birden çok fiyat noktası aynı adla listeleniyor [48]</td></tr>
+<tr><td>Sago Mini World / Piknik (0–5; 67 bin, 4,3)</td><td>aylık 7,99 $, yıllık 29,99–59,99 $</td><td>aylık ₺35,99, yıllık ₺204,99–409,99</td><td>Yorum: "it had a subscription :(" [49]</td></tr>
+<tr><td>Crayola Create and Play (0–5; 43 bin, 4,3)</td><td>aylık 2,99–7,99 $, yıllık 28,99–79,99 $; 7 gün deneme</td><td>—</td><td>Yorum: "I didn't know we had to have a game pass" [50]</td></tr>
+<tr><td>Bimi Boo Learning Games 2+ (0–5; 326 bin, 4,2)</td><td><strong>tek seferlik 6,99 $</strong>, 3 oyun ücretsiz</td><td>—</td><td>Diğer Bimi Boo uygulamaları: tam sürüm 9,99 $ + kategori 1,99 $ [51]</td></tr>
+<tr><td>Khan Academy Kids (0–5; 133 bin, 4,8)</td><td>ücretsiz, 501(c)(3)</td><td>—</td><td>[52]</td></tr>
+<tr><td>Lingokids</td><td>aylık 14,99 $, yıllık 71,99–74,99 $</td><td>—</td><td>Vitrinler karışık (DOĞRULANAMADI) [53]</td></tr>
+</tbody></table></div>
+<p>Sektör ölçütleri (RevenueCat 2026, 115 bin+ uygulama) [41]: indirme→ücretli (D35) medyan %2,0; sert paywall %10,7, freemium %2,1; Education deneme başlatma %6,5; deneme→ücretli Kuzey Amerika %34,2, Batı Avrupa %29,7; 17–32 günlük deneme %42,5, ≤4 gün %25,5; medyan yıllık fiyat 34,80 $, aylık 8–10 $ (rapor kendi içinde çelişiyor); uygulamaların ~1/4'ü ömür boyu plan sunuyor; D60 indirme başına gelir Kuzey Amerika 0,55 $, Avrupa 0,33 $, LATAM/MEA ≈0,10 $. Eğitimde yıllık iptallerin ilk ay payı en düşük (~%30); yıllık iptal edenlerin yalnız %5'i geri dönüyor [42].</p>
+<p>Geliştirici deneyimi: Sago Mini'de satın almaların ~%80'i ilk iki günde, gelirin %80'i Apple'dan [44]. Toca Boca 2018'de ücretli uygulamalardan ücretsiz+IAP'ye geçti, "pushback" bekledi [45]; 2023'te Sago Mini ve Toca, Piknik abonelik paketinde birleşti [46]. Tek kişilik Muky (2026): tek seferlik fiyat lansman zirvesi sonrası az gelir getirdi, aboneliğe geçti; rakam vermiyor [47]. Çocuk uygulaması harcamasının ülke bazlı açık verisi bulunamadı (Sensor Tower / Business of Apps paywall) — DOĞRULANAMADI. Vekil: Kids &amp; Toddlers oyunları tüm zamanlar 18 milyar indirme / 2 milyar $ (Nisan 2023) [39].</p>
+<p>Yorum: abonelik, içerik hattı olan stüdyoların modeli. Cobi Paint'te kullanım kesintili ve servis yok; Bimi Boo tipi tek seferlik kilit hem veriye hem kurallara en iyi oturur.</p>
+<h4>2.4 Fiyat merdiveni (öneri)</h4>
+<div class="table-wrap"><table><thead><tr><th>Bölge</th><th>Fiyat</th><th>Dayanak</th></tr></thead><tbody>
+<tr><td>ABD (taban vitrin)</td><td>5,99 $</td><td>Bimi Boo 6,99 $ [51]; medyan yıllık abonelik 34,80 $ [41]: "bir kez öde" algısı güçlü</td></tr>
+<tr><td>Birleşik Krallık</td><td>≈5,99 £ (otomatik)</td><td>Apple/Google eşitleme, KDV dâhil</td></tr>
+<tr><td>AB</td><td>≈6,99 € (otomatik)</td><td>KDV dâhil eşitleme; Pok Pok aylık 6,99 € ile aynı düzey [48]</td></tr>
+<tr><td>Türkiye</td><td><strong>₺199,99, elle</strong></td><td>Rakipler TR'de ABD'nin çok altında: Sago aylık ₺35,99 (ABD 7,99 $), Pok Pok aylık ₺159,99 (ABD 6,99 $) [48][49]. Apple'ın TRY eşitlemesi daha yüksek çıkabilir (DOĞRULANAMADI)</td></tr>
+<tr><td>Gelişen pazarlar (BR, MX, IN, ID, SA)</td><td>ilk 60 gün otomatik</td><td>Pok Pok BR ve IN'de indirim yapmıyor (aylık R$35,90, ₹669 ≈ ABD paritesi) [48]; veriden sonra elle düşür</td></tr>
+<tr><td>JP, KR, AU, CA</td><td>otomatik</td><td>Yüksek kişi başı harcama [40]</td></tr>
+</tbody></table></div>
+<h4>2.5 İncelemeden geçmek için ekranda ne olmalı</h4>
+<ul>
+<li><strong>Çocuk tarafı:</strong> kilit, rozet, "daha fazla" karosu yok. Ücretsiz sürüm küçük bir galeri gösterir; satın alma sonrası galeri büyür.</li>
+<li><strong>Ebeveyn tarafı (kapı arkası), tek ekran:</strong> ürün adı; StoreKit/Play'den gelen yerel fiyat (sabit yazılmaz) [3][25]; içerik ("300 sayfa, 3 seviye"); <strong>"Satın alımları geri yükle"</strong> düğmesi [1][4]; gizlilik politikası linki [1]; Aile Paylaşımı notu ("5 aile üyesiyle paylaşılır") [4]; Apple standart EULA linki metadata'da; tek düğme, ikinci ekran yok [26].</li>
+<li><strong>IAP metadata:</strong> görünen ad ve açıklama her mağaza dilinde; Ask to Buy isteğinde ebeveyn bu adı görür [6]. ASC'de IAP yaş derecelendirmesi (Texas) [14].</li>
+<li><strong>Play:</strong> target audience "5 &amp; under"; content rating anketinde "in-app purchases: yes"; Data safety "veri toplanmaz" (Play faturalama Google'ın işlemesi); Families'e uygun olmayan SDK yok [27][73].</li>
+</ul>
+<h4>2.6 Türkiye'ye özgü</h4>
+<ul>
+<li><strong>Apple TRY:</strong> fiyat noktaları ,99 ile biter (Pok Pok ₺159,99, Sago ₺35,99). Apple 17 Kasım 2025'te PL/CH/TR için eşitleme güncellemesi yaptı (abonelikler hariç) [9]. TRY tier tablosu halka açık değil; ASC fiyat ekranından okunur.</li>
+<li><strong>Google Play TR:</strong> alıcı para birimi TRY; taban fiyat 2015'te ₺0,59'a indi [80]; güncel aralık DOĞRULANAMADI (supported-locations sayfası JS ile yükleniyor).</li>
+<li><strong>GVK mükerrer 20/B istisnası</strong> [56][57]: yalnız gerçek kişi; vergi dairesinden istisna belgesi; Türkiye'de kurulu bankada özel hesap; tüm hasılat yalnız bu hesaba; banka %15 nihai stopaj keser; beyanname ve defter yok; KDV istisnası (KDVK 17/4-a); 2026 sınırı 4. dilim = <strong>5.300.000 TL</strong> [57] (vergimerkezi "~6,5 M tahmini" diyor, çelişiyor [58]); aşılırsa o yılın tüm kazancı beyan edilir. Tebliğ 49'un YMM raporu şartı (500.000 TL) beyannamede müstakil satırı olan istisnalar için [59]; 20/B geliri beyannameye girmediğinden muhtemelen kapsam dışı, vergimerkezi aksini yazıyor [58] → mali müşavire sor (DOĞRULANAMADI).</li>
+<li><strong>Mesafeli sözleşmeler:</strong> anında ifa edilen dijital içerikte cayma hakkı yok; ön bilgilendirmede işlevsellik ve uyumlu cihaz bilgisi. 2022 sonrası güncel metin teyit edilemedi [65].</li>
+<li><strong>AB DSA trader:</strong> IAP ile trader sayılırsın. Apple, AB vitrininde adres, telefon ve e-postayı yayımlar [17]. Google: mevcut hesaplar 1 Şubat 2027'ye kadar beyan; bireysel trader'ın adres ve telefonu 1 Mart 2027'den itibaren <strong>tüm pazarlarda</strong> gösterilir; beyan vermemek global kaldırma sebebi [29]. Ev adresi yerine posta kutusu/iş adresi ve ayrı telefon al.</li>
+</ul>
+<h3>3. Bölüm B — 10+ ülke</h3>
+<h4>3.1 Ülke seçimi (iOS payı StatCounter Ekim 2026 [35])</h4>
+<div class="table-wrap"><table><thead><tr><th>#</th><th>Ülke</th><th>iOS %</th><th>Dil</th><th>Neden</th></tr></thead><tbody>
+<tr><td>1</td><td>ABD</td><td>52</td><td>en-US</td><td>IAP geliri sonraki 5 pazarın toplamından fazla [37]; D60 RPI 0,55 $ [41]</td></tr>
+<tr><td>2</td><td>Birleşik Krallık</td><td>50</td><td>en-GB</td><td>Avrupa'nın büyük pazarı [38]; dil hazır</td></tr>
+<tr><td>3</td><td>Kanada</td><td>65</td><td>en-CA, fr-CA</td><td>Listenin en yüksek iOS payı; Fransızca ikinci pazarı açar</td></tr>
+<tr><td>4</td><td>Avustralya</td><td>62</td><td>en-AU</td><td>Kişi başı harcama tarihsel 2. (114 $, 2012–17) [40]</td></tr>
+<tr><td>5</td><td>Türkiye</td><td>23</td><td>tr</td><td>Ana pazar; Android %77 → Play yayını şart</td></tr>
+<tr><td>6</td><td>Almanya</td><td>28</td><td>de</td><td>DE+AT+CH; Avrupa IAP +%24 (2024) [38]</td></tr>
+<tr><td>7</td><td>Japonya</td><td>54</td><td>ja</td><td>Kişi başı harcama lideri (214 $) [40]; 2025'te ilk 20'de düşen tek pazar [37]</td></tr>
+<tr><td>8</td><td>Fransa</td><td>36</td><td>fr</td><td>FR+BE+CH, fr-CA ile ortak</td></tr>
+<tr><td>9</td><td>İspanya</td><td>27</td><td>es-ES, es-419</td><td>Avrupa'nın en hızlı büyüyeni (+%20, Q3 2024) [38]; MX ve LatAm bedava gelir</td></tr>
+<tr><td>10</td><td>Güney Kore</td><td>39</td><td>ko</td><td>Yüksek harcama; Education kategorisinde GRAC gerekmez [15]</td></tr>
+<tr><td>11</td><td>İtalya</td><td>38</td><td>it</td><td>Büyüyen Avrupa pazarı [38]</td></tr>
+<tr><td>12</td><td>Hollanda</td><td>32</td><td>nl</td><td>en-GB fallback kabul görür</td></tr>
+<tr><td>13</td><td>İsveç</td><td>56</td><td>(en)</td><td>Yüksek iOS payı; İngilizce yeterli</td></tr>
+<tr><td>14</td><td>S. Arabistan + BAE</td><td>42 / 19</td><td>ar</td><td>Apple ve Google vergiyi yönetiyor [24]</td></tr>
+<tr><td>15</td><td>Polonya</td><td>39</td><td>pl</td><td>Orta büyüklük; Lehçe gerekir</td></tr>
+</tbody></table></div>
+<p>Sıfır ek maliyetli vitrinler: IE, NZ, AT, CH, BE, LU, MX, AR, CL, CO. Ertelenenler: Brezilya (ECA Digital, ClassInd, stopaj; 3.3), Hindistan ve Endonezya (RPI 0,08–0,11 $ [41]), Rusya/Belarus/Çin (ödeme ve erişim kısıtı [33][34]).</p>
+<h4>3.2 Dil başına ne yerelleşir</h4>
+<div class="table-wrap"><table><thead><tr><th>Öğe</th><th>Zorunlu mu</th><th>Not</th></tr></thead><tbody>
+<tr><td>Mağaza metni (ad, alt başlık, açıklama, anahtar kelime)</td><td>Evet, her hedef dil</td><td>App Store 50 locale, birincil dil eşleşmeyen vitrinlerde gösterilir [20]; Play 86 dil, 10 dilde ücretsiz makine çevirisi [76]. Birincil en-US, ek en-GB</td></tr>
+<tr><td>Ekran görüntüleri</td><td>Bir set</td><td>Görselde metin yoksa tek set yeter, yalnız alt yazı çevrilir. Zorunlu boyutlar: iPhone "medium display" 1179×2556 / 1206×2622 ve iPad 13" 2064×2752 / 2048×2732; Nisan 2027'den itibaren iOS 27.1 SDK için iPhone Duo seti [21]</td></tr>
+<tr><td>Uygulama içi metin</td><td>Evet</td><td>Yalnız ebeveyn alanı: ayarlar, kapı yönergesi, satın alma ekranı, gizlilik özeti. Çocuk ekranı metinsiz kalır</td></tr>
+<tr><td>Ebeveyn kapısı</td><td>Evet</td><td>Sayı sözcükleri her dilde olmalı; Japonca/Korece/Arapça okuyan ebeveyn İngilizce sözcüklerde takılır. Alternatif: dil bağımsız rakamlı işlem ("3 × 4 = ?") + sesli yönerge; Apple okuma bilmeyen çocuk için sesli uyarı öneriyor [5]</td></tr>
+<tr><td>Gizlilik politikası</td><td>URL zorunlu [1][27]</td><td>Tek sayfa; her mağaza diline çeviri ucuz. Asgari TR + EN</td></tr>
+<tr><td>Destek</td><td>URL zorunlu</td><td>İngilizce yeterli; dil başına otomatik yanıt şablonu</td></tr>
+<tr><td>IAP adı ve açıklaması</td><td>Evet</td><td>Ask to Buy isteğinde ve Play diyaloğunda görünür [6]</td></tr>
+<tr><td>EULA / ToS</td><td>Hayır</td><td>Apple standart EULA'sı Apple tarafından yerelleştirilmiş; Google ToS linki İngilizce kalabilir [29]</td></tr>
+<tr><td>Yaş derecelendirme, Data safety, "Data Not Collected"</td><td>Otomatik</td><td>Mağazalar yerelleştirir</td></tr>
+</tbody></table></div>
+<h4>3.3 Hukuk — veri toplamayan çevrimdışı uygulama için</h4>
+<div class="table-wrap"><table><thead><tr><th>Rejim</th><th>Durum ve eylem</th><th>Kaynak</th></tr></thead><tbody>
+<tr><td>ABD COPPA (değişiklik RG 22 Nisan 2025; yürürlük 23 Haziran 2025; uyum 22 Nisan 2026)</td><td>Toplama yoksa maddi yükümlülük yok; cihazda kalan veri "toplama" değil. Yine de gizlilik politikası, "Data Not Collected", üçüncü taraf SDK yok</td><td>[61][62]</td></tr>
+<tr><td>ABD eyalet yasaları</td><td>Texas SB 2420 yürürlükte: Apple 4 Haziran 2026'dan itibaren Texas'ta yeni hesaplara uyguluyor; IAP ve "significant change" için ebeveyn onayı mağaza üzerinden; geliştirici Declared Age Range, Significant Change API (PermissionKit), consent revocation bildirimi, <code>ageRatingCode</code> uygular [14]. Utah 6 Mayıs 2027'ye ertelendi, Louisiana 1 Temmuz 2027, California AB 1043 1 Ocak 2027 (ikincil kaynaklar; HB 498 metni DOĞRULANAMADI)</td><td>[68][69][70][71]</td></tr>
+<tr><td>AB GDPR m.8 (üye devlette 13–16)</td><td>Veri işlenmediğinden uygulanmaz; m.27 temsilci gerekmez. DSA trader beyanı zorunlu (2.6)</td><td>[74][17]</td></tr>
+<tr><td>UK Children's Code</td><td>DPA 2018 s.123: kişisel veri işleyen servislere; kapsam dışı, ama bir sayfalık kapsam notu yaz. Online Safety Act: user-to-user değil → kapsam dışı; galeri/paylaşım eklenirse değişir</td><td>[63]</td></tr>
+<tr><td>Türkiye KVKK</td><td>Veri işleme yok → aydınlatma ve VERBİS yok; ayrıca &lt;50 çalışan ve &lt;100 M TL bilanço muafiyeti</td><td>[64]</td></tr>
+<tr><td>Brezilya</td><td>LGPD m.14 uygulanmaz. ECA Digital (Lei 15.211/2025, yürürlük 17 Mart 2026) çocuklara yönelik her uygulamayı kapsıyor: etki değerlendirmesi ve özeti, yaş sinyali, yasal temsilci (küçük sağlayıcı istisnası DOĞRULANAMADI); kaynaklar kapsam testinde çelişiyor</td><td>[66]</td></tr>
+<tr><td>Güney Kore</td><td>PIPA 14 altı rıza: uygulanmaz. GRAC yalnız oyunlara; Apple, Games/Entertainment kategorisindeki uygulamalara bölgesel derece verir, Education'a vermez</td><td>[15][67]</td></tr>
+<tr><td>Japonya</td><td>APPI'de çocuk hükmü yok; uygulanmaz</td><td>[67]</td></tr>
+<tr><td>Apple Declared Age Range</td><td>Kids Category için zorunlu değil ("kullanabilirsiniz"); IAP eklenince Texas/Brezilya/AU/SG/UT/LA için gerekir</td><td>[5][14][16]</td></tr>
+<tr><td>Play Age Signals</td><td>Beta, zorunlu değil; Texas ve Brezilya'da canlı; 2026 sonuna kadar küresel</td><td>[72]</td></tr>
+</tbody></table></div>
+<h4>3.4 Mağaza mekanikleri</h4>
+<ul>
+<li><strong>App Store Connect:</strong> 175 vitrin, "tümü + gelecekte eklenenler" seçeneği [19]; 50 locale [20]; 900 fiyat noktası (0,29–10.000 $), taban vitrin seçilir, 174 vitrin ve 43 para birimi otomatik eşitlenir, istenen vitrin elle yönetilir [18][4]. Kids: hesaplanan 4+/9+ derece + "Made for Kids" + yaş bandı; <strong>"You can't change this selection once your app is approved by App Review"</strong> [7] → 6–8'den "5 ve altı"na geçiş App Review'a yazılı sorulmalı. Kids seçimi uygulama düzeyinde, vitrin başına değil (fiilen global; DOĞRULANAMADI). 2025 yaş sistemi 4+/9+/13+/16+/18+ [11]; Eylül 2026'dan itibaren sosyal medya sorusu zorunlu [12]; 12 Ocak 2027'ye kadar "Shared Location" ve "Dating" beyanları [13]. <strong>Birincil kategoriyi Games'ten Education'a almak</strong> iki kazanç getirir: Kore bölgesel derecesi düşer [15]; iOS 27 Time Allowances'ta Games/Entertainment kategorisi ebeveynin oyun süresi kotasına girer, Education girmez [12].</li>
+<li><strong>Play Console:</strong> 143 ülkede ücretli uygulama [32]; IARC tek anket → ESRB/PEGI/USK/ClassInd/GRAC (oyun)/IARC generic [77]; Families: target audience "5 &amp; under", onaysız SDK yok [27][73]; <strong>Teacher Approved</strong>: başvuru yok, Families'e uyan uygulama otomatik değerlendirilir, öğretmen ve çocuk medyası uzmanları puanlar, Kids sekmesinde rozet [31]; fiyat: ülke para birimi sabit, taban fiyattan kur türetimi, ülke başına elle düzenleme, fiyat şablonları 27 Ekim 2025'te kalktı [78]. "Designed for Families" ayrı program değil, Kasım 2022'de Families politikasına katıldı [31].</li>
+</ul>
+<h4>3.5 Kontrol listesi (efora göre, azdan çoğa)</h4>
+<ol>
+<li><strong>Saat:</strong> ASC'de vitrin seçimi: tümü, Rusya ve Çin hariç [33][34].</li>
+<li><strong>Saat:</strong> Vitrin metnini düzelt: tr-TR locale ekle, galeri vaadini sil, "76 sayfa" ve iOS 15'i yaz [54].</li>
+<li><strong>Saat:</strong> Yaş anketi: sosyal medya sorusu (Eylül 2026) ve yeni beyanlar (12 Ocak 2027) [12][13]; birincil kategoriyi Education yap.</li>
+<li><strong>Saat:</strong> Apple DSA trader bilgisi ve Google trader beyanı; posta kutusu + ayrı telefon [17][29].</li>
+<li><strong>Gün:</strong> Tek sayfalık gizlilik politikası ve destek sayfası, hedef dillerde.</li>
+<li><strong>Gün:</strong> Google Play kaydını yayımla (bugün 404): Families "5 &amp; under", Data safety, IARC, <code>app-ads.txt</code> kaldır [55][27].</li>
+<li><strong>Gün:</strong> IAP kurulumu: non-consumable, Aile Paylaşımı açık, taban vitrin ABD 5,99 $, TR elle ₺199,99, IAP adı her dilde [3][4].</li>
+<li><strong>Gün:</strong> Ebeveyn alanında Tam Sürüm ekranı: fiyat API'den, restore düğmesi, gizlilik linki; sandbox'ta Ask to Buy testi [1][6].</li>
+<li><strong>Hafta:</strong> Uygulama içi ebeveyn metinleri 10 dile; kapıyı dil bağımsız yap, sesli yönergeyi dil başına kaydet [5].</li>
+<li><strong>Hafta:</strong> Mağaza metni ve alt yazılar 10 dile; tek ekran görüntüsü seti [20][21][76].</li>
+<li><strong>Hafta:</strong> Yaş sinyali API'leri (Declared Age Range, Significant Change, Play Age Signals) — IAP ile aynı sürümde [14][72].</li>
+<li><strong>Hafta+:</strong> Türkiye vergi: istisna belgesi, özel banka hesabı, Apple/Google ödeme hesabını buna taşı [56].</li>
+<li><strong>Ertele:</strong> Brezilya (ECA Digital etki değerlendirmesi ve temsilci) [66].</li>
+</ol>
+<h3>4. Çelişen ve doğrulanamayan noktalar</h3>
+<ul>
+<li>20/B 2026 sınırı: 5.300.000 TL [57] / "~6,5 M tahmini" [58]. YMM raporu şartının 20/B'ye uygulanıp uygulanmadığı belirsiz [58][59].</li>
+<li>RevenueCat raporu kendi içinde çelişiyor: aylık medyan 8 $ ve 10 $; Kuzey Amerika D35 %2,8 ve %2,6 [41].</li>
+<li>Brezilya ECA Digital kapsam testi: Mayer Brown "risk eşiği var", Baker McKenzie "yok" [66].</li>
+<li>Rusya: Play ücretli uygulama listesinde var, faturalama 2022'den beri durdurulmuş [32][33].</li>
+<li>Apple'ın TRY eşitlenmiş fiyatı, Google Play TR fiyat aralığı, Apple Kids kategorisinin vitrin bazlı olup olmadığı, Kore "oyun" tanımı, Utah HB 498 metni, Lingokids vitrin fiyatları, ülke bazlı çocuk uygulaması harcaması: DOĞRULANAMADI.</li>
+</ul>
+<h3>5. Kaynaklar (tümüne erişim 3 Kasım 2026)</h3>
+<p>[1] developer.apple.com/app-store/review/guidelines/ · [2] developer.apple.com/app-store/small-business-program/ · [3] developer.apple.com/app-store/subscriptions/ · [4] developer.apple.com/in-app-purchase/ · [5] developer.apple.com/app-store/kids-apps/ · [6] support.apple.com/en-us/105055 · [7] developer.apple.com/help/app-store-connect/manage-app-information/set-an-app-age-rating/ · [8] developer.apple.com/news/?id=gvnljl3f (29 Oca 2026) · [9] developer.apple.com/news/?id=nomqoqfm (30 Eki 2025) · [10] mactech.com/2021/12/09/apple-tells-developers-about-price-changes-on-the-app-store-in-turkey · [11] developer.apple.com/news/?id=ks775ehf (24 Tem 2025) · [12] developer.apple.com/news/?id=tlur8uvi (9 Tem 2026) ve ?id=0d2gpmml (8 Haz 2026) · [13] developer.apple.com/news/?id=yxkh08us (2 Kas 2026) · [14] developer.apple.com/news/?id=sg176nne (3 Haz 2026) · [15] developer.apple.com/news/?id=oj3r9pvw (12 Ağu 2026) · [16] developer.apple.com/support/age-assurance/ · [17] developer.apple.com/help/app-store-connect/manage-compliance-information/manage-eu-digital-services-act-compliance-information ve developer.apple.com/news/?id=einwn76m · [18] developer.apple.com/help/app-store-connect/manage-app-pricing/set-a-price · [19] developer.apple.com/help/app-store-connect/manage-your-apps-availability/manage-availability-for-your-app-on-the-app-store · [20] developer.apple.com/help/app-store-connect/reference/app-store-localizations · [21] developer.apple.com/help/app-store-connect/reference/screenshot-specifications · [22] support.google.com/googleplay/android-developer/answer/16954621 · [23] …/answer/112622 · [24] …/answer/138000 · [25] …/answer/9858738 · [26] …/answer/9900533 · [27] …/answer/9893335 · [28] support.google.com/googleplay/answer/7007852 · [29] support.google.com/googleplay/android-developer/answer/17594752 · [30] support.google.com/googleplay/answer/7039872 · [31] android-developers.googleblog.com/2022/11/helping-kids-and-families-find-high-quality-apps-for-kids.html · [32] support.google.com/googleplay/android-developer/answer/9306917 ve table/3541286 · [33] …/answer/11950272 · [34] macrumors.com/2026/04/02/apple-turns-off-payments-in-russia · [35] gs.statcounter.com/os-market-share/mobile/&lt;ülke&gt; (Ekim 2026) · [36] sensortower.com/blog/state-of-mobile-2026 · [37] sensortower.com/blog/q3-2025-digital-market-index · [38] sensortower.com/blog/2025-state-of-mobile-consumers-usd150-billion-spent-on-mobile-highlights · [39] sensortower.com/blog/exploring-the-new-kids-and-toddlers-taxonomy · [40] sensortower.com/blog/per-capita-app-store-spending (2012–17 verisi) · [41] revenuecat.com/state-of-subscription-apps · [42] 9to5mac.com/2026/05/27/new-report-shows-annual-app-subscribers-rarely-return-after-they-cancel/ · [43] revenuecat.com/blog/growth/whats-the-best-way-to-monetize-kids-apps · [44] revenuecat.com/blog/growth/how-to-build-a-great-kids-app-with-minimal-data-podcast-with-sago-minis-brennan-clark/ · [45] axios.com/2018/11/21/toca-boca-in-app-purchases-toca-life-world · [46] sagomini.com/article/important-customer-update · [47] news.ycombinator.com/item?id=46705676 · [48] apps.apple.com/{us,tr,gb,de,br,in,jp}/app/id1550204730 · [49] apps.apple.com/{us,tr}/app/id874425722 · [50] apps.apple.com/us/app/id1431955703 · [51] apps.apple.com/us/app/id1084997102 · [52] apps.apple.com/us/app/id1378467217 · [53] apps.apple.com/us/app/id1002043426 (arama sonuçları) · [54] apps.apple.com/us/app/id6757766966 · [55] play.google.com/store/apps/details?id=com.cobi.paint.cobi_paint_mobile (404) · [56] kazimceylan.av.tr/sosyal-medya-ve-mobil-uygulama-vergi-istisnasi · [57] forbes.com.tr/ekonomi/2026-yili-gelir-vergisi-tarifesi-ve-istisna-tutarlari-belirlendi · [58] vergimerkezi.com.tr/?p=4673 · [59] alomaliye.com/2025/12/30/istisna-ve-indirimler-icin-ymm-tasdik-raporu-zorunlulugu/ · [60] alomaliye.com/2023/07/07/katma-deger-vergisi-oranlari-karar-sayisi-7346/ · [61] ftc.gov/business-guidance/resources/complying-coppa-frequently-asked-questions · [62] alstonprivacy.com/ftc-publishes-amendments-to-coppa-rule/ · [63] legislation.gov.uk/ukpga/2018/12/section/123 ve legislation.gov.uk/ukpga/2023/50/section/3 · [64] kvkk.gov.tr/Icerik/8388/KAMUOYU-DUYURUSU ve erdem-erdem.av.tr (VERBİS istisnası) · [65] alomaliye.com/2014/11/27/mesafeli-sozlesmeler-yonetmeligi/ (2014 metni) · [66] mayerbrown.com (ECA Digital, Nis 2026) ve bakermckenzie.com (Mar 2026) · [67] prighter.com (PIPA m.22-2), support.google.com/googleplay/android-developer/answer/6223646, childreninthedigitalworld.twobirds.com/home/japan · [68] texasdatalaw.com/tracker/sb-2420/ ve onlinesafety.orrick.com/texas/ · [69] loeb.com (Utah, May 2026) ve stoel.com · [70] alstonprivacy.com (Louisiana, 2027) · [71] kelleydrye.com (California AB 1043) · [72] developer.android.com/google/play/age-signals · [73] support.google.com/googleplay/android-developer/answer/9867159 · [74] gdprlocal.com (m.8 yaşları, ikincil) ve gdpr-info.eu/art-27-gdpr/ · [76] support.google.com/googleplay/android-developer/answer/9844778 · [77] …/answer/9859655 · [78] …/answer/6334373 · [80] webrazzi.com/2015/11/18/google-playde-taban-fiyat-059-tlye-dustu/</p>
+</div>
+</body>
+</html>
