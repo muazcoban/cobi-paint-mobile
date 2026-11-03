@@ -162,7 +162,7 @@ ul.tight li, ol.tight li { margin: 3px 0; }
 <tr><td>Kademeli seviyeler</td><td>5/5</td><td><span class="badge b-p2">Geçti</span></td><td>Yapıldı.</td></tr>
 <tr><td>Bitiş ödülü</td><td>5/5</td><td><span class="badge b-p2">Geçti</span></td><td>Yapıldı; kurulun şartıyla yıldız yok, yalnız kutlama.</td></tr>
 <tr><td>Eser duvarı</td><td>5/5</td><td><span class="badge b-p2">Geçti</span></td><td>Yapıldı.</td></tr>
-<tr><td>Fotoğraflara kaydet ve yazdır</td><td>5/5</td><td><span class="badge b-p2">Geçti</span></td><td>Kapı arkasında "Boş sayfayı paylaş": sistem menüsü yazdırır ve kaydeder. Android'de doğrudan galeriye kayıt sonraya.</td></tr>
+<tr><td>Fotoğraflara kaydet ve yazdır</td><td>5/5</td><td><span class="badge b-p2">Geçti</span></td><td>Kapı arkasında paylaşım; Android'de doğrudan galeriye kayıt ve yazdırma da yapıldı (bölüm 15).</td></tr>
 <tr><td>Hareketsizlik ipucu</td><td>5/5</td><td><span class="badge b-p2">Geçti</span></td><td>Yapıldı.</td></tr>
 <tr><td>Çıkartma aracı</td><td>4/5</td><td><span class="badge b-p2">Geçti</span></td><td>Yapıldı (bölüm 13); kütüphane 201 sayfa olduğu için kurulun "200'ü geçince" şartı sağlandı.</td></tr>
 <tr><td>Günün sayfası ve sezon</td><td>4/5</td><td><span class="badge b-p2">Geçti</span></td><td>Sonraya: önce sezon temaları normal kategori olarak.</td></tr>
@@ -244,7 +244,7 @@ ul.tight li, ol.tight li { margin: 3px 0; }
 <tbody>
 <tr><td>Yaş sinyali API'leri</td><td>Texas/Utah/Louisiana ve Brezilya; yalnız kilitle birlikte</td><td>Declared Age Range + Significant Change (iOS 26.2 SDK), Play Age Signals betadan çıkınca; ayrı PR</td></tr>
 <tr><td>İllüstratör sayfaları</td><td>3. seviye sahneleri ve zamanla emoji sayfalarının yerini alacak özgün çizimler</td><td>İçerik raporunun 6. bölümü: 3 illüstratöre 5'er sayfalık deneme, sonra 180 sayfa</td></tr>
-<tr><td>Android'de doğrudan yazdırma ve galeriye kayıt</td><td>Bugün sistem paylaşım menüsü üzerinden</td><td>MediaStore kaydı ve PrintHelper için küçük kanal</td></tr>
+<tr><td>Android'de doğrudan yazdırma ve galeriye kayıt</td><td>Yapıldı (bölüm 15)</td><td>MediaStore ve PrintHelper kanalı, ebeveyn kapısının arkasında; iOS paylaşım menüsünde zaten var</td></tr>
 <tr><td>Çıkartma, ek fırçalar, ayna, sezon</td><td>Kurulun şartlı onayları</td><td>Ayna (bölüm 12), çıkartma (13) ve fırçalar (14) yapıldı; sezon kategorisi atlandı (bölüm 11)</td></tr>
 <tr><td>Entegrasyon testi</td><td>Uygulamanın tamamını açan test yok</td><td><code>integration_test</code>: ana ekran → sayfa → dolgu → eve dönüş</td></tr>
 <tr><td>Tasarım sistemi</td><td>Yazı tipi, ikon seti, maskot pozları</td><td><code>design:design-system</code> skill'iyle</td></tr>
@@ -271,7 +271,7 @@ ul.tight li, ol.tight li { margin: 3px 0; }
 <tr><td>PR #2 (<code>faz2/firca-ve-testler</code> → master)</td><td>Açık: <a href="https://github.com/muazcoban/cobi-paint-mobile/pull/2">github.com/muazcoban/cobi-paint-mobile/pull/2</a>. CI (analyze + test) PR'da koşuyor.</td></tr>
 <tr><td>Mevsim kategorisi</td><td>Atlandı: aday konuların neredeyse hepsi zaten başka kategorilerde; ayrı kategori kopya olurdu. İllüstratör sayfalarıyla birlikte yeniden bakılır.</td></tr>
 </tbody></table></div>
-<p>Sıradaki adaylar (kurul onaylı, yapılmadı): sezon temaları, yaş sinyali API'leri (kilitle birlikte), Android'de doğrudan yazdırma. Ayna çizimi bölüm 12'de, çıkartmalar bölüm 13'te, fırçalar bölüm 14'te. Senin adımların bölüm 8'de aynen geçerli.</p>
+<p>Sıradaki adaylar (kurul onaylı, yapılmadı): yaş sinyali API'leri (kilitle birlikte, Xcode 26 ister), sezon temaları (illüstratör sayfalarıyla); açık iş olarak iPad ayrıntıları. Ayna çizimi bölüm 12'de, çıkartmalar bölüm 13'te, fırçalar bölüm 14'te, Android'de galeri ve yazdırma bölüm 15'te. Senin adımların bölüm 8'de aynen geçerli.</p>
 
 <h2 id="ayna">12. Faz 3: ayna çizimi</h2>
 <p>Branch <code>faz3/ayna-cizimi</code> (PR #2'nin üstüne kurulu). Serbest çizim sayfasında ayna: bir parmak çizgisi sayfanın ortasındaki ayna çizgilerine göre kopyalanır. Minik'te tek düğme, dört yönlü açık ya da kapalı; Büyük'te aynı düğme kapalı → iki → dört → altı diye döner. Menü ya da yeni satır yok.</p>
@@ -350,6 +350,26 @@ ul.tight li, ol.tight li { margin: 3px 0; }
 <tr><td>Reduce Motion</td><td>Uyumlu: animasyon yok; planın ışıltı animasyonu bilerek yapılmadı.</td></tr>
 <tr><td>Erişilebilirlik etiketleri</td><td>Uyumlu: "Sprey boya", "Simli fırça", "Neon kalem" ve İngilizceleri.</td></tr>
 <tr><td>Kids Category 1.3 / 5.1.4</td><td>Uyumlu: veri, ağ, izin, metin, bağlantı yok.</td></tr>
+</tbody></table></div>
+<h2 id="android-aktarim">15. Faz 6: Android'de galeriye kayıt ve yazdırma</h2>
+<p>Branch <code>faz6/android-kayit-yazdirma</code>. iOS'ta paylaşım menüsü "Resmi Kaydet" ve "Yazdır"ı kendisi sunuyor; Android'in paylaşım menüsünde ikisi de yok. Eserlerim'de uzun basış ve ebeveyn kapısının arkasındaki alt sayfa Android'de artık üç satır daha gösteriyor: <strong>Galeriye kaydet</strong> (MediaStore, Pictures/Cobi Paint albümü; Android 10 ve sonrasında izin istemiyor), <strong>Yazdır</strong> (sistemin yazdırma penceresi, PrintHelper, resim sayfaya sığdırılmış) ve boyama sayfalarında <strong>Boş sayfayı yazdır</strong> (çizgi resim kâğıda, çocuk elle boyasın diye). iOS'ta satırlar değişmedi. Küçük bir kanal: <code>cobi.paint/export</code> (<code>MainActivity.kt</code>, tek bağımlılık <code>androidx.print</code>), Dart tarafında <code>ExportService</code>. Ne yapabildiğini cihaz söylüyor; iOS ve testler düz sayfayı görüyor.</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Kurul koşulu ve açık iş</th><th>Nasıl karşılandı</th></tr></thead>
+<tbody>
+<tr><td>Kurul (5/5): fotoğraflara kaydet ve yazdır, kapı arkasında</td><td>Üç satır da ebeveyn kapısının arkasında; çocuğun ekranlarında hiçbir değişiklik yok (Ç9).</td></tr>
+<tr><td>Açık iş: MediaStore kaydı ve PrintHelper için küçük kanal</td><td>Kanalda üç yöntem: <code>capabilities</code>, <code>saveToGallery</code> (ayrı iş parçacığında yazar, hata olursa kaydı siler), <code>print</code>. Yeni Flutter paketi yok.</td></tr>
+<tr><td>İzin istememe (Kids Category, Play Families)</td><td>Android 10 ve sonrasında MediaStore <code>RELATIVE_PATH</code> ile izin gerekmiyor; Android 7–9'da kayıt satırı hiç gösterilmiyor, paylaşım kalıyor. Manifest'e izin eklenmedi.</td></tr>
+<tr><td>Gizlilik metni gerçeği anlatsın</td><td>Uygulama içi gizlilik metnine (TR ve EN) ve <code>docs/privacy_policy.html</code> sayfasına yazdırma ve galeri cümleleri eklendi; mağaza metni ve README'de ebeveyn satırı güncellendi.</td></tr>
+</tbody></table></div>
+<p>Testler: 136. Servis testi: platform yokken hiçbir şey sunulmuyor ve hata çıkmıyor; Android yanıtında yetenekler, kayıt ve yazdırma çağrılarının bayt ve ad argümanları; platform hatası. Uygulama testi: kapıdan geçip düz sayfa, sonra Android 10 taklidiyle "Galeriye kaydet" ve onay mesajı, "Yazdır" ve çağrı. Emülatörde (CobiPaint_Pixel, API 34) akış semantik dökümüyle sürüldü: kapı çarpımı dökümden okunup çözüldü; "Galeriye kaydet" MediaStore'a <code>Pictures/Cobi Paint/cobi_paint_20261103_170955.png</code> yazdı (30.954 bayt, 1024×1024 PNG; geri çekilip bakıldı, boyanmış ejderha); "Yazdır" ve "Boş sayfayı yazdır" sistem yazdırma penceresini açtı, önizlemede boyanmış eser ve çizgi resim göründü (emülatörde önizleme 5 saniyeden geç geliyor). Gerçek yazıcıya basılmadı; Android 7–9 cihazda denenmedi; iOS'ta değişiklik yok.</p>
+<div class="table-wrap"><table>
+<thead><tr><th>HIG / Material / App Review maddesi</th><th>Sonuç</th></tr></thead>
+<tbody>
+<tr><td>Kids Category 1.3 / 5.1.4 ve Play Families</td><td>Uyumlu: yeni izin yok, veri yalnız ebeveynin seçtiği yazıcıya ya da cihazın galerisine gidiyor; gizlilik metni güncel.</td></tr>
+<tr><td>Ç9: çocuk için uygulamadan çıkış yok</td><td>Uyumlu: uzun basış ve kapı; yazdırma penceresi sistem arayüzü, yalnız kapının arkasından açılıyor.</td></tr>
+<tr><td>Material: alt sayfa satırları simge + fiil, geri bildirim</td><td>Uyumlu: kaydet ve yazdır simgeleri, "Galeriye kaydedildi", "Kaydedilemedi", "Yazdırılamadı" mesajları.</td></tr>
+<tr><td>HIG (iOS)</td><td>Değişiklik yok: paylaşım menüsü Kaydet ve Yazdır'ı sunmaya devam ediyor.</td></tr>
+<tr><td>Erişilebilirlik</td><td>Uyumlu: her satırın metni ekran okuyucuda okunuyor (semantik dökümünde görüldü).</td></tr>
 </tbody></table></div>
 </div>
 
