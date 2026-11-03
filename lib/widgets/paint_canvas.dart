@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../engine/document/coloring_document.dart';
 import '../engine/document/stroke.dart';
@@ -61,6 +62,26 @@ class PaintCanvas extends StatefulWidget {
   State<PaintCanvas> createState() => _PaintCanvasState();
 }
 
+/// The tool pictures drawn under the finger while it paints, decoded once
+/// for the whole app.
+final Map<BrushKind, ui.Image> _toolImages = {};
+Future<void>? _toolImagesLoading;
+
+Future<void> _loadToolImages() => _toolImagesLoading ??= () async {
+  for (final entry in {
+    BrushKind.marker: 'paintbrush',
+    BrushKind.rainbow: 'paintbrush',
+    BrushKind.crayon: 'crayon',
+  }.entries) {
+    try {
+      final data = await rootBundle.load('assets/images/tools/${entry.value}.png');
+      _toolImages[entry.key] = await decodeImageFromList(data.buffer.asUint8List());
+    } catch (e) {
+      debugPrint('Tool picture missing: $e');
+    }
+  }
+}();
+
 class _PaintCanvasState extends State<PaintCanvas> with SingleTickerProviderStateMixin {
   late PageLayers _layers;
   late CanvasGestureMachine _gestures;
@@ -93,15 +114,15 @@ class _PaintCanvasState extends State<PaintCanvas> with SingleTickerProviderStat
   @override
   void initState() {
     super.initState();
-    _reveal = AnimationController(vsync: this, duration: const Duration(milliseconds: 220))
-      ..addListener(_bump)
-      ..addStatusListener((status) {
-        if (status == AnimationStatus.completed) {
-          _revealFrom?.dispose();
-          _revealFrom = null;
-          _bump();
-        }
-      });
+    _reveal = AnimationController(vsync: this, duration: const Duration(milliseconds: 220))..addListener(_bump);
+    unawaited(_loadToolImages().then((_) => mounted ? _bump() : null));
+    _reveal.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        _revealFrom?.dispose();
+        _revealFrom = null;
+        _bump();
+      }
+    });
     _gestures = CanvasGestureMachine(
       callbacks: CanvasGestureCallbacks(
         onFill: _fill,
@@ -189,10 +210,7 @@ class _PaintCanvasState extends State<PaintCanvas> with SingleTickerProviderStat
     _viewport = size;
     final map = widget.document.map;
     _fitScale = math.min(size.width / map.width, size.height / map.height);
-    _fitOffset = Offset(
-      (size.width - map.width * _fitScale) / 2,
-      (size.height - map.height * _fitScale) / 2,
-    );
+    _fitOffset = Offset((size.width - map.width * _fitScale) / 2, (size.height - map.height * _fitScale) / 2);
     _pan = _clampPan(_pan, _zoom);
   }
 
@@ -339,15 +357,46 @@ class _PaintCanvasState extends State<PaintCanvas> with SingleTickerProviderStat
           onPointerUp: _onPointerUp,
           onPointerCancel: _onPointerCancel,
           child: RepaintBoundary(
-            child: CustomPaint(
-              size: constraints.biggest,
-              painter: _CanvasPainter(this),
-            ),
+            child: CustomPaint(size: constraints.biggest, painter: _CanvasPainter(this)),
           ),
         );
       },
     );
   }
+}
+
+void _drawTool(Canvas canvas, BrushKind kind, Offset tip, double size) {
+  if (kind == BrushKind.eraser) {
+    // A pink eraser block with a blue band, one corner at the finger.
+    canvas.save();
+    canvas.translate(tip.dx, tip.dy);
+    canvas.rotate(-0.45);
+    final body = Rect.fromLTWH(-size * 0.06, -size * 0.4, size * 0.4, size * 0.4);
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(body, Radius.circular(size * 0.05)),
+      Paint()..color = const Color(0xFFF48FB1),
+    );
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(
+        Rect.fromLTWH(body.left, body.top, body.width, body.height * 0.35),
+        Radius.circular(size * 0.05),
+      ),
+      Paint()..color = const Color(0xFF64B5F6),
+    );
+    canvas.restore();
+    return;
+  }
+  final image = _toolImages[kind];
+  if (image == null) return;
+  // Where the tip sits inside each picture, as a fraction of its size.
+  final anchor = kind == BrushKind.crayon ? const Offset(0.14, 0.9) : const Offset(0.17, 0.84);
+  final dst = Rect.fromLTWH(tip.dx - size * anchor.dx, tip.dy - size * anchor.dy, size, size);
+  canvas.drawImageRect(
+    image,
+    Rect.fromLTWH(0, 0, image.width.toDouble(), image.height.toDouble()),
+    dst,
+    Paint()..filterQuality = FilterQuality.medium,
+  );
 }
 
 class _CanvasPainter extends CustomPainter {
@@ -377,7 +426,9 @@ class _CanvasPainter extends CustomPainter {
       canvas.drawImage(from, Offset.zero, smooth);
       final t = Curves.easeOutCubic.transform(state._reveal.value);
       canvas.save();
-      canvas.clipPath(Path()..addOval(Rect.fromCircle(center: state._revealOrigin, radius: state._revealRadius * t + 1)));
+      canvas.clipPath(
+        Path()..addOval(Rect.fromCircle(center: state._revealOrigin, radius: state._revealRadius * t + 1)),
+      );
       canvas.drawImage(fill, Offset.zero, smooth);
       canvas.restore();
     } else if (fill != null) {
@@ -418,6 +469,13 @@ class _CanvasPainter extends CustomPainter {
         ..colorFilter = lineArtFilter
         ..filterQuality = FilterQuality.medium,
     );
+
+    // 5. The tool in the child's hand: its tip at the finger, the handle up
+    // and to the right, so the picture reads as "I am holding a brush".
+    if (liveKind != null && state._live.length >= 3) {
+      final n = state._live.length;
+      _drawTool(canvas, liveKind, Offset(state._live[n - 3], state._live[n - 2]), map.width * 0.28);
+    }
     canvas.restore();
   }
 
