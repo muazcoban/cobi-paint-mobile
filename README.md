@@ -8,7 +8,7 @@ Uygulama yeniden yapılandırılıyor. Yol haritası ve gerekçeler `plan/cobi-p
 
 - 🎨 **Dokun ve boya**: Bölgeye dokununca seçili renkle dolar.
 - ✏️ **Kalem ve silgi**
-- 🖼️ **Kategoriler**: Hayvanlar, Bitkiler, Araçlar, Karakterler, Doğa, Yiyecekler (76 sayfa).
+- 🖼️ **Kategoriler**: Hayvanlar, Bitkiler, Yiyecekler, Araçlar, Doğa, Eşyalar (201 sayfa, 3 zorluk seviyesi) ve serbest çizim sayfası.
 - ↩️ **Geri al / ileri al**
 - 💾 **Eserlerim**: Boyanan sayfalar kaydedilir ve sonra açılabilir.
 - 📤 **Paylaşım**: Sistem paylaşım menüsü.
@@ -54,7 +54,7 @@ GitHub Actions her pull request'te ve `master`'a her push'ta bu iki komutu çal�
 lib/
 ├── main.dart                     # Uygulama giriş noktası
 ├── data/
-│   └── builtin_images.dart       # Uygulamayla gelen 76 boyama sayfası
+│   └── builtin_images.dart       # Üretilmiş: 201 boyama sayfası (tool/pages/build_pages.py)
 ├── models/                       # Category, ColoringImage, SavedArtwork, UserSettings
 ├── providers/
 │   ├── app_provider.dart         # Ayarlar, kategoriler, eserler
@@ -71,12 +71,14 @@ tool/                             # Geçici yer tutucu sayfa üreticisi
 
 ## Boyama sayfası ekleme
 
-1. PNG dosyasını `assets/images/categories/{kategori}/` klasörüne koy.
-2. Klasör yeniyse `pubspec.yaml` içindeki `assets` listesine ekle.
-3. Sayfayı `lib/data/builtin_images.dart` listesine ekle.
-4. `flutter test` çalıştır. `test/builtin_images_test.dart` dosyanın varlığını, açılabildiğini ve `pubspec.yaml` içinde tanımlı olduğunu kontrol eder.
+Sayfalar `tool/pages/catalog.json` kataloğundan üretilir; dosyalar elle eklenmez.
 
-Faz 3'te sayfalar SVG kaynaktan üretilecek ve sızıntı kontrolünden geçecek (plan raporunun 8. bölümü).
+1. Konuyu `tool/pages/catalog.json` listesine ekle (Unicode kodu, Türkçe ve İngilizce ad, kategori).
+2. `python3 tool/pages/build_pages.py --work /tmp/cobi-pages --dart ~/flutter/sdk/flutter/bin/dart` çalıştır. Betik kaynağı indirir, 1024 px'e çevirir, konturu çıkarır, sayfa denetiminden geçirir, seviyeyi hesaplar ve `assets/pages/` ile `lib/data/builtin_images.dart` dosyasını yazar.
+3. `flutter test` çalıştır. `test/engine/region_builder_test.dart` her sayfanın denetimden geçtiğini ve seviyesinin doğru olduğunu kontrol eder.
+4. Elle çizilmiş bir sayfa için önce `dart run tool/page_report.dart <sayfa.png>` ile ölç.
+
+Kaynak çizimler Microsoft'un Fluent UI Emoji setinden (MIT); lisans metni `assets/licenses/` altında ve uygulamanın Ebeveynler alanında gösterilir.
 
 ## Lisans
 

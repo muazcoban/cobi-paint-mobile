@@ -29,7 +29,7 @@ boyama ve otomatik kayıt sayesinde çocuğunuz yardım istemeden boyar.
 
 **✨ Özellikler**
 
-🖼️ **6 kategoride 76 boyama sayfası**
+🖼️ **6 kategoride 200'den fazla boyama sayfası, 3 zorluk seviyesi**
 - Hayvanlar, Bitkiler, Araçlar, Karakterler, Doğa, Yiyecekler
 
 🎨 **Taşmayan boya**
@@ -60,7 +60,7 @@ saving let your child color without asking for help.
 
 **✨ Features**
 
-🖼️ **76 coloring pages in 6 categories**
+🖼️ **200+ coloring pages in 6 categories, 3 difficulty levels**
 - Animals, Plants, Vehicles, Characters, Nature, Food
 
 🎨 **Paint that stays in place**
