@@ -54,7 +54,7 @@ boyama ve otomatik kayıt sayesinde çocuğunuz yardım istemeden boyar.
 
 👨‍👩‍👧 **Ebeveynler için**
 - Reklam yok, internet bağlantısı yok, hesap yok, veri toplanmaz.
-- Paylaşım, silme ve ayarlar ebeveyn kontrolünün arkasında.
+- Paylaşım, galeriye kaydetme, yazdırma, silme ve ayarlar ebeveyn kontrolünün arkasında.
 - Rehberli Erişim (Guided Access) için uygulama içi rehber.
 
 ### English
@@ -90,7 +90,7 @@ saving let your child color without asking for help.
 
 👨‍👩‍👧 **For parents**
 - No ads, no internet connection, no accounts, no data collection.
-- Sharing, deleting and settings sit behind a grown-up check.
+- Sharing, saving to the gallery, printing, deleting and settings sit behind a grown-up check.
 - An in-app guide to Guided Access.
 
 ---

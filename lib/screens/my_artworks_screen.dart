@@ -8,6 +8,7 @@ import '../l10n/app_localizations.dart';
 import '../models/saved_artwork.dart';
 import '../models/coloring_image.dart';
 import '../providers/app_provider.dart';
+import '../services/export_service.dart';
 import '../services/share_service.dart';
 import '../services/sound_service.dart';
 import '../widgets/kid_button.dart';
@@ -15,8 +16,9 @@ import '../widgets/parental_gate.dart';
 import 'coloring_screen.dart';
 import 'home_screen.dart' show gridColumns;
 
-/// The child's pictures. Opening one continues it; sharing and deleting
-/// need a grown-up (long press, then the parental gate).
+/// The child's pictures. Opening one continues it; sharing, saving to the
+/// gallery, printing and deleting need a grown-up (long press, then the
+/// parental gate).
 class MyArtworksScreen extends StatelessWidget {
   const MyArtworksScreen({super.key});
 
@@ -138,9 +140,15 @@ class _ArtworkCard extends StatelessWidget {
 
   Future<void> _showOptions(BuildContext context) async {
     if (!await showParentalGate(context) || !context.mounted) return;
+    // Android's share sheet has no Print or Save, so the gate offers them
+    // itself where the device can; iOS has both in the sheet.
+    final exports = await ExportService().capabilities();
+    if (!context.mounted) return;
     final l10n = AppLocalizations.of(context)!;
     final box = context.findRenderObject() as RenderBox?;
     final origin = box == null ? null : box.localToGlobal(Offset.zero) & box.size;
+    final hasBlankPage =
+        !artwork.originalImagePath.contains('/imported/') && !artwork.originalImagePath.endsWith('/blank.png');
     final action = await showModalBottomSheet<String>(
       context: context,
       showDragHandle: true,
@@ -153,11 +161,25 @@ class _ArtworkCard extends StatelessWidget {
               title: Text(l10n.share),
               onTap: () => Navigator.pop(sheetContext, 'share'),
             ),
-            if (!artwork.originalImagePath.contains('/imported/') && !artwork.originalImagePath.endsWith('/blank.png'))
+            if (exports.gallery)
+              ListTile(
+                leading: const Icon(Icons.save_alt_rounded),
+                title: Text(l10n.saveToGallery),
+                onTap: () => Navigator.pop(sheetContext, 'gallery'),
+              ),
+            if (exports.print)
+              ListTile(
+                leading: const Icon(Icons.print_rounded),
+                title: Text(l10n.printPicture),
+                onTap: () => Navigator.pop(sheetContext, 'print'),
+              ),
+            if (hasBlankPage)
+              // The line art on paper: printed here on Android, through the
+              // share sheet's Print and Save elsewhere.
               ListTile(
                 leading: const Icon(Icons.print_outlined),
-                title: Text(l10n.shareBlankPage),
-                onTap: () => Navigator.pop(sheetContext, 'blank'),
+                title: Text(exports.print ? l10n.printBlankPage : l10n.shareBlankPage),
+                onTap: () => Navigator.pop(sheetContext, exports.print ? 'printBlank' : 'blank'),
               ),
             ListTile(
               leading: const Icon(Icons.delete_outline_rounded, color: Color(0xFFE53935)),
@@ -179,6 +201,42 @@ class _ArtworkCard extends StatelessWidget {
           debugPrint('Share failed: $e');
           if (context.mounted) {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.shareError)));
+          }
+        }
+      case 'gallery':
+        try {
+          final bytes = await app.storageService.resolveArtworkFile(artwork.savedImagePath).readAsBytes();
+          await ExportService().saveToGallery(bytes, name: _exportName(DateTime.now()));
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.savedToGallery)));
+          }
+        } catch (e) {
+          debugPrint('Gallery save failed: $e');
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.saveError)));
+          }
+        }
+      case 'print':
+        try {
+          final bytes = await app.storageService.resolveArtworkFile(artwork.savedImagePath).readAsBytes();
+          await ExportService().printPicture(bytes, name: artwork.name);
+        } catch (e) {
+          debugPrint('Print failed: $e');
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.printError)));
+          }
+        }
+      case 'printBlank':
+        try {
+          final data = await rootBundle.load(artwork.originalImagePath);
+          await ExportService().printPicture(
+            data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes),
+            name: artwork.name,
+          );
+        } catch (e) {
+          debugPrint('Blank page print failed: $e');
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.printError)));
           }
         }
       case 'blank':
@@ -210,6 +268,13 @@ class _ArtworkCard extends StatelessWidget {
         if (yes == true) await app.deleteArtwork(artwork.id);
     }
   }
+}
+
+/// The file name a saved picture gets in the gallery: the app's name and a
+/// time stamp, so two saves never collide and the album sorts by date.
+String _exportName(DateTime at) {
+  String two(int n) => n.toString().padLeft(2, '0');
+  return 'cobi_paint_${at.year}${two(at.month)}${two(at.day)}_${two(at.hour)}${two(at.minute)}${two(at.second)}';
 }
 
 /// Opens a saved artwork on its page. Works for built-in pages, pages

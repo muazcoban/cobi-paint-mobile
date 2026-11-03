@@ -68,3 +68,8 @@ android {
 flutter {
     source = "../.."
 }
+
+dependencies {
+    // The system print dialog for a bitmap: the grown-up "Print" behind the gate.
+    implementation("androidx.print:print:1.0.0")
+}

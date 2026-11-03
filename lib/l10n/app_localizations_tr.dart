@@ -199,6 +199,24 @@ class AppLocalizationsTr extends AppLocalizations {
   String get shareBlankPage => 'Boş sayfayı paylaş';
 
   @override
+  String get saveToGallery => 'Galeriye kaydet';
+
+  @override
+  String get savedToGallery => 'Galeriye kaydedildi';
+
+  @override
+  String get saveError => 'Kaydedilemedi';
+
+  @override
+  String get printPicture => 'Yazdır';
+
+  @override
+  String get printBlankPage => 'Boş sayfayı yazdır';
+
+  @override
+  String get printError => 'Yazdırılamadı';
+
+  @override
   String get privacyPolicy => 'Gizlilik Politikası';
 
   @override
@@ -267,7 +285,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get privacyPolicyText =>
-      'Cobi Paint hiçbir kişisel veri toplamaz.\n\n• Hesap, reklam, analiz aracı ve internet bağlantısı yoktur.\n• Çocuğunuzun boyadığı resimler yalnız bu cihazda saklanır ve hiçbir sunucuya gönderilmez.\n• Bir resim yalnız siz ebeveyn kontrolünü geçip paylaşmayı seçtiğinizde, sistemin paylaşım menüsüyle ve sizin seçtiğiniz uygulamaya gönderilir.\n• Kayıtlı bir resmi Eserlerim\'de basılı tutup ebeveyn kontrolünü geçerek silebilirsiniz. Uygulamayı silmek bütün resimleri siler.\n\nSorularınız için: cobipaint@gmail.com Tam Sürüm satın alımı Apple ya da Google hesabınızla yapılır; uygulama ödeme bilgisine erişmez ve hiçbir veri toplamaz.';
+      'Cobi Paint hiçbir kişisel veri toplamaz.\n\n• Hesap, reklam, analiz aracı ve internet bağlantısı yoktur.\n• Çocuğunuzun boyadığı resimler yalnız bu cihazda saklanır ve hiçbir sunucuya gönderilmez.\n• Bir resim yalnız siz ebeveyn kontrolünü geçip paylaşmayı seçtiğinizde, sistemin paylaşım menüsüyle ve sizin seçtiğiniz uygulamaya gönderilir.\n• Android\'de yazdırma ve galeriye kaydetme de ebeveyn kontrolünün arkasındadır: yazdırma sistemin yazdırma penceresinden geçer, kayıt yalnız bu cihazın galerisine yapılır.\n• Kayıtlı bir resmi Eserlerim\'de basılı tutup ebeveyn kontrolünü geçerek silebilirsiniz. Uygulamayı silmek bütün resimleri siler.\n\nSorularınız için: cobipaint@gmail.com Tam Sürüm satın alımı Apple ya da Google hesabınızla yapılır; uygulama ödeme bilgisine erişmez ve hiçbir veri toplamaz.';
 
   @override
   String get guidedAccessTitle => 'Çocuk uygulamada kalsın';
