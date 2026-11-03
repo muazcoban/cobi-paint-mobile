@@ -41,6 +41,12 @@ Apple's Human Interface Guidelines (read the current pages; HIG changes every WW
   (`colorNames` in the ARB files).
 - Kids Category: no ads, no analytics, no external links or purchases without the gate; the
   privacy policy is inside the app (Parents area).
+- Money (council decision, 3 Nov 2026): one non-consumable "Full Version" unlock, nothing else.
+  The only price on screen is on `FullVersionScreen` behind the gate, read from the store. The
+  child's screens are identical before and after the purchase: no lock, badge, "more" tile,
+  countdown or changed card order. The free subset is fixed in `tool/pages/catalog.json`
+  (`free: true`); a page that was free stays free. All of it is off unless the app is built with
+  `--dart-define=COBI_IAP=true`.
 - iPad: pass `sharePositionOrigin` to every share, or the popover crashes.
 
 ## Coloring pages
