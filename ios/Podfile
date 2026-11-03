@@ -38,5 +38,11 @@ end
 post_install do |installer|
   installer.pods_project.targets.each do |target|
     flutter_additional_ios_build_settings(target)
+    # Xcode 26 and later archive only with deployment targets of 15.0 or
+    # newer; plugin podspecs still declare 12.0 or 13.0, so lift every pod to
+    # the app's minimum (platform above).
+    target.build_configurations.each do |config|
+      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '15.0'
+    end
   end
 end
