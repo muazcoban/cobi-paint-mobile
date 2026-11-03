@@ -164,7 +164,7 @@ ul.tight li, ol.tight li { margin: 3px 0; }
 <tr><td>Eser duvarı</td><td>5/5</td><td><span class="badge b-p2">Geçti</span></td><td>Yapıldı.</td></tr>
 <tr><td>Fotoğraflara kaydet ve yazdır</td><td>5/5</td><td><span class="badge b-p2">Geçti</span></td><td>Kapı arkasında "Boş sayfayı paylaş": sistem menüsü yazdırır ve kaydeder. Android'de doğrudan galeriye kayıt sonraya.</td></tr>
 <tr><td>Hareketsizlik ipucu</td><td>5/5</td><td><span class="badge b-p2">Geçti</span></td><td>Yapıldı.</td></tr>
-<tr><td>Çıkartma aracı</td><td>4/5</td><td><span class="badge b-p2">Geçti</span></td><td>Sonraya: kütüphane 200 sayfayı geçince yeniden değerlendirilecek (kurul şartı).</td></tr>
+<tr><td>Çıkartma aracı</td><td>4/5</td><td><span class="badge b-p2">Geçti</span></td><td>Yapıldı (bölüm 13); kütüphane 201 sayfa olduğu için kurulun "200'ü geçince" şartı sağlandı.</td></tr>
 <tr><td>Günün sayfası ve sezon</td><td>4/5</td><td><span class="badge b-p2">Geçti</span></td><td>Sonraya: önce sezon temaları normal kategori olarak.</td></tr>
 <tr><td>Ek fırçalar</td><td>4/5</td><td><span class="badge b-p2">Geçti</span></td><td>Sonraya (L): önce fırça katmanı artımlı pişirmeye geçmeli.</td></tr>
 <tr><td>Ayna çizimi</td><td>4/5</td><td><span class="badge b-p2">Geçti</span></td><td>Yapıldı (bölüm 12).</td></tr>
@@ -271,7 +271,7 @@ ul.tight li, ol.tight li { margin: 3px 0; }
 <tr><td>PR #2 (<code>faz2/firca-ve-testler</code> → master)</td><td>Açık: <a href="https://github.com/muazcoban/cobi-paint-mobile/pull/2">github.com/muazcoban/cobi-paint-mobile/pull/2</a>. CI (analyze + test) PR'da koşuyor.</td></tr>
 <tr><td>Mevsim kategorisi</td><td>Atlandı: aday konuların neredeyse hepsi zaten başka kategorilerde; ayrı kategori kopya olurdu. İllüstratör sayfalarıyla birlikte yeniden bakılır.</td></tr>
 </tbody></table></div>
-<p>Sıradaki adaylar (kurul onaylı, yapılmadı): çıkartmalar, sezon temaları, yaş sinyali API'leri (kilitle birlikte), Android'de doğrudan yazdırma. Ayna çizimi bölüm 12'de. Senin adımların bölüm 8'de aynen geçerli.</p>
+<p>Sıradaki adaylar (kurul onaylı, yapılmadı): sezon temaları, yaş sinyali API'leri (kilitle birlikte), Android'de doğrudan yazdırma. Ayna çizimi bölüm 12'de, çıkartmalar bölüm 13'te. Senin adımların bölüm 8'de aynen geçerli.</p>
 
 <h2 id="ayna">12. Faz 3: ayna çizimi</h2>
 <p>Branch <code>faz3/ayna-cizimi</code> (PR #2'nin üstüne kurulu). Serbest çizim sayfasında ayna: bir parmak çizgisi sayfanın ortasındaki ayna çizgilerine göre kopyalanır. Minik'te tek düğme, dört yönlü açık ya da kapalı; Büyük'te aynı düğme kapalı → iki → dört → altı diye döner. Menü ya da yeni satır yok.</p>
@@ -299,6 +299,31 @@ ul.tight li, ol.tight li { margin: 3px 0; }
 <tr><td>Reduce Motion</td><td>Uyumlu: ayna çizgileri animasyonsuz görünür; yeni animasyon yok.</td></tr>
 <tr><td>Kontrast</td><td>Uyumlu: glif 0xFF2D3142 beyaz üstünde (~12:1); kılavuz çizgiler süs, bilgi taşımaz.</td></tr>
 <tr><td>Kids Category 1.3 / 5.1.4</td><td>Uyumlu: veri, ağ, izin, metin eklemiyor.</td></tr>
+</tbody></table></div>
+
+<h2 id="cikartma">13. Faz 4: çıkartmalar</h2>
+<p>Branch <code>faz4/cikartmalar</code>. Her sayfada 16 çıkartma (Fluent UI Emoji, MIT, sayfalarla aynı kaynak ve commit): yıldız, kalp, ayçiçeği, kelebek, güneş, uğur böceği, balon, gökkuşağı, çilek, gülen yüz, bulut, taç, elma, nota, ay, pırıltı. Yeni düğme yok: fırça düğmesinin döngüsü keçeli kalem, gökkuşağı, (Büyük'te pastel) ve çıkartma diye dönüyor. Çıkartma kipindeyken düğme sıradaki çıkartmanın resmini gösteriyor; dokunuş onu yapıştırıyor, sürükleme bir çıkartma genişliği aralıkla iz bırakıyor, her çıkartma hafif eğik.</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Kurul koşulu (3 Kasım)</th><th>Nasıl karşılandı</th></tr></thead>
+<tbody>
+<tr><td>12–16 çıkartma, sayfa stiliyle aynı kaynak</td><td>16 çıkartma, <code>tool/stickers/build_stickers.py</code> ile sabit commit'ten indirilip 256 px PNG olarak üretiliyor; liste <code>lib/data/stickers.dart</code>.</td></tr>
+<tr><td>375 pt telefona yeni 82 pt üst düğme eklenmez</td><td>Düğme eklenmedi; çıkartma, fırça düğmesinin döngüsünde bir kip.</td></tr>
+<tr><td>Minik'te seçim ekranı yok, her dokunuş sıradaki çıkartmayı basar</td><td>İki kipte de seçici yok; sıra sabit, düğme sıradakini gösteriyor. Büyük'te fırça boyutu hücresi çıkartma boyutunu da değiştiriyor (küçük, orta, büyük).</td></tr>
+<tr><td>Geri alınabilir</td><td>Bir parmağın bütün izi tek adım; geri al hepsini kaldırıyor. Silgi değdiği çıkartmaları söküyor, geri al aynı sıraya geri koyuyor.</td></tr>
+<tr><td>Belgenin isteğe bağlı listesinde saklanır</td><td><code>ColoringDocument.stickers</code>; JSON'da yalnız çıkartma varsa <code>stickers</code> anahtarı yazılıyor. Eski sürümler anahtarı yok sayar, resim bozulmaz.</td></tr>
+</tbody></table></div>
+<p>Çıkartmalar çizgi resmin üstünde duruyor, gerçek çıkartma gibi; sayfanın bitmesine sayılmıyor (kutlama yalnız boyayla). Serbest sayfada ayna açıkken çıkartmalar da kopyalanıyor: dört yönlü aynada bir dokunuş dört çıkartma, eğimleri aynalı. Kaydedilen resimde ve küçük resimde çıkartmalar var. Renk seçince kip boyamaya dönüyor; Çiz sayfasında fırçaya, boyama sayfasında doldurmaya.</p>
+<p>Testler: 129 (çıkartma modeli, belge adımları, silgiyle sökme ve geri koyma, aynalı silgi, JSON, tuvalde dokunuş ve iz, aynalı dokunuş, kaydedilen resimde çıkartma, 16 resmin varlığı, uygulama testinde fırça döngüsü ve basma). Emülatörde (CobiPaint_Pixel, Minik) görüldü: kip seçimi, tek basma, beş çıkartmalık iz, tek adımda geri alma, silgiyle sökme, aynayla dört kopya. Büyük kip emülatörde denenemedi: makinedeki güvenlik ajanları (Defender, apfsd) CPU'yu tüketince emülatör yanıt vermez oldu (soğuk açılışta bile sistem servisleri gelmedi). Büyük'teki döngü (keçeli kalem, gökkuşağı, pastel, çıkartma) ve boyut hücresinin çıkartmayı büyütmesi uygulama testiyle doğrulandı; cihazda görülmedi.</p>
+<div class="table-wrap"><table>
+<thead><tr><th>HIG / App Review maddesi</th><th>Sonuç</th></tr></thead>
+<tbody>
+<tr><td>Dokunma hedefi ≥ 44 pt</td><td>Uyumlu: aynı fırça düğmesi (79 pt Minik telefon, 61 pt Büyük telefon).</td></tr>
+<tr><td>Düğme amacını açıkça söyler</td><td>Uyumlu: çıkartma kipinde düğme sıradaki çıkartmanın resmini gösteriyor; ne basılacağı görünüyor.</td></tr>
+<tr><td>Dört durumlu döngü (HIG iki durumlu toggle tarif eder)</td><td>Gerekçeli sapma, ayna düğmesiyle aynı gerekçe: menü yok, her durumun ikonu ve VoiceOver etiketi ayrı ("Çıkartma: yıldız").</td></tr>
+<tr><td>Geri bildirim</td><td>Uyumlu: çıkartma parmağın altında anında, dolgu sesi ve hafif haptik.</td></tr>
+<tr><td>Reduce Motion</td><td>Uyumlu: animasyon yok.</td></tr>
+<tr><td>Kontrast / renk körlüğü</td><td>Uyumlu: resimler bilgi taşımıyor, etiketler konuşuyor.</td></tr>
+<tr><td>Kids Category 1.3 / 5.1.4</td><td>Uyumlu: veri, ağ, izin, metin, bağlantı yok.</td></tr>
 </tbody></table></div>
 </div>
 
