@@ -56,7 +56,7 @@
 <td>İkili henüz Xcode 26 ile derlenmedi. Apple 28 Nisan 2026'dan beri iOS 26 SDK ile derlenmiş ikili ister; bu Mac'te Xcode 16.4 var. Xcode Cloud betiği bu denetim sürerken (18:19) çalışma ağacına eklendi ve Flutter belgesindeki desene uyuyor: Flutter 3.38.3 sabit, <code>precache --ios</code>, <code>pub get</code>, <code>pod install</code>, çalıştırılabilir (755). Eksik kalan: Xcode Cloud iş akışı yok, ilk arşiv denenmedi, derleme numarası çakışması çözülmedi. Xcode Cloud varsayılan olarak <code>CFBundleVersion</code>'ı kendi sayacıyla (1'den başlar) ezer; pubspec'teki 5 ve README'deki "numarayı artır" adımı o zaman etkisiz kalır.</td>
 <td>Upcoming requirements: "Since April 28, 2026 – Xcode 26 or later"</td>
 <td class="kanit"><code>ios/ci_scripts/ci_post_clone.sh:9-21</code> (izlenmeyen dosya, commit edilmedi); <code>README.md</code> "Xcode Cloud ile TestFlight" bölümü (çalışma ağacında, commit edilmedi); <code>ios/Podfile:15-16</code> (<code>Generated.xcconfig</code> yoksa <code>raise</code>); <code>ios/Runner.xcodeproj/project.pbxproj:226</code> (<code>LastUpgradeCheck = 1510</code>); <code>pubspec.lock</code>: <code>in_app_purchase_storekit 0.4.13</code> Flutter 3.38 ister, Flutter 3.38.3 Xcode 26 ile derlenir (sürüm notlarında iOS 26 ve Xcode 26 LLDB düzeltmeleri var).</td>
-<td>Betiği ve README bölümünü commit et. Xcode 26'lı bir Mac'te (ya da Xcode Cloud'un kendi arayüzünde) Archive iş akışını kur: Xcode "Latest Release" (26.x), dal <code>master</code>, Post-Action TestFlight Internal. İş akışı ayarlarında "Next Build Number" değerini 6 yap, ya da numarayı pubspec'ten almak için build number override'ı kapat; böylece ASC ve pubspec aynı sayıyı gösterir. İlk arşivde Podfile'ın imza override'ını (K-05) ve ITMS e-postalarını kontrol et.<span class="sen">senin işin</span></td>
+<td>Betiği ve README bölümünü commit et. Xcode 26'lı bir Mac'te (ya da Xcode Cloud'un kendi arayüzünde) Archive iş akışını kur: Xcode "Latest Release" (26.x), dal <code>master</code>, Post-Action TestFlight Internal. İş akışı ayarlarında "Next Build Number" değerini 6 yap, ya da numarayı pubspec'ten almak için build number override'ı kapat; böylece ASC ve pubspec aynı sayıyı gösterir. İlk arşivde Podfile'ın imza override'ını (K-05) ve ITMS e-postalarını kontrol et.<br><strong>4 Kasım:</strong> yol değişti, ikili yerelde Xcode 26.3 ile derlenecek (<code>tool/release/ios_testflight.sh</code>, <code>ios/ExportOptionsUpload.plist</code>; derleme numarası pubspec'ten, ASC sayacı kapalı). macOS 15.8.2 ve Xcode 26.3 kurulumu kullanıcıda. Aynı gün ikinci karar: kota (üyelikte takım başına ayda 25 saat) yettiği için Xcode Cloud'a dönüldü; yerel yol yedek. Sihirbazda takım MUAZ COBAN olmalı, sonraki derleme numarası 6.<span class="sen">senin işin</span></td>
 <td><span class="p0">P0 yükleme engeli</span></td>
 </tr>
 
@@ -92,7 +92,7 @@
 <td>OpenCV döneminden kalan derleme adımları Xcode Cloud'da imza adımını karıştırabilir: pod hedeflerinde <code>CODE_SIGN_STYLE</code> zorla <code>Automatic</code>, gömülü framework'leri <code>|| true</code> ile yeniden imzalayan betik, şemada CMake PATH ön eylemi.</td>
 <td>2.1 (derleme kararlılığı)</td>
 <td class="kanit"><code>ios/Podfile:44-53</code>; <code>ios/Runner.xcodeproj/project.pbxproj:353-366</code> ("Sign Embedded Frameworks", <code>--timestamp=none</code>) ve <code>:216</code> (phase sırası); <code>ios/Runner.xcodeproj/xcshareddata/xcschemes/Runner.xcscheme:8-25</code>; <code>ios/Podfile:1</code> (Firebase yorumu).</td>
-<td>Üçünü de kaldır: <code>post_install</code> içinde yalnız <code>flutter_additional_ios_build_settings</code> kalsın; "Sign Embedded Frameworks" phase'ini ve şema PreAction'ını sil. İlk Xcode Cloud arşivinde imza günlüğünü kontrol et.</td>
+<td>Üçünü de kaldır: <code>post_install</code> içinde yalnız <code>flutter_additional_ios_build_settings</code> kalsın; "Sign Embedded Frameworks" phase'ini ve şema PreAction'ını sil. İlk Xcode Cloud arşivinde imza günlüğünü kontrol et.<br><strong>4 Kasım:</strong> yapıldı; üçü de kaldırıldı, Firebase yorumu silindi, simülatör derlemesi geçti. İmza günlüğü ilk yerel arşivde kontrol edilecek.</td>
 <td><span class="p2">P2</span></td>
 </tr>
 
@@ -310,6 +310,15 @@
 <td>ASC özellik (2025), 2.3.1</td>
 <td class="kanit"><code>lib/widgets/motion.dart:8-10</code>; <code>lib/main.dart:96</code> (metin 200%); guideline testleri (K-08).</td>
 <td>Önce gerçek cihazda VoiceOver ile tam tur (ana ekran → kategori → boyama → Eserlerim → kapı). Sonra VoiceOver, Larger Text, Sufficient Contrast, Reduced Motion'ı işaretle. Emin değilsen boş bırak.</td>
+<td><span class="p2">P2</span></td>
+</tr>
+
+<tr>
+<td>H-09 (4 Kasım eki)</td>
+<td>iPhone Duo (23 Ekim 2026, iOS 27.1). 2.1.0 iOS 26.2 SDK ile derlenecek: Apple'a göre uygulama Duo'da çalışır, açık cihazda ekranın ortasında boşluklu, kapalı cihazda dış ekranda durum çubuğunun solunda görünür. Red nedeni değil. Duo ekran görüntüsü isteğe bağlı; gönderilirse ürün sayfasında "optimized" rozeti çıkar ve görüntü gerçek görünümü yansıtmalı (2.3.3). Nisan 2027'den itibaren her gönderim Duo ekran görüntüsü ve iOS 27 SDK ister.</td>
+<td>2.1 (uyum), 2.3.3 (ekran görüntüleri); Apple "Prepare your app for iPhone Duo"; screenshot-specifications</td>
+<td class="kanit"><code>lib/main.dart:26-31</code> (dört yön serbest; Duo iç ekran yön kilidini zaten yok sayar); <code>lib/screens/coloring_screen.dart</code> LayoutBuilder tall/wide; şartname: Duo 1398×2034 dış, 2007×2853 iç, "optional"; haber kkphp5qo (Nisan 2027).</td>
+<td>2.1.0'da Duo ekran görüntüsü gönderme: iOS 26 SDK görünümünü yansıtmaz, rozet yanıltır. Nisan 2027 öncesi ayrı faz: macOS 26.6 ve üstü, Xcode 27.1, Flutter UIScene geçişi (<code>flutter config --enable-uiscene-migration</code>), Duo simülatöründe dikey çubuk ve menteşe denemesi, iç ve dış ekran görüntüleri.</td>
 <td><span class="p2">P2</span></td>
 </tr>
 </table>
