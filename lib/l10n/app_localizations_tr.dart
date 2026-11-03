@@ -170,11 +170,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get gateTitle => 'Ebeveyn kontrolü';
 
   @override
-  String get gateInstruction => 'Devam etmek için bu sayılara sırayla dokunun:';
-
-  @override
-  String get gateDigitWords =>
-      'sıfır,bir,iki,üç,dört,beş,altı,yedi,sekiz,dokuz';
+  String get gateInstruction => 'Devam etmek için sonucu yaz:';
 
   @override
   String get parentsArea => 'Ebeveyn alanı';

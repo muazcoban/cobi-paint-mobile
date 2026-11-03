@@ -419,14 +419,8 @@ abstract class AppLocalizations {
   /// No description provided for @gateInstruction.
   ///
   /// In tr, this message translates to:
-  /// **'Devam etmek için bu sayılara sırayla dokunun:'**
+  /// **'Devam etmek için sonucu yaz:'**
   String get gateInstruction;
-
-  /// No description provided for @gateDigitWords.
-  ///
-  /// In tr, this message translates to:
-  /// **'sıfır,bir,iki,üç,dört,beş,altı,yedi,sekiz,dokuz'**
-  String get gateDigitWords;
 
   /// No description provided for @parentsArea.
   ///

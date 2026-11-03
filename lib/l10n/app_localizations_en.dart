@@ -170,11 +170,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get gateTitle => 'For grown-ups';
 
   @override
-  String get gateInstruction => 'To continue, tap these numbers in order:';
-
-  @override
-  String get gateDigitWords =>
-      'zero,one,two,three,four,five,six,seven,eight,nine';
+  String get gateInstruction => 'To continue, type the answer:';
 
   @override
   String get parentsArea => 'Parents';

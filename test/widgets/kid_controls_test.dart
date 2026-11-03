@@ -133,47 +133,47 @@ void main() {
   group('parental gate', () {
     setUp(resetParentalGateLock);
 
-    // Same seed and same shuffle as the gate, so the test knows the task.
-    List<int> taskFor(int seed) => (List<int>.generate(9, (i) => i + 1)..shuffle(math.Random(seed))).take(4).toList();
-
-    Future<bool?> openGate(WidgetTester tester, int seed) async {
-      bool? result;
+    Future<void> openGate(WidgetTester tester, int seed, void Function(bool?) onResult) async {
       await tester.pumpWidget(_app(Builder(
         builder: (context) => ElevatedButton(
-          onPressed: () async => result = await showParentalGate(context, random: math.Random(seed)),
+          onPressed: () async => onResult(await showParentalGate(context, random: math.Random(seed))),
           child: const Text('open'),
         ),
       )));
       await tester.tap(find.text('open'));
       await tester.pumpAndSettle();
-      return result;
     }
 
-    testWidgets('tapping the written numbers in order lets a grown-up in', (tester) async {
-      bool? result;
-      await tester.pumpWidget(_app(Builder(
-        builder: (context) => ElevatedButton(
-          onPressed: () async => result = await showParentalGate(context, random: math.Random(7)),
-          child: const Text('open'),
-        ),
-      )));
-      await tester.tap(find.text('open'));
-      await tester.pumpAndSettle();
+    /// The product the gate asks for, read from the screen.
+    int answer(WidgetTester tester) {
+      final text = (tester.widget<Text>(find.byKey(const ValueKey('gate-task')))).data!;
+      final parts = text.split(' × ');
+      return int.parse(parts[0]) * int.parse(parts[1].split(' ').first);
+    }
 
-      for (final d in taskFor(7)) {
+    Future<void> type(WidgetTester tester, int number) async {
+      for (final d in number.toString().split('')) {
         await tester.tap(find.byKey(ValueKey('gate-digit-$d')));
         await tester.pump();
       }
+    }
+
+    testWidgets('typing the product lets a grown-up in', (tester) async {
+      bool? result;
+      await openGate(tester, 7, (r) => result = r);
+      final product = answer(tester);
+      expect(product, greaterThanOrEqualTo(10), reason: 'two digits, so one tap cannot pass');
+
+      await type(tester, product);
       await tester.pumpAndSettle();
       expect(result, isTrue);
     });
 
-    testWidgets('a wrong number starts over with a new task', (tester) async {
-      await openGate(tester, 7);
-      final task = taskFor(7);
-      final wrong = List<int>.generate(9, (i) => i + 1).firstWhere((d) => d != task.first);
+    testWidgets('a wrong answer starts over with a new task', (tester) async {
+      await openGate(tester, 7, (_) {});
+      final product = answer(tester);
 
-      await tester.tap(find.byKey(ValueKey('gate-digit-$wrong')));
+      await type(tester, product == 99 ? 98 : product + 1);
       await tester.pump(const Duration(milliseconds: 400));
 
       expect(find.byType(ParentalGate), findsOneWidget, reason: 'the gate stays shut');
@@ -181,7 +181,7 @@ void main() {
 
     testWidgets('the gate meets the tap target, label and contrast guidelines', (tester) async {
       final handle = tester.ensureSemantics();
-      await openGate(tester, 3);
+      await openGate(tester, 3, (_) {});
 
       await expectLater(tester, meetsGuideline(androidTapTargetGuideline));
       await expectLater(tester, meetsGuideline(iOSTapTargetGuideline));
@@ -192,14 +192,7 @@ void main() {
 
     testWidgets('closing the gate answers no', (tester) async {
       bool? result;
-      await tester.pumpWidget(_app(Builder(
-        builder: (context) => ElevatedButton(
-          onPressed: () async => result = await showParentalGate(context, random: math.Random(1)),
-          child: const Text('open'),
-        ),
-      )));
-      await tester.tap(find.text('open'));
-      await tester.pumpAndSettle();
+      await openGate(tester, 1, (r) => result = r);
       await tester.tap(find.byIcon(Icons.close_rounded));
       await tester.pumpAndSettle();
 

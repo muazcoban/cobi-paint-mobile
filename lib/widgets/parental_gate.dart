@@ -50,9 +50,11 @@ class ParentalGate extends StatefulWidget {
 }
 
 class _ParentalGateState extends State<ParentalGate> with SingleTickerProviderStateMixin {
-  static const _length = 4;
-
-  late List<int> _target;
+  // A multiplication with a two-digit answer (2-9 x 2-9, product >= 10):
+  // a grown-up task in any language, and a child who matches shapes cannot
+  // pass it by tapping what is on screen.
+  late int _a;
+  late int _b;
   final List<int> _entered = [];
   Timer? _idle;
   Timer? _lockTicker;
@@ -104,8 +106,10 @@ class _ParentalGateState extends State<ParentalGate> with SingleTickerProviderSt
   }
 
   void _newTask() {
-    final digits = List<int>.generate(9, (i) => i + 1)..shuffle(widget.random);
-    _target = digits.take(_length).toList();
+    do {
+      _a = 2 + widget.random.nextInt(8);
+      _b = 2 + widget.random.nextInt(8);
+    } while (_a * _b < 10);
     _entered.clear();
   }
 
@@ -114,8 +118,8 @@ class _ParentalGateState extends State<ParentalGate> with SingleTickerProviderSt
     if (_secondsLocked > 0) return;
     setState(() {
       _entered.add(digit);
-      final i = _entered.length - 1;
-      if (_entered[i] != _target[i]) {
+      if (_entered.length < 2) return;
+      if (_entered[0] * 10 + _entered[1] != _a * _b) {
         _wrongAnswers++;
         if (_wrongAnswers >= 3) {
           final wait = 30 * (1 << math.min(_wrongAnswers - 3, 2)); // 30, 60, 120 s
@@ -124,7 +128,7 @@ class _ParentalGateState extends State<ParentalGate> with SingleTickerProviderSt
         }
         if (!reduceMotion(context)) _shake.forward(from: 0);
         _newTask();
-      } else if (_entered.length == _target.length) {
+      } else {
         _wrongAnswers = 0;
         _lockedUntil = null;
         Navigator.of(context).pop(true);
@@ -135,8 +139,7 @@ class _ParentalGateState extends State<ParentalGate> with SingleTickerProviderSt
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final words = l10n.gateDigitWords.split(',');
-    final task = _target.map((d) => words[d].trim()).join(' · ');
+    final task = '$_a × $_b = ?';
     final theme = Theme.of(context);
     final locked = _secondsLocked;
 
@@ -162,14 +165,15 @@ class _ParentalGateState extends State<ParentalGate> with SingleTickerProviderSt
             const SizedBox(height: 12),
             Text(
               locked > 0 ? '$locked' : task,
+              key: const ValueKey('gate-task'),
               textAlign: TextAlign.center,
-              style: theme.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
+              style: theme.textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 12),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                for (var i = 0; i < _length; i++)
+                for (var i = 0; i < 2; i++)
                   Container(
                     margin: const EdgeInsets.symmetric(horizontal: 5),
                     width: 14,
@@ -188,25 +192,36 @@ class _ParentalGateState extends State<ParentalGate> with SingleTickerProviderSt
                 offset: Offset(math.sin(_shake.value * math.pi * 6) * 10 * (1 - _shake.value), 0),
                 child: child,
               ),
-              child: GridView.count(
-                shrinkWrap: true,
-                crossAxisCount: 3,
-                mainAxisSpacing: 10,
-                crossAxisSpacing: 10,
-                childAspectRatio: 1.3,
-                physics: const NeverScrollableScrollPhysics(),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  for (var d = 1; d <= 9; d++)
-                    OutlinedButton(
-                      key: ValueKey('gate-digit-$d'),
-                      // Dark digits: the theme's coral on the tinted dialog
-                      // measured 2.2:1, below the 3:1 HIG minimum.
-                      style: OutlinedButton.styleFrom(
-                        foregroundColor: const Color(0xFF2D3142),
-                        side: const BorderSide(color: Color(0x662D3142)),
+                  for (final row in const [[1, 2, 3], [4, 5, 6], [7, 8, 9], [0]])
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          for (final d in row)
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 5),
+                              child: SizedBox(
+                                width: 96,
+                                height: 64,
+                                child: OutlinedButton(
+                                  key: ValueKey('gate-digit-$d'),
+                                  // Dark digits: the theme's coral on the tinted dialog
+                                  // measured 2.2:1, below the 3:1 HIG minimum.
+                                  style: OutlinedButton.styleFrom(
+                                    foregroundColor: const Color(0xFF2D3142),
+                                    side: const BorderSide(color: Color(0x662D3142)),
+                                  ),
+                                  onPressed: locked > 0 ? null : () => _press(d),
+                                  child: Text('$d', style: const TextStyle(fontSize: 26)),
+                                ),
+                              ),
+                            ),
+                        ],
                       ),
-                      onPressed: locked > 0 ? null : () => _press(d),
-                      child: Text('$d', style: const TextStyle(fontSize: 26)),
                     ),
                 ],
               ),
