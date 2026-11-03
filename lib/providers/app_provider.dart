@@ -8,6 +8,7 @@ import '../models/category.dart';
 import '../models/coloring_image.dart';
 import '../models/saved_artwork.dart';
 import '../services/haptics.dart';
+import '../services/purchase_service.dart';
 import '../services/storage_service.dart';
 import '../services/voice_service.dart';
 import '../services/sound_service.dart';
@@ -64,6 +65,8 @@ class AppProvider extends ChangeNotifier {
       SoundService().setVolume(_settings.soundVolume);
       Haptics.enabled = _settings.hapticsEnabled;
       VoiceService().enabled = _settings.voiceEnabled;
+      // The gallery grows quietly when the Full Version arrives.
+      PurchaseService().isFull.addListener(notifyListeners);
 
       // Photo import is frozen until it is rebuilt on the new coloring engine.
       // Pages imported before the freeze stay reachable through the import category.
@@ -91,7 +94,9 @@ class AppProvider extends ChangeNotifier {
   List<ColoringImage> getImagesForCategory(String categoryId) {
     // Imported pages only live in the import category
     if (categoryId == 'import') return _importedImages;
-    return builtInImages.where((img) => img.category == categoryId).toList();
+    final pages = builtInImages.where((img) => img.category == categoryId);
+    final locked = PurchaseService.enabled && !PurchaseService().isFull.value;
+    return (locked ? pages.where((img) => img.free) : pages).toList();
   }
 
   // Settings management

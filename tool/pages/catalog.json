@@ -7,7 +7,7 @@
   "licenseFile": "assets/licenses/fluentui-emoji.txt",
   "style": "Flat"
  },
- "notes": "Subjects chosen for 2-5 year olds: everyday animals, plants, food, vehicles, weather, toys. No people, faces, flags, brands, weapons, alcohol or religious symbols.",
+ "notes": "Subjects chosen for 2-5 year olds: everyday animals, plants, food, vehicles, weather, toys. No people, faces, flags, brands, weapons, alcohol or religious symbols. Pages marked free:true are the fixed free subset (8 per category, 3/3/2 by level); once free, a page stays free.",
  "pages": [
   {
    "code": "1f401",
@@ -15,7 +15,8 @@
    "nameTr": "fare",
    "nameEn": "mouse",
    "category": "animals",
-   "subgroup": "animal-mammal"
+   "subgroup": "animal-mammal",
+   "free": true
   },
   {
    "code": "1f404",
@@ -23,7 +24,8 @@
    "nameTr": "inek",
    "nameEn": "cow",
    "category": "animals",
-   "subgroup": "animal-mammal"
+   "subgroup": "animal-mammal",
+   "free": true
   },
   {
    "code": "1f405",
@@ -31,7 +33,8 @@
    "nameTr": "kaplan",
    "nameEn": "tiger",
    "category": "animals",
-   "subgroup": "animal-mammal"
+   "subgroup": "animal-mammal",
+   "free": true
   },
   {
    "code": "1f406",
@@ -47,7 +50,8 @@
    "nameTr": "tavşan",
    "nameEn": "rabbit",
    "category": "animals",
-   "subgroup": "animal-mammal"
+   "subgroup": "animal-mammal",
+   "free": true
   },
   {
    "code": "1f408",
@@ -55,7 +59,8 @@
    "nameTr": "kedi",
    "nameEn": "cat",
    "category": "animals",
-   "subgroup": "animal-mammal"
+   "subgroup": "animal-mammal",
+   "free": true
   },
   {
    "code": "1f409",
@@ -63,7 +68,8 @@
    "nameTr": "ejderha",
    "nameEn": "dragon",
    "category": "animals",
-   "subgroup": "animal-reptile"
+   "subgroup": "animal-reptile",
+   "free": true
   },
   {
    "code": "1f40a",
@@ -71,7 +77,8 @@
    "nameTr": "timsah",
    "nameEn": "crocodile",
    "category": "animals",
-   "subgroup": "animal-reptile"
+   "subgroup": "animal-reptile",
+   "free": true
   },
   {
    "code": "1f40b",
@@ -79,7 +86,8 @@
    "nameTr": "balina",
    "nameEn": "whale",
    "category": "animals",
-   "subgroup": "animal-marine"
+   "subgroup": "animal-marine",
+   "free": true
   },
   {
    "code": "1f40c",
@@ -687,7 +695,8 @@
    "nameTr": "filizlenme",
    "nameEn": "seedling",
    "category": "plants",
-   "subgroup": "plant-other"
+   "subgroup": "plant-other",
+   "free": true
   },
   {
    "code": "1f332",
@@ -695,7 +704,8 @@
    "nameTr": "yaprak dökmeyen ağaç",
    "nameEn": "evergreen tree",
    "category": "plants",
-   "subgroup": "plant-other"
+   "subgroup": "plant-other",
+   "free": true
   },
   {
    "code": "1f333",
@@ -703,7 +713,8 @@
    "nameTr": "yaprak döken ağaç",
    "nameEn": "deciduous tree",
    "category": "plants",
-   "subgroup": "plant-other"
+   "subgroup": "plant-other",
+   "free": true
   },
   {
    "code": "1f334",
@@ -711,7 +722,8 @@
    "nameTr": "palmiye ağacı",
    "nameEn": "palm tree",
    "category": "plants",
-   "subgroup": "plant-other"
+   "subgroup": "plant-other",
+   "free": true
   },
   {
    "code": "1f335",
@@ -719,7 +731,8 @@
    "nameTr": "kaktüs",
    "nameEn": "cactus",
    "category": "plants",
-   "subgroup": "plant-other"
+   "subgroup": "plant-other",
+   "free": true
   },
   {
    "code": "1f337",
@@ -759,7 +772,8 @@
    "nameTr": "ayçiçeği",
    "nameEn": "sunflower",
    "category": "plants",
-   "subgroup": "plant-flower"
+   "subgroup": "plant-flower",
+   "free": true
   },
   {
    "code": "1f340",
@@ -783,7 +797,8 @@
    "nameTr": "mantar",
    "nameEn": "mushroom",
    "category": "plants",
-   "subgroup": "plant-other"
+   "subgroup": "plant-other",
+   "free": true
   },
   {
    "code": "1f490",
@@ -791,7 +806,8 @@
    "nameTr": "buket",
    "nameEn": "bouquet",
    "category": "plants",
-   "subgroup": "plant-flower"
+   "subgroup": "plant-flower",
+   "free": true
   },
   {
    "code": "1fab4",
@@ -839,7 +855,8 @@
    "nameTr": "sosisli sandviç",
    "nameEn": "hot dog",
    "category": "food",
-   "subgroup": "food-prepared"
+   "subgroup": "food-prepared",
+   "free": true
   },
   {
    "code": "1f33d",
@@ -847,7 +864,8 @@
    "nameTr": "mısır koçanı",
    "nameEn": "ear of corn",
    "category": "food",
-   "subgroup": "food-vegetable"
+   "subgroup": "food-vegetable",
+   "free": true
   },
   {
    "code": "1f345",
@@ -855,7 +873,8 @@
    "nameTr": "domates",
    "nameEn": "tomato",
    "category": "food",
-   "subgroup": "food-fruit"
+   "subgroup": "food-fruit",
+   "free": true
   },
   {
    "code": "1f347",
@@ -863,7 +882,8 @@
    "nameTr": "üzüm",
    "nameEn": "grapes",
    "category": "food",
-   "subgroup": "food-fruit"
+   "subgroup": "food-fruit",
+   "free": true
   },
   {
    "code": "1f348",
@@ -871,7 +891,8 @@
    "nameTr": "kavun",
    "nameEn": "melon",
    "category": "food",
-   "subgroup": "food-fruit"
+   "subgroup": "food-fruit",
+   "free": true
   },
   {
    "code": "1f349",
@@ -879,7 +900,8 @@
    "nameTr": "karpuz",
    "nameEn": "watermelon",
    "category": "food",
-   "subgroup": "food-fruit"
+   "subgroup": "food-fruit",
+   "free": true
   },
   {
    "code": "1f34a",
@@ -999,7 +1021,8 @@
    "nameTr": "donut",
    "nameEn": "doughnut",
    "category": "food",
-   "subgroup": "food-sweet"
+   "subgroup": "food-sweet",
+   "free": true
   },
   {
    "code": "1f36a",
@@ -1015,7 +1038,8 @@
    "nameTr": "çikolata",
    "nameEn": "chocolate bar",
    "category": "food",
-   "subgroup": "food-sweet"
+   "subgroup": "food-sweet",
+   "free": true
   },
   {
    "code": "1f36c",
@@ -1199,7 +1223,8 @@
    "nameTr": "motosiklet",
    "nameEn": "motorcycle",
    "category": "vehicles",
-   "subgroup": "transport-ground"
+   "subgroup": "transport-ground",
+   "free": true
   },
   {
    "code": "1f3ce",
@@ -1207,7 +1232,8 @@
    "nameTr": "yarış arabası",
    "nameEn": "racing car",
    "category": "vehicles",
-   "subgroup": "transport-ground"
+   "subgroup": "transport-ground",
+   "free": true
   },
   {
    "code": "1f680",
@@ -1215,7 +1241,8 @@
    "nameTr": "roket",
    "nameEn": "rocket",
    "category": "vehicles",
-   "subgroup": "transport-air"
+   "subgroup": "transport-air",
+   "free": true
   },
   {
    "code": "1f681",
@@ -1231,7 +1258,8 @@
    "nameTr": "tren",
    "nameEn": "train",
    "category": "vehicles",
-   "subgroup": "transport-ground"
+   "subgroup": "transport-ground",
+   "free": true
   },
   {
    "code": "1f68a",
@@ -1239,7 +1267,8 @@
    "nameTr": "tramvay",
    "nameEn": "tram",
    "category": "vehicles",
-   "subgroup": "transport-ground"
+   "subgroup": "transport-ground",
+   "free": true
   },
   {
    "code": "1f68c",
@@ -1271,7 +1300,8 @@
    "nameTr": "araba",
    "nameEn": "automobile",
    "category": "vehicles",
-   "subgroup": "transport-ground"
+   "subgroup": "transport-ground",
+   "free": true
   },
   {
    "code": "1f699",
@@ -1287,7 +1317,8 @@
    "nameTr": "nakliye kamyonu",
    "nameEn": "delivery truck",
    "category": "vehicles",
-   "subgroup": "transport-ground"
+   "subgroup": "transport-ground",
+   "free": true
   },
   {
    "code": "1f69c",
@@ -1359,7 +1390,8 @@
    "nameTr": "uçak",
    "nameEn": "airplane",
    "category": "vehicles",
-   "subgroup": "transport-air"
+   "subgroup": "transport-air",
+   "free": true
   },
   {
    "code": "1f308",
@@ -1367,7 +1399,8 @@
    "nameTr": "gökkuşağı",
    "nameEn": "rainbow",
    "category": "nature",
-   "subgroup": "sky & weather"
+   "subgroup": "sky & weather",
+   "free": true
   },
   {
    "code": "1f30a",
@@ -1375,7 +1408,8 @@
    "nameTr": "dalga",
    "nameEn": "water wave",
    "category": "nature",
-   "subgroup": "sky & weather"
+   "subgroup": "sky & weather",
+   "free": true
   },
   {
    "code": "1f30b",
@@ -1383,7 +1417,8 @@
    "nameTr": "yanardağ",
    "nameEn": "volcano",
    "category": "nature",
-   "subgroup": "place-geographic"
+   "subgroup": "place-geographic",
+   "free": true
   },
   {
    "code": "1f327",
@@ -1391,7 +1426,8 @@
    "nameTr": "yağmur bulutu",
    "nameEn": "cloud with rain",
    "category": "nature",
-   "subgroup": "sky & weather"
+   "subgroup": "sky & weather",
+   "free": true
   },
   {
    "code": "1f328",
@@ -1399,7 +1435,8 @@
    "nameTr": "kar bulutu",
    "nameEn": "cloud with snow",
    "category": "nature",
-   "subgroup": "sky & weather"
+   "subgroup": "sky & weather",
+   "free": true
   },
   {
    "code": "1f3d6",
@@ -1407,7 +1444,8 @@
    "nameTr": "plaj ve şemsiye",
    "nameEn": "beach with umbrella",
    "category": "nature",
-   "subgroup": "place-geographic"
+   "subgroup": "place-geographic",
+   "free": true
   },
   {
    "code": "2600",
@@ -1415,7 +1453,8 @@
    "nameTr": "güneş",
    "nameEn": "sun",
    "category": "nature",
-   "subgroup": "sky & weather"
+   "subgroup": "sky & weather",
+   "free": true
   },
   {
    "code": "2601",
@@ -1439,7 +1478,8 @@
    "nameTr": "kardan adam",
    "nameEn": "snowman",
    "category": "nature",
-   "subgroup": "sky & weather"
+   "subgroup": "sky & weather",
+   "free": true
   },
   {
    "code": "26f0",
@@ -1471,7 +1511,8 @@
    "nameTr": "kurdele",
    "nameEn": "ribbon",
    "category": "things",
-   "subgroup": "event"
+   "subgroup": "event",
+   "free": true
   },
   {
    "code": "1f381",
@@ -1479,7 +1520,8 @@
    "nameTr": "paketlenmiş hediye",
    "nameEn": "wrapped gift",
    "category": "things",
-   "subgroup": "event"
+   "subgroup": "event",
+   "free": true
   },
   {
    "code": "1f384",
@@ -1487,7 +1529,8 @@
    "nameTr": "Noel ağacı",
    "nameEn": "Christmas tree",
    "category": "things",
-   "subgroup": "event"
+   "subgroup": "event",
+   "free": true
   },
   {
    "code": "1f388",
@@ -1495,7 +1538,8 @@
    "nameTr": "balon",
    "nameEn": "balloon",
    "category": "things",
-   "subgroup": "event"
+   "subgroup": "event",
+   "free": true
   },
   {
    "code": "1f389",
@@ -1503,7 +1547,8 @@
    "nameTr": "parti konfetisi",
    "nameEn": "party popper",
    "category": "things",
-   "subgroup": "event"
+   "subgroup": "event",
+   "free": true
   },
   {
    "code": "1f3be",
@@ -1511,7 +1556,8 @@
    "nameTr": "tenis",
    "nameEn": "tennis",
    "category": "things",
-   "subgroup": "sport"
+   "subgroup": "sport",
+   "free": true
   },
   {
    "code": "1f3c0",
@@ -1527,7 +1573,8 @@
    "nameTr": "ev",
    "nameEn": "house",
    "category": "things",
-   "subgroup": "place-building"
+   "subgroup": "place-building",
+   "free": true
   },
   {
    "code": "1f3eb",
@@ -1551,7 +1598,8 @@
    "nameTr": "gözlük",
    "nameEn": "glasses",
    "category": "things",
-   "subgroup": "clothing"
+   "subgroup": "clothing",
+   "free": true
   },
   {
    "code": "1f455",

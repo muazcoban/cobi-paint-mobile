@@ -58,6 +58,39 @@ class AppLocalizationsTr extends AppLocalizations {
   String get level3 => 'İnce ayrıntı';
 
   @override
+  String get fullVersion => 'Tam Sürüm';
+
+  @override
+  String get fullVersionShort => 'Bütün sayfaları aç';
+
+  @override
+  String get fullVersionDesc =>
+      'Ücretsiz sürümde her kategoriden 8 sayfa var. Tam Sürüm, 201 sayfanın hepsini bir kez ödemeyle sonsuza kadar açar. Abonelik yoktur. Çocuğunuzun boyadığı resimler her durumda Resimlerim\'de kalır.';
+
+  @override
+  String get buy => 'Satın al';
+
+  @override
+  String get restorePurchases => 'Satın alımları geri yükle';
+
+  @override
+  String get familySharingNote =>
+      'Aile Paylaşımı ile en fazla 5 aile üyesiyle paylaşılır.';
+
+  @override
+  String get storeUnavailable => 'Mağazaya şu an ulaşılamıyor.';
+
+  @override
+  String get tryAgain => 'Tekrar dene';
+
+  @override
+  String get fullVersionOwned => 'Tam Sürüm açık. Teşekkürler!';
+
+  @override
+  String get purchasePending =>
+      'Satın alma onay bekliyor. Onay gelince sayfalar açılır.';
+
+  @override
   String get licenses => 'Lisanslar';
 
   @override
@@ -204,7 +237,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get privacyPolicyText =>
-      'Cobi Paint hiçbir kişisel veri toplamaz.\n\n• Hesap, reklam, analiz aracı ve internet bağlantısı yoktur.\n• Çocuğunuzun boyadığı resimler yalnız bu cihazda saklanır ve hiçbir sunucuya gönderilmez.\n• Bir resim yalnız siz ebeveyn kontrolünü geçip paylaşmayı seçtiğinizde, sistemin paylaşım menüsüyle ve sizin seçtiğiniz uygulamaya gönderilir.\n• Kayıtlı bir resmi Eserlerim\'de basılı tutup ebeveyn kontrolünü geçerek silebilirsiniz. Uygulamayı silmek bütün resimleri siler.\n\nSorularınız için: cobipaint@gmail.com';
+      'Cobi Paint hiçbir kişisel veri toplamaz.\n\n• Hesap, reklam, analiz aracı ve internet bağlantısı yoktur.\n• Çocuğunuzun boyadığı resimler yalnız bu cihazda saklanır ve hiçbir sunucuya gönderilmez.\n• Bir resim yalnız siz ebeveyn kontrolünü geçip paylaşmayı seçtiğinizde, sistemin paylaşım menüsüyle ve sizin seçtiğiniz uygulamaya gönderilir.\n• Kayıtlı bir resmi Eserlerim\'de basılı tutup ebeveyn kontrolünü geçerek silebilirsiniz. Uygulamayı silmek bütün resimleri siler.\n\nSorularınız için: cobipaint@gmail.com Tam Sürüm satın alımı Apple ya da Google hesabınızla yapılır; uygulama ödeme bilgisine erişmez ve hiçbir veri toplamaz.';
 
   @override
   String get guidedAccessTitle => 'Çocuk uygulamada kalsın';

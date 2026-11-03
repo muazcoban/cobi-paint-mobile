@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'l10n/app_localizations.dart';
 import 'providers/app_provider.dart';
 import 'providers/locale_provider.dart';
+import 'services/purchase_service.dart';
 import 'services/sound_service.dart';
 import 'theme/app_theme.dart';
 import 'screens/splash_screen.dart';
@@ -41,6 +42,7 @@ void main() async {
     ),
   );
 
+  if (PurchaseService.enabled) unawaited(PurchaseService().init());
   runApp(const CobiPaintApp());
 
   // After the first frame, so neither delays the app appearing:

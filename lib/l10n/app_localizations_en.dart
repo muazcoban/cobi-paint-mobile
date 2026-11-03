@@ -58,6 +58,39 @@ class AppLocalizationsEn extends AppLocalizations {
   String get level3 => 'Fine detail';
 
   @override
+  String get fullVersion => 'Full Version';
+
+  @override
+  String get fullVersionShort => 'Unlock all pages';
+
+  @override
+  String get fullVersionDesc =>
+      'The free version has 8 pages in each category. The Full Version opens all 201 pages forever with one payment. There is no subscription. Your child\'s pictures stay in My Artworks either way.';
+
+  @override
+  String get buy => 'Buy';
+
+  @override
+  String get restorePurchases => 'Restore purchases';
+
+  @override
+  String get familySharingNote =>
+      'Shared with up to 5 family members through Family Sharing.';
+
+  @override
+  String get storeUnavailable => 'The store cannot be reached right now.';
+
+  @override
+  String get tryAgain => 'Try again';
+
+  @override
+  String get fullVersionOwned => 'The Full Version is open. Thank you!';
+
+  @override
+  String get purchasePending =>
+      'The purchase is waiting for approval. The pages open once it is approved.';
+
+  @override
   String get licenses => 'Licenses';
 
   @override
@@ -202,7 +235,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get privacyPolicyText =>
-      'Cobi Paint collects no personal data.\n\n• There are no accounts, ads, analytics or internet connections.\n• The pictures your child colours are stored only on this device and are never sent to a server.\n• A picture leaves the device only when you pass the grown-up check and choose to share it through the system share sheet, to an app you pick.\n• You can delete a saved picture by pressing and holding it in My Artworks and passing the grown-up check. Deleting the app deletes all pictures.\n\nQuestions: cobipaint@gmail.com';
+      'Cobi Paint collects no personal data.\n\n• There are no accounts, ads, analytics or internet connections.\n• The pictures your child colours are stored only on this device and are never sent to a server.\n• A picture leaves the device only when you pass the grown-up check and choose to share it through the system share sheet, to an app you pick.\n• You can delete a saved picture by pressing and holding it in My Artworks and passing the grown-up check. Deleting the app deletes all pictures.\n\nQuestions: cobipaint@gmail.com The Full Version purchase goes through your Apple or Google account; the app never sees payment details and collects no data.';
 
   @override
   String get guidedAccessTitle => 'Keep your child in the app';

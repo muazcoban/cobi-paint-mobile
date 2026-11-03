@@ -199,15 +199,16 @@ class _ParentalGateState extends State<ParentalGate> with SingleTickerProviderSt
                     Padding(
                       padding: const EdgeInsets.only(bottom: 10),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
+                          // The lone zero sits under the middle column.
+                          if (row.length == 1) const Spacer(),
                           for (final d in row)
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 5),
-                              child: SizedBox(
-                                width: 96,
-                                height: 64,
-                                child: OutlinedButton(
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 5),
+                                child: SizedBox(
+                                  height: 64,
+                                  child: OutlinedButton(
                                   key: ValueKey('gate-digit-$d'),
                                   // Dark digits: the theme's coral on the tinted dialog
                                   // measured 2.2:1, below the 3:1 HIG minimum.
@@ -215,11 +216,13 @@ class _ParentalGateState extends State<ParentalGate> with SingleTickerProviderSt
                                     foregroundColor: const Color(0xFF2D3142),
                                     side: const BorderSide(color: Color(0x662D3142)),
                                   ),
-                                  onPressed: locked > 0 ? null : () => _press(d),
-                                  child: Text('$d', style: const TextStyle(fontSize: 26)),
+                                    onPressed: locked > 0 ? null : () => _press(d),
+                                    child: Text('$d', style: const TextStyle(fontSize: 26)),
+                                  ),
                                 ),
                               ),
                             ),
+                          if (row.length == 1) const Spacer(),
                         ],
                       ),
                     ),

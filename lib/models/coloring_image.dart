@@ -15,6 +15,9 @@ class ColoringImage {
   /// inside a region, the eraser only clears strokes, and every tap on its
   /// card starts a new picture.
   final bool freeDraw;
+
+  /// Part of the fixed free subset shown before the Full Version is bought.
+  final bool free;
   final bool isImported;
   final DateTime? createdAt;
 
@@ -26,6 +29,7 @@ class ColoringImage {
     required this.imagePath,
     this.level = 2,
     this.freeDraw = false,
+    this.free = false,
     this.isImported = false,
     this.createdAt,
   });
@@ -39,6 +43,7 @@ class ColoringImage {
       imagePath: json['imagePath'] ?? '',
       level: (json['level'] as num?)?.toInt() ?? 2,
       freeDraw: json['freeDraw'] ?? false,
+      free: json['free'] ?? false,
       isImported: json['isImported'] ?? false,
       createdAt: json['createdAt'] != null
           ? DateTime.parse(json['createdAt'])
@@ -55,6 +60,7 @@ class ColoringImage {
       'imagePath': imagePath,
       'level': level,
       'freeDraw': freeDraw,
+      'free': free,
       'isImported': isImported,
       'createdAt': createdAt?.toIso8601String(),
     };
@@ -72,6 +78,7 @@ class ColoringImage {
     String? imagePath,
     int? level,
     bool? freeDraw,
+    bool? free,
     bool? isImported,
     DateTime? createdAt,
   }) {
@@ -83,6 +90,7 @@ class ColoringImage {
       imagePath: imagePath ?? this.imagePath,
       level: level ?? this.level,
       freeDraw: freeDraw ?? this.freeDraw,
+      free: free ?? this.free,
       isImported: isImported ?? this.isImported,
       createdAt: createdAt ?? this.createdAt,
     );

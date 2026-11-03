@@ -7,9 +7,11 @@ import '../models/user_settings.dart';
 import '../providers/app_provider.dart';
 import '../providers/locale_provider.dart';
 import '../services/haptics.dart';
+import '../services/purchase_service.dart';
 import '../services/sound_service.dart';
 import '../services/voice_service.dart';
 import '../theme/app_theme.dart';
+import 'full_version_screen.dart';
 
 /// Everything for grown-ups, reached only through the parental gate:
 /// mode, language, theme, sound, keeping the child in the app, privacy.
@@ -31,6 +33,17 @@ class ParentsScreen extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),
         children: [
           Text(l10n.parentsHint, style: const TextStyle(color: AppTheme.textPrimary)),
+          if (PurchaseService.enabled) ...[
+            _Section(l10n.fullVersion),
+            ListTile(
+              contentPadding: EdgeInsets.zero,
+              leading: const Icon(Icons.auto_awesome_outlined),
+              title: Text(l10n.fullVersion),
+              subtitle: Text(l10n.fullVersionShort),
+              trailing: const Icon(Icons.chevron_right_rounded),
+              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const FullVersionScreen())),
+            ),
+          ],
           _Section(l10n.ageMode),
           RadioGroup<AgeMode>(
             groupValue: settings.ageMode,

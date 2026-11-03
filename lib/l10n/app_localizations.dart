@@ -194,6 +194,66 @@ abstract class AppLocalizations {
   /// **'İnce ayrıntı'**
   String get level3;
 
+  /// No description provided for @fullVersion.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tam Sürüm'**
+  String get fullVersion;
+
+  /// No description provided for @fullVersionShort.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bütün sayfaları aç'**
+  String get fullVersionShort;
+
+  /// No description provided for @fullVersionDesc.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ücretsiz sürümde her kategoriden 8 sayfa var. Tam Sürüm, 201 sayfanın hepsini bir kez ödemeyle sonsuza kadar açar. Abonelik yoktur. Çocuğunuzun boyadığı resimler her durumda Resimlerim\'de kalır.'**
+  String get fullVersionDesc;
+
+  /// No description provided for @buy.
+  ///
+  /// In tr, this message translates to:
+  /// **'Satın al'**
+  String get buy;
+
+  /// No description provided for @restorePurchases.
+  ///
+  /// In tr, this message translates to:
+  /// **'Satın alımları geri yükle'**
+  String get restorePurchases;
+
+  /// No description provided for @familySharingNote.
+  ///
+  /// In tr, this message translates to:
+  /// **'Aile Paylaşımı ile en fazla 5 aile üyesiyle paylaşılır.'**
+  String get familySharingNote;
+
+  /// No description provided for @storeUnavailable.
+  ///
+  /// In tr, this message translates to:
+  /// **'Mağazaya şu an ulaşılamıyor.'**
+  String get storeUnavailable;
+
+  /// No description provided for @tryAgain.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tekrar dene'**
+  String get tryAgain;
+
+  /// No description provided for @fullVersionOwned.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tam Sürüm açık. Teşekkürler!'**
+  String get fullVersionOwned;
+
+  /// No description provided for @purchasePending.
+  ///
+  /// In tr, this message translates to:
+  /// **'Satın alma onay bekliyor. Onay gelince sayfalar açılır.'**
+  String get purchasePending;
+
   /// No description provided for @licenses.
   ///
   /// In tr, this message translates to:
@@ -479,7 +539,7 @@ abstract class AppLocalizations {
   /// No description provided for @privacyPolicyText.
   ///
   /// In tr, this message translates to:
-  /// **'Cobi Paint hiçbir kişisel veri toplamaz.\n\n• Hesap, reklam, analiz aracı ve internet bağlantısı yoktur.\n• Çocuğunuzun boyadığı resimler yalnız bu cihazda saklanır ve hiçbir sunucuya gönderilmez.\n• Bir resim yalnız siz ebeveyn kontrolünü geçip paylaşmayı seçtiğinizde, sistemin paylaşım menüsüyle ve sizin seçtiğiniz uygulamaya gönderilir.\n• Kayıtlı bir resmi Eserlerim\'de basılı tutup ebeveyn kontrolünü geçerek silebilirsiniz. Uygulamayı silmek bütün resimleri siler.\n\nSorularınız için: cobipaint@gmail.com'**
+  /// **'Cobi Paint hiçbir kişisel veri toplamaz.\n\n• Hesap, reklam, analiz aracı ve internet bağlantısı yoktur.\n• Çocuğunuzun boyadığı resimler yalnız bu cihazda saklanır ve hiçbir sunucuya gönderilmez.\n• Bir resim yalnız siz ebeveyn kontrolünü geçip paylaşmayı seçtiğinizde, sistemin paylaşım menüsüyle ve sizin seçtiğiniz uygulamaya gönderilir.\n• Kayıtlı bir resmi Eserlerim\'de basılı tutup ebeveyn kontrolünü geçerek silebilirsiniz. Uygulamayı silmek bütün resimleri siler.\n\nSorularınız için: cobipaint@gmail.com Tam Sürüm satın alımı Apple ya da Google hesabınızla yapılır; uygulama ödeme bilgisine erişmez ve hiçbir veri toplamaz.'**
   String get privacyPolicyText;
 
   /// No description provided for @guidedAccessTitle.
