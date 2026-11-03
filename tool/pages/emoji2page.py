@@ -14,10 +14,19 @@ import numpy as np
 from PIL import Image, ImageFilter
 
 
+def _white(rgba):
+    """Pixels that are (nearly) pure white in all three channels."""
+    return (rgba[:, :, 0] >= 245) & (rgba[:, :, 1] >= 245) & (rgba[:, :, 2] >= 245)
+
+
 def page(im, size=1024, line=11, fill=0.8, thr=60):
     """Returns (page, reference) images or (None, None) for an empty input."""
     rgba = np.asarray(im.convert("RGBA"))
-    ys, xs = np.nonzero(rgba[:, :, 3] > 16)
+    # Some renderers give the art an opaque white sheet instead of
+    # transparency, so white counts as "outside" too. White parts of the art
+    # itself (eyes, teeth) still get an outline from the colours around them.
+    content = (rgba[:, :, 3] > 16) & ~_white(rgba)
+    ys, xs = np.nonzero(content)
     if xs.size == 0:
         return None, None
     im = im.convert("RGBA").crop((xs.min(), ys.min(), xs.max() + 1, ys.max() + 1))
@@ -29,7 +38,7 @@ def page(im, size=1024, line=11, fill=0.8, thr=60):
 
     arr = np.asarray(canvas).astype(np.int16)
     rgb, alpha = arr[:, :, :3], arr[:, :, 3]
-    inside = alpha >= 128
+    inside = (alpha >= 128) & ~_white(np.asarray(canvas))
     edge = np.zeros(inside.shape, bool)
     # Compare each pixel with neighbours 1 and 2 px away: the 2 px step sees
     # the full colour difference across an anti-aliased boundary, so a line
@@ -51,7 +60,7 @@ def page(im, size=1024, line=11, fill=0.8, thr=60):
     out = Image.fromarray(np.where(lines, 0, 255).astype(np.uint8))
 
     ref = Image.new("RGB", (size, size), (255, 255, 255))
-    ref.paste(canvas, mask=canvas.split()[3])
+    ref.paste(canvas, mask=Image.fromarray((inside * 255).astype(np.uint8)))
     return out, ref
 
 

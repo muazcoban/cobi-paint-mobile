@@ -69,6 +69,7 @@ def main():
     ap.add_argument("--work", required=True, help="scratch directory for downloads and renders")
     ap.add_argument("--dart", default="dart", help="dart executable (Flutter's own, 3.10+)")
     ap.add_argument("--catalog", default=os.path.join(HERE, "catalog.json"))
+    ap.add_argument("--force", action="store_true", help="convert every page again (after a converter change)")
     args = ap.parse_args()
 
     catalog = json.load(open(args.catalog, encoding="utf-8"))
@@ -107,7 +108,7 @@ def main():
 
     for p in pages:
         out = os.path.join(page_dir, p["code"] + ".png")
-        if os.path.exists(out):
+        if os.path.exists(out) and not args.force:
             continue
         img, _ref = make_page(Image.open(os.path.join(render_dir, p["code"] + ".svg.png")))
         if img is None:
