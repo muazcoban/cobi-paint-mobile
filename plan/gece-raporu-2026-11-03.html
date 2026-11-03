@@ -96,13 +96,16 @@ ul.tight li, ol.tight li { margin: 3px 0; }
 <div class="wrap">
 <header class="top">
   <h1>Cobi Paint Gece Raporu</h1>
-  <div class="meta">2–3 Kasım 2026 gecesi · branch <code>faz1/boyama-motoru</code> · Hiçbir şey push edilmedi, PR açılmadı</div>
+  <div class="meta">2–3 Kasım 2026 gecesi · branch <code>faz1/boyama-motoru</code> · Hiçbir şey push edilmedi, PR açılmadı · Son güncelleme 03.11.2026 03:32</div>
 </header>
 
 <nav class="toc">
   <ol>
     <li><a href="#sonuc">Sonuç</a></li>
     <li><a href="#ekran">Ekranlar</a></li>
+    <li><a href="#icerik">201 yeni sayfa ve seviyeler</a></li>
+    <li><a href="#kurul">Kurul kararları</a></li>
+    <li><a href="#gelir">Gelir modeli ve yayın</a></li>
     <li><a href="#commit">Commit'ler</a></li>
     <li><a href="#dogrulama">Neyi nasıl doğruladım</a></li>
     <li><a href="#adim">Senin adımların</a></li>
@@ -112,98 +115,148 @@ ul.tight li, ol.tight li { margin: 3px 0; }
 </nav>
 
 <h2 id="sonuc">1. Sonuç</h2>
-<p class="lead">Uygulama yeni boyama motoruyla, 3 yaşına göre kurulmuş arayüzle ve Apple uyum düzeltmeleriyle çalışıyor. İş <code>faz1/boyama-motoru</code> branch'inde 11 yerel kod commit'i olarak duruyor. Mağazaya göndermeden önce senin yapman gereken adımlar <a href="#adim">bölüm 5</a>'te.</p>
+<p class="lead">Uygulama yeni motor, 201 profesyonel sayfa, 3 zorluk seviyesi, serbest çizim, bitiş kutlaması ve Apple uyum düzeltmeleriyle çalışıyor. Gelir modeli kurul kararıyla tek seferlik "Tam Sürüm" kilidi; kodu hazır ve bir derleme bayrağının arkasında bekliyor. Mağazaya çıkış için kalan adımların çoğu senin hesaplarında (<a href="#adim">bölüm 8</a>).</p>
 <div class="callout">
   <ul>
-    <li><b>Şikâyetlerin karşılığı.</b> Boya taşması ve piksel boşlukları: bölge etiket haritası, dolgu çizginin altına kadar uzanıyor, hâle yok. Kötü dokunma: parmak kaysa da dokunuş sayılıyor, avuç ve ikinci parmak yok sayılıyor. Kötü yakınlaştırma: Minik modda zoom yok; Büyük modda iki parmakla 1–6 kat. Fırça: çizginin içinde kalan keçeli kalem ve silgi.</li>
-    <li><b>Apple.</b> HIG denetimindeki 4 kritik açığın hepsini kapattım. Denetimi testlere bağlarken 2 kontrast açığı daha buldum ve onları da kapattım. 18 maddenin 12'si uyumlu; ayrıntı <a href="ux-arastirma-raporu.html">UX raporunda</a>.</li>
-    <li><b>Hazır resimler.</b> 76 sayfanın 5'inde çocuk parmağına yetecek kapalı alan yok, 13'ü zayıf. <code>fire_truck.png</code> itfaiye değil, ikinci bir helikopter çiziyor. Yeni çizim hâlâ en büyük eksik.</li>
-    <li><b>Kalite.</b> <code>flutter analyze</code> temiz, 71 test geçiyor. iOS simülatör ve Android derlemeleri geçiyor.</li>
+    <li><b>Şikâyetlerin karşılığı.</b> Boya taşması ve piksel boşlukları: bölge etiket haritası, dolgu çizginin altına kadar; hâle yok. Kötü dokunma: kayan parmak yine dokunuş sayılır, avuç ve ikinci parmak yok sayılır. Kötü yakınlaştırma: Minik modda zoom yok, Büyük modda iki parmakla 1–6 kat. Fırça: çizginin içinde kalan keçeli kalem, silgi ve serbest çizim sayfası.</li>
+    <li><b>Görseller.</b> 76 kodla üretilmiş sayfanın yerine Microsoft Fluent UI Emoji (MIT) setinden dönüştürülmüş 201 sayfa: 6 kategori, 3 seviye, 1024 px, hepsi sayfa denetiminden geçiyor. Üretim hattı repoda; yeni konu eklemek bir JSON satırı ve bir komut.</li>
+    <li><b>Kurullar.</b> İki beş üyeli kurul 27 adayı oyladı: 18 geçti, 9 reddedildi. Geçenlerden 8'i bu gece yapıldı, 3'ünün altyapısı kuruldu, 7'si senin mağaza adımların ya da sonraki sürüm.</li>
+    <li><b>Kalite.</b> <code>flutter analyze</code> temiz, 90 test geçiyor. iOS simülatör ve Android derlemeleri geçiyor; Android'de bütün yeni akışlar emülatörde denendi.</li>
   </ul>
 </div>
 
 <h2 id="ekran">2. Ekranlar</h2>
-<p>Android ekranları CobiPaint_Pixel emülatöründen, iOS ekranı CobiPaint iPhone simülatöründen (iOS 18.5). Hepsi son derlemeden.</p>
+<p>Son derlemeden, CobiPaint_Pixel emülatöründen.</p>
 <div class="grid g3">
-  <figure><img src="img/gece-ana.jpg" alt="Ana ekran"><figcaption>Ana ekran: tek ekran, büyük kartlar, son eser galeride. Gri çark kapıya gider.</figcaption></figure>
-  <figure><img src="img/gece-boyama.jpg" alt="Boyama ekranı"><figcaption>Boyama: dolgu hâlesiz; yeşil çizgiler fırça. Kart sayfanın kendisi, beyaz her yer boya alır. Doldur ve Fırça seçili rengi rozette gösteriyor.</figcaption></figure>
-  <figure><img src="img/gece-kapi.jpg" alt="Ebeveyn kapısı"><figcaption>Ebeveyn kapısı: kelimeyle yazılmış dört rakam. Rakamlar artık koyu (önce 2,22:1).</figcaption></figure>
-  <figure><img src="img/gece-ebeveyn.jpg" alt="Ebeveynler alanı"><figcaption>Ebeveynler alanı: mod, dil, tema, ses, yeni Titreşim anahtarı, Guided Access rehberi, gizlilik politikası.</figcaption></figure>
-  <figure><img src="img/gece-ios.jpg" alt="iOS ana ekran"><figcaption>iOS: yeni görünüm denetleyicisiyle açılıyor; durum çubuğu krem zeminde okunur.</figcaption></figure>
-  <figure><img src="img/gece-yazi-200.jpg" alt="Yüzde 200 metin"><figcaption>%200 metin: ana ekran ve kategori taşmıyor.</figcaption></figure>
+  <figure><img src="img/gece2-ana.jpg" alt="Ana ekran"><figcaption>Ana ekran: Çiz kartı, 6 kategori, son eser galeride.</figcaption></figure>
+  <figure><img src="img/gece2-kategori.jpg" alt="Kategori"><figcaption>Kategori: çocuğun seviyesindeki sayfalar sarı çerçeveyle önde; kilit, sayı ya da çubuk yok.</figcaption></figure>
+  <figure><img src="img/gece2-ipucu.jpg" alt="Hareketsizlik ipucu"><figcaption>6 sn dokunulmayan sayfada maskot en büyük alanın üstünde nabız atar; belgeye hiçbir şey yazmaz.</figcaption></figure>
+  <figure><img src="img/gece2-kutlama.jpg" alt="Bitiş kutlaması"><figcaption>Parmak boyu her alan dolunca bir kez kısa konfeti; yıldız ve sayaç yok.</figcaption></figure>
+  <figure><img src="img/gece2-duvar.jpg" alt="Eser duvarı"><figcaption>Eserlerim: çerçeveli resimler, tamamı görünür; eski sayfaların eserleri de açılıyor.</figcaption></figure>
+  <figure><img src="img/gece2-ciz.jpg" alt="Serbest çizim"><figcaption>Çiz: boş sayfa, fırça hazır, çizgi kırpılmaz, silgi yalnız çizgiyi siler.</figcaption></figure>
 </div>
-<figure style="margin-top:16px"><img src="img/gece-yatay.jpg" alt="Yatay boyama ekranı"><figcaption>Yatay: solda düğmeler, ortada kare kart, sağda 2 sütunlu palet.</figcaption></figure>
-<figure style="margin-top:16px"><img src="img/gece-sayfa-denetimi.jpg" alt="Sayfa denetimi"><figcaption>Sayfa denetiminin işaretlediği sayfalar; her renk bir bölge, mavi arka plan. Bulut ve şimşekte kontur açık, boya arka plana taşıyor; kar tanesinde kapalı alan yok; palmiye ve kiraz çiçeğinde alanlar parmaktan küçük. <code>fire_truck</code> helikopter çiziyor.</figcaption></figure>
+<figure style="margin-top:16px"><img src="img/gece2-tum-sayfalar.jpg" alt="201 sayfa"><figcaption>201 sayfanın tamamı (hayvanlar, bitkiler, yiyecekler, araçlar, doğa, eşyalar).</figcaption></figure>
 
-<h2 id="commit">3. Commit'ler</h2>
-<p>Hepsi <code>faz1/boyama-motoru</code>'da; branch <code>plan/yeniden-dogus</code>'taki Faz 0 commit'inden (<code>f3c362e</code>) açıldı. Toplam fark: 77 dosya, +5.885 / −5.615 satır (raporlar hariç).</p>
+<h2 id="icerik">3. 201 yeni sayfa ve seviyeler</h2>
+<p>Araştırma ajanı 10 kaynağın lisansını okudu; tam rapor <a href="icerik-arastirma-raporu.html">içerik raporunda</a>. Seçim: Fluent UI Emoji "Flat" (MIT, commit <code>1ffb34c</code>). Twemoji ve OpenMoji'nin CC lisanslarında App Store'un kopya korumasıyla çatışabilen bir madde var; o yüzden elendi.</p>
 <div class="table-wrap"><table>
-<thead><tr><th>Commit</th><th>Ne değişti</th><th>Ölçülen sonuç</th></tr></thead>
+<thead><tr><th>Adım</th><th>Ne yapar</th><th>Nerede</th></tr></thead>
 <tbody>
-<tr><td><code>a94e631</code></td><td>Bölge motoru ve boyama belgesi: 4 yönlü bölge etiketleme, boşluk kapatma, çizgi altına büyütme, isolate ve disk önbelleği; renk tablosu ve 100 adımlık geri al.</td><td>Sayfa başına 7–39 ms. Kedi yüzü tek bölge; pizza kabuğu ve gökkuşağı bantları ayrı.</td></tr>
-<tr><td><code>be8272b</code></td><td>Jest durum makinesi ve katmanlı tuval: kâğıt, dolgu, fırça, çizgi resim.</td><td>Dolgu parmak değdiği anda; ikinci parmak 150 ms içinde gelirse pinch (yalnız Büyük).</td></tr>
-<tr><td><code>7eadb40</code></td><td>Yeni motor üstünde 3 yaş arayüzü: 82 pt kontroller, 9 renk + silgi, otomatik kayıt, kayıt formatı v2 ve eski kayıtların taşınması, ebeveyn kapısı, Ebeveynler alanı.</td><td>Emülatörde dolgu, fırça, silgi, geri al, otomatik kayıt, kaldığı yerden devam.</td></tr>
-<tr><td><code>a6b769c</code></td><td>HIG ve App Store uyumu: palet yerleşimi, renk rozeti, Reduce Motion, Sessiz mod, metin ölçeği, gizlilik manifesti, en/tr izin metinleri, kamera çentiği, krem açılış.</td><td>4 kritik HIG açığı kapandı. iOS derlemesinde <code>PrivacyInfo.xcprivacy</code> ve iki <code>InfoPlist.strings</code> var; MinimumOSVersion 15.0.</td></tr>
-<tr><td><code>36d548d</code></td><td>Sayfa denetimi (<code>PageCheck</code>, <code>tool/page_report.dart</code>) ve testi.</td><td>76 sayfa: 5 kullanılamaz, 13 zayıf, 58 iyi.</td></tr>
-<tr><td><code>d02d63a</code></td><td>Kullanılmayan 69 metin anahtarı silindi.</td><td>121 anahtardan 52'si kaldı.</td></tr>
-<tr><td><code>a72c6e9</code></td><td><code>cobi-toddler-ux</code> proje skill'i; dokunma hedefi, etiket ve kontrast testleri.</td><td>Skill oturumda görünüyor.</td></tr>
-<tr><td><code>0eb2fad</code></td><td>Ebeveynler alanında Titreşim anahtarı.</td><td>Varsayılan açık; ayarla birlikte saklanıyor.</td></tr>
-<tr><td><code>21e333a</code></td><td>iOS'ta boyama ekranındayken üst ve alt kenar hareketi ertelenir.</td><td>Simülatörde derlenip açıldı; hareket elle denenmedi.</td></tr>
-<tr><td><code>18446e2</code></td><td>Kontrast ve dil: kapı rakamları, üst çubuklar, tema adları, paylaşım metni, metinsiz açılış ekranı.</td><td>Kapı 2,22:1 → testten geçiyor; üst çubuk 2,73:1 → testten geçiyor.</td></tr>
-<tr><td><code>dba6ea5</code></td><td>Minik modun açıklaması 8 değil 9 renk diyor.</td><td>—</td></tr>
+<tr><td>Katalog</td><td>Unicode listesinden 2–5 yaşa uygun konular (insan, yüz, bayrak, marka, silah, alkol, dinî simge yok); Türkçe ve İngilizce adlar CLDR'den; sabit ücretsiz küme (<code>free: true</code>, kategori başına 8).</td><td><code>tool/pages/catalog.json</code></td></tr>
+<tr><td>Üretim</td><td>SVG indir (sabit commit) → QuickLook ile 1024 px → renk sınırlarına 11 px siyah kontur, beyaz zemin dışarısı → sayfa denetimi → seviye → <code>assets/pages/</code> ve <code>lib/data/builtin_images.dart</code>.</td><td><code>tool/pages/build_pages.py</code>, <code>emoji2page.py</code></td></tr>
+<tr><td>Seviye</td><td>1: en çok 4 parmak boyu alan ve 10 bölge (83 sayfa) · 3: 8+ parmak alanı ya da 16+ bölge (45) · 2: kalanlar (73). Aynı kural Dart'ta da var; test her sayfayı doğruluyor.</td><td><code>PageCheck.level</code>, <code>level_for</code></td></tr>
+<tr><td>Sıralama</td><td>Çocuğun seviyesi: 4 sayfa boyanınca bir üst seviye; Minik modda 2'de durur; ebeveyn alanından sabitlenir. Hiçbir sayfa kilitli değil.</td><td><code>lib/data/page_order.dart</code></td></tr>
+<tr><td>Lisans</td><td>MIT metni pakette ve Ebeveynler → Lisanslar ekranında.</td><td><code>assets/licenses/fluentui-emoji.txt</code></td></tr>
 </tbody></table></div>
-<p>Raporlar ayrı bir commit'te: bu sayfa, <a href="ux-arastirma-raporu.html">UX raporu</a> ve <a href="cobi-paint-yeniden-dogus-plani.html#durum">plan raporunun durum bölümü</a>.</p>
+<p>Eski 76 dosya pakette kaldı: kayıtlı eserler yoluyla sayfayı buluyor. Fluent'ta olmayan 7 konu (T-Rex, orka, deniz feneri, yoyo, piñata, tişört, kral kelebeği) atlandı. Hâlâ en iyi yol hibrit: bu set ilk 2 seviye için yeterli; illüstratörle çizilecek sahne sayfaları 3. seviyeyi zenginleştirir.</p>
 
-<h2 id="dogrulama">4. Neyi nasıl doğruladım</h2>
+<h2 id="kurul">4. Kurul kararları</h2>
+<p>İki kurul, her biri beş üye: 3 yaş UX (veto), Apple/Google uyumu (veto), Flutter mühendisi, ebeveyn-ürün, tasarım/içerik ya da iş analisti. Geçme şartı 4/5 ve veto yok.</p>
+<h3>Özellik kurulu (16 aday)</h3>
+<div class="table-wrap"><table>
+<thead><tr><th>Aday</th><th>Oy</th><th>Karar</th><th>Durum bu sabah</th></tr></thead>
+<tbody>
+<tr><td>Sesli yönlendirme</td><td>5/5</td><td><span class="badge b-p2">Geçti</span></td><td>Altyapı hazır: kayıtlı klip çalar, VoiceOver açıkken susar, ebeveyn anahtarı var. Klipler kaydedilmeli (<code>tool/voice/README.md</code>).</td></tr>
+<tr><td>Serbest çizim sayfası</td><td>5/5</td><td><span class="badge b-p2">Geçti</span></td><td>Yapıldı (Çiz kartı).</td></tr>
+<tr><td>Kademeli seviyeler</td><td>5/5</td><td><span class="badge b-p2">Geçti</span></td><td>Yapıldı.</td></tr>
+<tr><td>Bitiş ödülü</td><td>5/5</td><td><span class="badge b-p2">Geçti</span></td><td>Yapıldı; kurulun şartıyla yıldız yok, yalnız kutlama.</td></tr>
+<tr><td>Eser duvarı</td><td>5/5</td><td><span class="badge b-p2">Geçti</span></td><td>Yapıldı.</td></tr>
+<tr><td>Fotoğraflara kaydet ve yazdır</td><td>5/5</td><td><span class="badge b-p2">Geçti</span></td><td>Kapı arkasında "Boş sayfayı paylaş": sistem menüsü yazdırır ve kaydeder. Android'de doğrudan galeriye kayıt sonraya.</td></tr>
+<tr><td>Hareketsizlik ipucu</td><td>5/5</td><td><span class="badge b-p2">Geçti</span></td><td>Yapıldı.</td></tr>
+<tr><td>Çıkartma aracı</td><td>4/5</td><td><span class="badge b-p2">Geçti</span></td><td>Sonraya: kütüphane 200 sayfayı geçince yeniden değerlendirilecek (kurul şartı).</td></tr>
+<tr><td>Günün sayfası ve sezon</td><td>4/5</td><td><span class="badge b-p2">Geçti</span></td><td>Sonraya: önce sezon temaları normal kategori olarak.</td></tr>
+<tr><td>Ek fırçalar</td><td>4/5</td><td><span class="badge b-p2">Geçti</span></td><td>Sonraya (L): önce fırça katmanı artımlı pişirmeye geçmeli.</td></tr>
+<tr><td>Ayna çizimi</td><td>4/5</td><td><span class="badge b-p2">Geçti</span></td><td>Sonraya: serbest sayfa yayına girdikten sonra.</td></tr>
+<tr><td>Renkli örnek ve sihirli boya</td><td>3/5</td><td><span class="badge b-p0">Veto</span></td><td>"Doğru renk bu" baskısı; çocuğun rengi seçme hakkını alır.</td></tr>
+<tr><td>Sayıyla boyama</td><td>1/5</td><td><span class="badge b-p0">Veto</span></td><td>Yanlış renkte boyamayan oyun başarısızlık getirir; hedef 6+.</td></tr>
+<tr><td>Boyamanın tekrarı</td><td>2/5</td><td><span class="badge b-p0">Reddedildi</span></td><td>Kayıt formatı sırayı tutmuyor; çocuğa katkısı yok.</td></tr>
+<tr><td>Harf ve rakam izleme</td><td>1/5</td><td><span class="badge b-p0">Veto</span></td><td>3 yaş için erken; uygulamayı alfabe uygulamasına çevirir.</td></tr>
+<tr><td>Fotoğraftan sayfa</td><td>1/5</td><td><span class="badge b-p0">Veto</span></td><td>Küçük ve açık alanlar üretir; Karar 3'te dondurulmuştu.</td></tr>
+</tbody></table></div>
+<h3>Gelir ve yayın kurulu (11 aday)</h3>
+<div class="table-wrap"><table>
+<thead><tr><th>Aday</th><th>Oy</th><th>Karar</th><th>Durum bu sabah</th></tr></thead>
+<tbody>
+<tr><td>Tek seferlik Tam Sürüm kilidi</td><td>5/5</td><td><span class="badge b-p2">Geçti</span></td><td>Kod hazır, <code>COBI_IAP</code> bayrağı kapalı. Mağaza ürünü senin işin.</td></tr>
+<tr><td>Google Play yayını</td><td>5/5</td><td><span class="badge b-p2">Geçti</span></td><td>Kod hazır (eski reklam dosyaları silindi); Console adımları senin.</td></tr>
+<tr><td>Birincil kategori Education</td><td>5/5</td><td><span class="badge b-p2">Geçti</span></td><td>App Store Connect'te senin işin.</td></tr>
+<tr><td>15 ülkede kademeli yayın</td><td>5/5</td><td><span class="badge b-p2">Geçti</span></td><td>Vitrin seçimi senin işin; İngilizce yedek dil hazır.</td></tr>
+<tr><td>10 dile yerelleştirme</td><td>5/5</td><td><span class="badge b-p2">Geçti</span></td><td>Taslaklar <code>lib/l10n/drafts/</code> altında (yapay zekâ çevirisi, yerli inceleme şart); derlemeye girmiyor.</td></tr>
+<tr><td>Dilden bağımsız ebeveyn kapısı</td><td>5/5</td><td><span class="badge b-p2">Geçti</span></td><td>Yapıldı: iki basamaklı sonuçlu çarpma.</td></tr>
+<tr><td>Yaş sinyali API'leri</td><td>5/5</td><td><span class="badge b-p2">Geçti</span></td><td>Sonraya: yalnız kilitle aynı sürümde; iOS 26.2 SDK gerekir.</td></tr>
+<tr><td>Şimdilik ücretsiz kal</td><td>3/5</td><td><span class="badge b-p0">Reddedildi</span></td><td>Satın almaların ~%80'i ilk iki günde; ücretsiz dönem dönüşmez.</td></tr>
+<tr><td>Tematik paketler</td><td>1/5</td><td><span class="badge b-p0">Veto</span></td><td>Satın alma durumuna göre değişen ana ekran 3 yaşı şaşırtır.</td></tr>
+<tr><td>Yıllık abonelik</td><td>0/5</td><td><span class="badge b-p0">Çift veto</span></td><td>Süre bitince çocuğun galerisi küçülür (Ç6); 3.1.2 "sürekli değer" zayıf.</td></tr>
+<tr><td>Ömür boyu + abonelik</td><td>0/5</td><td><span class="badge b-p0">Çift veto</span></td><td>Aynı sorunlar; iki fiyat ebeveyni yönlendirme kalıbı.</td></tr>
+</tbody></table></div>
+<p>Kurulların tam gerekçeleri ve her üyenin şartları oturum kaydında; özetleri <a href="gelir-ve-yayin-raporu.html">gelir raporunun</a> ve bu raporun ilgili bölümlerinde.</p>
+
+<h2 id="gelir">5. Gelir modeli ve yayın</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Konu</th><th>Karar</th><th>Kaynak</th></tr></thead>
+<tbody>
+<tr><td>Model</td><td>Non-consumable "Tam Sürüm" (<code>com.cobi.paint.full</code>), Aile Paylaşımı açık, yalnız kapı arkasındaki tek ekran; fiyat mağazadan okunur, geri yükle düğmesi aynı ekranda.</td><td>Apple 1.3 / 3.1.1, Bimi Boo örneği, RevenueCat 2026 medyanları</td></tr>
+<tr><td>Fiyat</td><td>Taban ABD 5,99 $; Türkiye elle ₺199,99; diğer vitrinler otomatik eşitleme; 60 gün sonra gelişen pazarlar için gözden geçir.</td><td>Rakip fiyatları (Pok Pok, Sago, Bimi Boo)</td></tr>
+<tr><td>Ücretsiz küme</td><td>Kategori başına 8 sayfa (seviyelere dağılmış, toplam 48); bir kez ücretsiz olan sayfa hep ücretsiz kalır; çocuk ekranı satın alma öncesi ve sonrası aynı.</td><td>Kurul şartı</td></tr>
+<tr><td>Komisyon</td><td>Apple Small Business %15; Google ilk 1 M$ %15 (2026–27'de %10 + ücret). ₺199,99'dan cebe ≈ ₺135–142.</td><td>Gelir raporu 2.2</td></tr>
+<tr><td>Vergi</td><td>GVK mükerrer 20/B istisnası: gerçek kişi, istisna belgesi, özel banka hesabı, %15 stopaj, 2026 sınırı 5,3 M TL (teyit et).</td><td>Gelir raporu 2.6</td></tr>
+<tr><td>Ülkeler</td><td>Önce ABD, UK, CA, AU, TR, DE; sonra JP, FR, ES, KR, IT, NL, SE, SA/AE, PL. RU, CN kapalı; BR ertelenir (ECA Digital).</td><td>Gelir raporu 3.1</td></tr>
+</tbody></table></div>
+
+<h2 id="commit">6. Commit'ler</h2>
+<p>Hepsi <code>faz1/boyama-motoru</code>'da, Faz 0 commit'i <code>f3c362e</code>'den sonra. Hiçbiri push edilmedi.</p>
+<div class="table-wrap"><table><thead><tr><th>Commit</th><th class="num">Saat</th><th>Konu</th></tr></thead><tbody><tr><td><code>a94e631</code></td><td class="num">00:47</td><td>feat: Region engine and coloring document (phase 1b, 1c)</td></tr><tr><td><code>be8272b</code></td><td class="num">00:54</td><td>feat: Toddler-first gesture machine and layered paint canvas (phase 1a, 1d)</td></tr><tr><td><code>7eadb40</code></td><td class="num">01:11</td><td>feat: Toddler-first coloring app on the new engine (phases 1c-5)</td></tr><tr><td><code>a6b769c</code></td><td class="num">01:56</td><td>feat: Apple HIG and App Store compliance pass (phase 4)</td></tr><tr><td><code>36d548d</code></td><td class="num">01:56</td><td>test: Page check for toddler-friendly coloring pages (phase 3)</td></tr><tr><td><code>d02d63a</code></td><td class="num">01:58</td><td>chore: Remove 69 unused strings</td></tr><tr><td><code>a72c6e9</code></td><td class="num">01:59</td><td>docs: Toddler UX project skill and accessibility guideline tests</td></tr><tr><td><code>0eb2fad</code></td><td class="num">02:01</td><td>feat: Parents can turn off haptics</td></tr><tr><td><code>21e333a</code></td><td class="num">02:12</td><td>feat: Defer iOS edge gestures while the child colours</td></tr><tr><td><code>18446e2</code></td><td class="num">02:12</td><td>fix: Readable grown-up screens and texts in the app&#x27;s language</td></tr><tr><td><code>dba6ea5</code></td><td class="num">02:16</td><td>fix: Minik mode has 9 colours, not 8</td></tr><tr><td><code>c746054</code></td><td class="num">02:22</td><td>docs: Night report, UX research report and plan status</td></tr><tr><td><code>30b846a</code></td><td class="num">02:57</td><td>feat: 201 coloring pages from Fluent UI Emoji, levels, free drawing, finish celebration</td></tr><tr><td><code>9b644c6</code></td><td class="num">03:08</td><td>fix: Page converter treats the renderer&#x27;s white sheet as outside</td></tr><tr><td><code>aa4ae2d</code></td><td class="num">03:09</td><td>docs: Content and monetization research reports, skill notes on the page pipeline</td></tr><tr><td><code>e815db2</code></td><td class="num">03:10</td><td>docs: Page counts, page pipeline notes and version 2.0.0+4</td></tr><tr><td><code>6344ff0</code></td><td class="num">03:14</td><td>feat: Spoken names groundwork, blank page sharing, old ad files removed</td></tr><tr><td><code>a08871c</code></td><td class="num">03:16</td><td>feat: Language-free parental gate (multiplication)</td></tr><tr><td><code>03559e9</code></td><td class="num">03:28</td><td>feat: Full Version unlock groundwork behind a build flag</td></tr><tr><td><code>de321f5</code></td><td class="num">03:32</td><td>fix: Dark text on filled and outlined buttons</td></tr></tbody></table></div>
+
+<h2 id="dogrulama">7. Neyi nasıl doğruladım</h2>
 <div class="table-wrap"><table>
 <thead><tr><th>Ne</th><th>Nasıl</th><th>Sonuç</th></tr></thead>
 <tbody>
-<tr><td>Kod kalitesi</td><td><code>flutter analyze</code>, <code>flutter test</code></td><td>0 bulgu, 71 test geçti</td></tr>
-<tr><td>Erişilebilirlik kuralları</td><td>Flutter'ın dokunma hedefi, etiket ve kontrast kılavuz testleri, uygulamanın kendi temasıyla</td><td>Kontroller, kategori ekranı, kapı ve Ebeveynler alanı geçiyor</td></tr>
-<tr><td>iOS paketi</td><td>Simülatör derlemesi + <code>PlistBuddy</code></td><td>Derleme 28–44 sn; gizlilik dosyaları pakette; Light görünüm; iOS 15.0</td></tr>
-<tr><td>iOS açılışı</td><td>Ayrı CobiPaint iPhone simülatörü, ekran görüntüsü</td><td>Ana ekran açılıyor</td></tr>
-<tr><td>Android akışları</td><td>CobiPaint_Pixel emülatörü (port 5580)</td><td>Ana ekran, kategori, dolgu, fırça, otomatik kayıt, kapı, Ebeveynler alanı, yatay düzen, %200 metin</td></tr>
-<tr><td>Hazır sayfalar</td><td><code>tool/page_report.dart</code> + bölge önizlemesi</td><td>5 kullanılamaz, 13 zayıf</td></tr>
+<tr><td>Kod kalitesi</td><td><code>flutter analyze</code>, <code>flutter test</code></td><td>0 bulgu, 90 test geçti</td></tr>
+<tr><td>Erişilebilirlik</td><td>Dokunma hedefi, etiket ve kontrast kılavuz testleri, uygulamanın kendi temasıyla</td><td>Kontroller, kategori, kapı, Ebeveynler alanı ve Tam Sürüm ekranı geçiyor</td></tr>
+<tr><td>Sayfalar</td><td>Sayfa denetimi testi 201 sayfayı ölçüyor ve seviyeyi kataloğa karşı doğruluyor</td><td>0 sorunlu sayfa</td></tr>
+<tr><td>Satın alma</td><td>Sahte mağazayla testler: teslim, geri yükleme, Ask to Buy beklemesi, hata, yeniden açılışta hak</td><td>Geçti; gerçek mağaza denenmedi</td></tr>
+<tr><td>Android akışları</td><td>CobiPaint_Pixel emülatörü</td><td>Ana ekran, Çiz, kategori ve seviye vurgusu, ipucu, dolgu, bitiş kutlaması, eser duvarı, yeni kapı, %200 metin, yatay</td></tr>
+<tr><td>iOS</td><td>Simülatör derlemesi (StoreKit eklentisi dahil), CobiPaint iPhone'da açılış</td><td>Derleme geçti (StoreKit eklentisi dahil); CobiPaint iPhone simülatöründe ana ekran açıldı</td></tr>
 </tbody></table></div>
 <div class="callout info">
-  <b>Doğrulanmayanlar:</b> gerçek cihazda açılış süresi (emülatörde ölçüm 19–33 sn arasında oynadı, güvenilir değil), Sessiz mod, iOS kenar ertelemesi, haptik, iPadOS 26 pencere modu, VoiceOver ile tam gezinti, gerçek bir 3 yaş çocuğuyla deneme.
+  <b>Doğrulanmayanlar:</b> ebeveyn alanındaki seviye seçimi ve Tam Sürüm ekranı cihazda (kapı rastgele olduğu için otomatikle açılamıyor; widget testleri kapsıyor), ses klipleri (henüz yok), gerçek mağaza satın alımı, iOS kenar ertelemesi, Sessiz mod, gerçek cihazda açılış süresi, 10 dilin çeviri kalitesi, gerçek bir 3 yaş çocuğuyla deneme.
 </div>
 
-<h2 id="adim">5. Senin adımların</h2>
-<p>Sıra, gönderimi engelleme derecesine göre.</p>
+<h2 id="adim">8. Senin adımların</h2>
+<p>Sıra, yayına çıkışı engelleme derecesine göre. Hiçbirini ben yapamam; hesaplar ve imzalar senin.</p>
 <ol>
-  <li><b>macOS 15.6+ ve Xcode 26.</b> 28 Nisan 2026'dan beri App Store yüklemesi Xcode 26 ister. Bu Mac'te Xcode 16.4 ve macOS 15.4.1 var.</li>
-  <li><b>UIScene geçişi.</b> Xcode 27'den önce gerekli. Ya Flutter'ı 3.41+'a yükselt, ya da <code>flutter config --enable-uiscene-migration</code> çalıştır. İkincisi global bir ayar olduğu için çalıştırmadım.</li>
-  <li><b>Yaş bandı.</b> Canlı sürüm Kids Category 6–8 bandında; hedef 5 ve altı. Bant onaydan sonra değişmeyebilir. App Review'a sor.</li>
-  <li><b>App Store Connect.</b> Yeni açıklamayı <code>store_listing.md</code>'den gir; canlı açıklama artık olmayan galeriden içe aktarmayı vaat ediyor. Yaş derecesi anketini ve social media sorusunu doldur. Gizlilik etiketi "Data Not Collected".</li>
-  <li><b><code>docs/</code>'u yeni sürümle birlikte yayınla.</b> Önce push edersen <code>app-ads.txt</code> silindiği için yayındaki reklamlı sürümün reklam doğrulaması bozulur. Yeni gizlilik politikası da yayındaki sürümle çelişir.</li>
-  <li><b>Android release keystore'unu yedekle.</b></li>
-  <li><b>Kararlar.</b> Satın alma yeniden kurulacak mı? İllüstratörle yeni sayfalar: önce 5 kullanılamaz sayfa ve itfaiye, sonra 60, sonra 200.</li>
-  <li><b>Kurulumlar.</b> <code>app-store-review-skill</code> (katalog dışı), Flutter Skills'ten 5 skill (kopyala), Dart and Flutter plugin'i. Plugin'den önce PATH'teki Homebrew <code>dart</code> 3.8'i kaldır ya da Flutter'ın <code>dart</code>'ını öne al.</li>
-  <li><b>Gerçek cihazda dene.</b> Açılış süresi, Sessiz mod, kenardan kaydırma, titreşim. Mümkünse bir 3 yaş çocuğuyla 10 dakika.</li>
-  <li><b>Branch'leri incele ve birleştir.</b> <code>faz1/boyama-motoru</code>, <code>plan/yeniden-dogus</code>'u da içeriyor. Hazır olunca <code>master</code>'a PR aç.</li>
+  <li><b>macOS 15.6+ ve Xcode 26.</b> App Store yüklemesi Xcode 26 ister; bu Mac'te 16.4 var. Ardından Flutter'ı 3.41+'a yükselt ya da <code>flutter config --enable-uiscene-migration</code> (Xcode 27'den önce şart).</li>
+  <li><b>App Store Connect.</b> Yeni açıklama (<code>store_listing.md</code>: 200+ sayfa, 3 seviye, galeri vaadi yok), tr-TR locale, birincil kategori Education (Games ikincil), yaş anketi (sosyal medya sorusu), Kids bandını 6–8'den "5 ve altı"na almak için App Review'a yazılı soru, DSA trader bilgisi (posta kutusu + ayrı telefon), ekran görüntüleri gerçek Minik modundan.</li>
+  <li><b>IAP ürünü.</b> Non-consumable <code>com.cobi.paint.full</code>, Family Sharing açık (geri alınamaz), taban 5,99 $, TR ₺199,99, ürün adı ve açıklaması her dilde, Paid Apps sözleşmesi ve vergi formları. Ürün hazır olunca uygulama <code>--dart-define=COBI_IAP=true</code> ile derlenir; o zamana kadar bütün sayfalar ücretsiz.</li>
+  <li><b>Google Play.</b> Bugün kayıt yok (404). Families "5 ve altı", Data safety "veri toplanmaz", IARC, Play App Signing (yükleme anahtarını yedekle), trader beyanı; hesap 13 Kasım 2023'ten yeniyse 14 günlük kapalı test. Play'de IAP ürünü ayrıca oluşturulur; Play metni Aile Kütüphanesi vaat etmez.</li>
+  <li><b>Türkiye vergisi.</b> GVK mükerrer 20/B istisna belgesi ve özel banka hesabı; mağaza ödeme hesabı buna taşınır. Mali müşavire sor.</li>
+  <li><b>docs/ yayını.</b> Gizlilik politikası ve <code>index.html</code> yalnız yeni sürümle birlikte push edilir (eski reklamlı sürüm yayındayken app-ads.txt'nin silinmesi doğrulamayı bozar).</li>
+  <li><b>Ses kayıtları.</b> <code>tool/voice/README.md</code>'deki 29 satırı iki dilde kaydet (ya da lisanslı seslendirmen); dosyaları <code>assets/voice/tr|en/</code> altına koy ve pubspec'e iki satır ekle. Kod hazır.</li>
+  <li><b>Çeviri incelemesi.</b> <code>lib/l10n/drafts/</code> altındaki 10 taslak yerli konuşan biri onaylamadan <code>supportedLocales</code>'e girmez; onaylanan dil ARB'ye taşınır, <code>CFBundleLocalizations</code> ve Play dil listesi genişler.</li>
+  <li><b>Gerçek cihazda dene.</b> Açılış süresi, Sessiz mod, kenardan kaydırma, titreşim; mümkünse bir 3 yaş çocuğuyla 10 dakika.</li>
+  <li><b>Branch'leri incele.</b> <code>faz1/boyama-motoru</code> her şeyi içeriyor; hazır olunca <code>master</code>'a PR aç. Android release keystore'unu yedekle.</li>
 </ol>
 
-<h2 id="acik">6. Açık kalan işler</h2>
+<h2 id="acik">9. Açık kalan işler</h2>
 <div class="table-wrap"><table>
-<thead><tr><th>İş</th><th>Neden önemli</th><th>Önerilen yol</th></tr></thead>
+<thead><tr><th>İş</th><th>Neden</th><th>Önerilen yol</th></tr></thead>
 <tbody>
-<tr><td>Sesli yönlendirme</td><td>Ç1: 3 yaş okumaz. HIG kapıda sesli uyarı öneriyor.</td><td>Seslendirme kaydı ya da cihazın konuşma motoru (<code>flutter_tts</code>, yeni bağımlılık). macOS <code>say</code> çıktısı lisans gereği dağıtılamaz.</td></tr>
-<tr><td>Yeni çizimler</td><td>Kullanıcı şikâyeti: resim az ve çirkin. 18 sayfa zayıf ya da kullanılamaz.</td><td>İllüstratör + AI eskiz; her yeni sayfa <code>tool/page_report.dart</code>'tan geçer.</td></tr>
-<tr><td>Hareketsizlik ipucu</td><td>İlk kez açan çocuk ne yapacağını bilmeyebilir.</td><td>3 sn işlem yoksa bir el bir bölgeyi doldurur; en fazla iki kez.</td></tr>
-<tr><td>Diğer fırçalar</td><td>Faz 2'nin ikinci yarısı.</td><td>Kurşun kalem, pastel, sprey, glitter, gökkuşağı, neon.</td></tr>
-<tr><td>iPad ayrıntıları</td><td>HIG 8 ve 12.</td><td>Cmd-Z kısayolu, 3 parmak düzenleme menüsünü kapatma, Windowed mod denemesi.</td></tr>
-<tr><td>Entegrasyon testi</td><td>Uygulamanın tamamını açan test yok.</td><td><code>integration_test</code> ile ana ekran → sayfa → dolgu → eve dönüş.</td></tr>
-<tr><td>Tasarım sistemi</td><td>Faz 3: yazı tipi, ikon seti, maskot.</td><td><code>design:design-system</code> skill'iyle.</td></tr>
+<tr><td>Yaş sinyali API'leri</td><td>Texas/Utah/Louisiana ve Brezilya; yalnız kilitle birlikte</td><td>Declared Age Range + Significant Change (iOS 26.2 SDK), Play Age Signals betadan çıkınca; ayrı PR</td></tr>
+<tr><td>İllüstratör sayfaları</td><td>3. seviye sahneleri ve zamanla emoji sayfalarının yerini alacak özgün çizimler</td><td>İçerik raporunun 6. bölümü: 3 illüstratöre 5'er sayfalık deneme, sonra 180 sayfa</td></tr>
+<tr><td>Android'de doğrudan yazdırma ve galeriye kayıt</td><td>Bugün sistem paylaşım menüsü üzerinden</td><td>MediaStore kaydı ve PrintHelper için küçük kanal</td></tr>
+<tr><td>Çıkartma, ek fırçalar, ayna, sezon</td><td>Kurulun şartlı onayları</td><td>Sıra: sezon temaları → ayna → çıkartma → fırçalar (önce artımlı pişirme)</td></tr>
+<tr><td>Entegrasyon testi</td><td>Uygulamanın tamamını açan test yok</td><td><code>integration_test</code>: ana ekran → sayfa → dolgu → eve dönüş</td></tr>
+<tr><td>Tasarım sistemi</td><td>Yazı tipi, ikon seti, maskot pozları</td><td><code>design:design-system</code> skill'iyle</td></tr>
+<tr><td>iPad ayrıntıları</td><td>HIG 8 ve 12</td><td>Cmd-Z, 3 parmak menüsü, Windowed mod denemesi</td></tr>
 </tbody></table></div>
 
-<h2 id="ortam">7. Ortam notları</h2>
+<h2 id="ortam">10. Ortam notları</h2>
 <ul>
-  <li><b>Cihazlar.</b> Replay Agent'ın emülatörüne (<code>emulator-5554</code>) ve açık duran iPhone 16 simülatörüne dokunmadım. Testler için CobiPaint_Pixel emülatörünü (port 5580) kullandım ve CobiPaint iPhone simülatörünü oluşturdum (iOS 18.5, UDID <code>15D6AEE9-8781-4319-B6AF-AA7253342616</code>).</li>
-  <li><b>Yeniden açmak için.</b> Android: <code>emulator -avd CobiPaint_Pixel -port 5580</code>. iOS: <code>xcrun simctl boot 15D6AEE9-8781-4319-B6AF-AA7253342616</code>, sonra <code>open -a Simulator</code>.</li>
+  <li><b>Cihazlar.</b> Replay Agent'ın emülatörüne (<code>emulator-5554</code>) ve açık duran iPhone 16 simülatörüne dokunmadım. Testler CobiPaint_Pixel (port 5580) ve CobiPaint iPhone (UDID <code>15D6AEE9-8781-4319-B6AF-AA7253342616</code>) üzerinde; ikisi de açık bırakıldı.</li>
+  <li><b>Derleme bayrağı.</b> Satın alma kodu <code>--dart-define=COBI_IAP=true</code> olmadan kapalı; mağaza ürünü olmayan bir derleme bütün sayfaları ücretsiz gösterir.</li>
   <li><b>Gradle.</b> Önbellek hatası verirse <code>android/</code> içinde <code>./gradlew app:assembleDebug -Ptarget-platform=android-arm64 --no-daemon</code> çalışıyor.</li>
-  <li><b>Bellek.</b> Oturum belleği ilk açıldığı geçici klasörde kalmıştı; bu projede açılan yeni oturumlar görebilsin diye proje bellek klasörüne taşıdım ve güncelledim.</li>
-  <li><b>Global CLAUDE.md.</b> Gece istediğin "Mobil tasarım: Apple Human Interface Guidelines" bölümünü ekledim; her mobil tasarımda güncel HIG okunup madde madde raporlanacak.</li>
+  <li><b>Araçlar.</b> Sayfa üretimi macOS QuickLook, Pillow ve numpy ister; Flutter'ın kendi <code>dart</code>'ı kullanılır (Homebrew dart 3.8 eski).</li>
+  <li><b>Raporlar.</b> <a href="cobi-paint-yeniden-dogus-plani.html#durum">Plan (durum bölümü)</a> · <a href="ux-arastirma-raporu.html">UX ve HIG</a> · <a href="icerik-arastirma-raporu.html">İçerik</a> · <a href="gelir-ve-yayin-raporu.html">Gelir ve yayın</a>.</li>
 </ul>
 </div>
 
