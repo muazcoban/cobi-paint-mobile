@@ -4,6 +4,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import '../l10n/app_localizations.dart';
+import '../services/voice_service.dart';
 import 'motion.dart';
 
 /// Shows an adult-level check before anything that leaves the coloring
@@ -16,6 +17,12 @@ import 'motion.dart';
 /// digits change every time so it cannot be learned by heart. Repeated
 /// wrong answers add a growing wait; the gate closes itself when idle.
 Future<bool> showParentalGate(BuildContext context, {math.Random? random}) async {
+  // Apple's Kids guidance: tell a child who cannot read to fetch a grown-up.
+  unawaited(VoiceService().say(
+    'gate',
+    languageCode: Localizations.localeOf(context).languageCode,
+    screenReader: MediaQuery.accessibleNavigationOf(context),
+  ));
   final passed = await showDialog<bool>(
     context: context,
     barrierDismissible: false,

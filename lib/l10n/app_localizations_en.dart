@@ -130,6 +130,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get haptics => 'Vibration';
 
   @override
+  String get voiceNames => 'Spoken names';
+
+  @override
+  String get shareBlankPage => 'Share blank page';
+
+  @override
   String get privacyPolicy => 'Privacy Policy';
 
   @override

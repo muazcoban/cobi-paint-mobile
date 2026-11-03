@@ -7,6 +7,9 @@ class UserSettings {
   final bool soundEnabled;
   final bool hapticsEnabled;
 
+  /// Spoken names of categories and colours (recorded clips).
+  final bool voiceEnabled;
+
   /// Page level a parent pinned (1-3); 0 lets the app choose.
   final int level;
 
@@ -20,6 +23,7 @@ class UserSettings {
     this.selectedTheme = 'coral',
     this.soundEnabled = true,
     this.hapticsEnabled = true,
+    this.voiceEnabled = true,
     this.level = 0,
     this.firstFills = 0,
     this.soundVolume = 0.7,
@@ -34,6 +38,7 @@ class UserSettings {
       selectedTheme: json['selectedTheme'] ?? 'coral',
       soundEnabled: json['soundEnabled'] ?? true,
       hapticsEnabled: json['hapticsEnabled'] ?? true,
+      voiceEnabled: json['voiceEnabled'] ?? true,
       level: (json['level'] as num?)?.toInt() ?? 0,
       firstFills: (json['firstFills'] as num?)?.toInt() ?? 0,
       soundVolume: ((json['soundVolume'] as num?) ?? 0.7).toDouble(),
@@ -46,6 +51,7 @@ class UserSettings {
       'selectedTheme': selectedTheme,
       'soundEnabled': soundEnabled,
       'hapticsEnabled': hapticsEnabled,
+      'voiceEnabled': voiceEnabled,
       'level': level,
       'firstFills': firstFills,
       'soundVolume': soundVolume,
@@ -57,6 +63,7 @@ class UserSettings {
     String? selectedTheme,
     bool? soundEnabled,
     bool? hapticsEnabled,
+    bool? voiceEnabled,
     int? level,
     int? firstFills,
     double? soundVolume,
@@ -66,6 +73,7 @@ class UserSettings {
       selectedTheme: selectedTheme ?? this.selectedTheme,
       soundEnabled: soundEnabled ?? this.soundEnabled,
       hapticsEnabled: hapticsEnabled ?? this.hapticsEnabled,
+      voiceEnabled: voiceEnabled ?? this.voiceEnabled,
       level: level ?? this.level,
       firstFills: firstFills ?? this.firstFills,
       soundVolume: soundVolume ?? this.soundVolume,

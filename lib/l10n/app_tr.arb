@@ -118,6 +118,11 @@
     "description": "Text that goes with a shared artwork"
   },
   "haptics": "Titreşim",
+  "voiceNames": "Sesli adlar",
+  "@voiceNames": {
+    "description": "Parents area switch for spoken category and colour names"
+  },
+  "shareBlankPage": "Boş sayfayı paylaş",
   "@haptics": {
     "description": "Parents area switch for haptic feedback"
   },

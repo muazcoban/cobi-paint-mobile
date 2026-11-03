@@ -130,6 +130,12 @@ class AppLocalizationsTr extends AppLocalizations {
   String get haptics => 'Titreşim';
 
   @override
+  String get voiceNames => 'Sesli adlar';
+
+  @override
+  String get shareBlankPage => 'Boş sayfayı paylaş';
+
+  @override
   String get privacyPolicy => 'Gizlilik Politikası';
 
   @override

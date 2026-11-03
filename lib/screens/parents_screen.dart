@@ -8,6 +8,7 @@ import '../providers/app_provider.dart';
 import '../providers/locale_provider.dart';
 import '../services/haptics.dart';
 import '../services/sound_service.dart';
+import '../services/voice_service.dart';
 import '../theme/app_theme.dart';
 
 /// Everything for grown-ups, reached only through the parental gate:
@@ -133,6 +134,15 @@ class ParentsScreen extends StatelessWidget {
               Haptics.enabled = enabled;
               app.updateSettings(settings.copyWith(hapticsEnabled: enabled));
               Haptics.selection();
+            },
+          ),
+          SwitchListTile(
+            contentPadding: EdgeInsets.zero,
+            title: Text(l10n.voiceNames),
+            value: settings.voiceEnabled,
+            onChanged: (enabled) {
+              VoiceService().enabled = enabled;
+              app.updateSettings(settings.copyWith(voiceEnabled: enabled));
             },
           ),
           _Section(l10n.guidedAccessTitle),

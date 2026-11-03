@@ -338,6 +338,18 @@ abstract class AppLocalizations {
   /// **'Titreşim'**
   String get haptics;
 
+  /// Parents area switch for spoken category and colour names
+  ///
+  /// In tr, this message translates to:
+  /// **'Sesli adlar'**
+  String get voiceNames;
+
+  /// No description provided for @shareBlankPage.
+  ///
+  /// In tr, this message translates to:
+  /// **'Boş sayfayı paylaş'**
+  String get shareBlankPage;
+
   /// Privacy policy button
   ///
   /// In tr, this message translates to:

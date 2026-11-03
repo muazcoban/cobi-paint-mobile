@@ -1,4 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import '../l10n/app_localizations.dart';
 import '../models/saved_artwork.dart';
@@ -149,6 +153,12 @@ class _ArtworkCard extends StatelessWidget {
               title: Text(l10n.share),
               onTap: () => Navigator.pop(sheetContext, 'share'),
             ),
+            if (!artwork.originalImagePath.contains('/imported/') && !artwork.originalImagePath.endsWith('/blank.png'))
+              ListTile(
+                leading: const Icon(Icons.print_outlined),
+                title: Text(l10n.shareBlankPage),
+                onTap: () => Navigator.pop(sheetContext, 'blank'),
+              ),
             ListTile(
               leading: const Icon(Icons.delete_outline_rounded, color: Color(0xFFE53935)),
               title: Text(l10n.delete, style: const TextStyle(color: Color(0xFFE53935))),
@@ -167,6 +177,20 @@ class _ArtworkCard extends StatelessWidget {
           await ShareService().shareArtwork(path, text: l10n.shareText, subject: artwork.name, origin: origin);
         } catch (e) {
           debugPrint('Share failed: $e');
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.shareError)));
+          }
+        }
+      case 'blank':
+        // The empty page as a file: the system sheet offers Print and Save.
+        try {
+          final data = await rootBundle.load(artwork.originalImagePath);
+          final file = File('${(await getTemporaryDirectory()).path}/blank_page.png');
+          await file.writeAsBytes(data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes));
+          if (!context.mounted) return;
+          await ShareService().shareArtwork(file.path, text: l10n.shareText, subject: artwork.name, origin: origin);
+        } catch (e) {
+          debugPrint('Blank page share failed: $e');
           if (context.mounted) {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.shareError)));
           }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../l10n/app_localizations.dart';
@@ -6,6 +8,7 @@ import '../models/category.dart';
 import '../models/saved_artwork.dart';
 import '../providers/app_provider.dart';
 import '../services/sound_service.dart';
+import '../services/voice_service.dart';
 import '../theme/app_theme.dart';
 import '../widgets/kid_button.dart';
 import '../widgets/parental_gate.dart';
@@ -134,6 +137,7 @@ class _GalleryCard extends StatelessWidget {
       semanticLabel: label,
       onTap: () {
         SoundService().playClickSound();
+        sayName(context, 'artworks');
         Navigator.push(context, MaterialPageRoute(builder: (_) => const MyArtworksScreen()));
       },
       child: Container(
@@ -184,6 +188,7 @@ class _DrawCard extends StatelessWidget {
       semanticLabel: label,
       onTap: () {
         SoundService().playClickSound();
+        sayName(context, 'draw');
         Navigator.push(context, MaterialPageRoute(builder: (_) => const ColoringScreen(image: freeDrawPage)));
       },
       child: Container(
@@ -234,6 +239,7 @@ class _CategoryCard extends StatelessWidget {
       semanticLabel: name,
       onTap: () {
         SoundService().playClickSound();
+        sayName(context, 'category_${category.id}');
         Navigator.push(context, MaterialPageRoute(builder: (context) => CategoryScreen(category: category)));
       },
       child: Container(
@@ -270,6 +276,16 @@ class _CategoryCard extends StatelessWidget {
       ),
     );
   }
+}
+
+/// Speaks a recorded name for a child who cannot read; silent with a
+/// screen reader or without the clip.
+void sayName(BuildContext context, String key) {
+  unawaited(VoiceService().say(
+    key,
+    languageCode: Localizations.localeOf(context).languageCode,
+    screenReader: MediaQuery.accessibleNavigationOf(context),
+  ));
 }
 
 /// Localised category name; the model only stores Turkish and English.

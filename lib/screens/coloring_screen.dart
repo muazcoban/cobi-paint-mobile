@@ -17,6 +17,7 @@ import '../providers/app_provider.dart';
 import '../services/haptics.dart';
 import '../services/sound_service.dart';
 import '../services/system_gestures.dart';
+import '../services/voice_service.dart';
 import '../widgets/celebration.dart';
 import '../widgets/idle_hint.dart';
 import '../widgets/kid_button.dart';
@@ -226,15 +227,25 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
 
   // Actions ------------------------------------------------------------------
 
+  void _say(String key) {
+    unawaited(VoiceService().say(
+      key,
+      languageCode: Localizations.localeOf(context).languageCode,
+      screenReader: MediaQuery.accessibleNavigationOf(context),
+    ));
+  }
+
   void _selectTool(CanvasTool tool) {
     if (_tool == tool) return;
     unawaited(_sound.playClickSound());
+    _say(tool == CanvasTool.fill ? 'fill' : 'brush');
     setState(() => _tool = tool);
   }
 
   void _selectPaletteItem(int index, List<Color> colors) {
     if (index < colors.length) {
       unawaited(_sound.playColorSelectSound());
+      _say('color_$index');
       setState(() {
         _color = colors[index];
         // Picking a colour while erasing means "I want to paint again".
@@ -242,6 +253,7 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
       });
     } else if (index == colors.length) {
       unawaited(_sound.playClickSound());
+      _say('eraser');
       setState(() => _tool = CanvasTool.eraser);
     } else {
       unawaited(_sound.playClickSound());
