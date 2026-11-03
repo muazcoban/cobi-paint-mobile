@@ -1,0 +1,475 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cobi Paint pazarlama ve ASO incelemesi</title>
+<style>
+:root { --ink:#1f2328; --muted:#57606a; --line:#d0d7de; --soft:#f6f8fa; --accent:#0a5c8a; --warn:#b35c00; --ok:#1a7f37; }
+* { box-sizing: border-box; }
+body { font-family: -apple-system, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color: var(--ink); background:#fff; margin:0; padding: 24px 16px 64px; line-height:1.5; font-size:15px; }
+main { max-width: 1040px; margin: 0 auto; }
+h1 { font-size: 26px; margin: 0 0 4px; }
+h2 { font-size: 20px; margin: 40px 0 10px; padding-top: 10px; border-top: 2px solid var(--line); }
+h3 { font-size: 16px; margin: 24px 0 8px; }
+p { margin: 8px 0; }
+.meta { color: var(--muted); font-size: 13px; margin-bottom: 18px; }
+nav ol { columns: 2; padding-left: 20px; font-size: 14px; }
+table { border-collapse: collapse; width: 100%; margin: 10px 0 18px; font-size: 14px; }
+th, td { border: 1px solid var(--line); padding: 6px 8px; vertical-align: top; text-align: left; }
+th { background: var(--soft); }
+td code.copy { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13px; background: var(--soft); padding: 2px 4px; border-radius: 3px; word-break: break-word; }
+pre.text { white-space: pre-wrap; background: var(--soft); border: 1px solid var(--line); padding: 10px 12px; border-radius: 4px; font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13px; }
+.decision { border-left: 4px solid var(--accent); background: #eef6fb; padding: 10px 14px; margin: 12px 0; }
+.warning { border-left: 4px solid var(--warn); background: #fff6e8; padding: 10px 14px; margin: 12px 0; }
+.ok { color: var(--ok); font-weight: 600; }
+.deviation { color: var(--warn); font-weight: 600; }
+.gap { color: #b42318; font-weight: 600; }
+.small { font-size: 13px; color: var(--muted); }
+ul.tight li { margin: 3px 0; }
+@media print { body { padding: 0; } h2 { break-after: avoid; } table { break-inside: auto; } }
+</style>
+</head>
+<body>
+<main>
+<h1>Cobi Paint pazarlama ve ASO incelemesi</h1>
+<p class="meta">3 Kasım 2026 · sürüm 2.1.0+5 · branch faz7/ipad-geri-al · App Store kimliği 6757766966 · Kaynaklar: store_listing.md, README.md, plan/gece-raporu-2026-11-03.html (bölüm 4, 8, 12–16), plan/gelir-ve-yayin-raporu.html, plan/ux-arastirma-raporu.html, lib/l10n/app_tr.arb, tool/voice/README.md ve bölüm 7'deki web kaynakları. Karakter sayılarını bu raporu üreten betik hesapladı.</p>
+
+<nav><ol>
+<li><a href="#summary">Sonuç</a></li>
+<li><a href="#positioning">Konumlandırma</a></li>
+<li><a href="#aso">ASC'ye girilecek kesin metinler</a></li>
+<li><a href="#screenshots">Ekran görüntüsü senaryosu</a></li>
+<li><a href="#requests">Yayın sırasında senden istediklerim</a></li>
+<li><a href="#plan">Yayın sonrası ilk 30 gün</a></li>
+<li><a href="#open-items">Doğrulayamadıklarım</a></li>
+<li><a href="#sources">Kaynaklar</a></li>
+</ol></nav>
+
+<h2 id="summary">0. Sonuç</h2>
+<div class="decision">
+<p><strong>Karar:</strong> Ad ve altyazı planladığın gibi kalsın; anahtar kelime dizilerini bu rapordaki üç dizi ile değiştir (TR 100/100, EN 97/100, ayrıca en-GB 99/100). Vitrine girmeden önce çözülmesi gereken tek konu yaş bandı: ASC'de "6–8" bandı, ürün sayfasında Türkçe "6-8 Yaş Çocuklar İçin Tasarlanmıştır" etiketi olarak görünür ve "Minik (3–5 yaş)" metniyle çelişir. Bu çelişki hem 2.3.1 riski hem dönüşüm kaybıdır; bölüm 4.5'teki mesajla App Review'a gönderimden önce yaz.</p>
+</div>
+<ul class="tight">
+<li><strong>Konum:</strong> "Üç yaşındaki çocuk tek başına boyar: boya taşmaz, hiçbir şey kaybolmaz, reklam yok." Rakipler (Bimi Boo, KidloLand, Crayon Club) içerik hacmiyle ve abonelikle yarışıyor; Cobi Paint üç yaşın motor becerisine göre kurulmuş motor ve "dürüst para" ile ayrışıyor (bölüm 1).</li>
+<li><strong>ASO:</strong> Bütün metinler yalnız var olan özellikleri anlatıyor; her iddianın repodaki kanıtı bölüm 2.6'da. Canlı vitrindeki "60+ resim" ve "galeriden yükleme" cümleleri silinmeli (2.3.1).</li>
+<li><strong>Ekran görüntüleri:</strong> 6 kare, Minik modda, ilk üçü arama sonucunda görünür: dolgu, çizgi içinde kalan kalem, kutlama (bölüm 3).</li>
+<li><strong>Senden:</strong> App Preview bu sürümde gerekmiyor, 2.1.1 için önerilir; uygulama içi etkinlik şimdi değil; featuring nomination gönderimden en az 3 hafta önce; diller: TR + en-US + en-GB ile çık, de/fr/es/ja yerli onaydan sonra (bölüm 4).</li>
+<li><strong>İlk 30 gün:</strong> Nakit bütçe 0; kanal: Apple editör adaylığı, Türkiye Android ağırlığı için Play kaydı, ebeveyn ve öğretmen toplulukları, Show HN / Product Hunt. Puan isteme yalnız ebeveyn alanında, 8. günden sonra, sistem API'siyle (bölüm 5).</li>
+</ul>
+
+<h2 id="positioning">1. Konumlandırma</h2>
+<h3>1.1 Kim için</h3>
+<p>Ürünün iki müşterisi var: kullanan çocuk ve indiren ebeveyn. Mağaza metni ebeveyne, ekran görüntüleri ikisine konuşur.</p>
+
+<table class="">
+<thead><tr><th>Kesim</th><th>İhtiyaç</th><th>Mesaj</th><th>Nerede</th></tr></thead>
+<tbody>
+<tr><td>Birincil: 3–5 yaş çocuğu olan ebeveyn</td><td>Çocuk yardım istemeden oynasın; ekranda reklam, satın alma ve yabancı içerik çıkmasın; işi kaybolunca ağlamasın.</td><td>Dokun, boyansın. Boya taşmaz, iş kaybolmaz. Reklam yok, internet yok, hesap yok.</td><td>Ad, altyazı, ilk 3 ekran görüntüsü, açıklamanın ilk cümlesi</td></tr>
+<tr><td>İkincil: 6–8 yaş kardeş</td><td>Daha çok renk, yakınlaştırma, ileri al, ince ayrıntılı sayfa.</td><td>Büyük mod: 16 renk, yakınlaştırma, ileri al, ince ayrıntı.</td><td>Açıklama (İki mod), 5. ekran görüntüsü</td></tr>
+<tr><td>Anaokulu öğretmeni, büyükanne ve büyükbaba</td><td>Kurulumu ve kullanımı açıklamaya gerek kalmasın; cihazdan çıkamasın.</td><td>Okuma gerektirmez; Rehberli Erişim rehberi içeride; ayarlar ebeveyn kapısının arkasında.</td><td>Açıklama (Ebeveynler için), destek sayfası</td></tr>
+<tr><td>Yolculuk ve bekleme anı</td><td>İnternet olmadan çalışsın, ses kapalıyken de anlaşılsın.</td><td>Tamamen çevrimdışı; sessiz modda efekt sesi susar.</td><td>Anahtar kelime (offline), açıklama</td></tr>
+</tbody></table>
+<h3>1.2 Rakipler (3 Kasım 2026, ABD ve Türkiye vitrinleri)</h3>
+<p>Adlar ve fiyatlar vitrinden okundu; puanlar ABD vitrini. Crayon Club'ın açıklaması "uygulama içi satın alma yok" derken vitrin 10 satın alma listeliyor; bu tür çelişkiler Apple'ın 2.3.1 maddesine göre bizim kaçınmamız gereken şey.</p>
+
+<table class="">
+<thead><tr><th>Uygulama</th><th>Ad / altyazı (ABD)</th><th>Band, kategori</th><th>İçerik</th><th>Para modeli</th><th>Puan</th><th>Üç yaş için zayıf noktası</th></tr></thead>
+<tbody>
+<tr><td>Bimi Boo (Bimi Boo Kids Learning Games FZ LLC)</td><td>Drawing for Kids - Baby Games / Coloring Book for Toddlers 2-5; TR: Çocuklar için boyama kitapları / Bebek, erkek ve kız oyunları</td><td>0–5, Eğitim</td><td>176 sayfa, 11 tema; 6 sayfa ücretsiz; 6 araç, "sihirli boyama"; 40 dil</td><td>Tam sürüm 11,99 $ (₺499,99) + tema paketleri 2,99 $ (₺149,99)</td><td>4,3 · 638 bin</td><td>Ücretsiz küme 6 sayfa; paket paket satın alma; UX raporuna göre geri al düğmesi küçük, renge dokununca resmin silindiği yorumu var</td></tr>
+<tr><td>KidloLand</td><td>Coloring Games for Kids 2-6! / Toddler Baby Drawing Book App; TR: Çocuklar İçin Boyama Oyunu ~ / Resim Çizim Eğitici Oyunlar 2</td><td>0–5, Eğitim</td><td>"1000+ oyun": boyama, çizim, yemek, giydirme, yapboz</td><td>Abonelik 9,99–119,99 $; yıllık 59,99 $</td><td>4,4 · 226 bin</td><td>Dev menü; üç yaş için fazla seçenek; abonelik ve birden çok fiyat noktası</td></tr>
+<tr><td>Crayon Club (Sago Mini / Piknik)</td><td>Crayon Club: Color PAW Patrol / Safe Drawing for Kids Ages 2-6</td><td>0–5, Gündelik (Casual)</td><td>1000+ sayfa, 75+ konu, lisanslı karakterler, her ay yeni içerik</td><td>Abonelik 7,99 $/ay, 59,99 $/yıl; Piknik paketi 14,99 $/ay</td><td>4,0 · 1,3 bin</td><td>Abonelik; markaya bağımlı; açıklama ile satın alma listesi çelişiyor</td></tr>
+<tr><td>Lake</td><td>Lake: Coloring Book for Adults / Color Therapy, Calming ASMR</td><td>4+, Yaşam Tarzı; Kids kategorisinde değil</td><td>Bağımsız sanatçı çizimleri; ADA 2017</td><td>Haftalık 2,99 $, aylık 9,99 $, yıllık 39,99 $</td><td>4,6 · 82 bin</td><td>Doğrudan rakip değil: yetişkin ürünü, ebeveyn kapısı yok. Ölçüt: zanaat ve marka kalitesi</td></tr>
+<tr><td>Cobi Paint 2.1.0</td><td>Cobi Paint: Çocuk Boyama / Küçük eller için boyama kitabı</td><td>Hedef 5 ve altı (bugün 6–8), Eğitim</td><td>201 sayfa, 6 kategori, 3 seviye; 6 fırça, 16 çıkartma, ayna</td><td>Şimdi tamamen ücretsiz; ileride tek seferlik Tam Sürüm, abonelik yok</td><td>Puan yok</td><td>İçerik hacmi rakiplerin altında; sesli yönlendirme henüz yok; iki dil; Play kaydı yok</td></tr>
+</tbody></table>
+<h3>1.3 Fark: söyleyebileceklerimiz ve kanıtı</h3>
+<table class="">
+<thead><tr><th>Fark</th><th>Repodaki kanıt</th><th>Mağaza cümlesi</th></tr></thead>
+<tbody>
+<tr><td>Dolgu çizgiden taşmaz, kalem başladığı bölgede kalır</td><td>lib/engine (bölge etiket haritası); gece raporu bölüm 1</td><td>Boya çizgiden taşmaz, kalem çizginin içinde kalır.</td></tr>
+<tr><td>Üç yaşa göre ölçülmüş arayüz: 82 pt düğmeler, 9 renk, menü yok, metin yok</td><td>lib/screens/coloring_screen.dart (_Metrics), .claude/skills/cobi-toddler-ux/SKILL.md (Ç1–Ç10)</td><td>Okuma gerektirmez; düğmeler kocaman ve resimli.</td></tr>
+<tr><td>Hiç reklam, analiz, internet, hesap yok</td><td>Podfile.lock'ta reklam ve analiz SDK'sı yok (UX raporu 7); gizlilik metni app_tr.arb privacyPolicyText</td><td>Reklam yok, internet bağlantısı yok, hesap yok, veri toplanmaz.</td></tr>
+<tr><td>Kaybolmayan iş: otomatik kayıt, eser duvarı</td><td>Autosave 400 ms (skill Ç6); lib/screens Eserlerim</td><td>Her resim kendiliğinden kaydedilir.</td></tr>
+<tr><td>Dürüst para: bugün her şey açık; ileride tek seferlik kilit, çocuk ekranında kilit simgesi yok</td><td>COBI_IAP bayrağı; kurul kararı (gece raporu bölüm 4)</td><td>Bu sürümde satın alma yok; açıklamada fiyat ve vaat yazılmaz.</td></tr>
+<tr><td>Dilden bağımsız ebeveyn kapısı</td><td>lib/widgets/parental_gate.dart; gece raporu bölüm 4 (çarpma)</td><td>Kapı dilden bağımsızdır: iki sayının çarpımı.</td></tr>
+<tr><td>Ses ve hareket ayarlarına saygı: Reduce Motion, sessiz anahtar, %200 metin</td><td>UX raporu bölüm 8 (HIG 3, 4, 5, 7)</td><td>Mağaza metninde değil; featuring adaylığında (bölüm 4.3).</td></tr>
+</tbody></table>
+<h3>1.4 Tek cümlelik vaat</h3>
+<div class="decision">
+<p><strong>TR:</strong> Üç yaşındaki çocuk tek başına boyar: boya taşmaz, hiçbir şey kaybolmaz, reklam yok.</p>
+<p><strong>EN:</strong> A coloring book a three-year-old can use alone: paint stays in the lines, nothing gets lost, no ads.</p>
+<p class="small">Konumlandırma cümlesi (iç kullanım): Okumayı bilmeyen çocuğu olan ebeveyn için Cobi Paint, çocuğun yardım istemeden kullandığı boyama kitabıdır; Bimi Boo ve KidloLand'den farkı, içerik hacmi yerine üç yaşın elini ve sabrını ölçü almasıdır.</p>
+</div>
+<h3>1.5 Konumun zayıf yanları</h3>
+<ul class="tight">
+<li><strong>Yaş bandı:</strong> Vitrindeki "6–8" etiketi ile "3–5" vaadi aynı sayfada yan yana duracak. Bölüm 4.5.</li>
+<li><strong>Hacim:</strong> 201 sayfa, rakiplerin "1000+" iddiasının altında. Sayıyı sakla değil, "3 seviye, hiçbir sayfa kilitli değil" ile birlikte söyle; "yüzlerce" gibi şişirme yok.</li>
+<li><strong>Ses:</strong> Sesli yönlendirme klipleri kaydedilmedi (tool/voice/README.md). Metinlerde sesli anlatım vaadi yok; kaydedilince 2.2'nin Yenilikler metnine ve featuring adaylığına girer.</li>
+<li><strong>Puan sıfır:</strong> Kimlik 6757766966 bugün puansız. İlk 30 günün ana hedefi dürüst puan birikimi (bölüm 5.4).</li>
+<li><strong>Türkiye Android ağırlıklı:</strong> iOS payı %23 (gelir raporu 3.1). App Store metni bitince Play kaydı Türkiye için daha çok indirme getirir.</li>
+</ul>
+
+<h2 id="aso">2. ASO: ASC'ye girilecek kesin metinler</h2>
+<h3>2.1 Alanlar ve kurallar</h3>
+
+<table class="">
+<thead><tr><th>Alan</th><th>Sınır</th><th>Aramada indekslenir mi</th><th>Kural</th></tr></thead>
+<tbody>
+<tr><td>Ad</td><td>30</td><td>Evet, en yüksek ağırlık</td><td>2.3.7: benzersiz ad, fiyat ve marka adı yok. "Çocuk" / "Kids" sözcükleri Kids kategorisine ayrılmıştır (2.3.8); Cobi Paint Kids kategorisinde olduğu için kullanabilir.</td></tr>
+<tr><td>Altyazı</td><td>30</td><td>Evet</td><td>Doğrulanamayan iddia ve başka uygulama adı yok (2.3.7).</td></tr>
+<tr><td>Anahtar kelimeler</td><td>100</td><td>Evet</td><td>Virgülle, boşluksuz; ad ve altyazıdaki sözcükler tekrar edilmez; çoğul ve kategori adı eklenmez; marka ve rakip adı yasak (Apple ürün sayfası rehberi, 2.3.7).</td></tr>
+<tr><td>Tanıtım metni</td><td>170</td><td>Hayır</td><td>Sürüm göndermeden değiştirilebilir; haber ve kampanya için (Apple ürün sayfası rehberi).</td></tr>
+<tr><td>Açıklama</td><td>4000</td><td>Hayır</td><td>İlk cümle "daha fazla"dan önce görünür; fiyat yazılmaz; yalnız var olan özellik (2.3.1).</td></tr>
+<tr><td>Yenilikler</td><td>4000</td><td>Hayır</td><td>Büyük değişiklik açıkça listelenir (2.3.12).</td></tr>
+<tr><td>Ekran görüntüsü, önizleme</td><td>10 görsel, 3 video</td><td>Hayır</td><td>Uygulama kullanımda gösterilir; metin ve dokunma noktası kaplaması serbest (2.3.3); 4+ içeriğe uygun (2.3.8).</td></tr>
+<tr><td>Satın alma görünen adı</td><td>35 (açıklama 55)</td><td>Evet, ürün aramada görünür</td><td>İleride Tam Sürüm için; Ask to Buy isteğinde ebeveyn bu adı görür.</td></tr>
+</tbody></table>
+<p><strong>Dil ve vitrin eşlemesi.</strong> Türkiye vitrini Türkçe yerelleştirmeyi ve ikinci dil olarak İngilizce (Birleşik Krallık) yerelleştirmesini indeksler (MobileAction ve AppFollow tabloları; Phiture eski tablosunda Fransızca da var, doğrulanamadı). Bu yüzden üç kayıt öneriyorum: tr, en-US (ABD ve ABD'ye bağlı vitrinler) ve en-GB (Birleşik Krallık, Avrupa vitrinlerinin çoğu, Türkiye'nin ikinci dili). en-GB kaydında "colouring" yazımı kullanılır; Apple "color" ve "colour" sözcüklerini ayrı sayar, bu yüzden en-GB anahtar kelimelerinde ABD yazımı "coloring" da bulunur.</p>
+<p><strong>"3 yaş" ve "toddler" sözcükleri.</strong> Band 6–8 kaldığı sürece görünür alanlara (ad, altyazı, ekran görüntüsü) yaş sayısı koymadım; "küçük eller" ve "okul öncesi" iki banda da uyar. Anahtar kelimelerde "3 yaş" ve "toddler" duruyor: görünmezler ve ürünün Minik modunu doğru anlatırlar. Band "5 ve altı" olursa altyazı değişmeden kalabilir.</p>
+
+<h3>2.2 Kesin metinler</h3>
+<p>Karakter sayıları betikle ölçüldü (Python len, Apple'ın saydığı birim). Not sütunu gerekçeyi verir.</p>
+
+<table class="">
+<thead><tr><th>Alan</th><th>Dil</th><th>Metin</th><th>Karakter</th><th>Not</th></tr></thead>
+<tbody>
+<tr><td>Ad</td><td>tr</td><td><code class="copy">Cobi Paint: Çocuk Boyama</code></td><td>24 / 30</td><td>Planladığın ad. "Çocuk" ve "Boyama" en yüksek ağırlıklı alanda.</td></tr>
+<tr><td>Ad</td><td>en-US</td><td><code class="copy">Cobi Paint: Kids Coloring</code></td><td>25 / 30</td><td>Planladığın ad.</td></tr>
+<tr><td>Ad</td><td>en-GB</td><td><code class="copy">Cobi Paint: Kids Colouring</code></td><td>26 / 30</td><td>Yeni kayıt. Birleşik Krallık, Avustralya, İrlanda ve Türkiye'nin ikinci dili için "colouring" yazımı.</td></tr>
+<tr><td>Altyazı</td><td>tr</td><td><code class="copy">Küçük eller için boyama kitabı</code></td><td>30 / 30</td><td>Planladığın altyazı. "boyama" adla tekrar ediyor (6 karakter kayıp); karşılığı okunabilir bir vaat. ASO'ya daha sıkı seçenek: "Okul öncesi, küçük eller için" (29).</td></tr>
+<tr><td>Altyazı</td><td>en-US</td><td><code class="copy">Coloring book for little hands</code></td><td>30 / 30</td><td>Planladığın altyazı. Sıkı seçenek: "Preschool coloring book" (23).</td></tr>
+<tr><td>Altyazı</td><td>en-GB</td><td><code class="copy">Colouring for little hands</code></td><td>26 / 30</td><td>"book" anahtar kelimeye taşındı; 30 sınırına "Colouring book for little hands" (31) sığmıyor.</td></tr>
+<tr><td>Anahtar kelimeler</td><td>tr</td><td><code class="copy">okul öncesi,bebek,oyunu,oyunları,oyunlar,çizim,3 yaş,eğitici,reklamsız,anaokulu,hayvan,çıkartma,renk</code></td><td>100 / 100</td><td>Ad ve altyazıyla çakışma yok. "oyunu / oyunları / oyunlar" üç biçim bilerek: Apple Türkçe ekleri birleştirmez; "boyama oyunu", "çocuk oyunları", "eğitici oyunlar" üç ayrı sorgudur. "boya", "minik", "resim", "renkler" sığmadı; ilk anahtar kelime güncellemesinde sıralamaya göre yer değiştir.</td></tr>
+<tr><td>Anahtar kelimeler</td><td>en-US</td><td><code class="copy">toddler,preschool,drawing,games,baby,animals,stickers,no ads,learning,kindergarten,offline,colors</code></td><td>97 / 100</td><td>Çakışma yok. "painting" eklenmedi: ad zaten "Paint" içeriyor. 3 karakter boş; "art" eklenebilir (100).</td></tr>
+<tr><td>Anahtar kelimeler</td><td>en-GB</td><td><code class="copy">toddler,preschool,coloring,book,drawing,games,baby,animals,stickers,no ads,learning,nursery,offline</code></td><td>99 / 100</td><td>"coloring" ABD yazımı burada; "nursery" Birleşik Krallık'ta anaokulu karşılığı.</td></tr>
+<tr><td>Tanıtım metni</td><td>tr</td><td><code class="copy">Yepyeni Cobi Paint: 6 kategoride 201 boyama sayfası, taşmayan tek dokunuş dolgu, 6 fırça, 16 çıkartma ve aynalı serbest çizim. Reklam yok, internet yok, hesap yok.</code></td><td>163 / 170</td><td>İndekslenmez; haber dili. Fiyat ve "ücretsiz" yazılmadı.</td></tr>
+<tr><td>Tanıtım metni</td><td>en-US</td><td><code class="copy">New Cobi Paint: 201 coloring pages in 6 categories, one-tap fill that stays in the lines, 6 brushes, 16 stickers and mirror drawing. No ads, no internet, no accounts.</code></td><td>166 / 170</td><td></td></tr>
+<tr><td>Tanıtım metni</td><td>en-GB</td><td><code class="copy">New Cobi Paint: 201 colouring pages in 6 categories, one-tap fill that stays in the lines, 6 brushes, 16 stickers and mirror drawing. No ads, no internet, no accounts.</code></td><td>167 / 170</td><td></td></tr>
+<tr><td>Açıklamanın ilk 3 satırı</td><td>tr</td><td><code class="copy">Cobi Paint, okumayı henüz bilmeyen çocuklar için boyama kitabıdır: dokun, boyansın. Boya çizgiden taşmaz, kalem çizginin içinde kalır, her resim kendiliğinden kaydedilir. Reklam, internet bağlantısı ve hesap yoktur; 6 kategoride 201 sayfa ve 3 zorluk seviyesi vardır.</code></td><td>267</td><td>Tam açıklama 2.4'te. İlk cümle "daha fazla"dan önce görünür.</td></tr>
+<tr><td>Açıklamanın ilk 3 satırı</td><td>en-US / en-GB</td><td><code class="copy">Cobi Paint is a coloring book for children who cannot read yet: tap, and it fills. Paint never leaks over the lines, the marker stays inside them, and every picture saves itself. No ads, no internet, no accounts; 201 pages in 6 categories and 3 difficulty levels.</code></td><td>263</td><td>en-GB için "coloring" yerine "colouring", "colors" yerine "colours".</td></tr>
+<tr><td>Yenilikler</td><td>tr</td><td>Bölüm 2.5</td><td>979 / 4000</td><td>2.3.12: kaldırılan özellik de yazıldı.</td></tr>
+<tr><td>Yenilikler</td><td>en-US / en-GB</td><td>Bölüm 2.5</td><td>987 / 4000</td><td></td></tr>
+<tr><td>Satın alma görünen adı (ileride)</td><td>tr</td><td><code class="copy">Tam Sürüm: 201 boyama sayfası</code></td><td>29 / 35</td><td>Yalnız COBI_IAP açıldığında. Ürün kimliği com.cobi.paint.full.</td></tr>
+<tr><td>Satın alma görünen adı (ileride)</td><td>en</td><td><code class="copy">Full Version: all 201 pages</code></td><td>27 / 35</td><td></td></tr>
+<tr><td>Satın alma açıklaması (ileride)</td><td>tr</td><td><code class="copy">201 sayfa tek ödemeyle, sonsuza kadar. Abonelik yok.</code></td><td>52 / 55</td><td></td></tr>
+<tr><td>Satın alma açıklaması (ileride)</td><td>en</td><td><code class="copy">Every page with one payment, forever. No subscription.</code></td><td>54 / 55</td><td></td></tr>
+</tbody></table>
+<h3>2.3 Anahtar kelime gerekçesi</h3>
+<p>Arama hacmi verisine erişimim yok (Apple Ads hesabı ve ASO aracı gerekir). Seçim, rakiplerin ad ve altyazılarında kullandığı sözcüklere ve Türkçe sorgu biçimlerine dayanıyor. İlk sürümden sonra sıralamayı 10 sorguda gizli pencereden elle kontrol et; 2.1.1 ile sığmayanları dene.</p>
+
+<table class="">
+<thead><tr><th>Dil</th><th>Sözcük</th><th>Hedef sorgu (ad ve altyazıyla birleşerek)</th><th>Kaynak</th></tr></thead>
+<tbody>
+<tr><td>tr</td><td>okul öncesi</td><td>okul öncesi boyama, okul öncesi oyunlar</td><td>Minik mod 3–5 yaş; MEB okul öncesi 36–72 ay</td></tr>
+<tr><td>tr</td><td>bebek</td><td>bebek boyama, bebek oyunları</td><td>Bimi Boo TR altyazısı "Bebek, erkek ve kız oyunları"</td></tr>
+<tr><td>tr</td><td>oyunu, oyunları, oyunlar</td><td>boyama oyunu, çocuk oyunları, eğitici oyunlar, okul öncesi oyunlar</td><td>KidloLand TR adı "Boyama Oyunu", altyazısı "Eğitici Oyunlar"</td></tr>
+<tr><td>tr</td><td>çizim</td><td>çocuk çizim, çizim oyunu</td><td>Serbest çizim sayfası (Çiz kartı)</td></tr>
+<tr><td>tr</td><td>3 yaş</td><td>3 yaş oyunları, 3 yaş boyama</td><td>Minik mod; görünmez alan</td></tr>
+<tr><td>tr</td><td>eğitici</td><td>eğitici oyunlar, eğitici boyama</td><td>Birincil kategori Eğitim; "eğitici" sözcüğü sonuç vaat etmez</td></tr>
+<tr><td>tr</td><td>reklamsız</td><td>reklamsız çocuk oyunu, reklamsız boyama</td><td>Faz 0'da AdMob kaldırıldı</td></tr>
+<tr><td>tr</td><td>anaokulu</td><td>anaokulu oyunları, anaokulu boyama</td><td>Aynı hedef kitle, farklı sözcük</td></tr>
+<tr><td>tr</td><td>hayvan</td><td>hayvan boyama</td><td>Hayvanlar kategorisi</td></tr>
+<tr><td>tr</td><td>çıkartma</td><td>çıkartma oyunu, çıkartmalı boyama</td><td>16 çıkartma (lib/data/stickers.dart)</td></tr>
+<tr><td>tr</td><td>renk</td><td>renk oyunu, renkleri öğren (kısmen)</td><td>"renkler" sığmadı; sonraki güncellemede denenir</td></tr>
+<tr><td>en</td><td>toddler, preschool, kindergarten (GB: nursery)</td><td>toddler coloring, preschool coloring games, coloring for kindergarten</td><td>Bimi Boo altyazısı "Coloring Book for Toddlers 2-5"; KidloLand "Toddler Baby Drawing"</td></tr>
+<tr><td>en</td><td>drawing, games, baby, animals, stickers</td><td>drawing games for kids, baby coloring, animal coloring, sticker book</td><td>Rakip adları; özellikler</td></tr>
+<tr><td>en</td><td>no ads, offline, learning, colors</td><td>coloring games no ads, offline games for toddlers, learning colors</td><td>Ürün gerçeği; "learning colors" sesli renk adları (voiceNames) ile tutarlı</td></tr>
+</tbody></table>
+<h3>2.4 Tam açıklama</h3><p>store_listing.md'deki metnin düzeltilmiş hâli. Değişenler: yeni açılış paragrafı; emoji kaldırıldı; iOS'ta kaydetme ve yazdırmanın paylaşım menüsünden yapıldığı yazıldı; "puan, yıldız, süre yok" eklendi; kapının çarpma olduğu yazıldı; hiçbir yerde fiyat ve "ücretsiz" yok.</p>
+<p><strong>Türkçe</strong> (1732 / 4000)</p>
+<pre class="text">Cobi Paint, okumayı henüz bilmeyen çocuklar için boyama kitabıdır: dokun, boyansın. Boya çizgiden taşmaz, kalem çizginin içinde kalır, her resim kendiliğinden kaydedilir. Reklam, internet bağlantısı ve hesap yoktur; 6 kategoride 201 sayfa ve 3 zorluk seviyesi vardır.
+
+TAŞMAYAN BOYA
+• Bir bölgeye dokunmak onu anında boyar; boya çizgilerden taşmaz, beyaz kenar kalmaz.
+• Keçeli kalem, başladığı bölgenin içinde kalır.
+• Silgi ve her zaman görünen geri al düğmesi.
+• 16 çıkartma: dokununca yapışır, sürükleyince iz bırakır; silgiyle çıkar.
+
+201 BOYAMA SAYFASI
+• Hayvanlar, Bitkiler, Yiyecekler, Araçlar, Doğa, Eşyalar.
+• 3 zorluk seviyesi: büyük alanlardan ince ayrıntıya. Çocuk boyadıkça daha ayrıntılı sayfalar öne gelir; hiçbir sayfa kilitli değildir.
+
+SERBEST ÇİZİM
+• Fırçalar: keçeli kalem, gökkuşağı, sprey ve simli fırça; Büyük modda pastel ve neon kalem de var.
+• Ayna: karalama simetrik bir desene dönüşür (Minik&#x27;te dört yönlü; Büyük&#x27;te iki, dört ya da altı yönlü).
+
+KÜÇÜK ELLER İÇİN
+• Okuma gerektirmez; düğmeler kocaman ve resimli.
+• Boyama kendiliğinden kaydedilir; çocuk sayfadan çıkınca da iş kaybolmaz.
+• Kaldığı resme dokununca boyamaya kaldığı yerden devam eder.
+• Biten resim kısa bir konfetiyle kutlanır. Puan, yıldız ve süre yoktur.
+
+İKİ MOD
+• Minik (3–5 yaş): 9 renk, yakınlaştırma yok.
+• Büyük (6 yaş ve üstü): 16 renk, iki parmakla yakınlaştırma, fırça boyutları, ileri al.
+
+EBEVEYNLER İÇİN
+• Reklam yok, internet bağlantısı yok, hesap yok, veri toplanmaz.
+• Paylaşım (ve paylaşım menüsünden kaydetme ya da yazdırma), silme ve ayarlar ebeveyn kapısının arkasındadır. Kapı dilden bağımsızdır: iki sayının çarpımı.
+• Rehberli Erişim için kısa rehber Ebeveynler alanındadır.
+
+Sorularınız için: cobipaint@gmail.com</pre>
+<p><strong>English, en-US</strong> (1729 / 4000). en-GB için coloring → colouring, colors → colours.</p>
+<pre class="text">Cobi Paint is a coloring book for children who cannot read yet: tap, and it fills. Paint never leaks over the lines, the marker stays inside them, and every picture saves itself. No ads, no internet, no accounts; 201 pages in 6 categories and 3 difficulty levels.
+
+PAINT THAT STAYS IN PLACE
+• Tap an area and it fills straight away; paint never leaks over the lines and leaves no white edges.
+• The marker stays inside the area it started in.
+• An eraser and an undo button that is always visible.
+• 16 stickers: tap to stick one, drag for a trail; the eraser peels them off.
+
+201 COLORING PAGES
+• Animals, Plants, Food, Vehicles, Nature, Things.
+• 3 difficulty levels, from big areas to fine detail. More detailed pages move to the front as your child colors; no page is ever locked.
+
+FREE DRAWING
+• Brushes: marker, rainbow, spray and glitter; Big mode adds the crayon and the neon pen.
+• Mirror: a scribble turns into a symmetric pattern (four-way in Little mode; two, four or six-way in Big mode).
+
+MADE FOR LITTLE HANDS
+• No reading needed; big picture buttons.
+• Drawings save themselves, so nothing is lost when the child leaves a page.
+• Tapping a picture they started continues where they left off.
+• A short confetti celebrates a finished picture. No scores, stars or timers.
+
+TWO MODES
+• Little (ages 3–5): 9 colors, no zoom.
+• Big (ages 6 and up): 16 colors, pinch to zoom, brush sizes, redo.
+
+FOR PARENTS
+• No ads, no internet connection, no accounts, no data collection.
+• Sharing (and saving or printing from the share sheet), deleting and settings sit behind a parental gate. The gate is language-free: multiply two numbers.
+• A short Guided Access guide lives in the Parents area.
+
+Questions: cobipaint@gmail.com</pre>
+<h3>2.5 Yenilikler (sürüm 2.1.0)</h3><p>Canlı sürüm 1.0 reklamlı eski uygulama olduğu için bu metin bir yeniden doğuş duyurusudur; 2.3.12 gereği kaldırılan özellik de yazıldı.</p>
+<p><strong>Türkçe</strong> (979 / 4000)</p>
+<pre class="text">Cobi Paint baştan yazıldı.
+
+• Yeni boyama motoru: bir bölgeye dokunmak onu anında boyar, boya çizgiden taşmaz. Keçeli kalem başladığı bölgenin içinde kalır.
+• 6 kategoride 201 boyama sayfası ve 3 zorluk seviyesi. Çocuk boyadıkça daha ayrıntılı sayfalar öne gelir; hiçbir sayfa kilitli değildir.
+• İki mod: Minik (3–5 yaş: 9 renk, yakınlaştırma yok) ve Büyük (6 yaş ve üstü: 16 renk, iki parmakla yakınlaştırma, ileri al).
+• 6 fırça (keçeli kalem, gökkuşağı, pastel, sprey, simli, neon), 16 çıkartma ve aynalı serbest çizim sayfası.
+• Resimler kendiliğinden kaydedilir; biten resim kısa bir konfetiyle kutlanır.
+• Dilden bağımsız ebeveyn kapısı: paylaşım, silme ve ayarlar yalnız kapının arkasında.
+• iPad&#x27;de Büyük modda üç parmak jestleri ve Cmd-Z ile geri al.
+• Reklamlar kaldırıldı. İnternet bağlantısı, hesap ve veri toplama yok.
+• Fotoğraftan boyama sayfası üretme kaldırıldı; daha önce eklediğiniz sayfalar Fotoğraflarım altında durmaya devam eder.
+• iOS 15 ve üstü gerekir.</pre>
+<p><strong>English</strong> (987 / 4000)</p>
+<pre class="text">Cobi Paint has been rebuilt from the ground up.
+
+• New coloring engine: tap an area and it fills instantly; paint never leaks over the lines. The marker stays inside the area it started in.
+• 201 coloring pages in 6 categories with 3 difficulty levels. More detailed pages move to the front as your child colors; no page is ever locked.
+• Two modes: Little (ages 3–5: 9 colors, no zoom) and Big (ages 6 and up: 16 colors, pinch to zoom, redo).
+• 6 brushes (marker, rainbow, crayon, spray, glitter, neon), 16 stickers and a free drawing page with a mirror.
+• Pictures save themselves; a finished picture gets a short confetti celebration.
+• Language-free parental gate: sharing, deleting and settings live only behind it.
+• On iPad, Big mode supports three-finger undo gestures and Cmd-Z.
+• Ads removed. No internet connection, no accounts, no data collection.
+• Making coloring pages from photos has been removed; pages you added earlier stay under My Photos.
+• Requires iOS 15 or later.</pre>
+<h3>2.6 Kural denetimi: her iddianın kanıtı</h3>
+<p>2.3.1 (yalnız var olan özellik) ve Kids kategorisi (1.3, 5.1.4) için. Durum: <span class="ok">uyumlu</span>, <span class="deviation">dikkat</span>, <span class="gap">düzelt</span>.</p>
+
+<table class="">
+<thead><tr><th>Metindeki iddia</th><th>Kanıt</th><th>Durum</th></tr></thead>
+<tbody>
+<tr><td>201 sayfa, 6 kategori, 3 zorluk seviyesi</td><td>lib/data/builtin_images.dart (tool/pages/catalog.json'dan üretilir); test/engine/region_builder_test.dart her sayfanın seviyesini doğrular</td><td><span class="ok">uyumlu</span></td></tr>
+<tr><td>Dokununca anında dolar, boya çizgiden taşmaz, beyaz kenar kalmaz</td><td>Bölge etiket haritası, dolgu çizginin altına kadar (gece raporu bölüm 1)</td><td><span class="ok">uyumlu</span></td></tr>
+<tr><td>Keçeli kalem başladığı bölgede kalır</td><td>Gece raporu bölüm 1; ARB ageModeLittleDesc</td><td><span class="ok">uyumlu</span></td></tr>
+<tr><td>6 fırça: keçeli, gökkuşağı, pastel, sprey, simli, neon; pastel ve neon yalnız Büyük'te</td><td>lib/engine/render/page_layers.dart drawStroke; _bigOnlyBrushes (gece raporu bölüm 14)</td><td><span class="ok">uyumlu</span></td></tr>
+<tr><td>16 çıkartma: dokununca yapışır, sürükleyince iz, silgiyle çıkar</td><td>lib/data/stickers.dart; gece raporu bölüm 13</td><td><span class="ok">uyumlu</span></td></tr>
+<tr><td>Ayna: Minik'te dört yönlü, Büyük'te iki, dört, altı</td><td>Stroke.symmetry, MirrorGlyph (gece raporu bölüm 12)</td><td><span class="ok">uyumlu</span></td></tr>
+<tr><td>Minik 9 renk, yakınlaştırma yok; Büyük 16 renk, iki parmakla yakınlaştırma, fırça boyutu, ileri al</td><td>littlePalette / bigPalette; ARB ageModeLittleDesc, ageModeBigDesc; commit dba6ea5</td><td><span class="ok">uyumlu</span></td></tr>
+<tr><td>Kendiliğinden kaydedilir, kaldığı yerden devam</td><td>Autosave 400 ms (skill Ç6); Eserlerim ekranı</td><td><span class="ok">uyumlu</span></td></tr>
+<tr><td>Biten resim kısa konfetiyle kutlanır; puan, yıldız, süre yok</td><td>lib/widgets/celebration.dart; kurul şartı "yıldız yok" (gece raporu bölüm 4)</td><td><span class="ok">uyumlu</span></td></tr>
+<tr><td>Reklam yok, internet yok, hesap yok, veri toplanmaz</td><td>Podfile.lock'ta reklam ve analiz SDK'sı yok (UX raporu 7); privacyPolicyText; ASC gizlilik etiketi "Data Not Collected"</td><td><span class="ok">uyumlu</span></td></tr>
+<tr><td>Paylaşım, silme, ayarlar ebeveyn kapısının arkasında; kapı çarpma</td><td>showParentalGate; gece raporu bölüm 4 (dilden bağımsız kapı)</td><td><span class="ok">uyumlu</span></td></tr>
+<tr><td>Kaydetme ve yazdırma iOS'ta paylaşım menüsünden</td><td>Gece raporu bölüm 15: iOS paylaşım menüsü "Resmi Kaydet" ve "Yazdır" sunar; doğrudan düğmeler yalnız Android'de</td><td><span class="deviation">dikkat</span>: iOS metninde "galeriye kaydetme" ve "yazdırma" düğmesi vaat etme; bu raporun metni "paylaşım menüsünden" diyor</td></tr>
+<tr><td>Rehberli Erişim rehberi Ebeveynler alanında</td><td>app_tr.arb guidedAccessTitle, guidedAccessText</td><td><span class="ok">uyumlu</span></td></tr>
+<tr><td>iPad'de Büyük modda üç parmak ve Cmd-Z ile geri al</td><td>Gece raporu bölüm 16; gerçek iPad'de denenmedi</td><td><span class="deviation">dikkat</span>: gerçek cihazda bir kez dene, sonra Yenilikler metninde bırak</td></tr>
+<tr><td>iOS 15 ve üstü</td><td>README (iOS 15.0+); canlı vitrin iOS 13 yazıyor</td><td><span class="ok">uyumlu</span></td></tr>
+<tr><td>Canlı vitrin: "60+ resim", "galeriden resim yükleme", 4 tema</td><td>Fotoğraftan sayfa dondurulmuş (README Faz 0); 76 eski sayfa yalnız kayıtlı eserler için</td><td><span class="gap">düzelt</span>: üç cümle de silinir; Yenilikler kaldırmayı açıkça söyler</td></tr>
+<tr><td>Yazılmayanlar: sesli yönlendirme, 10 dil, Tam Sürüm ve fiyat, Android galeri ve yazdırma, eğitsel sonuç iddiaları</td><td>Klipler yok (tool/voice/README.md); çeviriler taslak (lib/l10n/drafts); COBI_IAP kapalı</td><td><span class="ok">uyumlu</span>: bilerek yok</td></tr>
+<tr><td>Yaş bandı 6–8 ile "Minik (3–5 yaş)" aynı sayfada</td><td>ASC bandı; Türkçe etiket "6-8 Yaş Çocuklar İçin Tasarlanmıştır" (Bimi Boo TR sayfasında "0-5 Yaş Çocuklar İçin Tasarlanmıştır" biçiminde görülüyor)</td><td><span class="gap">düzelt</span>: bölüm 4.5</td></tr>
+<tr><td>Ad ve altyazıda "Çocuk" / "Kids"</td><td>2.3.8: Kids kategorisine ayrılmış sözcükler; uygulama Kids kategorisinde</td><td><span class="ok">uyumlu</span></td></tr>
+</tbody></table>
+<h2 id="screenshots">3. Ekran görüntüsü senaryosu</h2>
+<p>Altı kare, Minik modda, iPhone 6,9" (1320×2868, dikey) ve iPad 13" (2064×2752, dikey). İlk üç kare arama sonucunda görünür; bu yüzden sıra: dolgu, çizgi, kutlama. Başlıklar 3–5 kelime, karenin üstünde krem bant üzerinde koyu yazı (uygulamanın açılış rengi ve 0xFF2D3142 glif rengi). Her karenin altında sabit ince şerit: "Reklam yok · İnternet yok · Hesap yok" / "No ads · No internet · No accounts". Bu şerit başlık sayısını artırmadan ebeveynin ilk sorusunu yanıtlar. 2.3.3 kaplamalara izin verir; görsel gerçek arayüzden çekilir, dokunma noktası kaplaması serbesttir.</p>
+
+<table class="">
+<thead><tr><th>Sıra</th><th>Ekran (Minik modda)</th><th>Nasıl kurulur</th><th>Başlık TR</th><th>Başlık EN</th><th>Kural notu</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>Boyama ekranı: Hayvanlar'dan 1. seviye bir sayfa; 3 alan dolu, parmak 4. alanda</td><td>Sayfayı aç, üç alanı farklı renklerle doldur, dördüncüye dokunma anında çek; dokunma noktası kaplaması ekle</td><td>Dokun, hemen boyansın</td><td>Tap and it fills</td><td>2.3.3: uygulama kullanımda; dokunma noktası kaplaması açıkça izinli</td></tr>
+<tr><td>2</td><td>Aynı sayfa: keçeli kalem çizgisi bölgenin kenarına dayanmış, dışarı taşmamış</td><td>Fırçayı seç, bir bölgenin içinde kenarları zorlayan bir karalama yap</td><td>Boya çizgiden taşmaz</td><td>Paint stays in the lines</td><td>Ürünün en güçlü iddiası; görselde kanıtı görünür</td></tr>
+<tr><td>3</td><td>Bitiş kutlaması: tamamlanan sayfa ve konfeti</td><td>Sayfanın bütün alanlarını doldur; konfeti anında çek (Reduce Motion kapalı olsun)</td><td>Biten resim kutlanır</td><td>Finish a page, get confetti</td><td>Puan ve yıldız yok; bunu gösterir</td></tr>
+<tr><td>4</td><td>Ana ekran: Çiz kartı, 6 kategori, Eserlerim kartında bir resim</td><td>En az bir kayıtlı eser olsun; Fotoğraflarım kategorisi görünmesin (içe aktarılmış sayfa yok)</td><td>6 kategori, 201 sayfa</td><td>201 pages, 6 categories</td><td>Sayı doğru: catalog.json</td></tr>
+<tr><td>5</td><td>Çiz sayfası: dört yönlü ayna açık, simli fırça deseni, birkaç çıkartma</td><td>Çiz kartından gir, ayna düğmesine bas, simli fırçayla kısa çizgiler, sonra çıkartma kipinde iki dokunuş</td><td>6 fırça, çıkartma, ayna</td><td>6 brushes, stickers, mirror</td><td>Minik'te 4 fırça + çıkartma görünür; "6 fırça" iki modun toplamı, açıklama bunu söylüyor</td></tr>
+<tr><td>6</td><td>Eserlerim: çerçeveli 6–8 resim</td><td>Farklı kategorilerden 6–8 sayfa boya; aynı renk düzenini kullanma</td><td>Kendiliğinden kaydedilir, kaybolmaz</td><td>Saves itself, nothing lost</td><td>Kayıt düğmesi olmadığını anlatır</td></tr>
+<tr><td>7 (isteğe bağlı)</td><td>Ebeveyn kapısı: çarpma ekranı</td><td>Çarkı aç, kapı ekranını çek</td><td>Ayarlar ebeveyn kapısının ardında</td><td>Settings behind a parent gate</td><td>Kids kategorisi güven mesajı; ilk üçe koyma</td></tr>
+</tbody></table>
+<h3>3.1 Çekim notları</h3>
+<ul class="tight">
+<li>Simülatör durum çubuğu: <code>xcrun simctl status_bar &lt;UDID&gt; override --time 9:41 --batteryState charged --batteryLevel 100 --wifiBars 3 --cellularBars 4</code>. Çekimden sonra <code>clear</code>.</li>
+<li>Dil: TR seti için cihaz dili Türkçe, EN seti için İngilizce; çocuk ekranları metinsiz olduğu için yalnız ana ekran kartları ve Eserlerim başlığı değişir. en-GB setine aynı görseller yüklenir; başlıklar "colouring" yazımıyla.</li>
+<li>iPad seti aynı altı kare; yatay set gerekmez. Ekran görüntüleri cihaza özgüdür: iPad seti ayrıca yüklenir.</li>
+<li>Başlık bandı yüksekliği karenin %12'si; yazı boyu 1320 px genişlikte en az 88 px; kontrast 4,5:1 üstü (0xFF2D3142 krem üstünde yaklaşık 12:1).</li>
+<li>Gösterme: Büyük modun 16 renkli paleti (ilk karelerde), Fotoğraflarım kategorisi, boş Eserlerim, açılış ekranı, cihaz dışı el ve parmak fotoğrafı.</li>
+<li>Reduce Motion ve %200 metin kapalı olsun; çekim bitince bir kez de %200 metinle kontrol et, ama o kareleri yükleme.</li>
+<li>Play kaydı için aynı kareler 1080×1920 (9:16) olarak ayrıca dışa aktarılır: Play'de uzun kenar kısa kenarın en çok 2 katı olabilir, 1320×2868 bu kuralı aşar. Play'de "Teacher Approved" değerlendirmesi otomatik.</li>
+</ul>
+
+<h2 id="requests">4. Yayın sırasında senden istediklerim</h2>
+<p>Gece raporunun 8. bölümündeki adımlar (Xcode 26, ASC alanları, IAP ürünü, Play, vergi, docs/ yayını, ses kayıtları, çeviri incelemesi, gerçek cihaz) aynen geçerli. Buradakiler pazarlama tarafının ekleri.</p>
+
+<table class="">
+<thead><tr><th>Konu</th><th>Karar</th><th>Ne yapacaksın</th><th>Dayanak</th></tr></thead>
+<tbody>
+<tr><td>App Preview videosu</td><td>Bu sürümde gerekmez; 2.1.1 için önerilir</td><td>Bölüm 4.1'deki 20 saniyelik kurgu; simülatörden <code>xcrun simctl io &lt;UDID&gt; recordVideo --codec h264 onizleme.mov</code>, sonra 886×1920'ye ölçekle (6,9"), iPad için 1200×1600. 15–30 sn, en çok 30 fps, H.264. Önizleme ekran görüntülerinden önce oynar ve sessiz başlar; poster karesi varsayılan 5. saniye.</td><td>Apple App Preview sayfası ve ASC önizleme özellikleri</td></tr>
+<tr><td>Uygulama içi etkinlik (In-App Event)</td><td>Şimdi değil</td><td>Etkinlik gerçek bir uygulama içi içerik değişikliği ister; çocuk ekranları değişmiyor. Mevsim ya da 23 Nisan sayfaları gelirse "Yeni içerik" etkinliği aç ve featuring adaylığına bağla.</td><td>Apple ürün sayfası rehberi; kurul: sezon kategorisi ertelendi</td></tr>
+<tr><td>Featuring nomination</td><td>Evet, gönderimden en az 3 hafta önce</td><td>Bölüm 4.3'teki içerikle "App Launch" türünde bir adaylık; ileride ses klipleri ve yeni diller için "App Enhancements". Roller: Account Holder, Admin, App Manager ya da Marketing.</td><td>ASC yardım: en az 3 hafta; Getting Featured: 2 hafta, geniş değerlendirme için 3 aya kadar</td></tr>
+<tr><td>Yerelleştirme önceliği</td><td>TR + en-US + en-GB ile çık; sonra de, fr, es, ja</td><td>Bölüm 4.4 tablosu. Bir dilin mağaza kaydı ancak o dilin ebeveyn alanı çevirisi (lib/l10n/drafts) yerli onaydan geçince açılır; mağazada olup uygulamada olmayan dil 2.3.1 riskidir.</td><td>Gelir raporu 3.1 ülke sırası; MobileAction vitrin-dil tablosu</td></tr>
+<tr><td>Yaş bandı sorusu</td><td>Gönderimden önce</td><td>Bölüm 4.5'teki mesajı ASC → Contact Us → App Review'a gönder; cevabı sürüm notuna (Notes for Review) ekle.</td><td>ASC yardım: Kids seçimi onaydan sonra değişmez</td></tr>
+<tr><td>Rehberli Erişim rehberi</td><td>Evet, 1 saat</td><td>docs/ altına tek sayfa (TR/EN): Ayarlar → Erişilebilirlik → Rehberli Erişim; uygulama açıkken yan düğmeye üç kez bas; süre sınırı; Android'de Uygulama sabitleme. Destek sayfasından ve açıklamadaki "Ebeveynler için" bölümünden bağla.</td><td>support.apple.com/111795; ARB guidedAccessText</td></tr>
+<tr><td>Basın kiti</td><td>Evet, 1 saat</td><td>docs/basin/: 1024 px ikon, 6 ekran görüntüsü, 80 kelimelik TR/EN özet, tek cümlelik vaat, iletişim. Apple editörleri ve blog yazarları için tek bağlantı.</td><td>Getting Featured: güçlü ürün sayfası ve görsel</td></tr>
+<tr><td>Destek ve yorum şablonları</td><td>Evet</td><td>cobipaint@gmail.com için otomatik yanıt (TR/EN) ve ASC'de 1–3 yıldız yorumlara 48 saat içinde kişisel yanıt; yanıt pazarlama içermez.</td><td>5.6.1</td></tr>
+<tr><td>Puan isteme kodu</td><td>2.1.1'e</td><td>Bölüm 5.4 kuralları: yalnız ebeveyn alanı, kapıdan sonra, sistem API'si; ayrıca "Puan ver" satırı write-review bağlantısıyla.</td><td>5.6.1; Apple puan sayfası (365 günde en çok 3)</td></tr>
+<tr><td>Paylaşım metnine bağlantı</td><td>2.1.1'e</td><td>shareText'e App Store kısa bağlantısı eklenir; paylaşım zaten kapının arkasında. Kodu değiştirmeden önce kararını ver.</td><td>1.3: link kapı arkasında</td></tr>
+<tr><td>TestFlight (Xcode Cloud)</td><td>Evet</td><td>Gerçek cihaz denemesi ve adaylıktaki Supplemental Materials için herkese açık TestFlight bağlantısı.</td><td>UX raporu 9: gerçek cihaz açık</td></tr>
+<tr><td>Google Play kaydı</td><td>App Store metni biter bitmez</td><td>Türkiye'de iOS payı %23; aynı metin ve görseller; Families "5 ve altı"; Teacher Approved otomatik değerlendirme.</td><td>Gelir raporu 1 ve 3.4</td></tr>
+<tr><td>App Analytics</td><td>Evet, haftalık</td><td>Gösterim, ürün sayfası görüntüleme, dönüşüm, kaynak (arama, gezinme, yönlendirme), D1/D7 tutma, çökme. Uygulamada analiz SDK'sı yok; bu tek veri kaynağı.</td><td>ASC</td></tr>
+</tbody></table>
+<h3>4.1 App Preview kurgusu (20 saniye, Minik mod, sessiz anlaşılır)</h3>
+<table class="">
+<thead><tr><th>Saniye</th><th>Görüntü</th><th>Üst yazı TR / EN</th></tr></thead>
+<tbody>
+<tr><td>0–4</td><td>Boyama sayfasında üç dokunuş, üç alan dolar; dokunma noktası kaplaması</td><td>Dokun, boyansın / Tap, it fills</td></tr>
+<tr><td>4–8</td><td>Keçeli kalem kenara dayanır, taşmaz</td><td>Çizgiden taşmaz / Stays in the lines</td></tr>
+<tr><td>8–12</td><td>Fırça düğmesi döner: gökkuşağı, simli; iki çıkartma</td><td>Fırçalar ve çıkartmalar / Brushes and stickers</td></tr>
+<tr><td>12–16</td><td>Çiz sayfasında ayna açık, bir karalama dört yönlü desene dönüşür</td><td>Ayna / Mirror</td></tr>
+<tr><td>16–20</td><td>Konfeti, ardından Eserlerim duvarı; son kare: Reklam yok · İnternet yok · Hesap yok</td><td>Kaydetmek yok, kaybolmaz / Saves itself</td></tr>
+</tbody></table>
+<p class="small">Kurallar: yalnız uygulama görüntüsü, el ve cihaz yok; fiyat ve tarih yok; ses tek parça kısa müzik ya da uygulamanın efekt sesleri; metin okunacak kadar uzun kalır. Önizleme Apple Ads'te de kullanılabilir.</p>
+
+<h3>4.2 Uygulama içi etkinlik</h3>
+<p>Etkinlik kartı uygulamada gerçekten olan bir şeyi duyurur (yeni içerik, canlı etkinlik, meydan okuma). Cobi Paint'te çocuk ekranı değişmez; etkinlik yalan olurdu. Gelecekte 23 Nisan için 6–8 sayfalık "Bayram" teması normal kategori olarak gelirse "Yeni içerik" türünde etkinlik ve featuring adaylığı birlikte açılır.</p>
+
+<h3>4.3 Featuring nomination içeriği</h3>
+<p>Apple editörleri ölçüt listesi vermiyor; sayfa yedi başlık sayıyor: kullanıcı deneyimi, arayüz, yenilik, benzersizlik, erişilebilirlik, yerelleştirme, ürün sayfası. Türkiye editörleri geçmiş yıllarda 23 Nisan'da "Türkiye'den harika çocuk uygulamaları" koleksiyonu ve Bugün sekmesinde yerli geliştirici hikâyeleri yayımladı (Teknoblog, ShiftDelete). Adaylık metni bunlara göre:</p>
+
+<table class="">
+<thead><tr><th>Form alanı</th><th>Yazılacak</th></tr></thead>
+<tbody>
+<tr><td>Nomination name</td><td>Cobi Paint 2.1 launch: a coloring book a three-year-old can use alone</td></tr>
+<tr><td>Type</td><td>App Launch (ilk gönderim); ses klipleri ve yeni diller için ayrı App Enhancements</td></tr>
+<tr><td>Description</td><td>Ne: 201 sayfalık, iki modlu boyama kitabı; üç yaşın parmağına göre bölge motoru (dolgu taşmaz, kalem içeride kalır); menüsüz araç çubuğu; dilden bağımsız ebeveyn kapısı. Neden: okumayı bilmeyen çocuk için reklamsız, hesapsız, çevrimdışı alternatif. Öncelik: yıl içindeki tek büyük sürüm.</td></tr>
+<tr><td>Publish date</td><td>Planlanan yayın günü; adaylık en az 3 hafta önce</td></tr>
+<tr><td>Countries / localizations</td><td>Türkiye ve ABD öncelikli; tr, en-US, en-GB</td></tr>
+<tr><td>Helpful details</td><td>Erişilebilirlik: her kontrolde VoiceOver etiketi ve renk adları, Reduce Motion'da konfeti ve animasyon yok, %200 metin, 4,5:1 kontrast testleri, 82 pt dokunma hedefleri, kapı ekran okuyucuyla zaman aşımına uğramaz. Gizlilik: veri toplanmaz, SDK yok. İçerik: MIT lisanslı Fluent UI Emoji'den üretilmiş 201 sayfa, üretim hattı açık. Tek geliştirici, Türkiye.</td></tr>
+<tr><td>Supplemental materials</td><td>TestFlight herkese açık bağlantı, basın kiti sayfası, 20 saniyelik önizleme</td></tr>
+</tbody></table>
+<p class="small">Takvim: 20 Kasım Dünya Çocuk Hakları Günü için süre dar (3 hafta kuralı). Gerçekçi hedefler: yılbaşı tatili koleksiyonları (Aralık), 23 Nisan 2027 Türkiye, okula dönüş (Ağustos–Eylül 2027). Her hedef için ayrı adaylık.</p>
+
+<h3>4.4 Yerelleştirme önceliği</h3>
+
+<table class="">
+<thead><tr><th>Sıra</th><th>Mağaza kaydı</th><th>Vitrinler</th><th>Ne gerekir</th><th>Ne zaman</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>tr</td><td>Türkiye</td><td>Hazır</td><td>Şimdi</td></tr>
+<tr><td>1</td><td>en-US</td><td>ABD, Kanada (İngilizce), Meksika'nın ikinci dili ve ABD'ye bağlı vitrinler</td><td>Hazır</td><td>Şimdi</td></tr>
+<tr><td>1</td><td>en-GB</td><td>Birleşik Krallık, İrlanda, Avustralya, Yeni Zelanda; Türkiye dâhil Avrupa vitrinlerinin çoğunda ikinci dil</td><td>Bu rapordaki metinler, "colouring" yazımı</td><td>Şimdi</td></tr>
+<tr><td>2</td><td>de-DE</td><td>Almanya, Avusturya, İsviçre</td><td>lib/l10n/drafts de taslağının yerli onayı; mağaza metni çevirisi</td><td>Onaydan sonra, 2.1.1</td></tr>
+<tr><td>2</td><td>fr-FR (+ fr-CA kopyası)</td><td>Fransa, Belçika, İsviçre, Kanada</td><td>Aynı</td><td>2.1.1</td></tr>
+<tr><td>2</td><td>es-ES + es-MX</td><td>İspanya; Meksika ve Latin Amerika</td><td>Aynı; iki kayıt aynı metinle</td><td>2.1.1</td></tr>
+<tr><td>2</td><td>ja</td><td>Japonya (kişi başı harcama lideri)</td><td>Yerli onay şart; makine çevirisi riskli</td><td>2.1.1 ya da 2.2</td></tr>
+<tr><td>3</td><td>pt-BR, it, nl, ko, ar, pl</td><td>Brezilya (hukuken ertelendi), İtalya, Hollanda, Kore, Körfez, Polonya</td><td>Onay ve kapasite</td><td>2.2 ve sonrası</td></tr>
+</tbody></table>
+<p class="small">Ölçüt: iOS payı ve harcama (gelir raporu 3.1), çeviri maliyeti (çocuk ekranı metinsiz, yalnız ebeveyn alanı ve mağaza) ve en-GB'nin ikinci dil olarak kapladığı vitrin sayısı. Fransızca için Türkiye vitrini etkisi doğrulanamadı.</p>
+
+<h3>4.5 App Review'a yaş bandı mesajı</h3>
+<p>ASC'de "Contact Us" → "App Review" → "Other". İngilizce gönder:</p>
+
+<pre class="text">Subject: Request to change the Made for Kids age band before submitting version 2.1.0 (app ID 6757766966)
+
+Cobi Paint (ID 6757766966) is currently set to the Kids Category age band &quot;6–8&quot;. Version 2.1.0 is a complete rebuild designed for children aged 3–5 (a &quot;Little&quot; mode with 9 colours, 82 pt controls, no zoom and no reading required) with a &quot;Big&quot; mode for ages 6 and up. The age band that matches the app&#x27;s primary audience is &quot;5 and Under&quot;.
+
+App Store Connect states that the Made for Kids selection cannot be changed after approval. Could you please change the age band to &quot;5 and Under&quot; for this app, or tell us how to request the change with the 2.1.0 submission? The app has no ads, no third-party analytics, no accounts and no network access; the privacy policy is inside the app and at https://muazcoban.github.io/cobi-paint-mobile/privacy_policy.html.
+
+Thank you.
+Muaz Çoban</pre>
+<h2 id="plan">5. Yayın sonrası ilk 30 gün</h2>
+<p>Nakit bütçe 0 TL; zaman bütçesi günde yaklaşık 1 saat. Satın alma kapalı olduğu için ücretli reklam geri dönüşü ölçülemez; ilk 30 günün amacı dürüst puan, dönüşüm oranı verisi ve 2.1.1 için anahtar kelime öğrenmesi.</p>
+<h3>5.1 Haftalık plan</h3>
+
+<table class="">
+<thead><tr><th>Dönem</th><th>İş</th><th>Çıktı</th></tr></thead>
+<tbody>
+<tr><td>Gün −21 … 0</td><td>Featuring adaylığı (4.3); basın kiti ve Rehberli Erişim sayfası; yaş bandı yanıtı; Play kaydı taslağı; 20 ailelik WhatsApp tohum listesi; 5 anaokulu için QR'lı boyama sayfası çıktısı (MIT lisanslı sayfalardan 5 tanesi, PDF); Reddit ve Product Hunt hesaplarının hazırlanması</td><td>Adaylık gönderildi; docs/ sayfaları canlı; PDF hazır</td></tr>
+<tr><td>Gün 1–7</td><td>Yayın. Çökme ve yorum takibi günlük; puan isteme kapalı. Tohum ailelere kişisel mesaj (teşvik yok). Show HN ve r/SideProject: "3 yaşındaki çocuğum için reklamsız, verisiz boyama uygulamasını baştan yazdım" (gizlilik açısı). TR: 3 Facebook grubunda (Montessori, okul öncesi öğretmenleri) kural izin veriyorsa ebeveyn-geliştirici hikâyesi; izin vermiyorsa yalnız soru-cevap.</td><td>İlk 10 puan; çökme oranı; ilk ASO verisi</td></tr>
+<tr><td>Gün 8–14</td><td>Puan isteme açılır (5.4). Product Hunt lansmanı (Salı–Perşembe). TR teknoloji basını: Webrazzi, ShiftDelete, Teknoblog, Log'a basın kiti ile "yerli geliştiriciden reklamsız çocuk uygulaması". Anahtar kelime sıralaması 10 sorguda elle kontrol; sığmayan sözcükler için 2.1.1 listesi.</td><td>2.1.1 metin değişiklikleri; en az 1 haber</td></tr>
+<tr><td>Gün 15–21</td><td>Google Play yayını (Türkiye Android %77). Anaokulu ziyaretleri: QR'lı çıktı, "sessiz köşe" önerisi. 10 mikro hesaba (5–30 bin takipçili ebeveyn ve öğretmen, Instagram/TikTok) DM: ürünü dene, beğenirsen paylaş; ödeme ve kod yok. Reddit r/toddlers, r/Parenting, r/daddit: yalnız "boyama uygulaması önerisi" soran başlıklarda, geliştirici olduğunu yazarak.</td><td>Play'de ilk kurulumlar; 2–3 paylaşım</td></tr>
+<tr><td>Gün 22–30</td><td>App Analytics okuması: kaynaklara göre dönüşüm; TR ve ABD puan ortalaması; yorumlardan 2.2 listesi (ses klipleri, istenen konular). Ücretli test kararı (5.3). 2.1.1 gönderimi: anahtar kelime, puan isteme, paylaşım bağlantısı, varsa yeni dil.</td><td>30 gün raporu; 2.1.1 yayında</td></tr>
+</tbody></table>
+<h3>5.2 Kanallar</h3>
+<table class="">
+<thead><tr><th>Kanal</th><th>Maliyet</th><th>Ne yapılır</th><th>Dikkat</th></tr></thead>
+<tbody>
+<tr><td>Apple editör adaylığı</td><td>0</td><td>4.3</td><td>Garanti yok; en büyük kaldıraç</td></tr>
+<tr><td>Türkiye: Facebook grupları (Montessori, okul öncesi öğretmenleri), Kadınlar Kulübü forumu</td><td>0</td><td>Hikâye anlatımı: neden yazdım, neyi yapmadım (reklam, veri)</td><td>Grup kurallarını oku; reklam yasağı olan grupta paylaşma</td></tr>
+<tr><td>Türkiye: Instagram ve TikTok mikro hesaplar</td><td>0 (takas yok)</td><td>10 DM, 1 cümle + bağlantı; "beğenirsen paylaş"</td><td>Ücretli iş birliği etiketi gerekmez çünkü ödeme yok; ödeme olursa reklam etiketi zorunlu</td></tr>
+<tr><td>Türkiye: teknoloji basını</td><td>0</td><td>Basın kiti ile e-posta; 23 Nisan ve Apple Kids kuralları açısı</td><td>Yanıt oranı düşük; 1 haber yeter</td></tr>
+<tr><td>Anaokulları (5 tanıdık)</td><td>Baskı maliyeti</td><td>QR'lı boyama çıktısı; tablette uygulama</td><td>Öğretmen tavsiyesi ebeveyne en güvenilir yol</td></tr>
+<tr><td>Show HN, r/SideProject, r/FlutterDev</td><td>0</td><td>Teknik ve gizlilik hikâyesi; bölge motoru ve MIT üretim hattı</td><td>Geliştirici kitlesi; dolaylı etki ve SEO</td></tr>
+<tr><td>Product Hunt</td><td>0</td><td>Salı–Perşembe lansmanı, 6 görsel + önizleme</td><td>Ebeveyn kitlesi küçük; geri bağlantı değeri</td></tr>
+<tr><td>Reddit ebeveyn toplulukları (r/toddlers, r/Parenting, r/daddit, r/Mommit)</td><td>0</td><td>Yalnız öneri isteyen başlıklarda yanıt; geliştirici olduğunu açıkla</td><td>Çoğunda kendi ürününü anlatma yasağı; moderatör kuralları önce</td></tr>
+<tr><td>İnceleme siteleri</td><td>0 … ücretli</td><td>iGameMom ücretsiz, bekleme 6–24 ay; Educational App Store tek seferlik ücret (tutar sayfada yazmıyor); Common Sense Media geliştirici başvurusu bulunamadı</td><td>Harcamadan önce tutarı sor</td></tr>
+<tr><td>Google Play Teacher Approved</td><td>0</td><td>Families politikasına uyan uygulama otomatik değerlendirilir</td><td>Başvuru yok; beklenir</td></tr>
+</tbody></table>
+<h3>5.3 Apple Ads</h3>
+<p><strong>Karar:</strong> İlk 30 günde ücretli reklam yok. İki gerekçe: satın alma kapalı olduğu için harcamanın geri dönüşü ölçülemez; puan ve dönüşüm verisi olmadan reklam trafiği boşa gider.</p>
+<p><strong>Durum:</strong> Apple Ads Türkiye'de 2024 sonundan beri açık (Apple duyurusu Ekim 2024, MobileAction'a göre açılış 3 Aralık 2024). Apple'ın okuduğum Apple Ads politika ve yardım sayfalarında Kids kategorisi uygulamalarını dışlayan bir cümle yok; kural şu: 13 yaş altına kayıtlı hesaplara ve Yönetilen Apple Hesaplarına reklam gösterilmez, hedeflenebilen en küçük yaş ABD ve Avrupa'da 18. Yani reklam ebeveyne gider. Uygulamanın uygunluğu Apple Ads hesabında uygulama başına "eligible / ineligible" olarak görünür; bütçe ayırmadan önce oraya bak. Satın alma açılınca test: 50–100 $, yalnız tam eşleşme 5 sorgu ("boyama oyunu", "çocuk boyama", "toddler coloring", "preschool coloring", "coloring book kids"), dokunma başı maliyet tavanı düşük, 14 gün; ölçü: indirme başı maliyet ve dönüşüm.</p>
+
+<h3>5.4 Puan ve yorum isteme kuralları</h3>
+
+<table class="">
+<thead><tr><th>Kural</th><th>Dayanak</th><th>Cobi Paint uygulaması</th></tr></thead>
+<tbody>
+<tr><td>Yalnız sistem API'si; özel puan penceresi yasak</td><td>App Review 5.6.1</td><td>iOS: SKStoreReviewController / AppStore.requestReview. Android: Play In-App Review API.</td></tr>
+<tr><td>Sistem 365 günde en çok 3 kez gösterir; kullanıcı Ayarlar'dan kapatabilir</td><td>Apple puan sayfası</td><td>Çağrı boşa gidebilir; akış buna dayanmaz.</td></tr>
+<tr><td>Doğal bir duraklamada, iş bölmeden, ilk açılışta değil</td><td>Apple puan sayfası</td><td>Yalnız ebeveyn alanında, kapıdan geçtikten sonra; tetik: ebeveyn bir resmi paylaştıktan ya da yazdırdıktan sonra, kurulumdan en az 3 gün ve en az 3 kayıtlı resim sonra.</td></tr>
+<tr><td>Çocuğun akışında hiçbir istek yok</td><td>1.3: çocuk alanında dikkat dağıtıcı yok; pencere metin içerir, çocuk okuyamaz</td><td>Boyama ve ana ekranda çağrı yok.</td></tr>
+<tr><td>Düğmeye bağlı istek yapma; düğme varsa mağaza sayfasına götür</td><td>Play In-App Review rehberi; Apple aynı mantık</td><td>Ebeveyn alanında "Puan ver" satırı: iOS'ta https://apps.apple.com/app/id6757766966?action=write-review, Android'de Play sayfası. Bağlantı kapının arkasında (1.3 uyumlu).</td></tr>
+<tr><td>Puan isteme öncesi soru sorma ("beğendin mi?")</td><td>Play rehberi; Apple özel pencereyi yasaklar</td><td>Ön eleme yok.</td></tr>
+<tr><td>Teşvikli yorum yok; tanıdıklara ödül yok</td><td>5.6.3 keşif sahtekârlığı</td><td>Tohum ailelere yalnız "beğenirsen yaz".</td></tr>
+<tr><td>Her yoruma yanıt, önce 1–3 yıldız; yanıtta pazarlama ve kişisel veri yok</td><td>5.6.1</td><td>48 saat içinde, uygulamanın dilinde; düzeltme çıkınca sürüm notunda söyle ve yoruma dön.</td></tr>
+<tr><td>Puanı pazarlamada kullanma şartı</td><td>Apple puan sayfası</td><td>Yalnız güncel puan; yorum alıntısı için yazarın izni.</td></tr>
+</tbody></table>
+<h3>5.5 Ölçülecekler (App Analytics, haftada bir)</h3>
+<ul class="tight">
+<li>Gösterim → ürün sayfası görüntüleme → indirme: dönüşüm oranı, vitrine ve kaynağa göre (arama, gezinme, yönlendirme). Hedef sayısı vermiyorum; ilk iki hafta taban çizgisidir.</li>
+<li>Puan sayısı ve ortalaması, TR ve ABD ayrı. 30. günde en az 20 (TR) ve 10 (ABD) puan bir hedef, tahmin değil.</li>
+<li>D1 ve D7 tutma; çökmesiz oturum oranı. Uygulamada analiz SDK'sı olmadığı için yalnız Apple'ın izinli verisi.</li>
+<li>Anahtar kelime sırası: 10 sorgu, iki vitrin, gizli pencere, haftada bir; tablo plan/ altında tutulur.</li>
+</ul>
+
+<h2 id="open-items">6. Doğrulayamadıklarım</h2>
+<ul class="tight">
+<li>Apple Ads'in Kids kategorisi uygulamalarını kampanyaya kabul edip etmediği: resmî sayfalarda yasak cümlesi bulamadım; hesapta uygunluk durumuna bak.</li>
+<li>Türkiye vitrininin üçüncü indeks dili (Fransızca) ve indeks tablolarının güncelliği: AppTweak ve Phiture'ın kendi sahte anahtar kelime testini tekrarlamak gerekir.</li>
+<li>Anahtar kelime arama hacimleri: araç yok; seçim rakip metinlerine ve sorgu biçimlerine dayanıyor.</li>
+<li>Kids bandı değişikliğinin App Review'da nasıl işlediği: ASC yardımı "onaydan sonra değişmez, bize yazın" diyor; süreç ve süre bilinmiyor.</li>
+<li>İkincil kategori Games (Family) seçiminin iOS 27 Time Allowances oyun kotasına etkisi: gelir raporu birincil kategori için yazdı; ikincil için belirsiz. Grafik görünürlüğü istiyorsan tut, Apple'ın belgesi ikincil kategoriyi de sayıyorsa boş bırak.</li>
+<li>Educational App Store başvuru ücreti ve Common Sense Media geliştirici başvurusu: sayfalarda tutar ve form yok.</li>
+<li>Türkiye App Store'un 23 Nisan 2026 koleksiyonu: haberler önceki yıllara ait; 2027 için adaylık gönderilerek öğrenilir.</li>
+</ul>
+
+<h2 id="sources">7. Kaynaklar (hepsine 3 Kasım 2026'da bakıldı)</h2>
+<p><strong>Repo:</strong> store_listing.md · README.md · plan/gece-raporu-2026-11-03.html (bölüm 1, 4, 8, 12–16) · plan/gelir-ve-yayin-raporu.html (1, 2.3, 3.1, 3.4) · plan/ux-arastirma-raporu.html (3, 7, 8) · lib/l10n/app_tr.arb, app_en.arb · tool/voice/README.md · .claude/skills/cobi-toddler-ux/SKILL.md · pubspec.yaml (2.1.0+5).</p>
+<p><strong>Apple:</strong> App Review Guidelines 1.3, 2.3.1, 2.3.3, 2.3.7, 2.3.8, 2.3.10, 2.3.12, 5.1.4, 5.6.1, 5.6.3 (developer.apple.com/app-store/review/guidelines/) · Kids apps (developer.apple.com/app-store/kids-apps/ ve developer.apple.com/kids/) · Ürün sayfası alan sınırları (developer.apple.com/app-store/product-page/) · App Previews (developer.apple.com/app-store/app-previews/) ve özellikleri (developer.apple.com/help/app-store-connect/reference/app-preview-specifications/) · Getting Featured (developer.apple.com/app-store/getting-featured/) · Featuring nomination yardımı (developer.apple.com/help/app-store-connect/manage-featuring-nominations/nominate-your-app-for-featuring) · Puan ve yorum (developer.apple.com/app-store/ratings-and-reviews/) · Apple Ads kitle ayarları (ads.apple.com/app-store/help/ad-groups/0021-modify-audience-settings) ve politikaları (ads.apple.com/policies) · Rehberli Erişim (support.apple.com/en-us/111795).</p>
+<p><strong>Google:</strong> Play Families politikası (support.google.com/googleplay/android-developer/answer/9893335) · In-App Review rehberi (developer.android.com/guide/playcore/in-app-review).</p>
+<p><strong>Vitrinler:</strong> Cobi Paint (apps.apple.com/us/app/id6757766966) · Bimi Boo (apps.apple.com/us/app/id1001555097 ve /tr/…?l=tr) · KidloLand (apps.apple.com/us/app/id451719402 ve /tr/…?l=tr) · Crayon Club (apps.apple.com/us/app/id6740246122) · Lake (apps.apple.com/us/app/id1183717726).</p>
+<p><strong>ASO ve pazar:</strong> MobileAction vitrin-dil tablosu (mobileaction.co/blog/app-store-cross-localization/) · AppFollow (appfollow.io/app-store-keywords-localizations) · Apple Ads Türkiye açılışı (ppc.land, mobilemarketingreads.com, Aralık 2024) · Türkiye App Store 23 Nisan haberleri (teknoblog.com, shiftdelete.net; tarihsiz) · iGameMom başvuru (igamemom.com/igamemom-service-to-app-developer) · Educational App Store başvuru (educationalappstore.com/blog/how-to-submit-app-to-educational-app-store).</p>
+</main>
+</body>
+</html>

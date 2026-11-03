@@ -389,6 +389,33 @@ ul.tight li, ol.tight li { margin: 3px 0; }
 <tr><td>Kids Category 1.3 / 5.1.4</td><td>Uyumlu: çocuğun ekranında değişiklik yok.</td></tr>
 <tr><td>Erişilebilirlik</td><td>Uyumlu: geri al düğmesi ve etiketi aynı; sistem balonu VoiceOver'la okunur.</td></tr>
 </tbody></table></div>
+<h2 id="yayin">17. Yayın hazırlığı: sürüm 2.1.0, App Store Connect, iki ajan</h2>
+<p>Akşam, PR #6 merge edildikten sonra. Kodda: <code>pubspec.yaml</code> 2.1.0+5; <code>ios/ci_scripts/ci_post_clone.sh</code> (Xcode Cloud için Flutter 3.38.3 kurulumu, <code>pub get</code>, <code>pod install</code>) ve README'de "Xcode Cloud ile TestFlight" adımları; <code>docs/privacy_policy.html</code> §7 artık tek seferlik satın almayı anlatıyor (abonelik değil); <code>store_listing.md</code> ASC'ye girilen son metinlerle eşitlendi. Bu Mac'te Xcode 16.4 olduğu için ikili yüklenemiyor (Nisan 2026'dan beri Xcode 26 zorunlu); yol Xcode Cloud, ilk iş akışı Xcode sihirbazından açılır (README).</p>
+<p>App Store Connect (Claude in Chrome ile, kişisel takım MUAZ COBAN, Team ID 5MY44SLWZU; developer.apple.com'daki varsayılan takım Fimple'dı, karıştırmamak gerekir):</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Alan</th><th>Yapılan</th></tr></thead>
+<tbody>
+<tr><td>Program Lisans Sözleşmesi</td><td>Güncelleme Account Holder onayı istiyordu; kullanıcı onayladı (29 Ekim'de yayımlanan, 3 Kasım'da kabul). Onaysız yeni sürüm açılmıyordu.</td></tr>
+<tr><td>Sürüm</td><td>2.1.0 taslağı oluşturuldu ("Prepare for Submission"); yayın biçimi "elle yayınla".</td></tr>
+<tr><td>App Information</td><td>Ad TR "Cobi Paint: Çocuk Boyama", EN "Cobi Paint: Kids Coloring"; altyazılar (30/30); kategori Education birincil, Games › Family ikincil (Games'ti); gizlilik politikası URL'si iki dilde yeni sayfaya çevrildi.</td></tr>
+<tr><td>Sürüm metinleri (TR ve EN-US)</td><td>Açıklama (emojisiz: ASC varyasyon seçicili emojiyi "geçersiz karakter" sayıyor), yenilikler, tanıtım metni (pazarlamacının 201 sayfa vurgulu dizisi), anahtar kelimeler (100 ve 97 karakter, boşluksuz), destek ve pazarlama URL'si, telif 2026. İngilizce (ABD) yerelleştirmesi eklendi; yanlışlıkla eklenen Fince ve Katalanca kaldırıldı (menü referansları kaydığı için koordinatla tıklandı).</td></tr>
+<tr><td>Ekran görüntüleri</td><td>Simülatörden Minik modda: iPhone 6,1"/6,3" (ASC'nin zorunlu saydığı boyut, 1206×2622) TR 5 kare, EN 4 kare; iPad 13" (2064×2752) TR 5 kare. Eski uygulamanın kareleri taslaktan kaldırıldı. 1320×2868 (6,9") büyük ekran bölümünde reddedildi (1284×2778 istiyor), isteğe bağlı olduğu için atlandı. Dosyalar <code>build/store_screenshots/</code> altında.</td></tr>
+<tr><td>App Privacy</td><td>"Veri toplanmaz" etiketi zaten yayındaydı; URL güncellendi.</td></tr>
+<tr><td>App Review notu</td><td>Kapının nasıl geçileceği (dişli, basılı tutma, çarpma), oturum açma ve ağ olmadığı, satın almanın bu derlemede kapalı olduğu yazıldı. İletişim bilgileri 1.0'dan geliyor.</td></tr>
+<tr><td>Fiyatlandırma</td><td>Değişmedi: ücretsiz, ABD tabanlı, 175 ülke.</td></tr>
+</tbody></table></div>
+<p>İki ajan çalıştı. <a href="pazarlama-incelemesi-2026-11-03.html">Pazarlama incelemesi</a>: konum "üç yaşındaki çocuk tek başına boyar", rakip karşılaştırması, ASO dizileri (uygulandı), en-GB önerisi, ekran görüntüsü başlıkları, yayın sonrası 30 gün planı, puan isteme kuralları. <a href="app-review-risk-denetimi-2026-11-03.html">App Review risk denetimi</a>: 4 P0, 9 P1, 16 P2. Kapananlar: eski açıklama (M-01), hakem notu (M-05), yerelleştirme karışıklığı (H-07), web politikası §7 (M-02), Xcode Cloud betiği (K-01'in repo tarafı). Açık kalanlar aşağıda.</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Açık iş</th><th>Kim</th><th>Not</th></tr></thead>
+<tbody>
+<tr><td>İkiliyi yüklemek</td><td>Sen</td><td>README'deki Xcode Cloud adımları; GitHub yetkisi ve sihirbaz senin tıklamanla. İş akışında derleme numarasını 6'dan başlat ya da ASC'nin otomatik numarasını kapat.</td></tr>
+<tr><td>Yaş anketi (yeni biçim)</td><td>Sen (ben doldurabilirim)</td><td>Gönderim öncesi zorunlu; önerilen yanıtlar risk raporu bölüm 4 (sonuç 4+). Kids bandı aynı ankette.</td></tr>
+<tr><td>Kids bandı 6–8 ile "3 yaş ve üstü" çelişkisi</td><td>Sen</td><td>Band onaydan sonra kilitli; App Review'a yazılı istek (hazır İngilizce metin: pazarlama raporu 4.5). Karar senin.</td></tr>
+<tr><td>DSA tüccar beyanı</td><td>Sen</td><td>Agreements › Compliance; adres ve telefon yayımlanır. Beyan olmadan AB vitrininden kaldırılma riski.</td></tr>
+<tr><td>Paid Apps sözleşmesi, tüzel bilgi</td><td>Sen</td><td>Yalnız <code>COBI_IAP=true</code> derlemesi için; bu sürümde gerekmez.</td></tr>
+<tr><td>Eski IAP ürünleri (<code>cobi_paint_pro_*</code>)</td><td>Ben kontrol ederim</td><td>Varsa sürümden çıkarılmalı (2.1b).</td></tr>
+<tr><td>en-GB yerelleştirmesi, görüntülere başlık şeridi, App Preview</td><td>İsteğe bağlı</td><td>Pazarlama raporu 2 ve 3; 2.1.1 için.</td></tr>
+</tbody></table></div>
 </div>
 
 </body>

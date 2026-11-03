@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cobi Paint – App Store Review ve Kids Category risk denetimi (3 Kasım 2026)</title>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; line-height: 1.5; color: #222; max-width: 1180px; margin: 0 auto; padding: 24px 20px 60px; }
+  h1 { font-size: 1.7em; margin-bottom: 4px; }
+  h2 { font-size: 1.25em; margin-top: 40px; border-bottom: 2px solid #eee; padding-bottom: 4px; }
+  h3 { font-size: 1.05em; margin-top: 28px; }
+  p.meta { color: #666; margin-top: 0; }
+  .ozet { background: #fff6ee; border-left: 4px solid #e8754f; padding: 12px 16px; margin: 20px 0; }
+  table { border-collapse: collapse; width: 100%; margin: 12px 0 24px; font-size: 0.93em; }
+  th, td { border: 1px solid #ddd; padding: 7px 9px; vertical-align: top; text-align: left; }
+  th { background: #f4f4f4; }
+  code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.92em; background: #f3f3f3; padding: 1px 4px; border-radius: 3px; }
+  pre { background: #f3f3f3; padding: 10px 12px; overflow-x: auto; font-size: 0.88em; }
+  .p0 { background: #c62828; color: #fff; padding: 2px 7px; border-radius: 4px; font-weight: 600; white-space: nowrap; }
+  .p1 { background: #ef8f00; color: #fff; padding: 2px 7px; border-radius: 4px; font-weight: 600; white-space: nowrap; }
+  .p2 { background: #607d8b; color: #fff; padding: 2px 7px; border-radius: 4px; font-weight: 600; white-space: nowrap; }
+  .ok { color: #2e7d32; font-weight: 600; }
+  .sen { display: inline-block; border: 1px solid #999; color: #555; border-radius: 4px; padding: 0 6px; font-size: 0.85em; margin-left: 4px; white-space: nowrap; }
+  td.kanit { font-size: 0.88em; }
+  ul.kisa li { margin-bottom: 4px; }
+</style>
+</head>
+<body>
+
+<h1>Cobi Paint – App Store Review ve Kids Category risk denetimi</h1>
+<p class="meta">3 Kasım 2026 · branch <code>faz7/ipad-geri-al</code> (commit <code>f4caa65</code>) · sürüm <code>2.1.0+5</code> · denetleyen: Claude (statik kod incelemesi, cihazda çalıştırma yok)</p>
+
+<div class="ozet">
+<p><strong>Sonuç:</strong> Kod tarafında App Review'un reddedeceği bir bulgu yok. Yayını durduracak dört P0 var; dördü de derleme hattı, mağaza metni ve hesap tarafında: Xcode 26 ile derleme henüz denenmedi (Xcode Cloud betiği çalışma ağacında hazır, iş akışı yok), canlı App Store açıklaması kaldırılmış bir özelliği vaat ediyor, yaş anketi yeni biçimde yanıtlanmadan sürüm gönderilemez, IAP derlemesi için Paid Apps sözleşmesi etkin olmalı.</p>
+<p><strong>Sayılar:</strong> P0 (reddeder ya da yükleme engeli): 4 · P1 (takılma): 9 · P2 (iyileştirme): 16. Uyumlu bulunan 22 kontrol ayrı tabloda.</p>
+<p><strong>Kaynak:</strong> App Store Review Guidelines, "Last Updated: October 16, 2026"; Apple Kids sayfası; Apple "Upcoming requirements" (Xcode 26 zorunluluğu 28 Nisan 2026, yaş anketi 31 Ocak 2026, DSA tüccar beyanı 17 Şubat 2025); App Store Connect yardımı; Flutter UIScene ve Xcode Cloud belgeleri. Bağlantılar en altta.</p>
+</div>
+
+<h2>1. Öncelik tanımları</h2>
+<table>
+<tr><th style="width:110px">Öncelik</th><th>Anlamı</th></tr>
+<tr><td><span class="p0">P0 reddeder</span></td><td>App Review bu hâliyle reddeder ya da ikili App Store Connect'e hiç yüklenemez.</td></tr>
+<tr><td><span class="p1">P1 takılma</span></td><td>İnceleme uzar, Resolution Center'dan soru gelir ya da vitrin eksik kalır. Düzeltmeden göndermek kumar.</td></tr>
+<tr><td><span class="p2">P2 iyileştirme</span></td><td>Ret riski düşük; kaliteyi, erişilebilirliği ya da bir sonraki sürümü ilgilendirir.</td></tr>
+</table>
+<p><span class="sen">senin işin</span> etiketi: App Store Connect, Apple Developer hesabı ya da bir Mac/Xcode Cloud ayarı gerektirir; kodla çözülmez.</p>
+
+<h2>2. Bulgular</h2>
+
+<h3>2.1 Kod ve ikili (K)</h3>
+<table>
+<tr><th style="width:48px">No</th><th style="width:22%">Risk</th><th style="width:11%">Kural</th><th style="width:25%">Kanıt (dosya:satır)</th><th>Düzeltme</th><th style="width:92px">Öncelik</th></tr>
+
+<tr>
+<td>K-01</td>
+<td>İkili henüz Xcode 26 ile derlenmedi. Apple 28 Nisan 2026'dan beri iOS 26 SDK ile derlenmiş ikili ister; bu Mac'te Xcode 16.4 var. Xcode Cloud betiği bu denetim sürerken (18:19) çalışma ağacına eklendi ve Flutter belgesindeki desene uyuyor: Flutter 3.38.3 sabit, <code>precache --ios</code>, <code>pub get</code>, <code>pod install</code>, çalıştırılabilir (755). Eksik kalan: Xcode Cloud iş akışı yok, ilk arşiv denenmedi, derleme numarası çakışması çözülmedi. Xcode Cloud varsayılan olarak <code>CFBundleVersion</code>'ı kendi sayacıyla (1'den başlar) ezer; pubspec'teki 5 ve README'deki "numarayı artır" adımı o zaman etkisiz kalır.</td>
+<td>Upcoming requirements: "Since April 28, 2026 – Xcode 26 or later"</td>
+<td class="kanit"><code>ios/ci_scripts/ci_post_clone.sh:9-21</code> (izlenmeyen dosya, commit edilmedi); <code>README.md</code> "Xcode Cloud ile TestFlight" bölümü (çalışma ağacında, commit edilmedi); <code>ios/Podfile:15-16</code> (<code>Generated.xcconfig</code> yoksa <code>raise</code>); <code>ios/Runner.xcodeproj/project.pbxproj:226</code> (<code>LastUpgradeCheck = 1510</code>); <code>pubspec.lock</code>: <code>in_app_purchase_storekit 0.4.13</code> Flutter 3.38 ister, Flutter 3.38.3 Xcode 26 ile derlenir (sürüm notlarında iOS 26 ve Xcode 26 LLDB düzeltmeleri var).</td>
+<td>Betiği ve README bölümünü commit et. Xcode 26'lı bir Mac'te (ya da Xcode Cloud'un kendi arayüzünde) Archive iş akışını kur: Xcode "Latest Release" (26.x), dal <code>master</code>, Post-Action TestFlight Internal. İş akışı ayarlarında "Next Build Number" değerini 6 yap, ya da numarayı pubspec'ten almak için build number override'ı kapat; böylece ASC ve pubspec aynı sayıyı gösterir. İlk arşivde Podfile'ın imza override'ını (K-05) ve ITMS e-postalarını kontrol et.<span class="sen">senin işin</span></td>
+<td><span class="p0">P0 yükleme engeli</span></td>
+</tr>
+
+<tr>
+<td>K-02</td>
+<td>Satın al ve geri yükle düğmeleri hata vermez. <code>buy()</code> ve <code>restore()</code> <code>unawaited</code> çağrılır; StoreKit 2'nin <code>storekit_duplicate_product_object</code> hatası ya da ağ hatası sessiz kalır. İnceleyici düğmeye basar, hiçbir şey olmaz, "IAP çalışmıyor" yazar.</td>
+<td>2.1(b), 3.1.1</td>
+<td class="kanit"><code>lib/screens/full_version_screen.dart:77</code> (<code>unawaited(_purchases.buy(product))</code>), <code>:87</code> (<code>unawaited(_purchases.restore())</code>). <code>lib/services/purchase_service.dart:98-101</code>.</td>
+<td><code>try/catch</code> ile sar; hatada <code>l10n.storeUnavailable</code> SnackBar'ı göster; işlem sürerken düğmeyi kilitle (<code>_busy</code> bayrağı). Yalnız <code>COBI_IAP=true</code> derlemesinde görünür.</td>
+<td><span class="p2">P2</span></td>
+</tr>
+
+<tr>
+<td>K-03</td>
+<td>Ebeveyn alanı ipucu yanıltıcı: "Ayarlar, paylaşım ve silme yalnız buradan yapılır." Paylaşım ve silme bu ekranda yok; Eserlerim'de basılı tutmakla açılır. Kapıyı denetleyen inceleyici paylaşımı burada arar.</td>
+<td>2.3.1, Kids 1.3</td>
+<td class="kanit"><code>lib/l10n/app_tr.arb:216</code>, <code>lib/l10n/app_en.arb:84</code> (<code>parentsHint</code>). Gerçek yer: <code>lib/screens/my_artworks_screen.dart:141-142</code>.</td>
+<td>Metni değiştir: "Ayarlar burada. Paylaşmak, yazdırmak ve silmek için Eserlerim'de bir resmi basılı tutun." İngilizcesini aynı anlamla yaz.</td>
+<td><span class="p2">P2</span></td>
+</tr>
+
+<tr>
+<td>K-04</td>
+<td>"Sesli adlar" anahtarı hiçbir şey yapmaz: <code>assets/voice/</code> klasörü yok ve pubspec'te tanımlı değil; kapıdaki "büyüğünü çağır" sesi de çalmaz. Apple'ın Kids sayfası okuma bilmeyen çocuk için sesli uyarı önerir. Görünür ama etkisiz bir ayar "placeholder" sayılabilir.</td>
+<td>2.1(a); Kids sayfası (voiceover prompt önerisi)</td>
+<td class="kanit"><code>lib/screens/parents_screen.dart:152-160</code>; <code>lib/services/voice_service.dart:8-11, 45-49</code>; <code>lib/widgets/parental_gate.dart:20-25</code>; <code>pubspec.yaml:47-66</code> (voice yok); <code>ls assets/voice</code> → yok.</td>
+<td>En azından <code>gate</code> klibini iki dilde kaydet, <code>assets/voice/tr/</code> ve <code>assets/voice/en/</code> altına koy, pubspec'e ekle. Klip yoksa anahtarı <code>VoiceService().hasVoice(lang)</code> false iken gizle.</td>
+<td><span class="p2">P2</span></td>
+</tr>
+
+<tr>
+<td>K-05</td>
+<td>OpenCV döneminden kalan derleme adımları Xcode Cloud'da imza adımını karıştırabilir: pod hedeflerinde <code>CODE_SIGN_STYLE</code> zorla <code>Automatic</code>, gömülü framework'leri <code>|| true</code> ile yeniden imzalayan betik, şemada CMake PATH ön eylemi.</td>
+<td>2.1 (derleme kararlılığı)</td>
+<td class="kanit"><code>ios/Podfile:44-53</code>; <code>ios/Runner.xcodeproj/project.pbxproj:353-366</code> ("Sign Embedded Frameworks", <code>--timestamp=none</code>) ve <code>:216</code> (phase sırası); <code>ios/Runner.xcodeproj/xcshareddata/xcschemes/Runner.xcscheme:8-25</code>; <code>ios/Podfile:1</code> (Firebase yorumu).</td>
+<td>Üçünü de kaldır: <code>post_install</code> içinde yalnız <code>flutter_additional_ios_build_settings</code> kalsın; "Sign Embedded Frameworks" phase'ini ve şema PreAction'ını sil. İlk Xcode Cloud arşivinde imza günlüğünü kontrol et.</td>
+<td><span class="p2">P2</span></td>
+</tr>
+
+<tr>
+<td>K-06</td>
+<td>UIScene yaşam döngüsü yok. Apple Xcode 27 (iOS 27 SDK) ile zorunlu kılacak; Flutter'ın otomatik geçişi bu projede çalışmaz çünkü <code>AppDelegate</code> özelleştirilmiş ve kök denetleyici <code>Main.storyboard</code>'daki <code>KidFlutterViewController</code>. Flutter 3.38.3 her <code>flutter build ios</code>'ta uyarı basar.</td>
+<td>Xcode 27 gereksinimi (bu gönderimde değil)</td>
+<td class="kanit"><code>ios/Runner/Info.plist</code> (<code>UIApplicationSceneManifest</code> yok); <code>ios/Runner/AppDelegate.swift:5-41</code>; <code>ios/Runner/Base.lproj/Main.storyboard</code>; Flutter SDK <code>flutter_tools/lib/src/ios/mac.dart:182</code> (<code>UISceneMigration</code>).</td>
+<td>Bir sonraki sürümde elle geçiş: <code>AppDelegate</code>'i <code>FlutterImplicitEngineDelegate</code> yap, eklenti kaydını <code>didInitializeImplicitFlutterEngine</code>'e taşı, <code>Info.plist</code>'e <code>UISceneDelegateClassName = FlutterSceneDelegate</code> ve <code>UISceneStoryboardFile = Main</code> ile manifest ekle; <code>KidFlutterViewController</code> kanalını <code>awakeFromNib</code>'de kur. Uyarıyı susturmak için <code>pubspec.yaml</code>'a <code>flutter: config: enable-uiscene-migration: false</code>.</td>
+<td><span class="p2">P2</span></td>
+</tr>
+
+<tr>
+<td>K-07</td>
+<td>iPad pencere boyutu canlı değişirken (Split View, Stage Manager, iPadOS 26 pencereleme) boyama ekranı test edilmemiş. <code>UIRequiresFullScreen</code> yok ve dört yön tanımlı, yani uygulama zaten yeniden boyutlanabilir. Koordinatlar sayfa oranına göre tutuluyor; tasarım dayanıklı görünüyor ama kanıt yok: testler 800×600 varsayılan pencerede koşuyor.</td>
+<td>2.1, 2.4.1, 4.0</td>
+<td class="kanit"><code>ios/Runner/Info.plist:37-43</code>; <code>lib/screens/coloring_screen.dart:56-66, 70-80, 483-488</code>; <code>test/app_test.dart</code> (pencere boyutu değiştirilmiyor).</td>
+<td>iPad 13" (iOS 26) simülatöründe boyama sırasında pencereyi daralt ve genişlet; Split View'da paylaşım popover'ının çapasını dene; bir widget testine <code>tester.view.physicalSize</code> ile 1024×1366 ve 320×1024 ekle.</td>
+<td><span class="p2">P2</span></td>
+</tr>
+
+<tr>
+<td>K-08</td>
+<td>Erişilebilirlik guideline testleri üç ekranı atlıyor: HomeScreen, MyArtworksScreen (alt sayfa ve silme diyaloğu dâhil) ve bir boyama sayfasındaki ColoringScreen. Draw sayfasında yalnız Android hedef ve etiket testi var; iOS 44 pt ve kontrast testi yok.</td>
+<td>4.0 (HIG dokunma hedefi ve kontrast)</td>
+<td class="kanit"><code>test/app_test.dart:69-70, 154</code> (yalnız <code>androidTapTargetGuideline</code> ve <code>labeledTapTargetGuideline</code>); kapsanan ekranlar: <code>test/category_screen_test.dart:43-47</code>, <code>test/parents_screen_test.dart:37-40</code>, <code>test/full_version_screen_test.dart:88-91</code>, <code>test/widgets/kid_controls_test.dart:128-131, 188-191</code>.</td>
+<td>Üç ekran için <code>iOSTapTargetGuideline</code>, <code>labeledTapTargetGuideline</code>, <code>textContrastGuideline</code> ekle; alt sayfayı açıp <code>Share</code> ve <code>Delete</code> satırlarını da kapsa.</td>
+<td><span class="p2">P2</span></td>
+</tr>
+
+<tr>
+<td>K-09</td>
+<td>Kapının açıklama yorumu eski: "dört rastgele basamak kelimeyle" diyor, uygulama çarpma soruyor. Notes for Review yazılırken yanlış anlatıma yol açar.</td>
+<td>2.3.1(a) (inceleme notunun doğruluğu)</td>
+<td class="kanit"><code>lib/widgets/parental_gate.dart:14-18</code> (yorum) ile <code>:108-114</code> (uygulama).</td>
+<td>Yorumu güncelle: "2–9 × 2–9 çarpma, sonuç ≥ 10, iki basamak girişi, 3 yanlışta 30/60/120 s kilit, 20 s boşta kapanır."</td>
+<td><span class="p2">P2</span></td>
+</tr>
+
+<tr>
+<td>K-10</td>
+<td>Rehberli Erişim metni yalnız yan düğmeyi anlatıyor; Ana Ekran düğmeli iPad'de üç kez Ana Ekran düğmesine basılır.</td>
+<td>2.3.1 (metin doğruluğu)</td>
+<td class="kanit"><code>lib/l10n/app_tr.arb:226</code>, <code>lib/l10n/app_en.arb:94</code> (<code>guidedAccessText</code>).</td>
+<td>"yan düğmeye (ya da Ana Ekran düğmesine) üç kez basın" yaz.</td>
+<td><span class="p2">P2</span></td>
+</tr>
+
+<tr>
+<td>K-11</td>
+<td><code>audioplayers_darwin 6.3.0</code> privacy manifest içermiyor. Apple'ın manifest zorunlu SDK listesinde değil ve kaynakta required-reason API (UserDefaults, dosya zaman damgası, sistem açılış süresi, disk alanı) kullanımı yok; ITMS-91053 beklenmez.</td>
+<td>Upcoming requirements: "Approved reasons for APIs" (1 Mayıs 2024)</td>
+<td class="kanit"><code>~/.pub-cache/hosted/pub.dev/audioplayers_darwin-6.3.0/darwin</code>: <code>PrivacyInfo.xcprivacy</code> yok; grep sonucu boş. Diğer dört eklentide manifest var (tablo 5).</td>
+<td>İşlem yok. İlk TestFlight yüklemesinden sonra gelen e-postada ITMS-91053 ararsan kapanır.</td>
+<td><span class="p2">P2</span></td>
+</tr>
+
+<tr>
+<td>K-12</td>
+<td>Export compliance: <code>ITSAppUsesNonExemptEncryption = false</code> tanımlı, App Store Connect soruyu atlar. Uygulama ağ çağrısı yapmaz; Flutter.framework içindeki BoringSSL yalnız standart TLS'tir. Bu bildirim Flutter uygulamalarında yaygın ve kabul görüyor.</td>
+<td>ASC export compliance</td>
+<td class="kanit"><code>ios/Runner/Info.plist:63-65</code>.</td>
+<td>İşlem yok. Daha sıkı olmak istersen anahtarı kaldırıp ASC'de "Yes – exempt" seç; o zaman yıllık self-classification raporu gerekir.</td>
+<td><span class="p2">P2</span></td>
+</tr>
+
+<tr>
+<td>K-13</td>
+<td>Uygulama ikonu klasik <code>appiconset</code>. iOS 26 eski ikonlara kendi cam efektini uygular; yuvarlatılmış ve gölgeli bir PNG bu efektle çift kenar gösterebilir.</td>
+<td>4.0 (HIG app icons, Liquid Glass)</td>
+<td class="kanit"><code>ios/Runner/Assets.xcassets/AppIcon.appiconset/Contents.json</code> (25 boyut, 1024 opak: <code>sips</code> hasAlpha no).</td>
+<td>iOS 26 simülatöründe ana ekranda ikona bak. Gerekirse Icon Composer ile <code>.icon</code> üret ve Xcode 26 projesine ekle; eski set yedek kalır.</td>
+<td><span class="p2">P2</span></td>
+</tr>
+
+<tr>
+<td>K-14</td>
+<td>GitHub Actions yalnız <code>flutter analyze</code> ve <code>flutter test</code> koşuyor; iOS derlemesi hiçbir yerde otomatik denenmiyor. Xcode 26 ile ilk derleme Xcode Cloud'da, yani yayına en yakın anda kırılır.</td>
+<td>2.1 (derleme kararlılığı)</td>
+<td class="kanit"><code>.github/workflows/ci.yml:9-28</code>.</td>
+<td><code>macos-15</code> runner'ında <code>flutter build ios --no-codesign --release</code> adımı ekle; <code>xcode-select</code> ile Xcode 26 seç.</td>
+<td><span class="p2">P2</span></td>
+</tr>
+
+<tr>
+<td>K-15</td>
+<td>IAP kapalı derlemede uygulama içi gizlilik metni var olmayan bir satın almadan söz eder: "Tam Sürüm satın alımı Apple ya da Google hesabınızla yapılır". İnceleyici IAP arar, bulamaz.</td>
+<td>5.1.1(i), 2.3.1</td>
+<td class="kanit"><code>lib/l10n/app_tr.arb:224</code>, <code>lib/l10n/app_en.arb:92</code> (<code>privacyPolicyText</code> son cümle); <code>lib/services/purchase_service.dart:22</code> (<code>COBI_IAP</code> bayrağı).</td>
+<td>Son cümleyi ayrı anahtara al (<code>privacyPolicyPurchase</code>) ve <code>PrivacyScreen</code>'de yalnız <code>PurchaseService.enabled</code> iken ekle (<code>lib/screens/parents_screen.dart:229</code>).</td>
+<td><span class="p2">P2</span></td>
+</tr>
+</table>
+
+<h3>2.2 Mağaza metni, politika ve inceleme notları (M)</h3>
+<table>
+<tr><th style="width:48px">No</th><th style="width:22%">Risk</th><th style="width:11%">Kural</th><th style="width:25%">Kanıt (dosya:satır)</th><th>Düzeltme</th><th style="width:92px">Öncelik</th></tr>
+
+<tr>
+<td>M-01</td>
+<td>Canlı App Store açıklaması "galeriden resim yükleme" (fotoğraftan boyama sayfası) vaat ediyor; özellik donduruldu ve arayüzden kaldırıldı. İnceleyici açıklamadaki özelliği arar, bulamaz: yanıltıcı pazarlama ve eksik işlev.</td>
+<td>2.3.1(a), 2.1(a)</td>
+<td class="kanit"><code>store_listing.md:3-5</code> (canlı metnin vaadi); <code>lib/providers/app_provider.dart:79-81</code> (içe aktarma dondurulmuş, yalnız eski sayfalar okunur); <code>README.md:24</code>. Gelir raporuna göre canlı kayıt "60+ resim" de diyor.</td>
+<td>App Store Connect'te Türkçe ve İngilizce açıklamayı, alt başlığı ve anahtar kelimeleri <code>store_listing.md</code> ile değiştir. "Galeri", "fotoğraf", "60+" geçen her cümleyi sil. "What's New" alanına da aynı sürümü yaz.<span class="sen">senin işin</span></td>
+<td><span class="p0">P0 reddeder</span></td>
+</tr>
+
+<tr>
+<td>M-02</td>
+<td>Gizlilik politikası iki yerde birbirini tutmuyor. Web sayfası: "Bu sürümde uygulama içi satın alma yoktur. İleride isteğe bağlı abonelik eklenirse…". Uygulama içi metin ve Tam Sürüm ekranı: tek seferlik satın alma var, abonelik yok. Hangi derleme giderse gitsin ikisinden biri yanlış.</td>
+<td>5.1.1(i), 3.1.1</td>
+<td class="kanit"><code>docs/privacy_policy.html:69-71, 120-122</code> (§7); <code>lib/l10n/app_tr.arb:224</code>, <code>lib/l10n/app_en.arb:92</code>; <code>lib/screens/full_version_screen.dart:11-13</code>. Canlı sayfa repo ile birebir aynı (HTTP 200, diff boş).</td>
+<td>§7'yi yeniden yaz: "Tam Sürüm, tek seferlik bir satın almadır (abonelik değil). İşlemi Apple ya da Google yapar; uygulama ödeme bilgisi görmez ve veri toplamaz. Satın alma ekranı ebeveyn kontrolünün arkasındadır." "Abonelik" kelimesini çıkar. IAP kapalı gidecekse K-15 ile birlikte uygula ve web metnini "henüz satışta değil" diye yaz. Tarihi güncelle ve <code>master</code>'a it (GitHub Pages <code>docs/</code> klasöründen yayınlanıyor).</td>
+<td><span class="p1">P1</span></td>
+</tr>
+
+<tr>
+<td>M-03</td>
+<td>Tam Sürüm ekranı "Aile Paylaşımı ile en fazla 5 aile üyesiyle paylaşılır" diyor. Bu, ancak ürün App Store Connect'te Family Sharing açık oluşturulduysa doğru; sonradan açılabilir ama bir kez açılınca kapatılamaz. Yanlışsa fiyat ve kapsam vaadi yanıltıcı olur.</td>
+<td>2.3.1(a), 3.1.1</td>
+<td class="kanit"><code>lib/l10n/app_tr.arb:51</code>, <code>lib/l10n/app_en.arb:24</code> (<code>familySharingNote</code>); <code>lib/screens/full_version_screen.dart:90-93</code>.</td>
+<td><code>com.cobi.paint.full</code> ürününü Family Sharing işaretli oluştur (plan zaten böyle). Açmayacaksan satırı kaldır.<span class="sen">senin işin</span></td>
+<td><span class="p1">P1</span></td>
+</tr>
+
+<tr>
+<td>M-04</td>
+<td>IAP açık derlemede açıklama "200'den fazla boyama sayfası" derken çocuk 48 sayfa görür (6 kategori × 8 ücretsiz). Ücretsiz-ücretli sınırı açıklamada yazmazsa yanlış fiyat ve kapsam izlenimi doğar.</td>
+<td>2.3.1(a), 3.1.1 (şeffaflık), 5.6 (müşteri güveni)</td>
+<td class="kanit"><code>lib/providers/app_provider.dart:106-107</code>; <code>lib/data/builtin_images.dart</code> (201 sayfa, kategori başına 8 <code>free: true</code>); <code>store_listing.md:32, 68</code>; <code>lib/l10n/app_tr.arb:48</code> (<code>fullVersionDesc</code> 201 sayfa, doğru).</td>
+<td>IAP açık gidecekse açıklamaya ekle: "Ücretsiz sürümde her kategoriden 8 sayfa. Tam Sürüm (tek seferlik satın alma) 201 sayfanın hepsini açar." ASC'de ürünü sürümün "In-App Purchases" listesine ekle; görünen adı iki dilde yaz (Ask to Buy isteğinde ebeveyn bu adı görür). IAP kapalı gidecekse değişiklik yok.<span class="sen">senin işin</span></td>
+<td><span class="p1">P1</span></td>
+</tr>
+
+<tr>
+<td>M-05</td>
+<td>Notes for Review boşsa ya da genelse inceleyici kapıyı, paylaşımı ve IAP'yi bulamaz; Apple "generic descriptions will be rejected" diyor. Kapı giriş noktaları belirgin değil: sağ üstte gri dişli ve Eserlerim'de basılı tutma.</td>
+<td>2.3.1(a), 2.1(b)</td>
+<td class="kanit"><code>lib/screens/home_screen.dart:111-117</code> (küçük gri dişli); <code>lib/screens/my_artworks_screen.dart:114, 141-142</code> (uzun basma); <code>lib/widgets/parental_gate.dart:108-137</code> (kilit süreleri).</td>
+<td>Notes for Review'a yaz (İngilizce): giriş yok; ebeveyn alanı sağ üstteki dişli ile açılır; kapı 2–9 arası iki sayının çarpımını ister, cevap ekrandaki sayıların çarpımıdır; 3 yanlış cevapta 30 s kilit; paylaşma, yazdırma ve silme Eserlerim'de resme basılı tutunca ve kapıdan sonra çıkar; Tam Sürüm ekranı Ebeveyn alanı → Tam Sürüm (IAP açıksa); Android'e özgü "Galeriye kaydet" ve "Yazdır" iOS'ta sistem paylaşım menüsündedir.<span class="sen">senin işin</span></td>
+<td><span class="p1">P1</span></td>
+</tr>
+</table>
+
+<h3>2.3 Hesap ve App Store Connect tarafı (H) <span class="sen">hepsi senin işin</span></h3>
+<table>
+<tr><th style="width:48px">No</th><th style="width:24%">Risk</th><th style="width:13%">Kural</th><th style="width:22%">Kanıt</th><th>Düzeltme</th><th style="width:92px">Öncelik</th></tr>
+
+<tr>
+<td>H-01</td>
+<td>Yaş derecelendirme anketi yeni biçimde yanıtlanmadan yeni sürüm gönderilemez. Apple 31 Ocak 2026'yı son tarih verdi; eski yanıtlar otomatik dönüştürüldü ama onay senin.</td>
+<td>Upcoming requirements: "Age Rating Updates – Since January 31, 2026"</td>
+<td class="kanit"><code>store_listing.md:116-126</code> (yanıt notları, "yanıtlanmalı"). Önerilen yanıtlar bölüm 4'te.</td>
+<td>ASC → App Information → Age Ratings → Set Up Age Ratings. Hedef sonuç 4+. "Made for Kids" seçimini koru (bkz. H-03).</td>
+<td><span class="p0">P0 gönderim engeli</span></td>
+</tr>
+
+<tr>
+<td>H-02</td>
+<td>IAP açık derlemede Paid Apps sözleşmesi, banka ve vergi formları etkin değilse StoreKit ürünü döndürmez; ekran "Mağazaya şu an ulaşılamıyor" gösterir. İnceleyici IAP'yi test edemez ve reddeder.</td>
+<td>2.1(b)</td>
+<td class="kanit"><code>lib/services/purchase_service.dart:92-96</code> (boş yanıt → null); <code>lib/screens/full_version_screen.dart:65-74</code>. Sen: sözleşme ASC'de bekliyor.</td>
+<td>Business → Agreements: Paid Apps "Active" olmadan <code>COBI_IAP=true</code> derleme gönderme. Ürün "Ready to Submit" ve sürüme bağlı olmalı; sandbox hesabıyla satın al, geri yükle ve Ask to Buy'ı dene. Sözleşme gecikirse IAP kapalı derle (bu durumda K-15 ve M-02'yi uygula).</td>
+<td><span class="p0">P0 (IAP derlemesi için)</span></td>
+</tr>
+
+<tr>
+<td>H-03</td>
+<td>Kids yaş bandı: canlı kayıt "Made for Ages 6–8", açıklama "3 yaş ve üstü", hedef "5 ve altı". Apple yardımı: "You can't change this selection once your app is approved by App Review." Bandı kendi başına değiştiremezsin; açıklama ile band çelişik kalırsa soru gelir.</td>
+<td>ASC yardımı (Set an app age rating); 1.3</td>
+<td class="kanit"><code>store_listing.md:109-111</code>; <code>lib/l10n/app_tr.arb:218</code> (Minik 3–5 yaş).</td>
+<td>Gönderimden önce App Review'a (Contact Us → App Review) yazılı sor: bandı "5 and under"a almak. Yanıt gelmeden gönderiyorsan Notes for Review'a aynı isteği yaz. Band değişmezse açıklamada "3 yaş ve üstü" ifadesi kalabilir; Apple bandı "primary audience" olarak okur, ama tutarlılık için "okul öncesi" de.</td>
+<td><span class="p1">P1</span></td>
+</tr>
+
+<tr>
+<td>H-04</td>
+<td>AB Dijital Hizmetler Yasası tüccar beyanı. IAP ile gelir elde eden geliştirici tüccardır. Beyan yoksa AB vitrininden kaldırılır (17 Şubat 2025'ten beri) ve AB için güncelleme gönderilemez (16 Ekim 2024'ten beri). Adres, telefon ve e-posta AB vitrininde yayımlanır.</td>
+<td>Upcoming requirements: DSA (2024-10-16, 2025-02-17)</td>
+<td class="kanit">Gece raporu: "DSA trader bilgisi (posta kutusu + ayrı telefon)". Repo'da iz yok; ASC'de kontrol.</td>
+<td>Business → Agreements → Compliance → Digital Services Act. Posta kutusu adresi ve ayrı telefon için belge ister. AB'de yayınlamayacaksan bile beyan zorunlu.</td>
+<td><span class="p1">P1</span></td>
+</tr>
+
+<tr>
+<td>H-05</td>
+<td>Eski IAP ürünleri <code>cobi_paint_pro_monthly</code> ve <code>cobi_paint_pro_lifetime</code> ASC'de duruyorsa inceleyici uygulamada bulamaz: "If any configured in-app purchase items cannot be found or reviewed in your app, explain the reason".</td>
+<td>2.1(b)</td>
+<td class="kanit"><code>README.md:23</code> (eski ürün kimlikleri); kodda yalnız <code>com.cobi.paint.full</code> (<code>lib/services/purchase_service.dart:23</code>).</td>
+<td>ASC → In-App Purchases: eski ürünleri sürümden çıkar ve "Remove from Sale" yap; aboneliği olan grup varsa grubu kapat. Notes for Review'a bir cümle ekle.</td>
+<td><span class="p1">P1</span></td>
+</tr>
+
+<tr>
+<td>H-06</td>
+<td>Ekran görüntüleri: uygulama iPad destekliyor, 13" iPad görüntüleri zorunlu; görüntüler uygulamayı kullanımda göstermeli (açılış ekranı ya da sadece başlık olmaz). Canlı görüntüler eski arayüzden olabilir.</td>
+<td>2.3.3</td>
+<td class="kanit"><code>ios/Runner.xcodeproj/project.pbxproj:495</code> (<code>TARGETED_DEVICE_FAMILY = "1,2"</code>); <code>store_listing.md:130-139</code>.</td>
+<td>6.9" iPhone ve 13" iPad (2064×2752) setlerini Minik modundan, gerçek boyama anından çek; kapı ekranını ekle (kapının varlığı inceleyiciye güven verir).</td>
+<td><span class="p1">P1</span></td>
+</tr>
+
+<tr>
+<td>H-07</td>
+<td>ASC yerelleştirme: canlı kayıtta dil alanı "English" ama açıklama Türkçe (gelir raporu). Birincil dil İngilizce ise Türkçe metin İngilizce alanına yazılmış demektir; inceleyici İngilizce bekler.</td>
+<td>2.3.1 (metadata), 2.3 (yerelleştirme)</td>
+<td class="kanit"><code>ios/Runner/Info.plist:57-61</code> (uygulama tr ve en); gelir raporu "Dil alanı English ama açıklama Türkçe".</td>
+<td>ASC → App Information → Localizations: Turkish ve English ayrı ayrı; birincil dili Türkçe'ye çevir (sürümle birlikte değişir). Her alanı <code>store_listing.md</code>'den doldur.</td>
+<td><span class="p1">P1</span></td>
+</tr>
+
+<tr>
+<td>H-08</td>
+<td>Accessibility Nutrition Labels (ASC, isteğe bağlı). Testler VoiceOver etiketi, kontrast ve dokunma hedefini doğruluyor; Reduce Motion kodda var. İşaretlenirse Kids vitrininde artı; yanlış işaretlenirse 2.3.1.</td>
+<td>ASC özellik (2025), 2.3.1</td>
+<td class="kanit"><code>lib/widgets/motion.dart:8-10</code>; <code>lib/main.dart:96</code> (metin 200%); guideline testleri (K-08).</td>
+<td>Önce gerçek cihazda VoiceOver ile tam tur (ana ekran → kategori → boyama → Eserlerim → kapı). Sonra VoiceOver, Larger Text, Sufficient Contrast, Reduced Motion'ı işaretle. Emin değilsen boş bırak.</td>
+<td><span class="p2">P2</span></td>
+</tr>
+</table>
+
+<h2>3. Uyumlu bulunanlar</h2>
+<table>
+<tr><th style="width:30%">Kontrol</th><th style="width:12%">Kural</th><th>Kanıt</th></tr>
+<tr><td><span class="ok">Dış bağlantı yok.</span> <code>url_launcher</code> yok; kodda <code>http</code>, <code>mailto</code>, mağaza bağlantısı yok. E-posta panoya kopyalanır, tıklanmaz.</td><td>1.3, 5.1.4</td><td><code>pubspec.yaml:17-25</code>; <code>grep</code> sonucu boş; <code>lib/screens/parents_screen.dart:178-187</code>; lisans sayfası <code>:171-177</code> (Flutter lisans metni, bağlantı değil).</td></tr>
+<tr><td><span class="ok">Kapı arkasında:</span> ayarlar, paylaşım, yazdırma, galeri, silme, satın alma, gizlilik metni, lisanslar.</td><td>1.3</td><td><code>lib/screens/home_screen.dart:85-88</code>; <code>lib/screens/my_artworks_screen.dart:141-142</code>; <code>lib/screens/parents_screen.dart:36-45</code>.</td></tr>
+<tr><td><span class="ok">Kapı niteliği:</span> 2–9 × 2–9 çarpma, sonuç ≥ 10, her açılışta yeni soru, 3 yanlışta 30/60/120 s kilit, 20 s boşta kapanır, ekrandan kopyalanamaz. Apple'ın "math-based task" örneğiyle aynı sınıf.</td><td>Kids sayfası (parental gates)</td><td><code>lib/widgets/parental_gate.dart:108-137</code>; testler <code>test/widgets/kid_controls_test.dart:163-200</code>.</td></tr>
+<tr><td><span class="ok">Üçüncü taraf analiz, reklam, kimlik yok.</span> Dokuz bağımlılığın hiçbiri veri göndermez (tablo 5).</td><td>1.3, 5.1.4(a)</td><td><code>pubspec.yaml:17-25</code>; <code>ios/Podfile.lock:1-16</code>.</td></tr>
+<tr><td><span class="ok">Hesap, giriş, konum, kamera, fotoğraf okuma yok.</span></td><td>5.1.1(ii)(v), 5.1.5</td><td><code>ios/Runner/Info.plist</code> (yalnız <code>NSPhotoLibraryAddUsageDescription</code>).</td></tr>
+<tr><td><span class="ok">Gizlilik politikası uygulama içinde ve URL canlı.</span> Metin ne toplandığını (hiç), saklamayı ve silmeyi anlatıyor.</td><td>5.1.1(i), 5.1.4(b)</td><td><code>lib/screens/parents_screen.dart:219-233</code>; <code>docs/privacy_policy.html:39-50</code>; canlı sayfa HTTP 200, repo ile aynı; destek URL'si HTTP 200.</td></tr>
+<tr><td><span class="ok">Privacy manifest:</span> uygulama <code>UserDefaults</code> için <code>CA92.1</code> bildiriyor; <code>shared_preferences_foundation</code> <code>1C8F.1</code>; <code>share_plus</code>, <code>in_app_purchase_storekit</code>, <code>path_provider_foundation</code> manifestli; izleme yok, toplanan veri yok.</td><td>Required reason APIs</td><td><code>ios/Runner/PrivacyInfo.xcprivacy:5-21</code>; <code>project.pbxproj:272</code> (Resources'a dâhil); pub cache manifestleri.</td></tr>
+<tr><td><span class="ok">Fotoğraf ekleme izin metni</span> paylaşım menüsündeki "Resmi Kaydet" için var ve iki dilde.</td><td>5.1.1(ii) (purpose string)</td><td><code>ios/Runner/Info.plist:49-51</code>; <code>ios/Runner/tr.lproj/InfoPlist.strings:1</code>; <code>en.lproj</code>; <code>project.pbxproj:273</code>.</td></tr>
+<tr><td><span class="ok">Export compliance anahtarı</span> tanımlı.</td><td>ASC</td><td><code>ios/Runner/Info.plist:63-65</code>.</td></tr>
+<tr><td><span class="ok">IAP akışı:</span> non-consumable, fiyat mağazadan, sabit fiyat yok, geri yükle düğmesi aynı ekranda, Ask to Buy "pending" durumu işleniyor, her işlem <code>completePurchase</code> ile kapatılıyor, satın alma durumu cihazda saklanıyor.</td><td>3.1.1</td><td><code>lib/screens/full_version_screen.dart:75-89</code>; <code>lib/services/purchase_service.dart:65-88</code>; <code>test/full_version_screen_test.dart:48-59</code>; StoreKit 2 varsayılan, iOS 15 tabanı yeterli (<code>project.pbxproj:491</code>).</td></tr>
+<tr><td><span class="ok">Abonelik yok;</span> çocuk ekranı satın alma durumundan etkilenmez, kilit simgesi ve sayaç yok.</td><td>3.1.2, 1.3</td><td><code>lib/providers/app_provider.dart:106-107</code> (yalnız liste kısalır); <code>lib/l10n/app_tr.arb:41</code>.</td></tr>
+<tr><td><span class="ok">Minimum iOS 15.0</span> (Apple 9 Eylül 2026'dan beri iOS 13+ ister).</td><td>Upcoming requirements</td><td><code>ios/Podfile:2</code>; <code>project.pbxproj:491, 624, 675</code>.</td></tr>
+<tr><td><span class="ok">iPad:</span> iPhone ve iPad hedefi, iPad'de dört yön, <code>UIRequiresFullScreen</code> yok (Split View için şart), tablet ızgarası ve tablet kontrol boyutları.</td><td>2.4.1, 4.0</td><td><code>project.pbxproj:495</code>; <code>ios/Runner/Info.plist:31-43</code>; <code>lib/screens/home_screen.dart:21</code>; <code>lib/screens/coloring_screen.dart:70-80</code>.</td></tr>
+<tr><td><span class="ok">Dynamic Type</span> 200%'e kadar büyür, sonra kilitlenir (gerekçeli sapma: sabit çocuk düzeni).</td><td>4.0 / HIG</td><td><code>lib/main.dart:94-96</code>.</td></tr>
+<tr><td><span class="ok">Reduce Motion</span> açılış, kapı sallanması, konfeti ve ipucu animasyonunda dikkate alınıyor.</td><td>4.0 / HIG</td><td><code>lib/widgets/motion.dart:8-10</code>; <code>lib/screens/splash_screen.dart:30</code>; <code>lib/widgets/parental_gate.dart:129</code>; <code>lib/widgets/celebration.dart:11</code>; <code>lib/widgets/idle_hint.dart:26</code>.</td></tr>
+<tr><td><span class="ok">VoiceOver:</span> her düğme ve kartta <code>Semantics(button: true, label: …)</code>; tuval etiketli; sesli adlar ekran okuyucu açıkken susar; kapının boşta kapanması ekran okuyucuda devre dışı.</td><td>4.0 / HIG</td><td><code>lib/widgets/kid_button.dart:120-124, 237</code>; <code>lib/screens/coloring_screen.dart:664-666</code>; <code>lib/services/voice_service.dart:45-46</code>; <code>lib/widgets/parental_gate.dart:85</code>.</td></tr>
+<tr><td><span class="ok">Standart davranışlar bozulmuyor:</span> ses efektleri Sessiz anahtarına uyan <code>ambient</code> oturumda; shake-to-undo genel API ile kapalı; kenar jestleri HIG'in "Going full screen" desenine göre erteleniyor, engellenmiyor.</td><td>2.5.9, 2.5.1</td><td><code>lib/services/sound_service.dart:46-58</code>; <code>ios/Runner/AppDelegate.swift:12, 21-41</code>.</td></tr>
+<tr><td><span class="ok">iPad'de paylaşım çökmez:</span> <code>sharePositionOrigin</code> karttan hesaplanıyor; hata yakalanıp SnackBar gösteriliyor.</td><td>2.1(a)</td><td><code>lib/screens/my_artworks_screen.dart:148-149, 196-205</code>; <code>lib/services/share_service.dart:22-32</code>.</td></tr>
+<tr><td><span class="ok">Açılış ve boyut:</span> splash 600 ms + ayarlar; sesler ilk kareden 1 s sonra yüklenir; varlıklar toplam 5,4 MB (202 sayfa PNG 1,9 MB).</td><td>2.1, 4.0</td><td><code>lib/screens/splash_screen.dart:42-46</code>; <code>lib/main.dart:51-56</code>; <code>du -sh assets</code>.</td></tr>
+<tr><td><span class="ok">Launch screen storyboard ve ikon seti tam;</span> 1024 px ikon opak.</td><td>2.3.3, 4.0</td><td><code>ios/Runner/Base.lproj/LaunchScreen.storyboard</code>; <code>AppIcon.appiconset/Contents.json</code> (25 giriş, eksik dosya yok).</td></tr>
+<tr><td><span class="ok">Rehberli Erişim rehberi gerçekten var</span> (mağaza metni vaadi).</td><td>2.3.1</td><td><code>lib/screens/parents_screen.dart:161-162</code>; <code>lib/l10n/app_tr.arb:225-226</code>.</td></tr>
+<tr><td><span class="ok">Gizli dosyalar repoda değil:</span> keystore, <code>key.properties</code>, <code>Generated.xcconfig</code>, <code>xcuserstate</code> izlenmiyor.</td><td>Güvenlik</td><td><code>git ls-files</code> sonucu boş; <code>.gitignore</code>, <code>ios/.gitignore:21-22</code>.</td></tr>
+</table>
+
+<h2>4. Yaş derecelendirme anketi: önerilen yanıtlar</h2>
+<p>Uygulamada derecelendirmeyi yükseltecek bir şey yok. Beklenen sonuç 4+; "5 ve altı" Kids bandı 4+ ister.</p>
+<table>
+<tr><th style="width:28%">Soru (ASC)</th><th style="width:12%">Yanıt</th><th>Dayanak</th></tr>
+<tr><td>Parental Controls (in-app control)</td><td>Hayır</td><td>Apple tanımı: ebeveynin çocuğun erişimini izlediği ya da kısıtladığı araçlar. Ebeveyn alanı yalnız mod, dil, ses gibi ayarlar; içerik kısıtı yok. Kapı bir ayar koruması, "parental control" değil. Evet dersen rozet çıkar ve inceleyici özelliği arar.</td></tr>
+<tr><td>Age Assurance</td><td>Hayır</td><td>Yaş doğrulama yok.</td></tr>
+<tr><td>Unrestricted Web Access</td><td>Hayır</td><td>WebView ve tarayıcı yok (bölüm 3, ilk satır).</td></tr>
+<tr><td>User-Generated Content</td><td>Hayır</td><td>Çizimler cihazda kalır; paylaşım sistem menüsüyle, ebeveyn seçimiyle; "broad distribution" yok. <code>store_listing.md:119-120</code> ile uyumlu.</td></tr>
+<tr><td>Messaging and Chat, Social Media</td><td>Hayır</td><td>Özellik yok. Eylül 2026'da eklenen sosyal medya sorusu da Hayır.</td></tr>
+<tr><td>Advertising</td><td>Hayır</td><td>Reklam SDK'sı yok; README Faz 0'da AdMob kaldırıldı.</td></tr>
+<tr><td>Şiddet, cinsellik, küfür, madde, kumar, loot box, yarışma</td><td>Yok</td><td>Boyama sayfaları Fluent UI Emoji kaynaklı; çıkartmalar kalp, yıldız, gülen yüz.</td></tr>
+<tr><td>Made for Kids</td><td>Evet, hedef "5 and under"</td><td>Band değişikliği onay sonrası kilitli (H-03).</td></tr>
+<tr><td>App Privacy (nutrition label)</td><td>Data Not Collected</td><td>Kod ağ çağrısı yapmıyor; StoreKit işlemleri Apple tarafında kalır, geliştirici satın alma geçmişi tutmuyor.</td></tr>
+</table>
+
+<h2>5. Bağımlılık matrisi (iOS tarafı)</h2>
+<table>
+<tr><th>Paket</th><th>Sürüm</th><th>iOS kodu</th><th>Privacy manifest</th><th>Required-reason API</th><th>Ağ</th><th>Kids 1.3</th></tr>
+<tr><td><code>share_plus</code></td><td>12.0.1</td><td><code>UIActivityViewController</code></td><td>Var (boş)</td><td>Yok</td><td>Yok</td><td class="ok">Uygun</td></tr>
+<tr><td><code>audioplayers</code> / <code>audioplayers_darwin</code></td><td>6.5.1 / 6.3.0</td><td>AVFoundation</td><td>Yok (K-11)</td><td>Yok (grep)</td><td>Yok (yalnız bundle)</td><td class="ok">Uygun</td></tr>
+<tr><td><code>in_app_purchase</code> / <code>in_app_purchase_storekit</code></td><td>3.3.1 / 0.4.13</td><td>StoreKit 2 (varsayılan)</td><td>Var (boş)</td><td>Yok</td><td>Yalnız App Store</td><td class="ok">Uygun, kapı arkasında</td></tr>
+<tr><td><code>path_provider</code> / <code>path_provider_foundation</code></td><td>2.1.5 / 2.5.1</td><td>FileManager</td><td>Var (boş)</td><td>Yok</td><td>Yok</td><td class="ok">Uygun</td></tr>
+<tr><td><code>shared_preferences</code> / <code>shared_preferences_foundation</code></td><td>2.5.4 / 2.5.6</td><td>UserDefaults</td><td>Var (<code>1C8F.1</code>)</td><td>UserDefaults (bildirildi)</td><td>Yok</td><td class="ok">Uygun</td></tr>
+<tr><td><code>image</code>, <code>provider</code>, <code>uuid</code>, <code>intl</code></td><td>4.7.2, 6.1.5+1, 4.5.2, 0.20.2</td><td>Saf Dart</td><td>Gerekmez</td><td>Yok</td><td>Yok</td><td class="ok">Uygun</td></tr>
+<tr><td>Flutter engine</td><td>3.38.3</td><td>Flutter.xcframework</td><td>Var (Flutter sağlar)</td><td>Flutter bildirir</td><td>Uygulama kullanmıyor</td><td class="ok">Uygun</td></tr>
+</table>
+
+<h2>6. Test kapsamı (4.0 tasarım, erişilebilirlik)</h2>
+<table>
+<tr><th>Ekran</th><th>Android 48 dp</th><th>iOS 44 pt</th><th>Etiket</th><th>Kontrast</th><th>Dosya</th></tr>
+<tr><td>CategoryScreen</td><td>Evet</td><td>Evet</td><td>Evet</td><td>Evet</td><td><code>test/category_screen_test.dart:43-47</code></td></tr>
+<tr><td>ParentsScreen</td><td>Evet</td><td>Evet</td><td>Evet</td><td>Evet</td><td><code>test/parents_screen_test.dart:37-40</code></td></tr>
+<tr><td>FullVersionScreen</td><td>Evet</td><td>Evet</td><td>Evet</td><td>Evet</td><td><code>test/full_version_screen_test.dart:88-91</code></td></tr>
+<tr><td>KidButton, KidPalette (bileşen)</td><td>Evet</td><td>Evet</td><td>Evet</td><td>Evet</td><td><code>test/widgets/kid_controls_test.dart:128-131</code></td></tr>
+<tr><td>ParentalGate</td><td>Evet</td><td>Evet</td><td>Evet</td><td>Evet</td><td><code>test/widgets/kid_controls_test.dart:188-191</code></td></tr>
+<tr><td>ColoringScreen (Draw sayfası)</td><td>Evet</td><td><strong>Hayır</strong></td><td>Evet</td><td><strong>Hayır</strong></td><td><code>test/app_test.dart:69-70</code></td></tr>
+<tr><td>ColoringScreen (boyama sayfası)</td><td><strong>Hayır</strong></td><td><strong>Hayır</strong></td><td><strong>Hayır</strong></td><td><strong>Hayır</strong></td><td>—</td></tr>
+<tr><td>HomeScreen</td><td><strong>Hayır</strong></td><td><strong>Hayır</strong></td><td><strong>Hayır</strong></td><td><strong>Hayır</strong></td><td>—</td></tr>
+<tr><td>MyArtworksScreen, alt sayfa, silme diyaloğu</td><td><strong>Hayır</strong></td><td><strong>Hayır</strong></td><td><strong>Hayır</strong></td><td><strong>Hayır</strong></td><td>—</td></tr>
+</table>
+<p>Eksikler K-08'de. Cihaz testi hiç yok: iPad 13" iOS 26 simülatöründe yatay, Split View ve VoiceOver turu (K-07, H-08) gönderimden önce bir kez yapılmalı.</p>
+
+<h2>7. Gönderim öncesi sıra</h2>
+<ol>
+<li>Yaş anketi (H-01), açıklama ve yerelleştirme (M-01, H-07), eski IAP'ler (H-05), DSA (H-04), band sorusu (H-03). Hepsi App Store Connect'te.</li>
+<li>IAP kararı: Paid Apps etkinse ürünü oluştur (Family Sharing açık, M-03), <code>COBI_IAP=true</code>; değilse IAP kapalı derle ve K-15 ile M-02'yi ona göre yaz.</li>
+<li>Gizlilik politikası §7 (M-02) ve küçük metinler (K-03, K-10); <code>master</code>'a it ki GitHub Pages güncellensin.</li>
+<li><code>ios/ci_scripts/ci_post_clone.sh</code> ile README bölümünü commit et, Xcode Cloud iş akışını kur ve derleme numarasını ayarla (K-01); OpenCV kalıntılarını temizle (K-05); ilk arşiv TestFlight'a.</li>
+<li>TestFlight'ta: iPad yatay ve Split View (K-07), VoiceOver turu, paylaşım menüsünde "Resmi Kaydet" izin metni, IAP sandbox (satın al, geri yükle, Ask to Buy).</li>
+<li>Ekran görüntüleri (H-06), Notes for Review (M-05), gönder.</li>
+</ol>
+
+<h2>8. Kaynaklar</h2>
+<ul class="kisa">
+<li>App Store Review Guidelines, "Last Updated: October 16, 2026": <a href="https://developer.apple.com/app-store/review/guidelines/">developer.apple.com/app-store/review/guidelines/</a> (1.3, 2.1, 2.3.1, 2.3.3, 2.5.9, 3.1.1, 4.0, 5.1.1, 5.1.2, 5.1.4, 5.6)</li>
+<li>Kids sayfası (parental gate örnekleri, yaş bantları 5 and under / 6–8 / 9–11, üçüncü taraf veri yasağı): <a href="https://developer.apple.com/kids/">developer.apple.com/kids/</a></li>
+<li>Upcoming requirements (Xcode 26: 28 Nisan 2026; iOS 13+: 9 Eylül 2026; yaş anketi: 31 Ocak 2026; DSA: 16 Ekim 2024 ve 17 Şubat 2025; required reason APIs: 1 Mayıs 2024): <a href="https://developer.apple.com/news/upcoming-requirements/">developer.apple.com/news/upcoming-requirements/</a></li>
+<li>ASC yardımı, yaş derecelendirmesi ayarlama ("You can't change this selection once your app is approved by App Review"): <a href="https://developer.apple.com/help/app-store-connect/manage-app-information/set-an-app-age-rating/">set-an-app-age-rating</a>; derecelendirme tanımları: <a href="https://developer.apple.com/help/app-store-connect/reference/age-ratings/">age-ratings</a></li>
+<li>ASC yardımı, DSA tüccar gereksinimleri: <a href="https://developer.apple.com/help/app-store-connect/manage-compliance-information/manage-european-union-digital-services-act-trader-requirements/">manage-european-union-digital-services-act-trader-requirements</a></li>
+<li>Flutter, Xcode Cloud kurulumu (<code>ios/ci_scripts/ci_post_clone.sh</code>): <a href="https://docs.flutter.dev/deployment/cd">docs.flutter.dev/deployment/cd</a></li>
+<li>Flutter, UIScene geçişi (Xcode 27 zorunluluğu, elle geçiş adımları): <a href="https://docs.flutter.dev/release/breaking-changes/uiscenedelegate">docs.flutter.dev/release/breaking-changes/uiscenedelegate</a></li>
+<li>Flutter 3.38 sürüm notları (iOS 26 ve Xcode 26 LLDB maddeleri): <a href="https://docs.flutter.dev/release/release-notes/release-notes-3.38.0">release-notes-3.38.0</a></li>
+<li>Repo içi: <code>store_listing.md</code>, <code>plan/gece-raporu-2026-11-03.html</code>, <code>plan/gelir-ve-yayin-raporu.html</code></li>
+</ul>
+
+</body>
+</html>
