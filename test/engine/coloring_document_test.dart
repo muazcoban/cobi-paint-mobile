@@ -156,4 +156,23 @@ void main() {
     expect(copy.points[1], closeTo(2.3, 1e-6));
     expect(Stroke.fromJson({'k': 'laser', 'p': []}), isNull);
   });
+
+  test('the eraser counts when only rainbow or crayon paint is on the page', () {
+    final path = Float32List.fromList([1, 1, 0.5, 5, 5, 0.5]);
+    doc.addStroke(Stroke(kind: BrushKind.rainbow, argb: 0, size: 4, points: path));
+    doc.erase(Stroke(kind: BrushKind.eraser, argb: 0, size: 6, points: path), const {});
+    expect(doc.strokes, hasLength(2), reason: 'the eraser stroke is recorded');
+    doc.undo();
+    expect(doc.strokes, hasLength(1));
+  });
+
+  test('a mirrored stroke is one stroke and one undo step', () {
+    final path = Float32List.fromList([1, 1, 0.5, 5, 5, 0.5]);
+    doc.addStroke(Stroke(kind: BrushKind.marker, argb: blue, size: 4, symmetry: 6, points: path));
+    expect(doc.strokes, hasLength(1));
+    expect(doc.strokes.single.symmetry, 6);
+    doc.undo();
+    expect(doc.strokes, isEmpty);
+    expect(doc.canUndo, isFalse);
+  });
 }

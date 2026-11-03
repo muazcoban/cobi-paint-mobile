@@ -266,6 +266,30 @@ abstract class AppLocalizations {
   /// **'Pastel boya'**
   String get crayon;
 
+  /// Mirror button on the free drawing page while the mirror is off; the next three are its on states
+  ///
+  /// In tr, this message translates to:
+  /// **'Ayna kapalı'**
+  String get mirrorOff;
+
+  /// No description provided for @mirror2.
+  ///
+  /// In tr, this message translates to:
+  /// **'İki yönlü ayna'**
+  String get mirror2;
+
+  /// No description provided for @mirror4.
+  ///
+  /// In tr, this message translates to:
+  /// **'Dört yönlü ayna'**
+  String get mirror4;
+
+  /// No description provided for @mirror6.
+  ///
+  /// In tr, this message translates to:
+  /// **'Altı yönlü ayna'**
+  String get mirror6;
+
   /// No description provided for @licenses.
   ///
   /// In tr, this message translates to:

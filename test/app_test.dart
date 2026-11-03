@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cobi_paint_mobile/data/page_order.dart';
 import 'package:cobi_paint_mobile/main.dart';
+import 'package:cobi_paint_mobile/models/user_settings.dart';
 import 'package:cobi_paint_mobile/screens/category_screen.dart';
 import 'package:cobi_paint_mobile/providers/app_provider.dart';
 import 'package:cobi_paint_mobile/services/sound_service.dart';
@@ -62,11 +63,31 @@ void main() {
     await tester.tap(find.text('Draw'));
     await settle(tester, () => find.byType(PaintCanvas).evaluate().isNotEmpty, reason: 'the blank page loaded');
     await tester.pumpAndSettle();
+    expect(find.bySemanticsLabel('Fill'), findsNothing, reason: 'the blank page has the mirror where the fill is');
+    expect(find.bySemanticsLabel('Mirror off'), findsOneWidget);
+    await expectLater(tester, meetsGuideline(androidTapTargetGuideline));
+    await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
 
     final canvas = find.byType(PaintCanvas);
     await tester.timedDrag(canvas, const Offset(90, 70), const Duration(milliseconds: 300));
     await tester.pump(const Duration(milliseconds: 500)); // autosave fires after 400 ms
     await settle(tester, () => app.savedArtworks.isNotEmpty, reason: 'autosave wrote the picture');
+
+    // Minik has one mirror switch: four-way, on or off.
+    await tester.tap(find.bySemanticsLabel('Mirror off'));
+    await tester.pumpAndSettle();
+    expect(find.bySemanticsLabel('Four-way mirror'), findsOneWidget);
+    await tester.timedDrag(canvas, const Offset(-60, 40), const Duration(milliseconds: 300));
+    await tester.pumpAndSettle();
+    final document = tester.widget<PaintCanvas>(canvas).document;
+    expect(document.strokes, hasLength(2), reason: 'the copies are drawn, not stored');
+    expect(document.strokes.last.symmetry, 4);
+    await tester.tap(find.bySemanticsLabel('Undo'));
+    await tester.pumpAndSettle();
+    expect(document.strokes, hasLength(1), reason: 'one mirrored stroke is one undo step');
+    await tester.tap(find.bySemanticsLabel('Four-way mirror'));
+    await tester.pumpAndSettle();
+    expect(find.bySemanticsLabel('Mirror off'), findsOneWidget);
 
     await tester.tap(find.bySemanticsLabel('Home'));
     await settle(tester, () => find.text('Animals').evaluate().isNotEmpty, reason: 'back on the home screen');
@@ -101,5 +122,23 @@ void main() {
     await settle(tester, () => find.byType(PaintCanvas).evaluate().isNotEmpty, reason: 'the page loaded');
     await tester.pumpAndSettle();
     expect(find.byType(PaintCanvas), findsOneWidget);
+    expect(find.bySemanticsLabel('Fill'), findsOneWidget, reason: 'a coloring page keeps the fill');
+    expect(find.bySemanticsLabel('Mirror off'), findsNothing, reason: 'the mirror is only on the blank page');
+  });
+
+  testWidgets('in Büyük mode the mirror cycles two, four, six and off', (tester) async {
+    final app = provider();
+    await openHome(tester, app);
+    await app.updateSettings(app.settings.copyWith(ageMode: AgeMode.big));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Draw'));
+    await settle(tester, () => find.byType(PaintCanvas).evaluate().isNotEmpty, reason: 'the blank page loaded');
+    await tester.pumpAndSettle();
+    for (final label in ['Two-way mirror', 'Four-way mirror', 'Six-way mirror', 'Mirror off']) {
+      await tester.tap(find.byWidgetPredicate((w) => w is KidButton && w.child is MirrorGlyph));
+      await tester.pumpAndSettle();
+      expect(find.bySemanticsLabel(label), findsOneWidget, reason: 'after a tap the mirror is "$label"');
+    }
   });
 }

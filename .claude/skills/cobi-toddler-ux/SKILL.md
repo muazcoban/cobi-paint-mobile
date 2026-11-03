@@ -48,6 +48,13 @@ Apple's Human Interface Guidelines (read the current pages; HIG changes every WW
   (`free: true`); a page that was free stays free. All of it is off unless the app is built with
   `--dart-define=COBI_IAP=true`.
 - iPad: pass `sharePositionOrigin` to every share, or the popover crashes.
+- Mirror drawing (council decision, 3 Nov 2026): only on the free drawing page, where it takes the
+  fill button's place (a fifth 82 pt button does not fit a 375 pt phone, and a bucket on a blank
+  page only recolours the paper). Minik has one switch: four-way on or off. Büyük cycles off, 2,
+  4, 6 on the same button, no menu. A stroke carries its symmetry (`Stroke.symmetry`, JSON key
+  `m`); copies are drawn by `PageLayers.paintStroke`, never stored, so one stroke is one undo step
+  and the eraser mirrors too. `MirrorGlyph` shows one petal and its copies; the faint mirror lines
+  on the canvas are not part of the saved picture.
 
 ## Coloring pages
 

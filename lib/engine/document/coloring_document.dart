@@ -76,7 +76,7 @@ class ColoringDocument extends ChangeNotifier {
       for (final l in touchedLabels)
         if (l > 0 && l < _fills.length && _fills[l] != null) l: _fills[l]!,
     };
-    final hasBrushPaint = _strokes.any((s) => s.kind == BrushKind.marker);
+    final hasBrushPaint = _strokes.any((s) => s.kind != BrushKind.eraser);
     if (cleared.isEmpty && !hasBrushPaint) return;
     _push(_StrokeCommand(stroke, cleared));
   }

@@ -55,6 +55,13 @@
   "purchasePending": "Satın alma onay bekliyor. Onay gelince sayfalar açılır.",
   "rainbowBrush": "Gökkuşağı fırçası",
   "crayon": "Pastel boya",
+  "mirrorOff": "Ayna kapalı",
+  "@mirrorOff": {
+    "description": "Mirror button on the free drawing page while the mirror is off; the next three are its on states"
+  },
+  "mirror2": "İki yönlü ayna",
+  "mirror4": "Dört yönlü ayna",
+  "mirror6": "Altı yönlü ayna",
   "licenses": "Lisanslar",
   "freeDraw": "Çiz",
   "@freeDraw": {

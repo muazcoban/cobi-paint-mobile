@@ -1,5 +1,8 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 
+import '../engine/render/symmetry.dart';
 import '../services/haptics.dart';
 
 /// Extra margin around a control in which a lifted finger still counts.
@@ -233,6 +236,53 @@ class _PressableCardState extends State<PressableCard> {
     }
     return Semantics(button: true, label: widget.semanticLabel, onTap: widget.onTap, child: card);
   }
+}
+
+/// One petal and its mirror copies: the icon shows what the mirror does to
+/// a stroke, so it explains itself without words. One petal means off.
+class MirrorGlyph extends StatelessWidget {
+  const MirrorGlyph({super.key, required this.ways, this.color = const Color(0xFF2D3142)});
+
+  /// Copies the mirror makes (see [symmetryWays]).
+  final int ways;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) => CustomPaint(painter: _MirrorPainter(ways, color));
+}
+
+class _MirrorPainter extends CustomPainter {
+  _MirrorPainter(this.ways, this.color);
+
+  final int ways;
+  final Color color;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final u = size.shortestSide;
+    final c = Offset(size.width / 2, size.height / 2);
+    // A leaf pointing up, leaning right of the vertical mirror line: 45
+    // degrees makes a four-way mirror a clover, 30 degrees makes a six-way
+    // mirror a flower with its petals 60 degrees apart.
+    final lean = ways == 4 ? math.pi / 4 : math.pi / 6;
+    final leaf = Path()
+      ..moveTo(0, -u * 0.06)
+      ..quadraticBezierTo(-u * 0.15, -u * 0.26, 0, -u * 0.48)
+      ..quadraticBezierTo(u * 0.15, -u * 0.26, 0, -u * 0.06)
+      ..close();
+    final paint = Paint()..color = color;
+    for (final transform in symmetryTransforms(ways, c.dx, c.dy)) {
+      canvas.save();
+      canvas.transform(transform.storage);
+      canvas.translate(c.dx, c.dy);
+      canvas.rotate(lean);
+      canvas.drawPath(leaf, paint);
+      canvas.restore();
+    }
+  }
+
+  @override
+  bool shouldRepaint(_MirrorPainter oldDelegate) => oldDelegate.ways != ways || oldDelegate.color != color;
 }
 
 /// A pink-and-white eraser block; Material has no eraser a child would know.

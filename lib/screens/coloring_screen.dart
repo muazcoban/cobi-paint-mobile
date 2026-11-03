@@ -97,6 +97,9 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
   Color _color = littlePalette.first;
   int _brushStep = 1;
 
+  /// Mirror copies per stroke on the free drawing page (see [symmetryWays]).
+  int _symmetry = 1;
+
   @override
   void initState() {
     super.initState();
@@ -190,6 +193,8 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
         _page = page;
         _saver = saver;
         _revisionAtOpen = document.revision;
+        // A mirror drawing opened again goes on the way it was left.
+        if (widget.image.freeDraw) _symmetry = document.strokes.lastOrNull?.symmetry ?? 1;
       });
       _scheduleHint(app, document);
     } catch (e) {
@@ -254,6 +259,18 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
     setState(() => _brush = kinds[(kinds.indexOf(_brushFor(big)) + 1) % kinds.length]);
   }
 
+  /// The mirror on the free drawing page. Minik has one switch: four-way
+  /// on or off. Büyük cycles off, two, four and six. The tool, the colour
+  /// and the page stay as they are.
+  void _tapMirror(bool big) {
+    unawaited(_sound.playClickSound());
+    final next = big
+        ? symmetryWays[(symmetryWays.indexOf(_symmetry) + 1) % symmetryWays.length]
+        : (_symmetry > 1 ? 1 : 4);
+    if (next > 1) _say('mirror');
+    setState(() => _symmetry = next);
+  }
+
   void _selectTool(CanvasTool tool) {
     if (_tool == tool) return;
     unawaited(_sound.playClickSound());
@@ -267,8 +284,9 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
       _say('color_$index');
       setState(() {
         _color = colors[index];
-        // Picking a colour while erasing means "I want to paint again".
-        if (_tool == CanvasTool.eraser) _tool = CanvasTool.fill;
+        // Picking a colour while erasing means "I want to paint again";
+        // the free drawing page has no fill, so the brush comes back there.
+        if (_tool == CanvasTool.eraser) _tool = widget.image.freeDraw ? CanvasTool.marker : CanvasTool.fill;
       });
     } else if (index == colors.length) {
       unawaited(_sound.playClickSound());
@@ -396,7 +414,9 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
     );
   }
 
-  /// Home, fill, brush and undo (plus redo in Büyük mode).
+  /// Home, fill, brush and undo (plus redo in Büyük mode). The free drawing
+  /// page has the mirror where the fill is: a fifth button does not fit a
+  /// 375 pt phone, and a bucket on a blank page only recolours the paper.
   List<Widget> _controls(_Metrics m, bool big) {
     final l10n = AppLocalizations.of(context)!;
     final brush = _brushFor(big);
@@ -410,14 +430,28 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
         semanticLabel: l10n.home,
         onTap: () => unawaited(_goHome()),
       ),
-      KidButton(
-        icon: Icons.format_color_fill_rounded,
-        size: m.primary * 0.96,
-        selected: _tool == CanvasTool.fill,
-        badgeColor: _color,
-        semanticLabel: l10n.fill,
-        onTap: () => _selectTool(CanvasTool.fill),
-      ),
+      if (widget.image.freeDraw)
+        KidButton(
+          size: m.primary * 0.96,
+          selected: _symmetry > 1,
+          semanticLabel: switch (_symmetry) {
+            2 => l10n.mirror2,
+            4 => l10n.mirror4,
+            6 => l10n.mirror6,
+            _ => l10n.mirrorOff,
+          },
+          onTap: () => _tapMirror(big),
+          child: MirrorGlyph(ways: _symmetry),
+        )
+      else
+        KidButton(
+          icon: Icons.format_color_fill_rounded,
+          size: m.primary * 0.96,
+          selected: _tool == CanvasTool.fill,
+          badgeColor: _color,
+          semanticLabel: l10n.fill,
+          onTap: () => _selectTool(CanvasTool.fill),
+        ),
       KidButton(
         icon: brush == BrushKind.crayon ? Icons.edit_rounded : Icons.brush_rounded,
         size: m.primary * 0.96,
@@ -496,6 +530,7 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
                       brush: _brushFor(big),
                       stayInside: !widget.image.freeDraw,
                       eraseFills: !widget.image.freeDraw,
+                      symmetry: widget.image.freeDraw ? _symmetry : 1,
                       allowZoom: big,
                       onFilled: _onFilled,
                     ),
