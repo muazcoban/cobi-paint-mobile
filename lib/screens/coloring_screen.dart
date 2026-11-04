@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math;
 import 'dart:io';
 import 'dart:ui' as ui;
 
@@ -71,9 +72,17 @@ final _stickerCodes = [for (final s in stickers) s.code];
 class _Metrics {
   _Metrics(Size size, bool big) {
     final tablet = size.shortestSide >= 600;
-    primary = big ? (tablet ? 96 : 64) : (tablet ? 116 : 82);
-    cell = big ? (tablet ? 88 : 52) : (tablet ? 112 : 70);
     gap = tablet ? 16 : 12;
+    cell = big ? (tablet ? 88 : 52) : (tablet ? 112 : 70);
+    final double wanted = big ? (tablet ? 96 : 64) : (tablet ? 116 : 82);
+    // The controls share one row (tall layout) or one column (wide layout)
+    // between 12 pt paddings. In a narrow Split View pane they shrink
+    // together instead of overflowing, never below the 44 pt minimum.
+    final wide = size.width > size.height * 1.1;
+    final along = (wide ? size.height : size.width) - 24;
+    final count = big ? 5 : 4;
+    final fit = (along - (count - 1) * gap) / count;
+    primary = math.max(44.0, math.min(wanted, fit));
   }
 
   late final double primary;

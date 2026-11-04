@@ -587,7 +587,7 @@ abstract class AppLocalizations {
   /// No description provided for @parentsHint.
   ///
   /// In tr, this message translates to:
-  /// **'Ayarlar, paylaşım ve silme yalnız buradan yapılır.'**
+  /// **'Ayarlar burada. Paylaşmak, yazdırmak ve silmek için Eserlerim\'de bir resmi basılı tutun.'**
   String get parentsHint;
 
   /// No description provided for @ageMode.
@@ -635,8 +635,14 @@ abstract class AppLocalizations {
   /// No description provided for @privacyPolicyText.
   ///
   /// In tr, this message translates to:
-  /// **'Cobi Paint hiçbir kişisel veri toplamaz.\n\n• Hesap, reklam, analiz aracı ve internet bağlantısı yoktur.\n• Çocuğunuzun boyadığı resimler yalnız bu cihazda saklanır ve hiçbir sunucuya gönderilmez.\n• Bir resim yalnız siz ebeveyn kontrolünü geçip paylaşmayı seçtiğinizde, sistemin paylaşım menüsüyle ve sizin seçtiğiniz uygulamaya gönderilir.\n• Android\'de yazdırma ve galeriye kaydetme de ebeveyn kontrolünün arkasındadır: yazdırma sistemin yazdırma penceresinden geçer, kayıt yalnız bu cihazın galerisine yapılır.\n• Kayıtlı bir resmi Eserlerim\'de basılı tutup ebeveyn kontrolünü geçerek silebilirsiniz. Uygulamayı silmek bütün resimleri siler.\n\nSorularınız için: cobipaint@gmail.com Tam Sürüm satın alımı Apple ya da Google hesabınızla yapılır; uygulama ödeme bilgisine erişmez ve hiçbir veri toplamaz.'**
+  /// **'Cobi Paint hiçbir kişisel veri toplamaz.\n\n• Hesap, reklam, analiz aracı ve internet bağlantısı yoktur.\n• Çocuğunuzun boyadığı resimler yalnız bu cihazda saklanır ve hiçbir sunucuya gönderilmez.\n• Bir resim yalnız siz ebeveyn kontrolünü geçip paylaşmayı seçtiğinizde, sistemin paylaşım menüsüyle ve sizin seçtiğiniz uygulamaya gönderilir.\n• Android\'de yazdırma ve galeriye kaydetme de ebeveyn kontrolünün arkasındadır: yazdırma sistemin yazdırma penceresinden geçer, kayıt yalnız bu cihazın galerisine yapılır.\n• Kayıtlı bir resmi Eserlerim\'de basılı tutup ebeveyn kontrolünü geçerek silebilirsiniz. Uygulamayı silmek bütün resimleri siler.\n\nSorularınız için: cobipaint@gmail.com'**
   String get privacyPolicyText;
+
+  /// No description provided for @privacyPolicyPurchase.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tam Sürüm tek seferlik bir satın almadır, abonelik değildir. Ödemeyi Apple ya da Google alır; uygulama ödeme bilgisini görmez ve hiçbir veri toplamaz.'**
+  String get privacyPolicyPurchase;
 
   /// No description provided for @guidedAccessTitle.
   ///
@@ -647,7 +653,7 @@ abstract class AppLocalizations {
   /// No description provided for @guidedAccessText.
   ///
   /// In tr, this message translates to:
-  /// **'iPhone ve iPad\'de Rehberli Erişim\'i kullanabilirsiniz: Ayarlar > Erişilebilirlik > Rehberli Erişim\'i açın, sonra uygulama açıkken yan düğmeye üç kez basın. Android\'de Ayarlar > Güvenlik > Uygulama sabitleme\'yi kullanın.'**
+  /// **'iPhone ve iPad\'de Rehberli Erişim\'i kullanabilirsiniz: Ayarlar > Erişilebilirlik > Rehberli Erişim\'i açın, sonra uygulama açıkken yan düğmeye (Ana Ekran düğmeli cihazlarda Ana Ekran düğmesine) üç kez basın. Android\'de Ayarlar > Güvenlik > Uygulama sabitleme\'yi kullanın.'**
   String get guidedAccessText;
 
   /// No description provided for @colorNames.

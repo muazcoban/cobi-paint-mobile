@@ -149,13 +149,21 @@ class ParentsScreen extends StatelessWidget {
               Haptics.selection();
             },
           ),
-          SwitchListTile(
-            contentPadding: EdgeInsets.zero,
-            title: Text(l10n.voiceNames),
-            value: settings.voiceEnabled,
-            onChanged: (enabled) {
-              VoiceService().enabled = enabled;
-              app.updateSettings(settings.copyWith(voiceEnabled: enabled));
+          // Shown only once clips for this language are bundled (K-04): a
+          // switch that changes nothing would mislead a parent.
+          FutureBuilder<bool>(
+            future: VoiceService().hasVoice(localeProvider.locale.languageCode),
+            builder: (context, snapshot) {
+              if (snapshot.data != true) return const SizedBox.shrink();
+              return SwitchListTile(
+                contentPadding: EdgeInsets.zero,
+                title: Text(l10n.voiceNames),
+                value: settings.voiceEnabled,
+                onChanged: (enabled) {
+                  VoiceService().enabled = enabled;
+                  app.updateSettings(settings.copyWith(voiceEnabled: enabled));
+                },
+              );
             },
           ),
           _Section(l10n.guidedAccessTitle),
@@ -226,7 +234,13 @@ class PrivacyScreen extends StatelessWidget {
       appBar: AppBar(title: Text(l10n.privacyPolicy)),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
-        child: SelectableText(l10n.privacyPolicyText, style: const TextStyle(fontSize: 16, height: 1.5)),
+        // The purchase paragraph belongs to builds that sell the Full Version
+        // (COBI_IAP); a reviewer of a build without it would look for a
+        // purchase that is not there (K-15).
+        child: SelectableText(
+          PurchaseService.enabled ? '${l10n.privacyPolicyText}\n\n${l10n.privacyPolicyPurchase}' : l10n.privacyPolicyText,
+          style: const TextStyle(fontSize: 16, height: 1.5),
+        ),
       ),
     );
   }

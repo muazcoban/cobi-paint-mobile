@@ -3,11 +3,15 @@ import 'package:cobi_paint_mobile/screens/full_version_screen.dart';
 import 'package:cobi_paint_mobile/services/purchase_service.dart';
 import 'package:cobi_paint_mobile/theme/app_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:in_app_purchase_platform_interface/in_app_purchase_platform_interface.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class _FakeStore extends InAppPurchasePlatform {
+  _FakeStore({this.failRestore = false});
+
+  final bool failRestore;
   int restoreCalls = 0;
 
   @override
@@ -25,7 +29,10 @@ class _FakeStore extends InAppPurchasePlatform {
       );
 
   @override
-  Future<void> restorePurchases({String? applicationUserName}) async => restoreCalls++;
+  Future<void> restorePurchases({String? applicationUserName}) async {
+    restoreCalls++;
+    if (failRestore) throw PlatformException(code: 'storekit_no_response', message: 'offline');
+  }
 
   @override
   Future<void> completePurchase(PurchaseDetails purchase) async {}
@@ -67,6 +74,23 @@ void main() {
     await tester.tap(find.text('Satın alımları geri yükle'));
     await tester.pump();
     expect(store.restoreCalls, 1);
+  });
+
+  testWidgets('a failing restore is said out loud and the button comes back', (tester) async {
+    final store = _FakeStore(failRestore: true);
+    PurchaseService.debugPlatform = store;
+    await tester.pumpWidget(_app());
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Satın alımları geri yükle'));
+    await tester.pump();
+    await tester.pumpAndSettle();
+    expect(store.restoreCalls, 1);
+    expect(find.byType(SnackBar), findsOneWidget, reason: 'the grown-up learns that the store did not answer');
+    final button = tester.widget<OutlinedButton>(
+      find.ancestor(of: find.text('Satın alımları geri yükle'), matching: find.byType(OutlinedButton)),
+    );
+    expect(button.onPressed, isNotNull, reason: 'the button is usable again after the failure');
   });
 
   testWidgets('an owned unlock shows thanks instead of a button', (tester) async {

@@ -92,7 +92,7 @@ Bu proje özel lisans altındadır. Tüm hakları saklıdır.
 
 App Store Connect, 28 Nisan 2026'dan beri yalnız Xcode 26 ve üstüyle (iOS 26 SDK) derlenmiş ikilileri
 kabul ediyor. Bu Mac'teki Xcode 16.4 günlük işler için kalır; ikiliyi Xcode Cloud derler, yerel Xcode 26 yedek yoldur. Bu yol Nisan 2027'ye kadar geçerli: o tarihten sonra iOS 27 SDK (Xcode 27.1, macOS 26.6 ve
-üstü), UIScene geçişi ve iPhone Duo ekran görüntüleri zorunlu olur. 2.1.0 iPhone Duo'da çalışır, ama
+üstü) ve iPhone Duo ekran görüntüleri zorunlu olur; UIScene geçişi 2.1.1'de yapıldı. 2.1.0 iPhone Duo'da çalışır, ama
 açık cihazda iç ekranın ortasında boşluklu görünür.
 
 ### Xcode Cloud ile (seçilen yol)

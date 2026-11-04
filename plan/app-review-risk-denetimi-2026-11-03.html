@@ -65,7 +65,7 @@
 <td>Satın al ve geri yükle düğmeleri hata vermez. <code>buy()</code> ve <code>restore()</code> <code>unawaited</code> çağrılır; StoreKit 2'nin <code>storekit_duplicate_product_object</code> hatası ya da ağ hatası sessiz kalır. İnceleyici düğmeye basar, hiçbir şey olmaz, "IAP çalışmıyor" yazar.</td>
 <td>2.1(b), 3.1.1</td>
 <td class="kanit"><code>lib/screens/full_version_screen.dart:77</code> (<code>unawaited(_purchases.buy(product))</code>), <code>:87</code> (<code>unawaited(_purchases.restore())</code>). <code>lib/services/purchase_service.dart:98-101</code>.</td>
-<td><code>try/catch</code> ile sar; hatada <code>l10n.storeUnavailable</code> SnackBar'ı göster; işlem sürerken düğmeyi kilitle (<code>_busy</code> bayrağı). Yalnız <code>COBI_IAP=true</code> derlemesinde görünür.</td>
+<td><code>try/catch</code> ile sar; hatada <code>l10n.storeUnavailable</code> SnackBar'ı göster; işlem sürerken düğmeyi kilitle (<code>_busy</code> bayrağı). Yalnız <code>COBI_IAP=true</code> derlemesinde görünür.<br><strong>4 Kasım, 2.1.1:</strong> yapıldı; try/catch, storeUnavailable SnackBar, _busy kilidi; sahte mağaza testi.</td>
 <td><span class="p2">P2</span></td>
 </tr>
 
@@ -74,7 +74,7 @@
 <td>Ebeveyn alanı ipucu yanıltıcı: "Ayarlar, paylaşım ve silme yalnız buradan yapılır." Paylaşım ve silme bu ekranda yok; Eserlerim'de basılı tutmakla açılır. Kapıyı denetleyen inceleyici paylaşımı burada arar.</td>
 <td>2.3.1, Kids 1.3</td>
 <td class="kanit"><code>lib/l10n/app_tr.arb:216</code>, <code>lib/l10n/app_en.arb:84</code> (<code>parentsHint</code>). Gerçek yer: <code>lib/screens/my_artworks_screen.dart:141-142</code>.</td>
-<td>Metni değiştir: "Ayarlar burada. Paylaşmak, yazdırmak ve silmek için Eserlerim'de bir resmi basılı tutun." İngilizcesini aynı anlamla yaz.</td>
+<td>Metni değiştir: "Ayarlar burada. Paylaşmak, yazdırmak ve silmek için Eserlerim'de bir resmi basılı tutun." İngilizcesini aynı anlamla yaz.<br><strong>4 Kasım, 2.1.1:</strong> yapıldı; ipucu TR ve EN değişti.</td>
 <td><span class="p2">P2</span></td>
 </tr>
 
@@ -83,7 +83,7 @@
 <td>"Sesli adlar" anahtarı hiçbir şey yapmaz: <code>assets/voice/</code> klasörü yok ve pubspec'te tanımlı değil; kapıdaki "büyüğünü çağır" sesi de çalmaz. Apple'ın Kids sayfası okuma bilmeyen çocuk için sesli uyarı önerir. Görünür ama etkisiz bir ayar "placeholder" sayılabilir.</td>
 <td>2.1(a); Kids sayfası (voiceover prompt önerisi)</td>
 <td class="kanit"><code>lib/screens/parents_screen.dart:152-160</code>; <code>lib/services/voice_service.dart:8-11, 45-49</code>; <code>lib/widgets/parental_gate.dart:20-25</code>; <code>pubspec.yaml:47-66</code> (voice yok); <code>ls assets/voice</code> → yok.</td>
-<td>En azından <code>gate</code> klibini iki dilde kaydet, <code>assets/voice/tr/</code> ve <code>assets/voice/en/</code> altına koy, pubspec'e ekle. Klip yoksa anahtarı <code>VoiceService().hasVoice(lang)</code> false iken gizle.</td>
+<td>En azından <code>gate</code> klibini iki dilde kaydet, <code>assets/voice/tr/</code> ve <code>assets/voice/en/</code> altına koy, pubspec'e ekle. Klip yoksa anahtarı <code>VoiceService().hasVoice(lang)</code> false iken gizle.<br><strong>4 Kasım, 2.1.1:</strong> yapıldı; klip yokken anahtar gizli (hasVoice).</td>
 <td><span class="p2">P2</span></td>
 </tr>
 
@@ -101,7 +101,7 @@
 <td>UIScene yaşam döngüsü yok. Apple Xcode 27 (iOS 27 SDK) ile zorunlu kılacak; Flutter'ın otomatik geçişi bu projede çalışmaz çünkü <code>AppDelegate</code> özelleştirilmiş ve kök denetleyici <code>Main.storyboard</code>'daki <code>KidFlutterViewController</code>. Flutter 3.38.3 her <code>flutter build ios</code>'ta uyarı basar.</td>
 <td>Xcode 27 gereksinimi (bu gönderimde değil)</td>
 <td class="kanit"><code>ios/Runner/Info.plist</code> (<code>UIApplicationSceneManifest</code> yok); <code>ios/Runner/AppDelegate.swift:5-41</code>; <code>ios/Runner/Base.lproj/Main.storyboard</code>; Flutter SDK <code>flutter_tools/lib/src/ios/mac.dart:182</code> (<code>UISceneMigration</code>).</td>
-<td>Bir sonraki sürümde elle geçiş: <code>AppDelegate</code>'i <code>FlutterImplicitEngineDelegate</code> yap, eklenti kaydını <code>didInitializeImplicitFlutterEngine</code>'e taşı, <code>Info.plist</code>'e <code>UISceneDelegateClassName = FlutterSceneDelegate</code> ve <code>UISceneStoryboardFile = Main</code> ile manifest ekle; <code>KidFlutterViewController</code> kanalını <code>awakeFromNib</code>'de kur. Uyarıyı susturmak için <code>pubspec.yaml</code>'a <code>flutter: config: enable-uiscene-migration: false</code>.</td>
+<td>Bir sonraki sürümde elle geçiş: <code>AppDelegate</code>'i <code>FlutterImplicitEngineDelegate</code> yap, eklenti kaydını <code>didInitializeImplicitFlutterEngine</code>'e taşı, <code>Info.plist</code>'e <code>UISceneDelegateClassName = FlutterSceneDelegate</code> ve <code>UISceneStoryboardFile = Main</code> ile manifest ekle; <code>KidFlutterViewController</code> kanalını <code>awakeFromNib</code>'de kur. Uyarıyı susturmak için <code>pubspec.yaml</code>'a <code>flutter: config: enable-uiscene-migration: false</code>.<br><strong>4 Kasım, 2.1.1:</strong> yapıldı (elle geçiş): FlutterImplicitEngineDelegate, UIApplicationSceneManifest + FlutterSceneDelegate, storyboard ve KidFlutterViewController aynen; iOS 18 simülatöründe açılış, Çiz ve döndürme doğrulandı.</td>
 <td><span class="p2">P2</span></td>
 </tr>
 
@@ -110,7 +110,7 @@
 <td>iPad pencere boyutu canlı değişirken (Split View, Stage Manager, iPadOS 26 pencereleme) boyama ekranı test edilmemiş. <code>UIRequiresFullScreen</code> yok ve dört yön tanımlı, yani uygulama zaten yeniden boyutlanabilir. Koordinatlar sayfa oranına göre tutuluyor; tasarım dayanıklı görünüyor ama kanıt yok: testler 800×600 varsayılan pencerede koşuyor.</td>
 <td>2.1, 2.4.1, 4.0</td>
 <td class="kanit"><code>ios/Runner/Info.plist:37-43</code>; <code>lib/screens/coloring_screen.dart:56-66, 70-80, 483-488</code>; <code>test/app_test.dart</code> (pencere boyutu değiştirilmiyor).</td>
-<td>iPad 13" (iOS 26) simülatöründe boyama sırasında pencereyi daralt ve genişlet; Split View'da paylaşım popover'ının çapasını dene; bir widget testine <code>tester.view.physicalSize</code> ile 1024×1366 ve 320×1024 ekle.</td>
+<td>iPad 13" (iOS 26) simülatöründe boyama sırasında pencereyi daralt ve genişlet; Split View'da paylaşım popover'ının çapasını dene; bir widget testine <code>tester.view.physicalSize</code> ile 1024×1366 ve 320×1024 ekle.<br><strong>4 Kasım, 2.1.1:</strong> yapıldı; dar bölme testi 25 px taşma buldu, düğme boyutu genişliğe göre küçülüyor (en az 44 pt).</td>
 <td><span class="p2">P2</span></td>
 </tr>
 
@@ -119,7 +119,7 @@
 <td>Erişilebilirlik guideline testleri üç ekranı atlıyor: HomeScreen, MyArtworksScreen (alt sayfa ve silme diyaloğu dâhil) ve bir boyama sayfasındaki ColoringScreen. Draw sayfasında yalnız Android hedef ve etiket testi var; iOS 44 pt ve kontrast testi yok.</td>
 <td>4.0 (HIG dokunma hedefi ve kontrast)</td>
 <td class="kanit"><code>test/app_test.dart:69-70, 154</code> (yalnız <code>androidTapTargetGuideline</code> ve <code>labeledTapTargetGuideline</code>); kapsanan ekranlar: <code>test/category_screen_test.dart:43-47</code>, <code>test/parents_screen_test.dart:37-40</code>, <code>test/full_version_screen_test.dart:88-91</code>, <code>test/widgets/kid_controls_test.dart:128-131, 188-191</code>.</td>
-<td>Üç ekran için <code>iOSTapTargetGuideline</code>, <code>labeledTapTargetGuideline</code>, <code>textContrastGuideline</code> ekle; alt sayfayı açıp <code>Share</code> ve <code>Delete</code> satırlarını da kapsa.</td>
+<td>Üç ekran için <code>iOSTapTargetGuideline</code>, <code>labeledTapTargetGuideline</code>, <code>textContrastGuideline</code> ekle; alt sayfayı açıp <code>Share</code> ve <code>Delete</code> satırlarını da kapsa.<br><strong>4 Kasım, 2.1.1:</strong> yapıldı; test/accessibility_test.dart (ana ekran, kategori, boyama sayfası, Eserlerim, alt sayfa, silme diyaloğu); "Sil" kırmızısı D32F2F oldu.</td>
 <td><span class="p2">P2</span></td>
 </tr>
 
@@ -128,7 +128,7 @@
 <td>Kapının açıklama yorumu eski: "dört rastgele basamak kelimeyle" diyor, uygulama çarpma soruyor. Notes for Review yazılırken yanlış anlatıma yol açar.</td>
 <td>2.3.1(a) (inceleme notunun doğruluğu)</td>
 <td class="kanit"><code>lib/widgets/parental_gate.dart:14-18</code> (yorum) ile <code>:108-114</code> (uygulama).</td>
-<td>Yorumu güncelle: "2–9 × 2–9 çarpma, sonuç ≥ 10, iki basamak girişi, 3 yanlışta 30/60/120 s kilit, 20 s boşta kapanır."</td>
+<td>Yorumu güncelle: "2–9 × 2–9 çarpma, sonuç ≥ 10, iki basamak girişi, 3 yanlışta 30/60/120 s kilit, 20 s boşta kapanır."<br><strong>4 Kasım, 2.1.1:</strong> yapıldı; yorum çarpımı anlatıyor.</td>
 <td><span class="p2">P2</span></td>
 </tr>
 
@@ -137,7 +137,7 @@
 <td>Rehberli Erişim metni yalnız yan düğmeyi anlatıyor; Ana Ekran düğmeli iPad'de üç kez Ana Ekran düğmesine basılır.</td>
 <td>2.3.1 (metin doğruluğu)</td>
 <td class="kanit"><code>lib/l10n/app_tr.arb:226</code>, <code>lib/l10n/app_en.arb:94</code> (<code>guidedAccessText</code>).</td>
-<td>"yan düğmeye (ya da Ana Ekran düğmesine) üç kez basın" yaz.</td>
+<td>"yan düğmeye (ya da Ana Ekran düğmesine) üç kez basın" yaz.<br><strong>4 Kasım, 2.1.1:</strong> yapıldı; Ana Ekran düğmesi eklendi.</td>
 <td><span class="p2">P2</span></td>
 </tr>
 
@@ -173,7 +173,7 @@
 <td>GitHub Actions yalnız <code>flutter analyze</code> ve <code>flutter test</code> koşuyor; iOS derlemesi hiçbir yerde otomatik denenmiyor. Xcode 26 ile ilk derleme Xcode Cloud'da, yani yayına en yakın anda kırılır.</td>
 <td>2.1 (derleme kararlılığı)</td>
 <td class="kanit"><code>.github/workflows/ci.yml:9-28</code>.</td>
-<td><code>macos-15</code> runner'ında <code>flutter build ios --no-codesign --release</code> adımı ekle; <code>xcode-select</code> ile Xcode 26 seç.</td>
+<td><code>macos-15</code> runner'ında <code>flutter build ios --no-codesign --release</code> adımı ekle; <code>xcode-select</code> ile Xcode 26 seç.<br><strong>4 Kasım, 2.1.1:</strong> yapıldı; ios-build işi macos-15 + Xcode 26, --no-codesign.</td>
 <td><span class="p2">P2</span></td>
 </tr>
 
@@ -182,7 +182,7 @@
 <td>IAP kapalı derlemede uygulama içi gizlilik metni var olmayan bir satın almadan söz eder: "Tam Sürüm satın alımı Apple ya da Google hesabınızla yapılır". İnceleyici IAP arar, bulamaz.</td>
 <td>5.1.1(i), 2.3.1</td>
 <td class="kanit"><code>lib/l10n/app_tr.arb:224</code>, <code>lib/l10n/app_en.arb:92</code> (<code>privacyPolicyText</code> son cümle); <code>lib/services/purchase_service.dart:22</code> (<code>COBI_IAP</code> bayrağı).</td>
-<td>Son cümleyi ayrı anahtara al (<code>privacyPolicyPurchase</code>) ve <code>PrivacyScreen</code>'de yalnız <code>PurchaseService.enabled</code> iken ekle (<code>lib/screens/parents_screen.dart:229</code>).</td>
+<td>Son cümleyi ayrı anahtara al (<code>privacyPolicyPurchase</code>) ve <code>PrivacyScreen</code>'de yalnız <code>PurchaseService.enabled</code> iken ekle (<code>lib/screens/parents_screen.dart:229</code>).<br><strong>4 Kasım, 2.1.1:</strong> yapıldı; privacyPolicyPurchase yalnız COBI_IAP açıkken.</td>
 <td><span class="p2">P2</span></td>
 </tr>
 </table>

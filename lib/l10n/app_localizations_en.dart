@@ -257,7 +257,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get parentsArea => 'Parents';
 
   @override
-  String get parentsHint => 'Settings, sharing and deleting live here.';
+  String get parentsHint =>
+      'Settings live here. To share, print or delete a picture, press and hold it in My Artworks.';
 
   @override
   String get ageMode => 'Mode';
@@ -283,14 +284,18 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get privacyPolicyText =>
-      'Cobi Paint collects no personal data.\n\n• There are no accounts, ads, analytics or internet connections.\n• The pictures your child colours are stored only on this device and are never sent to a server.\n• A picture leaves the device only when you pass the grown-up check and choose to share it through the system share sheet, to an app you pick.\n• On Android, printing and saving to the gallery are behind the grown-up check too: printing goes through the system print dialog, saving stays in this device\'s gallery.\n• You can delete a saved picture by pressing and holding it in My Artworks and passing the grown-up check. Deleting the app deletes all pictures.\n\nQuestions: cobipaint@gmail.com The Full Version purchase goes through your Apple or Google account; the app never sees payment details and collects no data.';
+      'Cobi Paint collects no personal data.\n\n• There are no accounts, ads, analytics or internet connections.\n• The pictures your child colours are stored only on this device and are never sent to a server.\n• A picture leaves the device only when you pass the grown-up check and choose to share it through the system share sheet, to an app you pick.\n• On Android, printing and saving to the gallery are behind the grown-up check too: printing goes through the system print dialog, saving stays in this device\'s gallery.\n• You can delete a saved picture by pressing and holding it in My Artworks and passing the grown-up check. Deleting the app deletes all pictures.\n\nQuestions: cobipaint@gmail.com';
+
+  @override
+  String get privacyPolicyPurchase =>
+      'The Full Version is a one-time purchase, not a subscription. Apple or Google takes the payment; the app never sees payment details and collects no data.';
 
   @override
   String get guidedAccessTitle => 'Keep your child in the app';
 
   @override
   String get guidedAccessText =>
-      'On iPhone and iPad use Guided Access: turn on Settings > Accessibility > Guided Access, then triple-click the side button while the app is open. On Android use Settings > Security > App pinning.';
+      'On iPhone and iPad use Guided Access: turn on Settings > Accessibility > Guided Access, then triple-click the side button (or the Home button on devices that have one) while the app is open. On Android use Settings > Security > App pinning.';
 
   @override
   String get colorNames =>

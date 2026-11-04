@@ -1,16 +1,23 @@
 import Flutter
 import UIKit
 
+/// UIScene life cycle (Info.plist, UIApplicationSceneManifest with
+/// FlutterSceneDelegate): required by Apple for apps built with the iOS 27
+/// SDK, supported since Flutter 3.38. Plugins register once the implicit
+/// engine exists, not in didFinishLaunching.
 @main
-@objc class AppDelegate: FlutterAppDelegate {
+@objc class AppDelegate: FlutterAppDelegate, FlutterImplicitEngineDelegate {
   override func application(
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
-    GeneratedPluginRegistrant.register(with: self)
     // Small children shake devices; that must not pop up the system Undo alert.
     application.applicationSupportsShakeToEdit = false
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
+  }
+
+  func didInitializeImplicitFlutterEngine(_ engineBridge: FlutterImplicitEngineBridge) {
+    GeneratedPluginRegistrant.register(with: engineBridge.pluginRegistry)
   }
 }
 
