@@ -26,3 +26,32 @@ jobs:
 
       - name: Test
         run: flutter test
+
+  # App Store Connect accepts only archives made with Xcode 26 or later, so
+  # the iOS build is tried here with the newest Xcode 26 on the runner before
+  # it reaches Xcode Cloud. No signing: a device build without a certificate.
+  ios-build:
+    runs-on: macos-15
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Select Xcode 26
+        run: |
+          ls -d /Applications/Xcode*.app
+          XCODE=$(ls -d /Applications/Xcode_26*.app 2>/dev/null | sort -V | tail -n 1)
+          if [ -z "$XCODE" ]; then echo "No Xcode 26 on this runner image" >&2; exit 1; fi
+          sudo xcode-select -s "$XCODE"
+          xcodebuild -version
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: 3.38.3
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build iOS (no code signing)
+        run: flutter build ios --release --no-codesign

@@ -213,7 +213,7 @@
   "gateTitle": "Ebeveyn kontrolü",
   "gateInstruction": "Devam etmek için sonucu yaz:",
   "parentsArea": "Ebeveyn alanı",
-  "parentsHint": "Ayarlar, paylaşım ve silme yalnız buradan yapılır.",
+  "parentsHint": "Ayarlar burada. Paylaşmak, yazdırmak ve silmek için Eserlerim'de bir resmi basılı tutun.",
   "ageMode": "Mod",
   "ageModeLittle": "Minik (3–5 yaş)",
   "ageModeLittleDesc": "Kocaman düğmeler, 9 renk, yakınlaştırma yok. Kalem çizginin dışına taşmaz.",
@@ -221,9 +221,10 @@
   "ageModeBigDesc": "16 renk, iki parmakla yakınlaştırma, fırça boyutları, ileri al.",
   "soundVolume": "Ses seviyesi",
   "theme": "Tema",
-  "privacyPolicyText": "Cobi Paint hiçbir kişisel veri toplamaz.\n\n• Hesap, reklam, analiz aracı ve internet bağlantısı yoktur.\n• Çocuğunuzun boyadığı resimler yalnız bu cihazda saklanır ve hiçbir sunucuya gönderilmez.\n• Bir resim yalnız siz ebeveyn kontrolünü geçip paylaşmayı seçtiğinizde, sistemin paylaşım menüsüyle ve sizin seçtiğiniz uygulamaya gönderilir.\n• Android'de yazdırma ve galeriye kaydetme de ebeveyn kontrolünün arkasındadır: yazdırma sistemin yazdırma penceresinden geçer, kayıt yalnız bu cihazın galerisine yapılır.\n• Kayıtlı bir resmi Eserlerim'de basılı tutup ebeveyn kontrolünü geçerek silebilirsiniz. Uygulamayı silmek bütün resimleri siler.\n\nSorularınız için: cobipaint@gmail.com Tam Sürüm satın alımı Apple ya da Google hesabınızla yapılır; uygulama ödeme bilgisine erişmez ve hiçbir veri toplamaz.",
+  "privacyPolicyText": "Cobi Paint hiçbir kişisel veri toplamaz.\n\n• Hesap, reklam, analiz aracı ve internet bağlantısı yoktur.\n• Çocuğunuzun boyadığı resimler yalnız bu cihazda saklanır ve hiçbir sunucuya gönderilmez.\n• Bir resim yalnız siz ebeveyn kontrolünü geçip paylaşmayı seçtiğinizde, sistemin paylaşım menüsüyle ve sizin seçtiğiniz uygulamaya gönderilir.\n• Android'de yazdırma ve galeriye kaydetme de ebeveyn kontrolünün arkasındadır: yazdırma sistemin yazdırma penceresinden geçer, kayıt yalnız bu cihazın galerisine yapılır.\n• Kayıtlı bir resmi Eserlerim'de basılı tutup ebeveyn kontrolünü geçerek silebilirsiniz. Uygulamayı silmek bütün resimleri siler.\n\nSorularınız için: cobipaint@gmail.com",
+  "privacyPolicyPurchase": "Tam Sürüm tek seferlik bir satın almadır, abonelik değildir. Ödemeyi Apple ya da Google alır; uygulama ödeme bilgisini görmez ve hiçbir veri toplamaz.",
   "guidedAccessTitle": "Çocuk uygulamada kalsın",
-  "guidedAccessText": "iPhone ve iPad'de Rehberli Erişim'i kullanabilirsiniz: Ayarlar > Erişilebilirlik > Rehberli Erişim'i açın, sonra uygulama açıkken yan düğmeye üç kez basın. Android'de Ayarlar > Güvenlik > Uygulama sabitleme'yi kullanın.",
+  "guidedAccessText": "iPhone ve iPad'de Rehberli Erişim'i kullanabilirsiniz: Ayarlar > Erişilebilirlik > Rehberli Erişim'i açın, sonra uygulama açıkken yan düğmeye (Ana Ekran düğmeli cihazlarda Ana Ekran düğmesine) üç kez basın. Android'de Ayarlar > Güvenlik > Uygulama sabitleme'yi kullanın.",
   "colorNames": "kırmızı,turuncu,sarı,yeşil,mavi,mor,pembe,kahverengi,siyah,açık mavi,açık yeşil,şeftali,açık sarı,lacivert,koyu yeşil,gri",
   "canvasLabel": "Boyama sayfası"
 }

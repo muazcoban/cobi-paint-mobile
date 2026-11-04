@@ -11,11 +11,12 @@ import 'motion.dart';
 /// world: sharing, settings, deleting, purchases, links. Returns true when
 /// a grown-up passed it.
 ///
-/// The task is four random digits written as words ("four, seven, two,
-/// nine") to tap in order, the pattern Apple shows for kids apps: a child
-/// who cannot read cannot pass it (about 1 in 3000 by guessing), and the
-/// digits change every time so it cannot be learned by heart. Repeated
-/// wrong answers add a growing wait; the gate closes itself when idle.
+/// The task is a multiplication with a two-digit answer (2-9 x 2-9, product
+/// at least 10) entered as two digits: a grown-up task in any language, and
+/// a child who matches shapes cannot pass it by tapping what is on screen.
+/// The factors change every time so it cannot be learned by heart. From the
+/// third wrong answer on, the gate locks for 30, 60 and then 120 seconds; it
+/// closes itself after 20 seconds without a tap.
 Future<bool> showParentalGate(BuildContext context, {math.Random? random}) async {
   // Apple's Kids guidance: tell a child who cannot read to fetch a grown-up.
   unawaited(VoiceService().say(

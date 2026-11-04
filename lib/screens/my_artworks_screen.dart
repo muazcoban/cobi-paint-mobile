@@ -183,7 +183,7 @@ class _ArtworkCard extends StatelessWidget {
               ),
             ListTile(
               leading: const Icon(Icons.delete_outline_rounded, color: Color(0xFFE53935)),
-              title: Text(l10n.delete, style: const TextStyle(color: Color(0xFFE53935))),
+              title: Text(l10n.delete, style: const TextStyle(color: Color(0xFFD32F2F))), // 5.0:1 on white
               onTap: () => Navigator.pop(sheetContext, 'delete'),
             ),
           ],
