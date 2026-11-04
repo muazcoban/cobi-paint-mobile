@@ -65,7 +65,7 @@
 <td>Satın al ve geri yükle düğmeleri hata vermez. <code>buy()</code> ve <code>restore()</code> <code>unawaited</code> çağrılır; StoreKit 2'nin <code>storekit_duplicate_product_object</code> hatası ya da ağ hatası sessiz kalır. İnceleyici düğmeye basar, hiçbir şey olmaz, "IAP çalışmıyor" yazar.</td>
 <td>2.1(b), 3.1.1</td>
 <td class="kanit"><code>lib/screens/full_version_screen.dart:77</code> (<code>unawaited(_purchases.buy(product))</code>), <code>:87</code> (<code>unawaited(_purchases.restore())</code>). <code>lib/services/purchase_service.dart:98-101</code>.</td>
-<td><code>try/catch</code> ile sar; hatada <code>l10n.storeUnavailable</code> SnackBar'ı göster; işlem sürerken düğmeyi kilitle (<code>_busy</code> bayrağı). Yalnız <code>COBI_IAP=true</code> derlemesinde görünür.</td>
+<td><code>try/catch</code> ile sar; hatada <code>l10n.storeUnavailable</code> SnackBar'ı göster; işlem sürerken düğmeyi kilitle (<code>_busy</code> bayrağı). Yalnız <code>COBI_IAP=true</code> derlemesinde görünür.<br><strong>4 Kasım, 2.1.1:</strong> yapıldı; try/catch, storeUnavailable SnackBar, _busy kilidi; sahte mağaza testi.</td>
 <td><span class="p2">P2</span></td>
 </tr>
 
@@ -101,7 +101,7 @@
 <td>UIScene yaşam döngüsü yok. Apple Xcode 27 (iOS 27 SDK) ile zorunlu kılacak; Flutter'ın otomatik geçişi bu projede çalışmaz çünkü <code>AppDelegate</code> özelleştirilmiş ve kök denetleyici <code>Main.storyboard</code>'daki <code>KidFlutterViewController</code>. Flutter 3.38.3 her <code>flutter build ios</code>'ta uyarı basar.</td>
 <td>Xcode 27 gereksinimi (bu gönderimde değil)</td>
 <td class="kanit"><code>ios/Runner/Info.plist</code> (<code>UIApplicationSceneManifest</code> yok); <code>ios/Runner/AppDelegate.swift:5-41</code>; <code>ios/Runner/Base.lproj/Main.storyboard</code>; Flutter SDK <code>flutter_tools/lib/src/ios/mac.dart:182</code> (<code>UISceneMigration</code>).</td>
-<td>Bir sonraki sürümde elle geçiş: <code>AppDelegate</code>'i <code>FlutterImplicitEngineDelegate</code> yap, eklenti kaydını <code>didInitializeImplicitFlutterEngine</code>'e taşı, <code>Info.plist</code>'e <code>UISceneDelegateClassName = FlutterSceneDelegate</code> ve <code>UISceneStoryboardFile = Main</code> ile manifest ekle; <code>KidFlutterViewController</code> kanalını <code>awakeFromNib</code>'de kur. Uyarıyı susturmak için <code>pubspec.yaml</code>'a <code>flutter: config: enable-uiscene-migration: false</code>.</td>
+<td>Bir sonraki sürümde elle geçiş: <code>AppDelegate</code>'i <code>FlutterImplicitEngineDelegate</code> yap, eklenti kaydını <code>didInitializeImplicitFlutterEngine</code>'e taşı, <code>Info.plist</code>'e <code>UISceneDelegateClassName = FlutterSceneDelegate</code> ve <code>UISceneStoryboardFile = Main</code> ile manifest ekle; <code>KidFlutterViewController</code> kanalını <code>awakeFromNib</code>'de kur. Uyarıyı susturmak için <code>pubspec.yaml</code>'a <code>flutter: config: enable-uiscene-migration: false</code>.<br><strong>4 Kasım, 2.1.1:</strong> yapıldı (elle geçiş): FlutterImplicitEngineDelegate, UIApplicationSceneManifest + FlutterSceneDelegate, storyboard ve KidFlutterViewController aynen; iOS 18 simülatöründe açılış, Çiz ve döndürme doğrulandı.</td>
 <td><span class="p2">P2</span></td>
 </tr>
 
