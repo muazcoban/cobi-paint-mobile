@@ -23,6 +23,10 @@ class _FullVersionScreenState extends State<FullVersionScreen> {
   ProductDetails? _product;
   bool _loading = true;
 
+  /// A store call in flight: the buttons wait for it instead of starting a
+  /// second one, and a failure is said out loud rather than swallowed.
+  bool _busy = false;
+
   @override
   void initState() {
     super.initState();
@@ -37,6 +41,22 @@ class _FullVersionScreenState extends State<FullVersionScreen> {
         _product = product;
         _loading = false;
       });
+    }
+  }
+
+  Future<void> _run(Future<void> Function() call) async {
+    if (_busy) return;
+    setState(() => _busy = true);
+    try {
+      await call();
+    } catch (e) {
+      debugPrint('Store call failed: $e');
+      if (mounted) {
+        final l10n = AppLocalizations.of(context)!;
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.storeUnavailable)));
+      }
+    } finally {
+      if (mounted) setState(() => _busy = false);
     }
   }
 
@@ -74,7 +94,7 @@ class _FullVersionScreenState extends State<FullVersionScreen> {
                   }
                   return FilledButton(
                     style: FilledButton.styleFrom(minimumSize: const Size.fromHeight(56)),
-                    onPressed: () => unawaited(_purchases.buy(product)),
+                    onPressed: _busy ? null : () => unawaited(_run(() => _purchases.buy(product))),
                     child: Text('${l10n.buy} · ${product.price}', style: const TextStyle(fontSize: 18)),
                   );
                 },
@@ -84,7 +104,7 @@ class _FullVersionScreenState extends State<FullVersionScreen> {
           const SizedBox(height: 12),
           OutlinedButton(
             style: OutlinedButton.styleFrom(minimumSize: const Size.fromHeight(48)),
-            onPressed: () => unawaited(_purchases.restore()),
+            onPressed: _busy ? null : () => unawaited(_run(_purchases.restore)),
             child: Text(l10n.restorePurchases),
           ),
           if (Platform.isIOS) ...[
