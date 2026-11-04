@@ -128,9 +128,11 @@ checks every catalog level against the page check.
 ## Before calling a UI change done
 
 1. `flutter analyze` and `flutter test`. The tests include the narrow-phone palette test and the
-   tap target, label and contrast guideline checks (`meetsGuideline`); add a guideline check for
-   every new screen.
-2. Run it: phone portrait and landscape, a 375 pt and a 393 pt wide phone, iPad. Use only the
+   tap target, label and contrast guideline checks (`meetsGuideline`, `test/accessibility_test.dart`
+   covers home, category, coloring page, My Artworks, its sheet and dialog); add a guideline check
+   for every new screen.
+2. Run it: phone portrait and landscape, a 375 pt and a 393 pt wide phone, iPad, and a 320 pt
+   Split View pane (the controls shrink to fit, never below 44 pt). Use only the
    separate `CobiPaint_Pixel` emulator (port 5580), never the Replay emulator (5554).
 3. Check with Reduce Motion on, the Silent switch on, VoiceOver on and text size at maximum.
 4. Write the HIG and App Review result per item (COMPLIANT / JUSTIFIED DEVIATION / GAP).
