@@ -122,6 +122,25 @@ saving let your child color without asking for help.
 
 ---
 
+## What's New (2.1.1'den sonraki sürüm, taslak)
+
+2.1.0 ve 2.1.1 bu özellikleri içermez; metin yalnız bunlarla çıkan sürüme yazılır (App Review 2.3.12).
+Sürüm numarası (2.1.2 ya da 2.2.0) henüz kararlaştırılmadı.
+
+### Turkish
+- 3 yeni kategori: Uzay, Müzik ve Giysiler. Toplam 307 boyama sayfası.
+- Bir resmi baştan boyamak için Eserlerim'de resmi basılı tutun, ebeveyn sorusunu yanıtlayın ve "Bu sayfayı baştan boya"ya dokunun. Eski resim yerinde kalır.
+- Keçeli kalemle bir alanın neredeyse tamamı boyanınca kalan küçük beyaz köşeler kendiliğinden dolar. Ebeveynler alanından kapatabilirsiniz.
+- Büyük modda iPad'de Apple Pencil ile bastırdıkça keçeli kalem, pastel ve neon çizgisi kalınlaşır.
+
+### English
+- 3 new categories: Space, Music and Clothes. 307 coloring pages in all.
+- To color a picture again, press and hold it in My Artworks, answer the grown-up question and tap "Colour this page again". The old picture stays.
+- When the marker has covered nearly all of an area, the last small white corners fill in by themselves. You can turn this off in the Parents area.
+- In Big mode on iPad, marker, pastel and neon lines get thicker as you press harder with Apple Pencil.
+
+---
+
 ## Keywords / Tags
 
 App Store anahtar kelime alanı 100 karakter, virgülle, boşluksuz; ad ve altyazıdaki kelimeler tekrar
@@ -168,11 +187,11 @@ altında (iphone61_tr ve iphone61_en 1206×2622, iphone69_* 1320×2868 ham, ipad
 zorunlu iPhone boyutu 6,1"/6,3" (1206×2622); 13" iPad zorunlu. Gerçek cihaz boyutlarında, uygulama
 kullanılırken çekilmeli (App Review 2.3.3). Çekilen kareler:
 
-1. Ana ekran: Resimlerim kartı ve kategoriler (sonraki içerik sürümünde 9 kategori var; telefonda son
+1. Ana ekran: Eserlerim kartı ve kategoriler (sonraki içerik sürümünde 9 kategori var; telefonda son
    satırlar kaydırınca görünür, yeni kare çekilecekse yeni kategoriler de görünsün)
 2. Boyama: bir bölge tek dokunuşla doluyor
 3. Boyama: keçeli kalem çizginin içinde kalıyor
-4. Resimlerim: çocuğun boyadığı resimler
+4. Eserlerim: çocuğun boyadığı resimler
 5. Ebeveyn kontrolü
 6. 13" iPad yatay (2064×2752 ya da 2752×2064)
 

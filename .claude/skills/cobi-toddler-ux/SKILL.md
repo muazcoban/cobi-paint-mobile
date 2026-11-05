@@ -65,6 +65,13 @@ Apple's Human Interface Guidelines (read the current pages; HIG changes every WW
   lines); no other brush paint and no second colour in the region; no white gap of a fingertip
   (1% of the page) left. Same reveal, sound and haptic as a tap fill; one undo step with its stroke;
   an undone completion is not repeated while the page is open. Parents switch, on by default.
+- Apple Pencil pressure (council, 5 Nov 2026, `lib/engine/render/pressure_outline.dart`): only
+  Büyük, only a stylus on iOS, only the marker, the pastel and the neon. The third value of every
+  point is the force / 2 rounded to the tenth (0.5 = a finger, so an average touch is the finger
+  width); width factor 0.35 at the lightest touch to 1.65, smoothed along the line. A stroke with
+  pressure is one filled outline per layer, so the neon keeps its 14 draw calls. Minik, fingers and
+  the other brushes store 0.5 and draw as before. No button, menu, slider or setting for it; a new
+  brush only replaces a Büyük state as a concrete candidate with its own vote.
 - Rejected on 5 Nov 2026: partly coloured pages (3/5), step-by-step drawing (0/5, veto for Minik;
   a Büyük-only proposal may come back), advertising for users without the Full Version (0/5, five
   vetoes: Kids rule 1.3, the "no ads" promise, the network-free design).

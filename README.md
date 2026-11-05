@@ -7,10 +7,10 @@ Uygulama yeniden yapılandırılıyor. Yol haritası ve gerekçeler `plan/cobi-p
 ## Bugünkü özellikler
 
 - 🎨 **Dokun ve boya**: Bölgeye dokununca seçili renkle dolar.
-- ✏️ **Kalem ve silgi**
+- ✏️ **Kalem ve silgi**: Keçeli kalemle bir alanın neredeyse tamamı tek renkle boyanınca kalan küçük beyaz köşeler kendiliğinden dolar (Ebeveynler alanında kapatılabilir). Büyük modda iPad'de Apple Pencil ile bastırdıkça keçeli kalem, pastel ve neon kalınlaşır.
 - 🖼️ **Kategoriler**: Hayvanlar, Bitkiler, Yiyecekler, Araçlar, Doğa, Eşyalar, Uzay, Müzik, Giysiler (307 sayfa, 3 zorluk seviyesi) ve serbest çizim sayfası. Serbest sayfada ayna çizimi: Minik'te tek düğmeyle dört yönlü, Büyük'te iki, dört ya da altı yönlü simetri. Fırça düğmesi keçeli kalem, gökkuşağı, sprey ve simli fırça arasında döner; Büyük'te pastel ve neon kalem de var. Her sayfada 16 çıkartma: aynı döngünün sonunda, dokunuş basar, sürükleme iz bırakır.
 - ↩️ **Geri al / ileri al**
-- 💾 **Eserlerim**: Boyanan sayfalar kaydedilir ve sonra açılabilir.
+- 💾 **Eserlerim**: Boyanan sayfalar kaydedilir ve sonra açılabilir. Ebeveyn kapısının arkasında bir sayfa baştan boyanabilir; eski resim yerinde kalır.
 - 📤 **Paylaşım**: Sistem paylaşım menüsü; Android'de ayrıca galeriye kaydetme ve yazdırma. Hepsi ebeveyn kapısının arkasında.
 - 🔊 **Ses efektleri**
 

@@ -227,7 +227,7 @@ abstract class AppLocalizations {
   /// Full Version screen; count is the number of bundled coloring pages, read from the app
   ///
   /// In tr, this message translates to:
-  /// **'Ücretsiz sürümde her kategoriden 8 sayfa var. Tam Sürüm, {count} sayfanın hepsini bir kez ödemeyle sonsuza kadar açar. Abonelik yoktur. Çocuğunuzun boyadığı resimler her durumda Resimlerim\'de kalır.'**
+  /// **'Ücretsiz sürümde her kategoriden 8 sayfa var. Tam Sürüm, {count} sayfanın hepsini bir kez ödemeyle sonsuza kadar açar. Abonelik yoktur. Çocuğunuzun boyadığı resimler her durumda Eserlerim\'de kalır.'**
   String fullVersionDesc(int count);
 
   /// No description provided for @buy.

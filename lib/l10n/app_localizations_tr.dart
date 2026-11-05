@@ -74,7 +74,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String fullVersionDesc(int count) {
-    return 'Ücretsiz sürümde her kategoriden 8 sayfa var. Tam Sürüm, $count sayfanın hepsini bir kez ödemeyle sonsuza kadar açar. Abonelik yoktur. Çocuğunuzun boyadığı resimler her durumda Resimlerim\'de kalır.';
+    return 'Ücretsiz sürümde her kategoriden 8 sayfa var. Tam Sürüm, $count sayfanın hepsini bir kez ödemeyle sonsuza kadar açar. Abonelik yoktur. Çocuğunuzun boyadığı resimler her durumda Eserlerim\'de kalır.';
   }
 
   @override

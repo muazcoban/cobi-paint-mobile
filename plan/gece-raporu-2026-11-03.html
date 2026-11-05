@@ -121,6 +121,7 @@ ul.tight li, ol.tight li { margin: 3px 0; }
     <li><a href="#inceleme-duzeltmeleri">Faz 8: 2.1.1 inceleme düzeltmeleri</a></li>
     <li><a href="#vitrin">Faz 9: vitrin dönüşümü ve tema düzeltmesi</a></li>
     <li><a href="#kurul-5-kasim">Faz 10: 5 Kasım kurulu, baştan boya ve otomatik tamamlama</a></li>
+    <li><a href="#kalem-ve-icerik">Faz 11: Apple Pencil basıncı ve yeni içerik</a></li>
   </ol>
 </nav>
 
@@ -492,6 +493,36 @@ ul.tight li, ol.tight li { margin: 3px 0; }
   <figure><img src="img/faz10-bastan-boya.jpg" alt="Eserlerim alt sayfası"><figcaption>Kapıdan sonraki alt sayfa: "Colour this page again / The old picture stays here" satırı Paylaş ile Sil arasında.</figcaption></figure>
 </div>
 <p><strong>Sahibe açık sorular</strong> (kurulun listesi): P1 çocuk yolu (çocuk kendi başına "yeni kâğıt" açabilsin mi), 3–5 çocukla 10–15 dakikalık gözlem oturumu (%85 eşiği ve P3 için), P2 tek anahtar yeterli mi, P1 ve P2 hangi sürümle (2.1.2 mi 2.2.0 mı), P3'te hangi kalem kastediliyor (Büyük'te Apple Pencil basıncı karşılıyor mu), P4 için "yalnız parmağın ulaşamadığı küçük ayrıntılar hazır gelir" biçimiyle yeniden oylama isteniyor mu. Reklam beş vetoyla reddedildi; kurulun gerekçesi: Kids 1.3, "reklam yok" sözü, ağsız mimari ve "Data Not Collected".</p>
+
+<h2 id="kalem-ve-icerik">21. Faz 11: Apple Pencil basıncı ve yeni içerik</h2>
+<p>Branch <code>faz11/kalem-basinci</code>, <code>faz10</code> üstüne. Kurulun sıradaki işi P3 ile arka planda yürüyen içerik çalışması bu dalda birleşti. 193 test geçiyor, analiz temiz; hiçbir şey push edilmedi.</p>
+<p><strong>Apple Pencil basıncı (P3, <code>6bf4b13</code>).</strong> Büyük modda iPad'de keçeli kalem, pastel ve neon çizgisi bastırdıkça kalınlaşır, hafif dokunuşta incelir; en hafif dokunuş da görünür iz bırakır. Kurulun şartları:</p>
+<ul>
+<li><strong>Kapsam dar.</strong> Yalnız Büyük, yalnız iOS'ta kalem girdisi, yalnız bu üç fırça. Parmak, Minik, gökkuşağı, sprey ve simli fırça eskisi gibi çizer. Yeni düğme, menü, sürgü ya da ayar yok.</li>
+<li><strong>Basınç kayıtta.</strong> Her noktanın üçüncü değeri, iOS'un verdiği kuvvetin yarısı ve kayıt dosyasının tuttuğu onda bire yuvarlanmış hâli. Ortalama dokunuş 0,5'e, yani parmak kalınlığına düşer. Yeniden açılan resim ve ayna kopyaları çizildiği gibi görünür. Kalem kalkarken kuvvet sıfır gelir; çizgi son hareketin basıncıyla biter.</li>
+<li><strong>Çizim yolu.</strong> Basınçlı çizgi her katmanda tek bir dolgu şekli: yumuşak kısımlarda bir şerit, uçlarda ve keskin dönüşlerde birer disk, hepsi aynı yönde sarılı. Kendini kesen karalamada delik kalmaz, yarı saydam pastel üst üste binen yerde koyulaşmaz, neon 14 çizim çağrısında kalır. Otomatik tamamlama Pencil çizgisini çizildiği kalınlıkla sayar.</li>
+</ul>
+<p>Bu Mac'te (flutter_tester, yazılımla piksel basma) 200 çizginin yeniden pişme süresi:</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Fırça</th><th>Parmak</th><th>Apple Pencil</th></tr></thead>
+<tbody>
+<tr><td>Keçeli kalem</td><td>32 ms</td><td>32 ms</td></tr>
+<tr><td>Pastel</td><td>94 ms</td><td>91 ms</td></tr>
+<tr><td>Neon</td><td>750 ms</td><td>1.098 ms</td></tr>
+</tbody></table></div>
+<p>Test ortamı GPU kullanmadığı için parmakla çizilen neon bile burada kurulun 300 ms bütçesini aşıyor; sayılar yalnız ikisinin oranını gösteriyor. İlk sürümde neon beş kat yavaştı. Geniş hale katmanlarında örnekleri seyreltip büyük disklerin kenar sayısını sınırlayınca fark %46'ya indi. iPad'de Apple Pencil ile deneme, Split View ve döndürme dâhil, henüz yapılmadı; simülatör kalem basıncı veremiyor.</p>
+<figure><img src="img/faz11-kalem-basinci.jpg" alt="Basınçlı ve basınçsız fırça çizgileri"><figcaption>Soldan keçeli kalem, pastel, neon. Üst sıra parmak, ikinci sıra uçlarda hafif, ortada sert basılan Pencil. Altta Pencil karalaması, kendini kesen halka ve keskin dönüş; delik yok.</figcaption></figure>
+<p><strong>Yeni içerik (birleştirme <code>f970012</code>).</strong> Arka plandaki ajan master üstünde çalıştı; dalını inceleyip bu dala birleştirdim. Çakışma çıkmadı; yerelleştirme dosyalarını yeniden ürettim, fark çıkmadı.</p>
+<ul>
+<li><strong>Sayılar.</strong> Üç yeni kategori: Uzay (13), Müzik (16), Giysiler (24). Doğa 13'ten 27'ye, Bitkiler 19'dan 24'e, Eşyalar 23'ten 44'e, Araçlar 20'den 32'ye, Hayvanlar 81'den 82'ye çıktı. Toplam 201'den 307 sayfaya. Her kategoride tam 8 ücretsiz sayfa var.</li>
+<li><strong>Ajanın kararları.</strong> Yeni kartlar ana ekranda eski altı kartın arkasına geldi. Sayfa denetiminden geçen 21 aday gözle elendi: soyut karolar, Japonca yazılı çiçek, insan figürlü paraşüt gibi. Yayımlanmış hiçbir sayfa kategori değiştirmedi; kayıtlı resimler sayfa kimliğini saklıyor.</li>
+<li><strong>Düzeltilen hatalar.</strong> Sayfa betiği tireli ve aksanlı adları indiremiyordu (yoyo, tişört, pinyata, T-Rex). Kategori kartları İngilizcede de Türkçe adı okuyordu. "İce cream" gibi İngilizce adlar Türkçe büyük İ alıyordu. Tam Sürüm metnindeki sabit "201" artık sayfa sayısından geliyor.</li>
+<li><strong>Benim eklediklerim.</strong> P1 testi kategori kartını eserin Türkçe adıyla arıyordu; kart artık uygulama dilinde okunduğu için testi sayfanın adına çevirdim (<code>283ea00</code>). Tam Sürüm metni ekranın adını "Resimlerim" yazıyordu; uygulamanın her yerindeki "Eserlerim" yaptım.</li>
+<li><strong>Simülatörde denendi.</strong> Ana ekranda üç yeni kart eski kartlarla aynı boyutta görünüyor. Uzay kategorisi açılıyor, kuyruklu yıldız sayfası dokunuşla taşmadan doluyor. Eski kategorilere eklenen 1. seviye sayfalar kategori içinde bazı eski sayfaların yerini birkaç kare kaydırıyor.</li>
+</ul>
+<figure><img src="img/faz11-yeni-kategoriler.jpg" alt="Yeni kategoriler ve boyanmış kuyruklu yıldız"><figcaption>Solda ana ekranın sonu: Uzay, Müzik, Giysiler. Sağda Uzay'daki kuyruklu yıldız, iki dokunuşla boyanmış.</figcaption></figure>
+<p><strong>Mağaza metni.</strong> Bu özelliklerle çıkacak sürümün "Yenilikler" taslağı (TR ve EN) ve yeni sayılı tanıtım ve açıklama satırları <code>store_listing.md</code> dosyasında. App Store Connect'e dokunmadım; metin yalnız o sürümle girer.</p>
+<p><strong>Açık kalanlar:</strong> iPad'de Apple Pencil denemesi; P2 ve P3 için en eski iPad'de ve düşük donanımlı Android'de süre ölçümü; içerikle çıkan sürümde "Notes for Review" metni; on taslak dildeki yeni kategori adlarının yerli okuması; Eserlerim'de VoiceOver'ın kayıtlı Türkçe adı okuması (kayıtlı veriyi değiştireceği için yapılmadı).</p>
 </div>
 
 </body>
