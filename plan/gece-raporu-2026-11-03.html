@@ -112,6 +112,15 @@ ul.tight li, ol.tight li { margin: 3px 0; }
     <li><a href="#acik">Açık kalan işler</a></li>
     <li><a href="#ortam">Ortam notları</a></li>
     <li><a href="#sabah">Sabah: PR'lar, Faz 2 ve testler</a></li>
+    <li><a href="#ayna">Faz 3: ayna çizimi</a></li>
+    <li><a href="#cikartma">Faz 4: çıkartmalar</a></li>
+    <li><a href="#firca">Faz 5: ek fırçalar</a></li>
+    <li><a href="#android-aktarim">Faz 6: Android'de galeriye kayıt ve yazdırma</a></li>
+    <li><a href="#ipad-geri-al">Faz 7: iPad'de sistem geri al ve klavye kısayolları</a></li>
+    <li><a href="#yayin">Yayın hazırlığı: sürüm 2.1.0, App Store Connect, iki ajan</a></li>
+    <li><a href="#inceleme-duzeltmeleri">Faz 8: 2.1.1 inceleme düzeltmeleri</a></li>
+    <li><a href="#vitrin">Faz 9: vitrin dönüşümü ve tema düzeltmesi</a></li>
+    <li><a href="#kurul-5-kasim">Faz 10: 5 Kasım kurulu, baştan boya ve otomatik tamamlama</a></li>
   </ol>
 </nav>
 
@@ -458,6 +467,26 @@ ul.tight li, ol.tight li { margin: 3px 0; }
 <tr><td>Başlıklı ekran görüntüleri</td><td><code>tool/store/caption_screenshots.py</code>: ham karelere üstte başlık bandı (%14, Avenir Next Bold, 0xFF2D3142 krem üstünde), altta "Reklam yok · İnternet yok · Hesap yok" şeridi, kare yuvarlatılmış köşe ve gölgeyle ortada; boyutlar değişmez. Sıra pazarlama raporuna göre: dolgu, çizgi, serbest çizim, ana ekran, Eserlerim, kapı. Üretilen: iPhone TR 5 kare, iPhone EN 4 kare (<code>build/store_screenshots/*_captioned/</code>). iPhone "kapı" karesi aslında ana ekrandı, kenara alındı. iPad ham kareleri başlıklarla uyuşmuyor (dolgu yerine ipucu, serbest çizim yerine filiz sayfası, kapı yerine ana ekran): iPad seti yeniden çekilmeli.</td><td><code>tool/store/caption_screenshots.py</code></td></tr>
 </tbody></table></div>
 <p>Kullanım: 2.1.1 App Store Connect'te açıldığında iPhone 6,1" TR ve EN setleri bu başlıklı karelerle değiştirilir; 2.1.0'ın karelerine inceleme sırasında dokunulmaz. iPad seti aynı gün yeniden çekildi: yeni "CobiPaint iPad" simülatörü (iPad Pro 13" M4, iOS 18.5, Türkçe, durum çubuğu 9:41), yedi kare: dolgu (salyangoz, üç alan), çizgi (mavi karalama halkada kalıyor), kutlama (ekran kaydından konfeti karesi), serbest çizim (dört yönlü ayna, gökkuşağı, simli, çıkartma), ana ekran, Eserlerim (sekiz resim), ebeveyn kapısı; <code>build/store_screenshots/ipad13_tr_v2_captioned/</code>. Çekim sırasında iki düzeltme: varsayılan Mercan temasının sayfa rengi eski krem (0xFFFFF4E6) oldu ve her temaya kendi Eserlerim kartı renkleri verildi (Mercan eski sarı-turuncuyu korur; koyu yazı en düşük 5,4:1). Kalan: iPhone setinde kutlama karesi ve 9:41 durum çubuğu; iPhone setleri de yeni simülatörden yeniden çekilebilir. Gözlem: iPad 13" ana ekranında kartların altı boş kalıyor (yedi kart iki sıra); büyük ekranda kartları büyütmek ayrı bir iyileştirme. İkon için Product Page Optimization testi ikon varyantlarının ikiliye eklenmesini ister (2.1.2 adayı). Testler: 146 geçiyor, analiz temiz.</p>
+
+<h2 id="kurul-5-kasim">20. Faz 10: 5 Kasım kurulu, baştan boya ve otomatik tamamlama</h2>
+<p>Kullanıcının 5 Kasım akşamı önerdiği işler beş üyeli kurula gitti (erken çocukluk uzmanı, App Review ve HIG uzmanı, ürün ve ASO, Flutter mühendisi, ebeveyn; kural 4/5 ve veto). Oylar ve birleştirilmiş tasarımlar <code>plan/kurul-2026-11-05.json</code> dosyasında. Kategori ve içerik artırma kurula gitmedi; mevcut üretim hattının genişlemesi olarak ayrı bir worktree'de yürüyor.</p>
+<div class="table-wrap"><table>
+<thead><tr><th>No</th><th>Öneri</th><th>Sonuç</th><th>Oy</th></tr></thead>
+<tbody>
+<tr><td>P1</td><td>Baştan başla: aynı sayfayı yeniden boyamak</td><td>şartlı geçti</td><td>5/5 şartlı onay, 0 ret, veto yok</td></tr>
+<tr><td>P2</td><td>Fırçayla boyamada otomatik tamamlama</td><td>şartlı geçti</td><td>5/5 şartlı onay, 0 ret, veto yok</td></tr>
+<tr><td>P3</td><td>Yeni kalem özellikleri</td><td>şartlı geçti</td><td>4/5 şartlı onay, 1 ret (ebeveyn üye, vetosuz), veto yok</td></tr>
+<tr><td>P4</td><td>Kısmen boyalı sayfalar</td><td>reddedildi</td><td>3/5 şartlı onay (Apple, Flutter, ebeveyn üye), 2 ret (erken çocukluk, ürün yöneticisi), veto yok; 4/5 eşiğinin altında</td></tr>
+<tr><td>P5</td><td>Adım adım çizim modu</td><td>reddedildi</td><td>0/5 onay, 5 ret, 1 veto (erken çocukluk uzmanı)</td></tr>
+<tr><td>P6</td><td>Tam Sürüm almayanlara reklam</td><td>reddedildi</td><td>0/5 onay, 5 ret, 5 veto</td></tr>
+</tbody></table></div>
+<p><strong>Yapılanlar</strong> (branch <code>faz10/bastan-boya-ve-tamamlama</code>, <code>faz9</code> üstüne):</p>
+<ul>
+<li><strong>Baştan boya (P1).</strong> Eserlerim'de uzun basma ve kapıdan sonra "Bu sayfayı baştan boya / Eski resim burada kalır": sayfa boş açılır, ilk dokunuşta yeni kopya kaydedilir, dokunmadan çıkılırsa kopya oluşmaz, hiçbir şey silinmez. Çocuğun ekranına düğme eklenmedi. Kategori kartı artık en son boyanan kopyayı açıyor; otomatik seviye farklı sayfaları sayıyor (yan bulgu: dört Çiz eseri çocuğu 2. seviyeye taşıyordu). Uçtan uca test: <code>test/paint_again_test.dart</code>.</li>
+<li><strong>Otomatik tamamlama (P2).</strong> Keçeli kalemle bir alanın ölçülebilir kısmının en az %85'i tek renkle boyanınca ve parmak boyu boşluk kalmayınca kalan köşeler o renkle dolar; dokunarak doldurmanın dalgası, sesi ve titreşimiyle gelir, kutlamaya sayılır. Çizgiyle tek geri al adımı; geri alınan bölge sayfa açık kaldıkça bir daha dolmaz. Ebeveynler alanında "Boyama" bölümü, tek anahtar, varsayılan açık. Ölçüm bu Mac'te 313.600 piksellik bölge ve 100 çizgi için ortalama 2,85 ms; kurulun bütçesi en eski iPad'de 4 ms, cihazda ölçülmedi.</li>
+<li><strong>Test sayısı:</strong> 163, analiz temiz. Simülatörde gerçek sayfada deneme yapılamadı: makinede dört simülatör açıktı ve bellek doldu; TestFlight derlemesinde iPhone 12'de denenmeli (keçeliyle bir alanı neredeyse doldurup parmağı kaldırmak yeter).</li>
+</ul>
+<p><strong>Sahibe açık sorular</strong> (kurulun listesi): P1 çocuk yolu (çocuk kendi başına "yeni kâğıt" açabilsin mi), 3–5 çocukla 10–15 dakikalık gözlem oturumu (%85 eşiği ve P3 için), P2 tek anahtar yeterli mi, P1 ve P2 hangi sürümle (2.1.2 mi 2.2.0 mı), P3'te hangi kalem kastediliyor (Büyük'te Apple Pencil basıncı karşılıyor mu), P4 için "yalnız parmağın ulaşamadığı küçük ayrıntılar hazır gelir" biçimiyle yeniden oylama isteniyor mu. Reklam beş vetoyla reddedildi; kurulun gerekçesi: Kids 1.3, "reklam yok" sözü, ağsız mimari ve "Data Not Collected".</p>
 </div>
 
 </body>

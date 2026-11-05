@@ -55,6 +55,19 @@ Apple's Human Interface Guidelines (read the current pages; HIG changes every WW
   has no keyboard bindings either. Büyük binds Cmd-Z / Shift-Cmd-Z on Apple platforms and
   Ctrl-Z / Ctrl-Shift-Z / Ctrl-Y elsewhere (`_keyboardUndo`). Shake-to-undo stays off for
   everyone (`applicationSupportsShakeToEdit = false` in AppDelegate): a child shakes the device.
+- Colour again (council, 5 Nov 2026): a grown-up long-presses a picture in My Artworks, passes the
+  gate and taps "Colour this page again": the page opens blank and not tied to the artwork; the
+  first touch saves a new copy, an untouched copy is never saved, nothing is deleted. Never put a
+  reset or clear control on a child's screen (Ç7). Category cards open the newest copy (updatedAt);
+  the automatic level counts different pages. A child's own "new paper" path needs its own vote.
+- Auto-complete (council, 5 Nov 2026, `lib/engine/document/auto_complete.dart`): only the marker on
+  a coloring page; one colour over at least 85% of the region's measurable area (8 px clear of the
+  lines); no other brush paint and no second colour in the region; no white gap of a fingertip
+  (1% of the page) left. Same reveal, sound and haptic as a tap fill; one undo step with its stroke;
+  an undone completion is not repeated while the page is open. Parents switch, on by default.
+- Rejected on 5 Nov 2026: partly coloured pages (3/5), step-by-step drawing (0/5, veto for Minik;
+  a Büyük-only proposal may come back), advertising for users without the Full Version (0/5, five
+  vetoes: Kids rule 1.3, the "no ads" promise, the network-free design).
 - Exports (3 Nov 2026): Android's share sheet has no Print or Save, so behind the gate My Artworks
   offers Save to gallery, Print and Print blank page through `ExportService`
   (`lib/services/export_service.dart`, channel `cobi.paint/export` in `MainActivity.kt`: MediaStore
