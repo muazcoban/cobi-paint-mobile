@@ -120,8 +120,16 @@ class PressureSpine {
     // from the line and faint, and every sample on a tight curve costs it a
     // disc.
     final stride = math.max(1, (0.3 * _base * scale / _step).floor());
-    final at = <int>[for (var i = 0; i < m - 1; i += stride) i, m - 1];
+    final at = <int>[0];
+    for (var i = stride; i < m - 1 + stride; i += stride) {
+      final next = math.min(i, m - 1);
+      // A line that comes back over itself can put two picked samples on
+      // one spot; a zero-length segment has no direction, so skip it.
+      final dx = _xs[next] - _xs[at.last], dy = _ys[next] - _ys[at.last];
+      if (dx * dx + dy * dy >= 0.0625) at.add(next);
+    }
     final k = at.length;
+    if (k == 1) return path;
     final dx = Float64List(k - 1), dy = Float64List(k - 1), len = Float64List(k - 1);
     for (var j = 0; j < k - 1; j++) {
       final ax = _xs[at[j + 1]] - _xs[at[j]], ay = _ys[at[j + 1]] - _ys[at[j]];

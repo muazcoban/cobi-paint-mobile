@@ -157,6 +157,19 @@ void main() {
       }
     });
 
+    test('a line drawn back over itself stays a proper shape', () {
+      final there = [for (var x = 10.0; x <= 110; x += 2) ...[x, 60.0, 0.7]];
+      final back = [for (var x = 108.0; x >= 10; x -= 2) ...[x, 60.0, 0.7]];
+      final spine = PressureSpine.of(_pencil(BrushKind.neon, [...there, ...back], size: 50));
+      for (final scale in [0.36, 1.0, 3.0]) {
+        final outline = spine.outline(scale);
+        expect(outline.getBounds().isFinite, isTrue, reason: 'no point without a direction at scale $scale');
+        for (var i = 0; i < spine.sampleCount; i++) {
+          expect(outline.contains(spine.sampleAt(i)), isTrue, reason: 'scale $scale, sample $i');
+        }
+      }
+    });
+
     test('is as wide as the pressure says', () {
       for (final pressure in [0.0, 0.5, 1.0]) {
         final stroke = _pencil(BrushKind.marker, _line(pressure));
