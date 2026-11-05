@@ -141,6 +141,24 @@ Sürüm numarası (2.1.2 ya da 2.2.0) henüz kararlaştırılmadı.
 
 ---
 
+## Notes for Review (2.1.1'den sonraki sürüm, taslak)
+
+App Review bu alanı İngilizce okur. Kapı bilgisi `lib/widgets/parental_gate.dart` ile doğrulandı.
+
+- No sign-in. The app makes no network requests and collects no data.
+- The Parents area opens from the grey gear at the top right of the home screen. The parental gate asks
+  for the product of two numbers from 2 to 9 (always a two-digit answer); from the third wrong answer it
+  locks for 30, 60 and then 120 seconds, and it closes itself after 20 seconds without a tap.
+- Share, "Share blank page", "Colour this page again" and Delete are behind the same gate: press and hold
+  a picture in My Artworks.
+- New in this version: three categories (Space, Music, Clothes) with 106 new coloring pages, 307 in all,
+  made from Microsoft's Fluent UI Emoji (MIT licence, shown in the Parents area). "Colour this page again"
+  opens a blank copy and keeps the old picture. When the marker has covered nearly all of an area, the
+  last small white corners fill in by themselves; parents can turn this off in the Parents area. In Big
+  mode on iPad, Apple Pencil pressure sets the width of the marker, pastel and neon lines.
+
+---
+
 ## Keywords / Tags
 
 App Store anahtar kelime alanı 100 karakter, virgülle, boşluksuz; ad ve altyazıdaki kelimeler tekrar
