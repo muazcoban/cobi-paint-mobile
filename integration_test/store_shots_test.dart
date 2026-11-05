@@ -37,7 +37,7 @@ void main() {
   // The host script answers every moment by dropping a file into the app's
   // temporary folder (the simulator's data container is on the Mac), so a
   // slow screenshot never catches a later screen. With
-  // --dart-define=COBI_SHOTS=off nobody answers and the walk is a plain smoke
+  // --dart-define=COBI_SHOTS=false nobody answers and the walk is a plain smoke
   // test, for example on Android.
   const shooting = bool.fromEnvironment('COBI_SHOTS', defaultValue: true);
 
@@ -249,6 +249,9 @@ void main() {
     await tester.tap(find.text(l10n.myArtworks));
     await wait(2500);
     await shot('04_artworks');
+    // The last tap's sound is still playing; the audio plugin's frame
+    // callbacks must end before the test does.
+    await wait(3000);
     semantics.dispose();
     say('DONE');
   });
