@@ -229,6 +229,12 @@ class AppLocalizationsTr extends AppLocalizations {
   String get delete => 'Sil';
 
   @override
+  String get paintAgain => 'Bu sayfayı baştan boya';
+
+  @override
+  String get paintAgainHint => 'Eski resim burada kalır';
+
+  @override
   String get deleteConfirmTitle => 'Eseri Sil';
 
   @override
@@ -258,7 +264,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get parentsHint =>
-      'Ayarlar burada. Paylaşmak, yazdırmak ve silmek için Eserlerim\'de bir resmi basılı tutun.';
+      'Ayarlar burada. Paylaşmak, yazdırmak, baştan boyamak ve silmek için Eserlerim\'de bir resmi basılı tutun.';
 
   @override
   String get ageMode => 'Mod';

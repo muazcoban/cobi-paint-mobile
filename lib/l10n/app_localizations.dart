@@ -530,6 +530,18 @@ abstract class AppLocalizations {
   /// **'Sil'**
   String get delete;
 
+  /// No description provided for @paintAgain.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu sayfayı baştan boya'**
+  String get paintAgain;
+
+  /// No description provided for @paintAgainHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Eski resim burada kalır'**
+  String get paintAgainHint;
+
   /// Delete confirmation title
   ///
   /// In tr, this message translates to:
@@ -587,7 +599,7 @@ abstract class AppLocalizations {
   /// No description provided for @parentsHint.
   ///
   /// In tr, this message translates to:
-  /// **'Ayarlar burada. Paylaşmak, yazdırmak ve silmek için Eserlerim\'de bir resmi basılı tutun.'**
+  /// **'Ayarlar burada. Paylaşmak, yazdırmak, baştan boyamak ve silmek için Eserlerim\'de bir resmi basılı tutun.'**
   String get parentsHint;
 
   /// No description provided for @ageMode.

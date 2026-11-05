@@ -17,18 +17,20 @@ const littleModeMaxLevel = 2;
 /// The level whose pages come first.
 ///
 /// A parent can pin a level in the Parents area ([UserSettings.level] 1-3);
-/// 0 means automatic: start at 1 and move up once [pagesPerLevel] pages of
-/// the current level have been coloured, counted from the saved artworks.
+/// 0 means automatic: start at 1 and move up once [pagesPerLevel] different
+/// pages of the current level have been coloured, counted from the saved
+/// artworks. Copies of one page and the Draw page count once: colouring the
+/// same page four times is practice, not a new level.
 int currentLevel(UserSettings settings, Iterable<SavedArtwork> artworks, Map<String, ColoringImage> pagesById) {
   if (settings.level >= 1 && settings.level <= 3) return settings.level;
   final max = settings.ageMode == AgeMode.little ? littleModeMaxLevel : 3;
-  final started = <int, int>{};
+  final started = <int, Set<String>>{};
   for (final artwork in artworks) {
     final page = pagesById[artwork.originalImageId];
-    if (page != null) started[page.level] = (started[page.level] ?? 0) + 1;
+    if (page != null) (started[page.level] ??= <String>{}).add(page.id);
   }
   var level = 1;
-  while (level < max && (started[level] ?? 0) >= pagesPerLevel) {
+  while (level < max && (started[level]?.length ?? 0) >= pagesPerLevel) {
     level++;
   }
   return level;

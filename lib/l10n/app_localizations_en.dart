@@ -229,6 +229,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get delete => 'Delete';
 
   @override
+  String get paintAgain => 'Colour this page again';
+
+  @override
+  String get paintAgainHint => 'The old picture stays here';
+
+  @override
   String get deleteConfirmTitle => 'Delete Artwork';
 
   @override
@@ -258,7 +264,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get parentsHint =>
-      'Settings live here. To share, print or delete a picture, press and hold it in My Artworks.';
+      'Settings live here. To share, print, colour again or delete a picture, press and hold it in My Artworks.';
 
   @override
   String get ageMode => 'Mode';

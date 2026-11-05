@@ -192,6 +192,8 @@
     "description": "Start coloring button"
   },
   "delete": "Sil",
+  "paintAgain": "Bu sayfayı baştan boya",
+  "paintAgainHint": "Eski resim burada kalır",
   "@delete": {
     "description": "Delete button"
   },
@@ -213,7 +215,7 @@
   "gateTitle": "Ebeveyn kontrolü",
   "gateInstruction": "Devam etmek için sonucu yaz:",
   "parentsArea": "Ebeveyn alanı",
-  "parentsHint": "Ayarlar burada. Paylaşmak, yazdırmak ve silmek için Eserlerim'de bir resmi basılı tutun.",
+  "parentsHint": "Ayarlar burada. Paylaşmak, yazdırmak, baştan boyamak ve silmek için Eserlerim'de bir resmi basılı tutun.",
   "ageMode": "Mod",
   "ageModeLittle": "Minik (3–5 yaş)",
   "ageModeLittleDesc": "Kocaman düğmeler, 9 renk, yakınlaştırma yok. Kalem çizginin dışına taşmaz.",

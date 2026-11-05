@@ -61,10 +61,13 @@ class CategoryScreen extends StatelessWidget {
                   if (images.isEmpty) {
                     return Center(child: Text(category.icon, style: const TextStyle(fontSize: 96)));
                   }
-                  // Latest artwork per page: lists are newest first.
+                  // The most recently coloured copy of each page: a page can
+                  // have several (a grown-up can start it again), and an edit
+                  // does not move an artwork in the list.
                   final latest = <String, SavedArtwork>{};
                   for (final a in provider.savedArtworks) {
-                    latest.putIfAbsent(a.originalImageId, () => a);
+                    final seen = latest[a.originalImageId];
+                    if (seen == null || a.updatedAt.isAfter(seen.updatedAt)) latest[a.originalImageId] = a;
                   }
                   return LayoutBuilder(
                     builder: (context, constraints) => GridView.builder(
