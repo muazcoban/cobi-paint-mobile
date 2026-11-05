@@ -6,6 +6,8 @@ import 'package:flutter/foundation.dart';
 import '../region/label_map.dart';
 import '../region/region_builder.dart';
 import '../render/symmetry.dart';
+import 'auto_complete.dart';
+import 'page_progress.dart';
 import 'sticker.dart';
 import 'stroke.dart';
 
@@ -76,7 +78,28 @@ class ColoringDocument extends ChangeNotifier {
     return label;
   }
 
-  void addStroke(Stroke stroke) => _push(_StrokeCommand(stroke, const {}, const {}));
+  /// Adds a brush stroke. [completion] is the fill [completionFor] found:
+  /// it joins the stroke's undo step, so one finger is one step and undo
+  /// takes both away.
+  void addStroke(Stroke stroke, {RegionFill? completion}) =>
+      _push(_StrokeCommand(stroke, const {}, const {}, completion: completion));
+
+  /// Regions whose automatic completion was undone: left alone for as long
+  /// as the page is open, so undo never fights the child.
+  final Set<int> _completionUndone = {};
+
+  /// The fill that finishes the region [stroke] stays in once the stroke is
+  /// added (see [AutoComplete]), or null. Only a marker stroke on a coloring
+  /// page asks; a region with a fill, the background and a region whose
+  /// completion was undone never complete.
+  RegionFill? completionFor(Stroke stroke) {
+    final label = stroke.clipLabel;
+    if (stroke.kind != BrushKind.marker || stroke.symmetry != 1 || label <= 0 || label >= _fills.length) return null;
+    if (_fills[label] != null || _completionUndone.contains(label)) return null;
+    if (label == PageProgress.backgroundLabel(map)) return null;
+    final result = AutoComplete.evaluate(map, [..._strokes, stroke], label);
+    return result == null ? null : RegionFill(argb: result.argb, x: result.x, y: result.y);
+  }
 
   /// Sticks [stickers] on the page as one step: a finger's trail of stamps
   /// comes off again with one undo.
@@ -283,16 +306,25 @@ class _FillCommand implements _Command {
 /// A brush stroke; for the eraser also the region fills it removed and the
 /// stickers it peeled off, by their place in the list.
 class _StrokeCommand implements _Command {
-  _StrokeCommand(this.stroke, this.clearedFills, this.peeledStickers);
+  _StrokeCommand(this.stroke, this.clearedFills, this.peeledStickers, {this.completion});
 
   final Stroke stroke;
   final Map<int, RegionFill> clearedFills;
   final Map<int, Sticker> peeledStickers;
 
+  /// The fill that finished the stroke's region, if it did.
+  final RegionFill? completion;
+
   @override
   void apply(ColoringDocument doc) {
     doc._strokes.add(stroke);
     doc._strokeRevision++;
+    final done = completion;
+    if (done != null) {
+      doc._setFill(stroke.clipLabel, done);
+      // Brought back with redo: the region may be completed again later.
+      doc._completionUndone.remove(stroke.clipLabel);
+    }
     for (final label in clearedFills.keys) {
       doc._setFill(label, null);
     }
@@ -305,6 +337,10 @@ class _StrokeCommand implements _Command {
   void revert(ColoringDocument doc) {
     doc._strokes.removeLast();
     doc._strokeRevision++;
+    if (completion != null) {
+      doc._setFill(stroke.clipLabel, null);
+      doc._completionUndone.add(stroke.clipLabel);
+    }
     clearedFills.forEach(doc._setFill);
     for (final index in peeledStickers.keys.toList()..sort()) {
       doc._stickers.insert(index, peeledStickers[index]!);

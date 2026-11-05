@@ -37,6 +37,8 @@ class Category {
     };
   }
 
+  /// New categories go after the existing ones: a child finds the cards by
+  /// where they are, so the older cards keep their places.
   static List<Category> getDefaultCategories() {
     return [
       Category(id: 'animals', name: 'Hayvanlar', nameEn: 'Animals', icon: '🐾', order: 1),
@@ -45,6 +47,9 @@ class Category {
       Category(id: 'nature', name: 'Doğa', nameEn: 'Nature', icon: '🌈', order: 5),
       Category(id: 'food', name: 'Yiyecekler', nameEn: 'Food', icon: '🍎', order: 6),
       Category(id: 'things', name: 'Eşyalar', nameEn: 'Things', icon: '🧸', order: 7),
+      Category(id: 'space', name: 'Uzay', nameEn: 'Space', icon: '🪐', order: 8),
+      Category(id: 'music', name: 'Müzik', nameEn: 'Music', icon: '🎸', order: 9),
+      Category(id: 'clothes', name: 'Giysiler', nameEn: 'Clothes', icon: '👕', order: 10),
       Category(id: 'import', name: 'İçe Aktar', nameEn: 'Import', icon: '📥', order: 99, isImportCategory: true),
     ];
   }

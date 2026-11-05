@@ -1,0 +1,695 @@
+{
+ "votes": [
+  {
+   "member": "Ürün yöneticisi ve ASO/pazarlama",
+   "verdicts": [
+    {
+     "id": "P1",
+     "decision": "conditional",
+     "veto": false,
+     "effort": "S",
+     "conditions": [
+      "Yıkıcı sıfırlama yok. 'Yeniden boya' sayfanın boş, yeni bir kopyasını açar; eski eser Eserlerim duvarında olduğu gibi kalır (Ç6, Ç7). Bugün baştan başlamanın tek yolu çocuğun resmini silmek; bu öneri aynı işi kayıpsız yapmalı.",
+      "Boyama ekranına yeni düğme ya da 'tümünü temizle' eklenmez. Araç çubuğu Minik'te 4, Büyük'te 5 düğme olarak kalır (lib/screens/coloring_screen.dart:83, `_Metrics`).",
+      "Giriş kapının arkasında: Eserlerim'de resme basılı tut, `showParentalGate`'i geç, `_showOptions` listesinde 'Yeniden boya' satırını seç (lib/screens/my_artworks_screen.dart:141). Hiçbir şey silinmediği için onay penceresi gerekmez.",
+      "Serbest çizim eserinde bu satır görünmez, çünkü Çiz kartı zaten her seferinde boş sayfa açıyor (lib/screens/home_screen.dart:195).",
+      "Seviye ilerlemesi kopyaları değil, farklı sayfaları sayar. `currentLevel` bugün her eseri ayrı sayıyor (lib/data/page_order.dart:28); aynı sayfanın dört kopyası çocuğu üst seviyeye taşımamalı.",
+      "Satın alma kuralı korunur. 'Yeniden boya' yalnız çocuğun kataloğunda açık olan sayfalarda çalışır (`getImagesForCategory`, lib/providers/app_provider.dart:102-107); kilitli bir sayfanın kopyası kilidi aşmanın yolu olmamalı.",
+      "Ebeveyn ipucu metni güncellenir (`parentsHint`, lib/l10n/app_tr.arb:216 ve app_en.arb:84): paylaşmak, yazdırmak, yeniden boyamak ve silmek için basılı tutun."
+     ],
+     "toddler_risk": "Kapının arkasında kaldığı sürece düşük, çünkü çocuk yeni bir şey görmez. Çocuğa açık bir sıfırlama düğmesi kazara iş kaybı ve 'resmim gitti' ağlaması demek (Ç6, Ç7). Minik'te her açılışta 'devam mı, yeni mi' diye sormak akışa bir adım ekler. 3 yaşındaki çocuk rastgele seçer ve kendi resmini kategori kartında bulamayabilir.",
+     "rationale": "Aynı resmi yeniden boyamak küçük çocuğun doğal tekrar oyunu; kâğıt boyama kitabının veremediği, ebeveynin fark edeceği bir değer. Ama tek cümlelik vaadimiz 'hiçbir şey kaybolmaz' (plan/pazarlama-incelemesi-2026-11-03.html §1.4) ve Bimi Boo'nun zayıf noktası olarak 'resim silindi' yorumu duruyor. Bu yüzden 'baştan başla' bir temizleme değil, yeni bir kopya olmalı. Veri modeli buna hazır: `ArtworkAutosaver` eser verilmezse yeni uuid açıyor (lib/screens/coloring/artwork_autosaver.dart:71), dokunulmamış sayfayı hiç kaydetmiyor (63-67), kategori kartı da sayfanın en yeni kopyasını gösteriyor (lib/screens/category_screen.dart:63-66). İş küçük ve risksiz; mağazada 'aynı resmi yeniden boyar, eskisi duvarında kalır' dürüst bir cümle olur.",
+     "design": "Çocuk (Minik ve Büyük): değişiklik yok. Kategori kartı çocuğun son kopyasını gösterir ve dokununca kaldığı yerden açar. Eserlerim'de her kopya kendi çerçevesinde durur, en yenisi başta. Ebeveyn: Eserlerim'de resme basılı tutar ve kapıyı geçer. Listede Paylaş, Galeriye kaydet, Yazdır, Boş sayfayı yazdır ve Sil satırlarının arasına boş sayfa simgeli 'Yeniden boya' satırı gelir. Dokununca aynı sayfa boş açılır. Çocuk ilk izi bırakınca yeni kopya kaydedilir ve kategori kartı onu göstermeye başlar; hiç boyamadan çıkarsa iz kalmaz. İkinci adım, yalnız mağaza yorumları isterse ve yalnız Büyük'te: boyanmış sayfaya dokununca iki büyük resimli seçim çıkar (çocuğun kopyası devam eder, boş çizgi resmi yeni kopya açar). Seçim metinsizdir ve VoiceOver etiketlidir; Minik'te bu seçim hiç yoktur. Mağaza: özellik yayına girince açıklamaya 'Aynı resmi istediği kadar yeniden boyayabilir; eski resmi duvarında kalır.' eklenir."
+    },
+    {
+     "id": "P2",
+     "decision": "conditional",
+     "veto": false,
+     "effort": "M",
+     "conditions": [
+      "Renk çocuğun kendi rengidir: bölgeyi en çok kaplayan keçeli izinin rengi. Hiçbir zaman 'doğru' renk ya da orijinal emoji rengi kullanılmaz.",
+      "Yalnız parmağın kalktığı çizginin bölgesi (`Stroke.clipLabel`) tamamlanır, sayfanın geri kalanı değil. Zaten dolgusu olan bölgede ve serbest çizim sayfasında (bölge yok, `stayInside: false`) çalışmaz.",
+      "Yalnız keçeli kalem tetikler ve kaplama yalnız keçeli iziyle ölçülür. Keçeli opak olduğu için (lib/engine/render/page_layers.dart:41-59) altına giren dolgu yalnız boşlukları kapatır. Gökkuşağı, pastel, sprey, simli, neon ve çıkartma tetiklemez, çünkü altlarına giren düz dolgu yarı saydam ya da çok renkli dokularını siler (page_layers.dart:120, 169, 189, 253).",
+      "Eşik, bölgenin kendi piksellerinin %85'idir (sahibin 80-90 bandının ortası); sınırlayıcı kutu kullanılmaz. Kural Minik ve Büyük'te aynıdır. Eşik kodda tek bir sabittir ve uygulamada analitik olmadığı için çocukla elle denenerek ayarlanır. Kaplama parmak kalkınca bir kez ölçülür ve en yavaş test cihazında çizginin bitişini gözle görülür biçimde geciktirmez.",
+      "Tek geri al adımı: son çizgi ve onun açtığı dolgu birlikte geri alınır (çıkartmadaki gibi bir parmak, bir adım; HIG Undo and redo: sonuç öngörülebilir olmalı). Otomatik dolgusu geri alınan bölge o oturumda bir daha kendiliğinden dolmaz; böylece bilerek bırakılan beyaz korunur.",
+      "Geri bildirim kova dolgusuyla aynıdır: parmağın kalktığı noktadan mevcut 220 ms açılış (lib/widgets/paint_canvas.dart:150), dolgu sesi ve hafif titreşim (Ç8). Reduce Motion açıkken dolgu anında görünür (paint_canvas.dart:233). Yeni animasyon, parıltı, simge ya da düğme eklenmez.",
+      "Silgi otomatik dolguyu her dolgu gibi siler (lib/engine/document/coloring_document.dart:88-99) ve kendisi tamamlamayı tetiklemez.",
+      "Otomatik dolgudan sonra mevcut `PageProgress` kontrolü çalışır; fırçayla biten sayfa da bir kez kutlanır ve eser `isCompleted` olarak kaydedilir. PageProgress'in kuralı değişmez.",
+      "Ebeveynler alanında (kapının arkasında) tek anahtar olur: varsayılan açık, iki modda geçerli. Metin yalnız orada görünür; TR ve EN metni yazılır, 10 dil taslağına anahtar eklenir. Anahtar Tam Sürüm'e bağlı değildir; çocuğun ekranı satın almadan önce ve sonra aynıdır.",
+      "Mağaza metnine yalnız yayına girdikten sonra yazılır (2.3.1). Özellik 2.1.0 ve 2.1.1'e girmez."
+     ],
+     "toddler_risk": "Düşük. Bölge kendiliğinden dolunca çocuk şaşırabilir; kova dolgusunun tanıdık dalgası ve sesi bunu 'ben yaptım' hissine çevirir. Birden çok renk kullanılan bölgede beklenmedik bir renk çıkabilir; baskın renk kuralı bu riski azaltır. Geri al yalnız dolguyu kaldırırsa çocuk 'geri al çalışmadı' sanır; tek adım şartı bunu önler. Parmak kalkınca gecikme olursa dokunuş bozuk hissettirir; performans şartı bunu önler. Fırçanın motor deneyimi korunur, yalnız son %15 tamamlanır.",
+     "rationale": "Bu istek ürün vaadimizin ('boya taşmaz' ve altyazıdaki 'küçük eller') doğal devamı: üç yaşındaki çocuğun parmağı köşeleri ve ince kenarları kaçırır, ebeveyn de kalan beyazlıkları görür. Bugün fırçayla boyayan çocuk hiç bitiş kutlaması görmüyor. `PageProgress` yalnız bölge dolgularını sayıyor (lib/engine/document/page_progress.dart:21); tamamlanma kontrolü de yalnız kova dolgusunda çalışıyor (`_onFilled`, lib/screens/coloring_screen.dart:428-446; PaintCanvas'a `onStrokeCommitted` verilmiyor, 689-690). Otomatik tamamlama bölgeyi sıradan bir `RegionFill`'e çevirdiği için ekran görüntüsünde vaat ettiğimiz 'biten resim kutlanır' fırçada da çalışır ve kayıt şeması değişmez (lib/engine/document/coloring_document.dart:188-197). Renk çocuğun kendi rengi olduğu için reddedilen 'renkli örnek ve sihirli boya' ile çakışmaz (plan/gece-raporu-2026-11-03.html §4: 'doğru renk bu' baskısı); rakiplerde aynı özelliğin olup olmadığını doğrulamadım, bu yüzden onu vitrin başlığı değil 'küçük eller için' vaadinin kanıtı olarak kullanırım.",
+     "design": "Çocuk (Minik ve Büyük): araç çubuğu, palet ve fırça döngüsü aynen kalır. Çocuk keçeliyle aslanın yelesini boyar ve parmağını kaldırır. Yelenin %85'inden fazlası boyalıysa kalan beyaz köşeler en çok kullandığı renkle dolar; dolgu parmağın kalktığı noktadan bilinen dalgayla ve dolgu sesiyle gelir. Çizgileri üstte kalır (plan Karar 6: dolgu fırçanın altında). Sayfanın bütün parmak boyu alanları dolunca bilinen kutlama gelir. Geri al tek dokunuşla son çizgiyi ve dolguyu birlikte kaldırır. Ebeveyn: Ebeveynler alanında 'Yaş modu'nun hemen altında (lib/screens/parents_screen.dart:47) yeni bir 'Boyama' bölümü açılır. Anahtarın adı 'Küçük boşlukları tamamla' (EN 'Fill small gaps'), alt yazısı 'Kalemle bir bölgenin büyük kısmı boyanınca kalan beyazlıklar aynı renkle dolar. İnce motor alıştırması için kapatabilirsiniz.' Varsayılan açıktır; anahtar kapının arkasında olduğu için çocuk değiştiremez. Mağaza (yayından sonra): Yenilikler'e 'Fırçayla boyarken atlanan küçük köşeler kendiliğinden dolar' / 'Missed corners fill themselves' satırı. Açıklamanın ilk paragrafına 'kalem çizginin içinde kalır, atlanan köşeler kendiliğinden dolar' eklenir. 'Küçük eller için' altyazısını destekleyen bir ekran görüntüsü alt yazısı adayıdır."
+    },
+    {
+     "id": "P3",
+     "decision": "conditional",
+     "veto": false,
+     "effort": "M",
+     "conditions": [
+      "Yeni düğme, menü ya da ayar eklenmez. Fırça döngüsü Minik'te 5, Büyük'te 7 durumu geçmez. Yeni bir kalem ancak mevcut bir durumun yerine geçer ve 3 yaş ile HIG incelemesinden geçer.",
+      "Kurulun fırça şartları sürer: belirlenimci (`_seeded`), bulanıklık yok, animasyon yok, her dokunuş iz bırakır, kayıtlı eser her cihazda aynı görünür. `BrushKind` adları değişmez, çünkü kayıtlarda saklanıyor.",
+      "Basınç yalnız Büyük'te ve yalnız kalemle (stylus) çalışır. Parmakla çizim bugünkü gibi sabit kalınlıkta kalır. Minik'e dokunulmaz.",
+      "Hiçbir kalem ya da özellik Tam Sürüm'e kilitlenmez; çocuğun ekranı satın almadan önce ve sonra aynıdır. Eski plandaki 'Pro fırça' fikri bu kuralla düştü.",
+      "Çiz sayfası ve boyama sayfası aynı döngüyü kullanır; sayfa türüne göre değişen döngü olmaz."
+     ],
+     "toddler_risk": "Yeni durum eklenirse orta: döngü uzar, çocuk keçeliyi kaybeder ve tek düğmenin ne yapacağını öngöremez. Menü eklenirse yüksek, çünkü okuma ve seçim yükü getirir. Basınç olarak ve yalnız Büyük'te yapılırsa düşük; Minik hiç değişmez.",
+     "rationale": "Fırçalar rakiplerde artık standart: planın 'Must' listesindeki altı fırçanın hepsi yapıldı (plan/cobi-paint-yeniden-dogus-plani.html §9) ve vitrinde '6 fırça' yazıyor; yedinci bir fırça ne indirme ne Tam Sürüm kararını değiştirir. Kurulun koyduğu sınır da dolu: Büyük döngüsü 7 durumda (lib/screens/coloring_screen.dart:288-296) ve 'yedi durum bu kalıbın sınırı'. Minik'te her yeni durum, 3 yaşındaki çocuğun keçeliye dönmek için yapacağı dokunuş sayısını artırır. Bu yüzden 'farklı kalem özelliklerini' yeni durum ya da düğme olarak değil, mevcut kalemlerin özelliği olarak kabul ederim; en değerli aday Büyük'te Apple Pencil basıncı, çünkü `Stroke` basıncı zaten saklıyor (lib/engine/document/stroke.dart:36), ama bugün hep 0.5 yazılıyor (lib/widgets/paint_canvas.dart:313, 336). Öncelikte içeriğin ve P2'nin arkasında durur.",
+     "design": "Minik: değişiklik yok (keçeli, gökkuşağı, sprey, simli, çıkartma). Büyük: döngü aynı kalır. iPad'de Apple Pencil ile çizen çocuğun keçeli, pastel ve neon çizgisi bastırdıkça kalınlaşır, hafif dokununca incelir; parmakla çizim değişmez. Basınç her noktanın üçüncü değeri olarak kaydedilir; eser yeniden açılınca aynı görünür. Ebeveyn tarafında ayar yok. Sahip belirli bir yeni kalem isterse (örneğin tebeşir ya da kurşun kalem), Büyük'te mevcut bir durumun yerine önerilir ve aynı kalıbı izler: kendi glifi, renk rozeti ve VoiceOver adı. Mağaza: yalnız yayına girince iPad ekran görüntüsünün alt yazısına ve açıklamaya 'Büyük modda Apple Pencil ile basınca duyarlı çizgi' eklenir."
+    },
+    {
+     "id": "P4",
+     "decision": "reject",
+     "veto": false,
+     "effort": "M",
+     "conditions": [
+      "Yeniden ele alınırsa: yalnız sahne arka planı (gökyüzü, zemin) tek soluk renkle hazır gelir; özne her zaman beyazdır.",
+      "Yeniden ele alınırsa: hazır alanlar sıradan dolgu gibi değiştirilir ve silinir; kilitli alan olmaz, çünkü dokunuşa tepki vermeyen alan Ç8'i bozar.",
+      "Yeniden ele alınırsa: ayrı mod, kart ya da rozet olmaz; varyantlar mağazada ayrı sayfa olarak sayılmaz."
+     ],
+     "toddler_risk": "Orta. Hazır renkler 'doğru renk' baskısı yaratır. Çocuk en çekici yeri, yani hazır boyalı alanı boyamak ister. Alan kilitliyse dokunuş bir şey yapmaz (Ç8); kilitli değilse hazır boyanın anlamı kalmaz. Kutlama, çocuğun yapmadığı bir işe bağlanır.",
+     "rationale": "Bu öneri kurulun 3/5 oy ve vetoyla reddettiği 'renkli örnek ve sihirli boya'nın yarısı: hazır boyalı alanlar 'doğru renk bu' mesajı verir ve çocuğun rengi seçme hakkını daraltır (plan/gece-raporu-2026-11-03.html §4). Eserlerim duvarı çocuğun kendi işi; yarısı hazır gelen resim 'benim resmim' duygusunu ve ebeveynin gurur anını, yani ağızdan ağıza yayılmanın kaynağını zayıflatır. Ebeveynin para ödeyeceği bir fark yaratmaz; aynı çizimin boyalı varyantlarını sayfa sayısına katmak '201 sayfa' iddiasını şişirme riski taşır (2.3.1). Hızlı başarı ihtiyacını zaten 1. seviye sayfalar (en çok 4 parmak boyu alan ve 10 bölge) ve P2 karşılıyor.",
+     "design": "Onaylayacağım bir biçim yok; ihtiyacı P2 ve 1. seviye sayfalar karşılıyor. Sahip yine de isterse kabul edebileceğim tek biçim şu: normal kategorilerde birkaç 'sahne' sayfası. Bu sayfalarda yalnız arka plan bölgesi (`PageProgress.backgroundLabel`) tek soluk renkle başlar, özne bembeyazdır. Çocuk arka planı kovayla ya da kalemle değiştirebilir, silgiyle silebilir. Hazır renk geri al geçmişinde yer almaz; sayfanın ilk hâlidir. Çocuk ekranında ayrı kart, rozet ya da mod yok; ebeveyn tarafında ayar yok; mağazada ayrı sayfa olarak sayılmaz."
+    },
+    {
+     "id": "P5",
+     "decision": "reject",
+     "veto": false,
+     "effort": "L",
+     "conditions": [
+      "Yeniden ele alınırsa: Minik'te asla, yalnız Büyük'te.",
+      "Yeniden ele alınırsa: yargı, puan ya da 'yanlış' durumu olmaz; adımlar çocuğun isteğiyle ilerler.",
+      "Yeniden ele alınırsa: son boyama adımı şablonun kendi bölgelerini kullanır, çocuğun kapanmamış çizgisini değil; yoksa dolgu sızar."
+     ],
+     "toddler_risk": "Minik'te yüksek: ince motor beceri ister. Çizgiyi tutturamayan çocuk ya ilerleyemez ya da 'yanlış yaptım' hisseder. Yeni bir mod ana ekrana bir seçim daha ekler. Adım talimatı okuma ya da konuşma gerektirir. Büyük'te orta.",
+     "rationale": "Hedef yaş uymuyor: soluk kılavuzu izleyerek çizmek 6 yaş ve üstünün becerisi; kurul harf ve rakam izlemeyi aynı gerekçeyle 1/5 oy ve vetoyla reddetti ('3 yaş için erken', plan/gece-raporu-2026-11-03.html §4). Adımı geçmek için çizimi yargılayan bir akış başarısızlık durumu üretir; sayıyla boyama da bu yüzden veto yedi. İçerik hattımız (tool/pages/build_pages.py: Fluent UI Emoji'den bölge haritası) sıralı çizim adımı üretmiyor; her resim için adım yazmak ve yeni bir giriş noktası kurmak L büyüklüğünde iş. Mağazada 'how to draw' aramaları 6-12 yaş çocukların ebeveynlerini çeker; bizim bandımız '5 ve altı', anahtar kelimelerimiz 'toddler, preschool, 3 yaş', bu özellik konumumuzu bulandırır.",
+     "design": "Bu sürüm döngüsünde yok. Play ve App Store verisi geldikten sonra Büyük için yeniden konuşulabilir. O zamanki tasarım: ana ekranda yeni kart yok; Büyük'te Çiz kartının içinde birkaç şablon. Her adımda soluk gri kılavuz çizgiler görünür; ayna çizgileri gibi bunlar da kaydedilen resmin parçası değildir. Çocuk istediği gibi çizer; puan ve yargı yoktur. Sonraki adıma, araç çubuğunda kova ya da aynanın yerindeki büyük ok düğmesiyle geçilir. Son adımda şablonun bölgeleri boyanır, çocuğun çizgileri üstte kalır. Ebeveyn tarafında ayar yok. Minik'te bu akış hiç görünmez."
+    },
+    {
+     "id": "P6",
+     "decision": "reject",
+     "veto": true,
+     "effort": "L",
+     "conditions": [],
+     "toddler_risk": "Yüksek. Reklam çocuğun ekranına ticari içerik ve uygulamadan çıkış yolu koyar (Ç9); kazara bir dokunuş mağazaya ya da tarayıcıya götürür. Reklam SDK'sı cihaz verisi toplar (5.1.4, COPPA) ve 'Data Not Collected' etiketi bozulur. Uygulamanın kendi sürüm manifestinde internet izni bile yok (android/app/src/main/AndroidManifest.xml; izin yalnız debug ve profile manifestlerinde var). 'Reklamı kaldırmak için öde' kalıbı çocuğu ebeveyne karşı bir baskı aracına çevirir.",
+     "rationale": "Reklam, ürünün tek cümlelik vaadini ve bütün mağaza varlığını yalanlar: konum cümlesinde 'reklam yok' (plan/pazarlama-incelemesi-2026-11-03.html §1.4), her ekran görüntüsünde 'Reklam yok · İnternet yok · Hesap yok' şeridi, anahtar kelimelerde 'reklamsız' ve 'no ads', 2.1.0 yeniliklerinde 'Reklamlar kaldırıldı' yazıyor. Apple 1.3, Kids Category'de üçüncü taraf reklamına yalnız belgeli ve insan incelemeli bağlamsal servisler için dar bir kapı bırakıyor; AdMob bu yüzden faz 0'da çıkarıldı (plan §10). Kategoriden çıkmak da çözüm değil: 2.3.8 ve 5.1.4(b), Kids dışındaki bir uygulamanın adında, altyazısında ve görsellerinde çocukları ana kitle gibi göstermesini yasaklıyor. Reklamı yalnız satın almayanlara göstermek, kurulun 'çocuğun ekranı satın almadan önce ve sonra aynı' kuralını çiğner ve satın almayı çocuk üzerinden bir baskı aracına çevirir. Gelir kaldıracı reklam değil, hâlâ kapalı duran Tam Sürüm (`COBI_IAP`, lib/services/purchase_service.dart:22).",
+     "design": "Reklam yok, sonraki sürümlerde de olmayacak. Geliri bunun yerine Tam Sürüm taşır. (1) Tek seferlik kilidi `COBI_IAP` açık bir sürümle yayına al. Çocuk ekranında kilit, rozet ya da sayaç olmaz; ücretsiz küme 48 sayfada sabit kalır (kategori başına 8, tool/pages/catalog.json). (2) Kilidi açmadan önceki şart: 2.1.x'i kurmuş cihazlar bütün sayfalarını korur. Bugün `getImagesForCategory` (lib/providers/app_provider.dart:102-107) kilidi herkese uyguluyor ve eski kullanıcıyı ayırmıyor. Kilit açılınca 2.1.x kullanan çocuğun kategorileri 201 sayfadan 48'e iner. Bu, kurulun aboneliği çift vetoyla reddederken gösterdiği 'galeri küçülür' sorununun aynısı. iOS'ta eski kullanıcı StoreKit AppTransaction'daki ilk indirme sürümüyle tanınabilir. (3) Kapının arkasındaki FullVersionScreen değeri anlatır: '201 sayfa, 3 seviye, Aile Paylaşımı ile 5 kişi'. (4) Ürün sayfasında Promoted IAP kullanılır (plan/gelir-ve-yayin-raporu.html §2.1: uygulamanın dışında, Kids kısıtı yok). (5) Sezon temaları normal kategori olarak eklenir (kurul kararı). P1 ve P2 herkese açık kalır ve 'küçük eller' vaadini güçlendirir."
+    }
+   ]
+  },
+  {
+   "member": "Kıdemli Flutter mühendisi (bu kod tabanını bilen; efor S/M/L, motor riski, test edilebilirlik, eski iPad performansı)",
+   "verdicts": [
+    {
+     "id": "P1",
+     "decision": "conditional",
+     "veto": false,
+     "effort": "S",
+     "conditions": [
+      "Yıkıcı sıfırlama yok: “baştan başla” mevcut eseri silmez ya da temizlemez, aynı sayfanın yeni bir kopyasını açar (ColoringScreen(image: sayfa), existingArtwork olmadan). ColoringDocument.clear() (coloring_document.dart:133-136) hiçbir düğmeye bağlanmaz (Ç6, Ç7).",
+      "Giriş yalnız ebeveyn kapısının arkasında, Eserlerim'deki mevcut uzun basış menüsündedir (my_artworks_screen.dart:114, 142). Kategori kartına uzun basış eklenmez: PressableCard'a onLongPress verilince 450 ms'den uzun basış dokunuş sayılmıyor (kid_button.dart:223), yavaş basan çocuk sayfa yerine kapıyı görür.",
+      "Kategori kartı sayfanın en son güncellenen kopyasını gösterir ve açar (updatedAt). Bugün liste sırasıyla seçiliyor (category_screen.dart:64-68) ve güncellenen eser listede yer değiştirmiyor (app_provider.dart:124-129).",
+      "currentLevel aynı sayfanın kopyalarını bir kez sayar (originalImageId tekil). Bugün her eser ayrı sayılıyor (page_order.dart:26-28); kopyalar seviyeyi hak edilmeden yükseltir.",
+      "Satır serbest çizim eserlerinde görünmez: Çiz kartı zaten her dokunuşta boş sayfa açıyor (lib/data/free_pages.dart, home_screen.dart:195).",
+      "Testler: kapı → menü → boş sayfa açılır; bir dolgudan sonra aynı sayfanın iki eseri vardır ve kategori yenisini açar; dokunmadan çıkılınca eser sayısı değişmez (artwork_autosaver.dart:63-67 bunu bugün sağlıyor); yeni menü satırı accessibility_test guideline kontrolünden geçer."
+     ],
+     "rationale": "Motor bu özelliği bugün destekliyor: her eser kendi UUID'siyle kaydediliyor (artwork_autosaver.dart:72) ve kategori ekranı sayfanın en yeni eserini seçiyor (category_screen.dart:64-68), yani “baştan başla” yalnız yeni bir kopya açmak demek; motor değişikliği yok, iş yarım gün. Yıkıcı bir temizle Ç6'yı (hiçbir şey kaybolmaz) ve Ç7'yi (temizle düğmesi yok) çiğner; yeni kopya ise eski eseri Eserlerim'de bırakır ve geri dönüşü olmayan bir adım içermez. Araç çubuğuna düğme eklenemez: Minik'te 375 pt telefona dört düğme sığıyor (_Metrics, coloring_screen.dart:83). Mevcut “uzun bas + kapı” kalıbı yetişkinin zaten bildiği yerdir; kategori kartına uzun basış ise çocuğun ana yolunu bozar.",
+     "toddler_risk": "Düşük; çocuğun akışı değişmez. Tek risk, ebeveyn yeni kopyayı açtıktan sonra çocuğun kategoride eski boyamasını aramasıdır; eski kopya Eserlerim'de çerçeveli durur. Giriş kategori kartına uzun basış olarak konursa yavaş basan 3 yaşındaki çocuk sayfası yerine ebeveyn kapısını görür; bu yüzden orası yasak.",
+     "design": "Çocuk (Minik ve Büyük): hiçbir şey değişmez. Kategori kartına dokunmak sayfanın en son boyanan kopyasına devam eder; araç çubuğu ve palet aynı kalır. Ebeveyn: Eserlerim'de esere uzun basar, çarpma kapısını geçer ve mevcut menüde (Paylaş, Galeriye kaydet, Yazdır, Boş sayfayı yazdır, Sil) Sil'in üstünde yeni bir satır görür: “Bu sayfayı baştan boya” (ikon Icons.restart_alt_rounded, kırmızı değil). Dokununca sayfa bembeyaz açılır ve cihaz çocuğa verilir. Çocuk ilk dokunuşu yapınca yeni eser Eserlerim'in başına gelir ve kategori kartı artık onu gösterir; eski kopya Eserlerim'de kalır, istenirse ayrıca silinir. Hiç dokunulmadan çıkılırsa yeni eser oluşmaz, kart eskisini göstermeye devam eder. Serbest çizim eserlerinde bu satır yoktur."
+    },
+    {
+     "id": "P2",
+     "decision": "conditional",
+     "veto": false,
+     "effort": "M",
+     "conditions": [
+      "Yalnız boyama sayfalarında, yalnız çizginin içinde kalan keçeli kalem çizgisinden sonra (clipLabel > 0, BrushKind.marker) ve yalnız dolgusu olmayan bölgede çalışır. Gökkuşağı, pastel, sprey, simli, neon ve çıkartma tetiklemez: altlarına düz dolgu girince görünüşleri değişir. Serbest çizim sayfasında yoktur.",
+      "Ölçüm dart:ui kullanmayan, birim testli saf bir Dart modülünde yapılır (ör. lib/engine/document/auto_complete.dart): bölgenin sınır kutusunda 4 px'lik kaba ızgara; çizgiler sırasıyla damgalanır, silgi çizgisi boyayı kaldırır.",
+      "Kapsama çizgi altındaki pikseller hariç ölçülür. LabelMap.area çizgi piksellerini de sayıyor (label_map.dart:19-20) ve kontur 11 px (emoji2page.py); başka bir etikete 8 px'ten yakın hücreler hesaba girmez. Aksi hâlde ince bölgeler eşiğe hiç ulaşmaz.",
+      "Tetik: iç alanın en az %85'i boyalı, kalan her boşluk parmak ucundan küçük (sayfanın %1'i, page_progress.dart:15) ve tek renk baskın (boyanan alanın en az %80'i). Sabitler tek yerde durur ve testte sabitlenir; ebeveyne eşik kaydırıcısı verilmez.",
+      "Otomatik dolgu, onu tetikleyen çizgiyle aynı geri alma adımıdır: _StrokeCommand dolguyu ve önceki değeri taşır (coloring_document.dart:285-313). Bir geri al ikisini birlikte kaldırır, ileri al birlikte getirir. Silgi, geri al ve ileri al tamamlamayı tetiklemez. Çocuk otomatik dolgu taşıyan bir adımı geri alırsa o bölgede sayfa açık kaldıkça tamamlama yapılmaz (bilerek bırakılan beyaz korunur).",
+      "Geri bildirim mevcut dolgunun aynısıdır: parmağın kalktığı noktadan 220 ms açılma (Reduce Motion açıkken anında), dolgu sesi, hafif titreşim; onFilled çağrılır, böylece sayfa bitiş kutlaması fırçayla boyamada da çalışır. Yeni animasyon eklenmez.",
+      "Kayıt biçimi değişmez: dolgu normal bir RegionFill olarak (l, c, x, y) yazılır, x ve y bölgenin iç noktasıdır, şema sürümü artmaz.",
+      "Performans: ölçüm yalnız parmak kalkınca ve yalnız o bölge için yapılır. iOS 15 hedefinin en eski iPad'inde (A8: iPad Air 2, iPad mini 4; ios/Podfile:1) 1024 px sayfada 300 bin piksellik bölge ve 100 çizgiyle 4 ms'yi geçmez; geçerse Isolate.run'a taşınır. Bu bir bütçedir, henüz ölçülmedi.",
+      "Ayar Ebeveynler alanında tek anahtardır, varsayılan açık (UserSettings'e yeni alan, eski kayıtlarda true). Testler: %90 doldurur, %80 doldurmaz, parmak boyu boşluk doldurmaz, dolu bölgeye dokunmaz, sprey ve simli sayılmaz, silgiden sonra yeniden hesaplar, tek geri al, geri alınan bölgede bastırma, JSON gidiş-dönüş, ayar kapalı, PaintCanvas widget testi."
+     ],
+     "rationale": "Bugün fırçayla boyanan bölge hiç “boyandı” sayılmıyor: PageProgress yalnız bölge dolgusuna bakıyor (page_progress.dart:21) ve sayfa bitiş kutlaması yalnız dolgu dokunuşundan tetikleniyor (paint_canvas.dart:296, coloring_screen.dart:428-446). Otomatik tamamlama bu açığı kapatır; dolgu katmanı fırça katmanının altında çizildiği için (paint_canvas.dart:552-593) yalnız beyaz kalan köşeler renklenir, çocuğun çizgisi aynen kalır. Motor riski orta: geri alma komut modeline isteğe bağlı tek bir alan eklenir ve değişiklik mevcut coloring_document ve paint_canvas testleriyle çevrili. Asıl risk ölçümde: çizgi altı piksellerini saymak özelliği ince bölgelerde hiç çalıştırmaz, gevşek eşik ise çocuğun bilerek bıraktığı beyazı boyar; şartlarım bu iki uca karşı.",
+     "toddler_risk": "Düşük; çocuk hiçbir şey öğrenmez, boşluk kendiliğinden kapanır. Bilerek bırakılan beyaz (parlama) boyanabilir; tek geri al son çizgiyi ve dolguyu birlikte kaldırır, sonra o bölgede tamamlama susar. Silgi bölgenin bütün dolgusunu temizlediği için (sihirli silgi) küçük bir silme bütün boşlukları geri getirir. Çok renkli bölgede boşluk baskın renkle dolarsa yanlış renkte benek kalabilir; baskın renk şartı bunu önler.",
+     "design": "Çocuk (Minik ve Büyük): keçeli kalemle bir bölgeyi boyar. Parmağını kaldırdığında bölge neredeyse tamamen boyalıysa kalan küçük köşeler, parmağın kalktığı yerden yayılan dolguyla 220 ms içinde aynı renge boyanır; dolgu sesi ve hafif titreşim gelir. Yeni düğme, işaret ya da sayaç yoktur. Sayfanın son bölgesi böyle tamamlanırsa mevcut kısa kutlama çalışır. Geri al düğmesine bir dokunuş son çizgiyi ve otomatik dolguyu birlikte kaldırır. Diğer fırçalarda ve serbest çizim sayfasında davranış bugünkü gibidir. Ebeveyn (kapı arkası, Ebeveynler alanı): yeni “Boyama yardımı” bölümünde bir anahtar: “Fırçayla boyarken küçük boşlukları tamamla”; alt satırı “Bir alan neredeyse tamamen boyandığında kalan köşeleri aynı renkle doldurur.” Varsayılan açık; kapalıyken her şey bugünkü gibi."
+    },
+    {
+     "id": "P3",
+     "decision": "conditional",
+     "veto": false,
+     "effort": "M",
+     "conditions": [
+      "Yeni düğme, menü ya da palet hücresi yok; kalem özelliği yalnız fırça düğmesinin döngüsünde yaşar (coloring_screen.dart:288-296). Minik'in beş durumu değişmez.",
+      "Büyük'te yedi durum sınırdır (kurul kararı): yeni bir fırça ancak mevcut bir Büyük durumunun yerine girer. Hangisinin çıkacağına kurul karar verir; veri toplanmadığı için karar çocuklarla yapılan gözlemle verilir.",
+      "Her yeni fırça BrushKind'ın sonuna eklenir (adlar kayıtta saklanıyor, stroke.dart:3-7), deterministiktir (_seeded), blur ve animasyon içermez, dokunuş iz bırakır. page_layers_test'teki üç test (satır 61, 83, 94) yeni fırçayı kapsar.",
+      "Performans bütçesi: çizgi başına çizim çağrısı neonun bugünkü 14 drawPath tavanını (page_layers.dart:242-268) geçmez. Geri al bütün listeyi yeniden pişirdiği için (page_layers.dart:429-432) en eski iOS 15 iPad'inde (A8) 200 çizginin yeniden pişmesi 300 ms altında kalır.",
+      "Her durum için yazısız glif, VoiceOver adı, TR/EN sesli klip ve parmağın altındaki araç resmi (assets/images/tools, Fluent UI Emoji) işe dâhildir; mağaza metni yeni fırçayla tutarlı kalır (store_listing.md:16-17 “6 fırça” diyor).",
+      "Somut öneri gelmeden kod yazılmaz: “farklı kalem özellikleri” her biri ayrı tanımlanıp bu şartlarla ayrı oylanır."
+     ],
+     "rationale": "Fırça döngüsü kurulun koyduğu sınırda: Minik beş, Büyük yedi durum (coloring_screen.dart:62, 288-296) ve her yeni durum çocuğun keçeli kaleme dönmek için yapacağı dokunuş sayısını artırır. Motor yeni bir fırçayı kolay kaldırır (drawStroke tek bir switch, page_layers.dart:54-71); fırça başına maliyet glif, ses, araç resmi ve testlerle bir-iki gün. Asıl teknik risk, eski iPad'de geri al sonrası bütün çizgi listesinin yeniden pişmesi. Basınçlı kurşun kalem daha önce bilerek yapılmadı (planın yol haritası: “parmakta basınç yok, Büyük'teki ince keçeli kalem aynı işi görüyor”); yine de Stroke basınç alanını taşıyor ama hep 0,5 yazılıyor (stroke.dart:36, paint_canvas.dart:313, 336). Öneri bu hâliyle tanımsız; somut bir fırçayla gelirse şartlarla destekliyorum.",
+     "toddler_risk": "Orta. Döngü uzarsa 3 yaşındaki çocuk istemediği fırçada kalır ve keçeli kaleme dönmek için daha çok dokunur; birbirine benzeyen glifleri ayırt edemez. Minik'e yeni durum eklenmezse risk yoktur.",
+     "design": "Minik: değişiklik yok (keçeli → gökkuşağı → sprey → simli → çıkartma). Büyük: yalnız bir yer değiştirme. Örnek: kurul neonu çıkarmaya karar verirse yerine tek bir somut kalem gelir (ör. çizgi boyunca deterministik kalp ya da yıldız deseni bırakan desenli kalem); düğmenin glifi durumu gösterir, rozet rengi tutar, VoiceOver adını okur, parmağın altında araç resmi görünür. İsteğe bağlı ve arayüzsüz: Büyük'te iPad'de Apple Pencil basıncı keçeli kalemin kalınlığını değiştirir (PointerDeviceKind.stylus); parmakla çizim bugünkü gibi kalır, eski kayıtlarda basınç 0,5 olduğu için görünüm değişmez. Ebeveyn hiçbir şey görmez, ayar yok."
+    },
+    {
+     "id": "P4",
+     "decision": "conditional",
+     "veto": false,
+     "effort": "M",
+     "conditions": [
+      "Yalnız parmak ucundan küçük ayrıntılar hazır boyalı gelir: PageProgress'in saymadığı bölgeler (alan < sayfanın %1'i, page_progress.dart:15-19). Parmak boyu her alan beyaz kalır ve çocuğa aittir; resmin yarısını önceden boyamak yok.",
+      "Yalnız Minik'te: Minik'te zoom yok (Ç3) ve bu ayrıntılara parmak isabet edemiyor. Büyük'te çocuk zoom ile kendisi boyar, sayfalar bembeyaz açılır.",
+      "Renkler üretim hattından gelir, elle girilmez: emoji2page.py renk referansını (_ref) zaten üretiyor, build_pages.py:113 bunu atıyor. Bir araç her küçük bölgenin referans rengini örnekler. Çevresindeki büyük alanın açık ya da koyu tonu olan parçalar (parlama, gölge) ve beyaz parçalar tohumlanmaz.",
+      "Tohum etiket numarasıyla değil nokta ve renkle saklanır; restore etiketi noktadan bulur (coloring_document.dart:210-213). Yalnız eser yokken açılan sayfaya uygulanır; restore geçmişi sıfırladığı için (coloring_document.dart:229-230) geri al tohumu kaldırmaz, dolgu ve silgi değiştirebilir.",
+      "“Boş sayfa” varsayımı düzeltilir: maskot ipucu (coloring_screen.dart:243, 257) ve otomatik kayıt (artwork_autosaver.dart:64) document.isEmpty yerine “çocuk bir şey yaptı mı”ya bakar. Yalnız tohumu olan sayfa Eserlerim'e girmez, ipucu yine çıkar.",
+      "Testler: her tohum noktası küçük bir bölgeye düşer (builtin_images_test'e ek), sayfa açılışta tamamlanmış sayılmaz, geri al kapalıdır, dokunmadan çıkınca eser oluşmaz.",
+      "Ebeveynler alanında anahtar: “Küçük ayrıntılar boyalı gelsin (Minik)”, varsayılan açık."
+     ],
+     "rationale": "Motor açısından ucuz: tohum, kayıttaki dolgu listesiyle aynı biçimde (nokta + renk) mevcut restore yoluyla yüklenir; komut modeli ve çizim değişmez. İçerik hattı da hazır, çünkü her sayfanın renkli referansı zaten üretilip atılıyor (build_pages.py:113). Resmin yarısını önceden boyamak, önceki kurulun 3/5 veto ettiği “renkli örnek”in gerekçesine düşer (“doğru renk bu” baskısı, plan/gece-raporu-2026-11-03.html bölüm 4); parmağın isabet edemediği ayrıntılarla sınırlamak ise Minik'in gerçek bir sorununu çözer ve çocuğun renk seçimine dokunmaz. Kalan risk “boş sayfa” varsayımının üç yerde kullanılması; 5. şart bunları kapatır.",
+     "toddler_risk": "Düşük-orta. Hazır boyalı bir ayrıntı çocuğun seçtiği renkle çatışabilir; örneğin çocuk elmayı yeşile boyarsa pembe parlama tuhaf durur, bu yüzden ton parçaları tohumlanmaz. Çocuk sayfayı “başkası başlamış” sanabilir. Küçük ayrıntıya dokunmaya çalışıp komşu alanı boyayabilir; bu bugün de var.",
+     "design": "Çocuk (Minik): yeni açılan bir sayfada gözbebekleri, gaga, burun, küçük benekler gibi parmak ucundan küçük ayrıntılar orijinal renklerinde hazır gelir; büyük alanların hepsi beyazdır. Çocuk her alanı boyar; isterse ayrıntıyı başka renge çevirir ya da silgiyle siler. Geri al hazır ayrıntıyı kaldırmaz. Yeni düğme yok, kategori kartı değişmez. Büyük: sayfalar bugünkü gibi bembeyaz açılır. Ebeveyn (kapı arkası): “Boyama yardımı” bölümünde ikinci anahtar: “Küçük ayrıntılar boyalı gelsin (Minik)”, varsayılan açık. Daha önce açılmış sayfaların kayıtlı hâli değişmez."
+    },
+    {
+     "id": "P5",
+     "decision": "reject",
+     "veto": false,
+     "effort": "L",
+     "conditions": [],
+     "rationale": "İzleyerek çizmek, önceki kurulun 1/5 veto ettiği harf ve rakam izlemeyle aynı motor becerisini ister (“3 yaş için erken”, plan/gece-raporu-2026-11-03.html bölüm 4). Motor tarafında yeni bir içerik türü (sıralı vektör adımlar), belgede adım durumu için şema değişikliği ve bir izleme değerlendirmesi gerekir; bugünkü hat sayfaları renk sınırlarından raster kontur olarak üretiyor (emoji2page.py), çizim sırası bilgisi yok ve her sayfanın adımları elle yazılmalı. Çocuğun kendi çizgisinden boyama haritası çıkarmak sızar, çünkü RegionBuilder yalnız 4 px civarı boşlukları kapatıyor (region_builder.dart:10, 14-16). Adım ilerletmek için düğme gerekir ve Minik'te beşinci 82 pt düğme 375 pt telefona sığmıyor (_Metrics, coloring_screen.dart:83). Maliyet haftalar, “5 yaş ve altı” bandında faydası küçük.",
+     "toddler_risk": "Yüksek. 3 yaşındaki çocuk silik çizgiyi izleyemez ve “izle” görevini okumadan anlamaz. Değerlendirme varsa başarısızlık yaşar, yoksa kılavuz anlamsızlaşır.",
+     "design": "Bu sürümde yok; Minik'te hiç olmamalı. İleride Büyük için bakılırsa: ayrı, el yapımı küçük bir içerik seti (ör. 10 sayfa); kılavuz çizgi, ayna çizgileri gibi kayda girmeyen bir rehber katmanı olarak çizilir; doğru/yanlış değerlendirmesi yok; adım P2'nin kapsama ölçeriyle kendiliğinden ilerler, düğme gerekmez; boyama aşamasında şablonun kendi çizgi resmi ve etiket haritası kullanılır, çocuğun izleri fırça katmanında kalır."
+    },
+    {
+     "id": "P6",
+     "decision": "reject",
+     "veto": true,
+     "effort": "L",
+     "conditions": [],
+     "rationale": "Kids Category'de üçüncü taraf reklam 1.3 gereği fiilen kapalı; istisna olan insan incelemeli bağlamsal reklam bile SDK'nın IP ve cihaz verisi işlemesini gerektirir ve bu, “Data Not Collected” etiketini (ios/Runner/PrivacyInfo.xcprivacy: izleme yok, toplanan veri türü yok) ve 5.1.4 kapsamında COPPA/GDPR durumunu değiştirir. Mağaza metni ve ekran görüntüleri “Reklam yok · İnternet yok · Hesap yok” diyor (tool/store/caption_screenshots.py:37-38, store_listing.md:16-17 ve 65); Android release manifestinde INTERNET izni bile yok (android/app/src/main/AndroidManifest.xml), yani reklam uygulamanın mimarisini değiştirir. Satın almayan kullanıcıya reklam göstermek, kurulun “çocuğun ekranı satın almadan önce ve sonra aynı” kuralını (.claude/skills/cobi-toddler-ux/SKILL.md) bozar ve çocuğu ebeveyne baskı aracına çevirir. Eski iPad'lerde (A8, 2 GB) reklam web görünümleri bellek ve çökme riski de getirir. AdMob faz 0'da bu gerekçelerle kaldırıldı; geri getirmek ebeveynin güvenine ihanettir.",
+     "toddler_risk": "Çok yüksek. 3 yaşındaki çocuk reklamı içerikten ayıramaz, yanlışlıkla dokunur, mağazaya ya da tarayıcıya çıkabilir (Ç9); reklam boyamayı böler.",
+     "design": "Reklam hiçbir biçimde yok: banner, geçiş reklamı, ödüllü reklam ve kendi uygulamalarımızın tanıtımı dâhil. Gelir tek seferlik Tam Sürüm'den gelir. Ek gelir gerekirse kilidin kapsamına yeni sayfa eklemek, Google Play yayını ve yerelleştirme (önceki kurulun geçirdiği kararlar) kullanılır. Çocuk da ebeveyn de bugünkü ekranları görür."
+    }
+   ]
+  },
+  {
+   "member": "Apple App Review ve HIG uzmanı (Kids Category: 1.3, 5.1.4, 2.3, HIG, erişilebilirlik)",
+   "verdicts": [
+    {
+     "id": "P1",
+     "decision": "conditional",
+     "veto": false,
+     "conditions": [
+      "Baştan başlamak her zaman yeni kopya açar; eski eser silinmez, üzerine yazılmaz. Mekanizma hazır: existingArtwork olmadan açılan ColoringScreen ilk değişiklikte yeni kimlikle kaydeder (lib/screens/coloring/artwork_autosaver.dart:63-72), kategori kartı en yeni eseri gösterir (lib/screens/category_screen.dart:64-68).",
+      "Boyama araç çubuğuna sıfırla ya da temizle düğmesi eklenmez (Ç7). Minik'te beşinci düğme 375 pt telefona sığmıyor (lib/screens/coloring_screen.dart:544-546, _Metrics :83).",
+      "ColoringDocument.clear() çocuğa açılmaz (lib/engine/document/coloring_document.dart:133-136). Sayfa yeniden açılınca geri alma geçmişi boş başlar (aynı dosya :199-232); temizlik bir sonraki girişte geri dönüşsüz olur.",
+      "Çocuğa metinli 'Devam / Yeni' iletişim kutusu gösterilmez (Ç1, Ç10).",
+      "Kategori kartı açılacak resmi gösterir; kart bitmiş resmi gösterip boş sayfa açmaz.",
+      "Seviye sayacı her sayfayı bir kez sayar. currentLevel bugün her eseri sayıyor (lib/data/page_order.dart:25-28); aynı sayfanın dört kopyası çocuğu bir üst seviyeye taşımamalı.",
+      "Silme bugünkü gibi kapı arkasında ve onay kutulu kalır (lib/screens/my_artworks_screen.dart:142, 256-268). Yenilikler metni (App Review 2.3.12) yeni davranışı yazar."
+     ],
+     "rationale": "Şartlı onay: baştan başlamak yeni kopya açarsa Apple kurallarına dokunmaz ve hiçbir eseri kaybettirmez. Yıkıcı sıfırlama ise HIG'e göre beklenmedik ve geri dönüşsüz veri kaybıdır, uyarı ister; okuma bilmeyen çocuk uyarıyı okuyamaz. Bu yüzden silme ve temizleme kapı arkasında kalır (Ç7, Ç9), çocuğun yolu yalnız kopya üretir. Altyapı sayfa başına birden çok eseri zaten destekliyor; iş küçük.",
+     "toddler_risk": "Yıkıcı sıfırlama çocuğun emeğini siler; çocuk ağlar, ebeveynin güveni sarsılır. Kartta görülen resimle açılan resim farklıysa 3 yaş 'resmim kayboldu' sanır. Her açılışta seçim ekranı fazladan adım ekler ve rastgele dokunuşla yarım kopyalar biriktirir.",
+     "effort": "S",
+     "design": "Çocuk (Minik ve Büyük, aynı kural): Bitmemiş sayfa bugünkü gibi kaldığı yerden açılır. Bitmiş sayfa (SavedArtwork.isCompleted, artwork_autosaver.dart:98) kategoride yeniden temiz çizgi resim olarak görünür ve dokununca yeni kopya açar. Bitmiş resim Eserlerim duvarında kalır; oradan açılınca kaldığı yerden devam eder. Yeni düğme, iletişim kutusu ve metin yok. Ebeveyn (kapı arkası): Eserlerim'de uzun basma → ebeveyn kapısı → alt sayfada Paylaş, Yazdır ve Sil'in yanında 'Baştan boya' satırı. Satır aynı sayfayı boş açar; eski resim duvarda kalır. Veri kaybı olmadığı için onay kutusu gerekmez (HIG Feedback). Hiç dokunulmayan kopya kaydedilmez (artwork_autosaver.dart:63-66); duvar boş çerçeveyle dolmaz. HIG denetimi: satır ebeveyn alanında 44 pt'nin üstünde (uyumlu); metin %200 ölçekte sarılır (uyumlu); VoiceOver etiketi ARB'den gelir (uyumlu); çocuk tarafında yeni dokunma hedefi yok. App Review 4.0 ve 2.1: risk yok. Not: fırçayla boyanan alan bugün bitişe sayılmıyor (lib/engine/document/page_progress.dart:21 yalnız dolguyu sayar); P2 olmadan çocuk yolu yalnız dokunarak doldurulan sayfalarda işler."
+    },
+    {
+     "id": "P2",
+     "decision": "conditional",
+     "veto": false,
+     "conditions": [
+      "Tamamlama yalnız çizginin başladığı bölgeye uygulanır (Stroke.clipLabel > 0, lib/widgets/paint_canvas.dart:315-317). Boyanmamış bölgelere ya da sayfanın geri kalanına renk atılmaz; bu, kurulun veto ettiği sihirli boyaya döner (plan/gece-raporu-2026-11-03.html:171).",
+      "Renk çocuğun rengidir: bölgenin eşik kadarını tek renkte keçeli kalem çizgileri kaplıyorsa o renkle tamamlanır. Birden çok renkle boyanmış bölge tamamlanmaz.",
+      "Yalnız keçeli kalem sayılır. Gökkuşağı, sprey, simli, pastel ve neon sayılmaz: aynı renkte düz dolgu onların dokusunu görünmez kılar.",
+      "Eşik sabit tek değerdir (öneri %85; istenen aralık %80-90). Ebeveyne kaydırıcı verilmez (HIG Settings: ayar sayısını az tut).",
+      "Tetik yalnız yeni bir keçeli çizgi bittiğinde (parmak kalkınca) çalışır. Geri al, ileri al, silgi, sayfa açılışı ve eski eserler tetiklemez; geriye dönük değişiklik yok.",
+      "Çizgi ve onun tamamlaması tek geri alma adımıdır: tek geri al ikisini kaldırır, bölge çizgiden önceki hâline döner (HIG Undo: geri almanın sonucu görünür olmalı; çıkartmalardaki 'bir parmak, bir adım' kuralı).",
+      "Geri bildirim dokunarak doldurmayla aynıdır: parmağın kalktığı noktadan 220 ms açılış, dolgu sesi, hafif titreşim (Ç8). Reduce Motion açıkken açılış yok (lib/widgets/paint_canvas.dart:233).",
+      "Tamamlama bitiş kontrolünden geçer. Bugün kontrol yalnız dokunarak doldurmada çalışıyor (lib/screens/coloring_screen.dart:428-446; onFilled yalnız _fill'den çağrılıyor, paint_canvas.dart:296).",
+      "Hesap belirlenimcidir (aynı çizgiler her cihazda aynı sonucu verir): kapsama, kayıtlı çizgi noktaları ve etiket haritasından CPU'da hesaplanır ve birim testle sabitlenir. Hesap kare düşürmez (isolate ya da örnekleme). Sonuç sıradan RegionFill olarak kaydedilir; kayıt biçimi değişmez.",
+      "Yalnız boyama sayfalarında çalışır (stayInside, lib/screens/coloring_screen.dart:682); serbest çizim sayfasında yok.",
+      "Ayar Ebeveynler alanında, kapı arkasında tek anahtardır; varsayılan açık. UserSettings'e yeni alan eklenir; eski kayıtlarda varsayılan açık okunur. Anahtar için parents_screen_test ve meetsGuideline denetimi eklenir. Yenilikler metni (2.3.12) davranışı yazar."
+     ],
+     "rationale": "Şartlı onay: otomatik tamamlama 3 yaşın ince motor sınırını telafi eder ve Apple kurallarına dokunmaz; veri, ağ ve yeni çocuk kontrolü yok. Renk çocuğun o bölgede kullandığı renk olduğu için kurulun sihirli boya vetosuna takılmaz; tek bölge ve tek renk şartı bu yüzden var. Bugün fırçayla boyanan alan bitişe sayılmıyor (page_progress.dart:21) ve bitiş kontrolü yalnız dokunarak doldurmada çalışıyor; fırçayla boyayan çocuk sayfa bitiş kutlamasını görmüyor, eser de 'bitmiş' işaretlenmiyor, bu özellik o boşluğu da kapatır. Ayarın kapı arkasında durması HIG'in 'göreve özgü seçenek bağlamda olsun' önerisinden gerekçeli sapmadır: Ç9 çocuğun ayar değiştirmesini yasaklıyor.",
+     "toddler_risk": "Parmak kalktıktan sonra resmin kendiliğinden değişmesi çocuğu şaşırtabilir; dokunarak doldurmayla aynı ses ve açılış bunu 'boyam yaptı' hissine çevirir. Çocuğun bilerek iki renkle yaptığı desen ya da beyaz bıraktığı yer kaybolabilir; tek renk kuralı ve tek dokunuşla geri al bunu önler. Geri al yalnız dolguyu kaldırır ve tamamlama yeniden tetiklenirse döngü oluşur; tek adım kuralı ve 'geri al tetiklemez' kuralı bunu kapatır.",
+     "effort": "M",
+     "design": "Çocuk (Minik ve Büyük): yeni düğme yok. Keçeli kalemle bir bölgenin çoğunu boyar ve parmağını kaldırır. Kalan köşeler aynı renkle, dokunarak doldurmadaki açılış, ses ve titreşimle dolar. Geri al tek dokunuşla son çizgiyi ve tamamlamayı birlikte kaldırır. Diğer fırçalar bugünkü gibi davranır. Bütün parmak boyu alanlar dolunca sayfa bitiş kutlaması gelir; fırçayla boyayan çocuk da görür. Ebeveyn (Ebeveynler alanı, kapı arkası): 'Boyama' başlığı altında tek anahtar: 'Fırçayla boyamayı tamamla' / 'Finish brush colouring'. Alt satır: 'Bir alanın çoğu fırçayla boyanınca kalan küçük boşlukları aynı renkle doldurur.' Varsayılan açık; iki kip için tek ayar. Kapalıyken davranış bugünküyle aynı. HIG denetimi: SwitchListTile VoiceOver etiketini başlıktan alır (uyumlu); metin %200'de sarılır (uyumlu); açılış Reduce Motion'a uyar (uyumlu); ses ve titreşim mevcut anahtarlara uyar (uyumlu); ayarın bağlam yerine kapı arkasında olması gerekçeli sapma (Ç9). App Review: 1.3 ve 5.1.4'e etkisi yok; 4.0 riski yok; 2.1 için en büyük bölgede (arka plan) kare süresi ölçülür."
+    },
+    {
+     "id": "P3",
+     "decision": "conditional",
+     "veto": false,
+     "conditions": [
+      "Yeni düğme, menü ya da uzun basma seçeneği yok; fırça döngüsü tek yol kalır (kurul kararı, .claude/skills/cobi-toddler-ux/SKILL.md:79-89).",
+      "Minik döngüsü beş durumda kalır: keçeli, gökkuşağı, sprey, simli, çıkartma (lib/screens/coloring_screen.dart:288-296). Döngü uzarsa çocuk keçeliye dönmek için daha çok dokunur; başka araçtan fırça düğmesine dönüş son fırçayı seçer, keçeliyi değil (aynı dosya :283-286).",
+      "Büyük yedi durumda kalır. Yeni fırça ancak var olan birinin yerine ve kurul oyuyla girer.",
+      "Her fırça belirlenimcidir (rastgelelik çizgiden tohumlanır, lib/engine/render/page_layers.dart:75-78); bulanıklık ve animasyon yok; tek dokunuş iz bırakır.",
+      "Her durumun kendi glifi var; glif seçili renkle boyanmaz, renk KidButton(badgeColor:) rozetinde durur. VoiceOver adı ve ses anahtarı ARB'de, parmak altında Fluent UI Emoji araç resmi var.",
+      "BrushKind adları kayıtta saklanır; yeni değer yalnız sona eklenir (lib/engine/document/stroke.dart:3-7). Eski sürüm bilinmeyen fırçayı sessizce atar (aynı dosya :60-62); bu kabul edilir.",
+      "Basınç yalnız Büyük'te ve yalnız Apple Pencil'da (PointerDeviceKind.stylus) etkilidir; parmak girdisi sabit kalınlıkta kalır. Ayna kopyaları ve yeniden açılış basıncı kayıttan okur.",
+      "Yenilikler metni (2.3.12) değişikliği yazar. App Review 2.1 için iPad'de Pencil ve parmakla, Split View dâhil denenir."
+     ],
+     "rationale": "Şartlı onay: yeni kalem özelliği Apple kurallarına dokunmaz; risk 3 yaşın uzayan fırça döngüsünde kaybolması. Kurul Minik döngüsünü beş durum olarak belirledi, yedi durumu bu kalıbın sınırı saydı ve Büyük bugün yedi durumda; eklenecek her fırça bir başkasının yerine geçmeli. Düğme istemeyen en iyi aday Apple Pencil basıncı: HIG basıncı fırça boyutu ya da opaklık gibi sürekli bir özelliğe bağlamayı öneriyor. Veri yapısında yer hazır: Stroke.points 'x, y, basınç' üçlüleri tutuyor (stroke.dart:36), basınç bugün hep 0.5 yazılıyor (paint_canvas.dart:313, 336).",
+     "toddler_risk": "Uzayan döngüde çocuk keçeli kalemi bulamaz ve takılır. Birbirine benzeyen glifler ya da dokunuşta iz bırakmayan fırça 'çalışmıyor' hissi verir (Ç8). Animasyonlu ya da bulanık fırça Reduce Motion'ı ve belirlenimci kayıt kuralını bozar.",
+     "effort": "M",
+     "design": "Minik: değişiklik yok. Büyük, iPad ve Apple Pencil: kalem bastırıldıkça çizgi kalınlaşır (keçeli, pastel, neon) ya da koyulaşır (pastel). Basınç noktalarla kaydedilir; ayna kopyaları ve yeniden açılan resim aynı görünür. Parmakla çizimde fark yok. İsteğe bağlı: Apple Pencil çift dokunuşu sistem ayarına göre silgiye geçer, yalnız Büyük'te (HIG: çift dokunuş ayarına saygı); Minik çift dokunuşu yok sayar. Döngüye yeni fırça girerse bir başkasının yerine girer ve kendi glifi, VoiceOver adı, ses klibi ve parmak altı araç resmiyle gelir. Ebeveyn tarafında ayar yok. HIG denetimi: yeni dokunma hedefi yok (uyumlu); yeni glifin kontrastı en az 3:1 olmalı (eklenirken denetlenir); animasyon yok, Reduce Motion etkilenmez (uyumlu). App Review 4.0 riski yok."
+    },
+    {
+     "id": "P4",
+     "decision": "conditional",
+     "veto": false,
+     "conditions": [
+      "Yalnız kırıntı bölgeler önceden boyanır: parmak boyunun altındaki, sayfa alanının %1'inden küçük, PageProgress'in saymadığı alanlar (lib/engine/document/page_progress.dart:15). Parmak boyu hiçbir alan önceden boyanmaz.",
+      "Önceden boyanan bölge sıradan dolgudur: dokunmak rengini değiştirir, silgi temizler. Kilitli bölge yok; tepkisiz dokunuş Ç8'i bozar.",
+      "Renkler üretim hattından gelir, elle girilmez. emoji2page.py renk referansını zaten üretiyor (tool/pages/emoji2page.py:2-4); build_pages.py bugün onu atıyor (tool/pages/build_pages.py:113).",
+      "Ön renk yalnız yeni eser başlarken uygulanır; kayıtlı eserler değişmez. Ön renk başlangıç durumudur, geri alma adımı değildir.",
+      "Yalnız Minik'te. Büyük boş sayfayla kalır; çocuk yakınlaştırarak ayrıntıyı kendisi boyar. Ayrı ayar yok (HIG Settings).",
+      "Kategori kartı sayfanın açılacak hâlini gösterir.",
+      "Test, ön rengin hiçbir parmak boyu bölgeye dokunmadığını ve PageProgress sonucunun değişmediğini doğrular; seviye kuralı (PageCheck.level) aynı kalır.",
+      "Mağaza görseli değişirse gerçek ekrandan çekilir (2.3.3); Yenilikler metni (2.3.12) değişikliği yazar."
+     ],
+     "rationale": "Şartlı onay: Apple açısından engel yok; içerik MIT lisanslı kaynaktan geliyor, veri ve ağ yok. Asıl risk, kurulun 'doğru renk bu' baskısı ve çocuğun renk seçme hakkı gerekçesiyle veto ettiği renkli örneği arka kapıdan geri getirmek (plan/gece-raporu-2026-11-03.html:171). Önceden boyamayı parmağın ulaşamadığı kırıntı bölgelerle sınırlamak bu riski kaldırır: çocuk seçebileceği hiçbir alanı hazır bulmaz, bitmiş resim de göz ve parıltı gibi ayrıntılarla güzel görünür. Kırıntılar bugün de bitişe sayılmadığı için bitiş kuralı değişmez.",
+     "toddler_risk": "Büyük alanlar hazır gelirse çocuk 'doğru renk bu' baskısı hisseder ve resmi kendi eseri saymaz. Kilitli ön renk dokunuşa tepkisiz kalır ve 'bozuk' hissi verir. Kartta resim fazla dolu görünürse çocuk sayfayı bitmiş sanıp açmayabilir.",
+     "effort": "M",
+     "design": "Minik: yeni sayfa açılınca göz bebeği, yanak, küçük parıltı gibi parmağın sığmadığı ayrıntılar kaynak emojinin renginde hazır gelir. Bütün parmak boyu alanlar beyazdır. Çocuk hazır ayrıntıya dokunursa ayrıntı seçtiği renge döner; silgi temizler. Yeni kontrol, düğme ve metin yok. Büyük: bugünkü gibi boş sayfa. Ebeveyn: ayar yok; Yenilikler metni anlatır. Teknik: build_pages.py her sayfa için kırıntı bölgelerinin (x, y, argb) listesini renk referansından üretir ve lib/data/builtin_images.dart'a yazar. ColoringScreen yeni eser başlatırken (existingArtwork yok) listeyi belgeye başlangıç dolgusu olarak yükler. HIG denetimi: çizgi resim dolgunun üstünde çizildiği için kontrast değişmez (lib/widgets/paint_canvas.dart:595-603, uyumlu); yeni dokunma hedefi yok (uyumlu). App Review 4.0 ve 2.1: risk yok; MIT lisans metni uygulamada zaten var."
+    },
+    {
+     "id": "P5",
+     "decision": "reject",
+     "veto": false,
+     "conditions": [
+      "Bu bir ret; aşağıdakiler yalnız ileride yeniden oylanırsa aranacak şartlardır.",
+      "Yalnız Büyük'te; Minik'te görünmez.",
+      "Geçti-kaldı denetimi yok; her çizgi kabul edilir, adım okuma gerektirmeden ilerler.",
+      "Boyama aşaması çocuğun çizgisini değil, sayfanın kapalı çizgi resmini kullanır; dolgu sızmaz.",
+      "Rehber çizgi en az 3:1 kontrastta olur (soluk kurşun kalem bu sınırın altında kalır); rehberin çizilme animasyonu Reduce Motion açıkken kapalıdır.",
+      "Kurulun harf izleme vetosu bu öneriyle birlikte yeniden oylanır."
+     ],
+     "rationale": "Ret, veto değil: Apple kuralı çiğnenmiyor ve kip Büyük'e sınırlanırsa 3 yaşa zarar yok; ama 3 yaş ölçütü ve kurulun önceki kararı geçişe izin vermiyor. Kurul harf ve rakam izlemeyi '3 yaş için erken' diye veto etti (plan/gece-raporu-2026-11-03.html:174); adım adım resim çizmek aynı izleme becerisini daha karmaşık şekillerle ister. Gelişim kaynaklarına göre çocuk çemberi yaklaşık 3, artıyı 4, kareyi 4-5, üçgeni 5 yaşında kopyalar; bir hayvanı adım adım çizmek bunların birleşimidir. Çocuğun çizdiği çizgi kapalı bölge vermez ve kurulun fotoğraftan sayfayı veto ettiği açık alan sorununu geri getirir (aynı dosya :175); iş de büyük: 201 sayfa için adım içeriği, yeni ekran ve sesli yönerge gerekir.",
+     "toddler_risk": "3 yaş çizgiyi izleyemez, resmi 'bozuk' bulur, bırakır ya da ağlar. Adımlar ilerlemek için doğru çizgi isterse kip bir sınava döner ve başarısızlık üretir (Ç10). Soluk rehber çizgi görünmez; görünür olursa çocuk onu kendi çizgisi sanır.",
+     "effort": "L",
+     "design": "Bugün yapılacak bir şey yok. Çizmeyi keşfetmek için 3 yaşa serbest çizim sayfası ve ayna yeter. İleride Büyük için oylanırsa: ana ekranda ayrı kart yok; Büyük'te kategorilerin içinde 'adım adım' sayfalar. Her adımda sayfanın çizgi resminin bir parçası 3:1 kontrastlı kesik çizgiyle görünür. Çocuk üstünden geçer ya da geçmez; tek dokunuşla ya da birkaç saniye sonra sonraki adım gelir. Son adımda tam çizgi resim belirir ve sıradan boyama başlar. Metin yok; sesli yönerge var; VoiceOver her adımı okur. Ebeveyn tarafında ayar yok. App Review: 2.1 için yeni ekran iPad ve Split View'da denenir; mağaza metni (2.3.1) bu kipi '5 yaş ve altı' bandının özelliği gibi sunmaz."
+    },
+    {
+     "id": "P6",
+     "decision": "reject",
+     "veto": true,
+     "conditions": [],
+     "rationale": "Ret ve veto: öneri üç veto ölçütünün üçünü de karşılıyor. Apple kuralı: 1.3'e göre Kids uygulaması 'may not send personally identifiable information or device information to third parties'; her reklam isteği reklam sunucusuna IP ve cihaz bilgisi taşır ve Apple'ın Kids sayfası bunu yetişkin bölümlerinde bile ebeveynin açık onayına bağlar. Ebeveyn güveni: mağaza metni, anahtar kelimeler, ekran görüntüsü şeridi, gizlilik politikası ve 'Data Not Collected' etiketi reklam olmadığını söylüyor; 1.3'e göre Kids beklentisi kategori bırakılsa bile sonraki güncellemelerde sürer. Çocuk: AAP'nin 2020 bildirisine göre 7 yaş ve altındaki çocuk reklamın ikna amacını kavrayamaz; satın almaya göre değişen çocuk ekranı da kurulun tematik paket vetosunun gerekçesiyle aynı (plan/gece-raporu-2026-11-03.html:189). Onaylı gelir yolu kapı arkasındaki tek seferlik Tam Sürüm; reklam bu modelin yerine ya da yanına konmaz.",
+     "toddler_risk": "3 yaş reklamı içerikten ayıramaz; reklama dokunur, uygulamadan çıkar ya da istemeden bir satış sayfasına gider. Reklam kreatifi uygulamanın denetiminde değildir: metin, ses, hareket ve küçük kapatma düğmesi Ç1, Ç2 ve Reduce Motion kurallarını bozar. Satın almaya göre değişen ekran 3 yaşı şaşırtır.",
+     "effort": "L",
+     "design": "Reklam yok; ücretsiz kullanıcının ve satın alan kullanıcının çocuk ekranı aynı kalır (.claude/skills/cobi-toddler-ux/SKILL.md:44-49). Gelir: Ebeveynler alanında kapı arkasındaki 'Tam Sürüm' satırı (lib/screens/parents_screen.dart:36-46) ve FullVersionScreen; fiyat mağazadan okunur. Reklam eklenseydi bozulacak sözler ve dosyalar (efor L'nin nedeni): ios/Runner/PrivacyInfo.xcprivacy:5-10 (izleme yok, toplanan veri listesi boş); ASC gizlilik etiketi 'Data Not Collected' ve 'Advertising: Hayır' (store_listing.md:138); Android release manifesti hiç izin istemiyor, INTERNET bile yok (android/app/src/main/AndroidManifest.xml); gizlilik politikası (docs/privacy_policy.html:32-41, 87-96); uygulama içi gizlilik metni (lib/l10n/app_tr.arb:224, lib/l10n/app_en.arb:92); mağaza metni ve 'reklamsız' / 'no ads' anahtar kelimeleri (store_listing.md:16-17, 65, 101, 113-119; 2.3.1 ve 2.3.7); ekran görüntüsü şeridi (tool/store/caption_screenshots.py:37-38). 5.1.4: bugün veri toplanmadığı için COPPA ve GDPR yükümlülüğü fiilen yok (plan/gelir-ve-yayin-raporu.html, bölüm 3.3); reklam ortağı bu durumu bitirir ve bildirim ile onay yükümlülüğü doğurur (hukuki görüş değildir). Google Play Families 'aşırı agresif ticari taktikleri' kaldırma nedeni sayıyor (plan/gelir-ve-yayin-raporu.html:117). Ebeveyne tanıtım istenirse en fazla: Ebeveynler alanında, kapının arkasında, SDK'sız ve ağsız statik bir 'Diğer uygulamalarımız' satırı; satın alan ve almayan için aynı (1.3: dış link kapı arkasında)."
+    }
+   ]
+  },
+  {
+   "member": "Ebeveyn üye (3 ve 6 yaşında iki çocuk: güven, güvenlik, reklam, evde neyin kızdırıp neyin sevindirdiği). Dosya yolları repo köküne göre: /Users/muazcobanos/Work/Workspace/Cobi.Paint.Mobile",
+   "verdicts": [
+    {
+     "id": "P1",
+     "decision": "conditional",
+     "veto": false,
+     "conditions": [
+      "Yeniden başlamak eski eseri silmez ve üzerine yazmaz: existingArtwork olmadan yeni bir ColoringScreen açar, eski eser Eserlerim'de kalır.",
+      "Çocuk yolu yalnız tamamlanmış sayfada çıkar (isCompleted: eserin bitti işareti). Yarım sayfa bugünkü gibi tek dokunuşla devam eder.",
+      "Boyama ekranına düğme eklenmez. Minik'te beşinci düğme 375 pt telefonda her düğmeyi (351 − 4×12) / 5 ≈ 61 pt'ye düşürür; Ç2'nin Minik alt sınırı 64 pt (lib/screens/coloring_screen.dart 81-85).",
+      "ColoringDocument.clear() çocuk arayüzüne bağlanmaz. İleride silen bir sıfırlama gerekirse Ç7 gereği ebeveyn kapısının arkasına girer.",
+      "currentLevel eserleri değil farklı sayfaları sayar (lib/data/page_order.dart 22-28); yoksa aynı sayfanın kopyaları seviyeyi yükseltir.",
+      "Ebeveyn yolu: Eserlerim'de uzun basma ve ebeveyn kapısından sonra açılan sayfaya 'Bu sayfayı yeniden boya (eskisi kalır)' satırı eklenir.",
+      "Yeni seçim ekranı test/accessibility_test.dart'taki meetsGuideline kontrollerine girer. Kartlar PressableCard kullanır (Ç4), Minik'te en az 64 pt olur ve VoiceOver etiketi taşır."
+     ],
+     "rationale": "Şartlı onay veriyorum: evde en sık duyduğum istek 'aslanı bir daha boyayayım'. Bugün biten sayfa bitmiş hâliyle açılıyor ve eski adımlar geri alınamıyor, çünkü restore geri al geçmişini boşaltıyor (lib/engine/document/coloring_document.dart 199-232); baştan başlamak için çocuk bütün resmi silgiyle silmeli, ebeveyn de resmi Eserlerim'den silmeli. Veri modeli bir sayfaya birden çok eseri zaten taşıyor (lib/screens/category_screen.dart 64-68) ve Çiz kartı her dokunuşta yeni resim açıyor (lib/models/coloring_image.dart 14-16); yeniden başlamak da eskisini silmeden yeni eser açmak olmalı. Silmeyen yol Ç6'yı ve Ç7'yi korur ve veri kaybı olmadığı için HIG Feedback'in istediği uyarı penceresine gerek bırakmaz.",
+     "effort": "S",
+     "design": "Çocuk (Minik ve Büyük aynı): Kategori ekranında tamamlanmış bir sayfanın kartına dokununca tam ekran bir seçim açılır. Solda çocuğun boyadığı resim, sağda aynı sayfanın boş çizgi resmi durur. İki büyük kart var (375 pt telefonda yaklaşık 160 pt, dar Split View'da alt alta, hiçbiri 64 pt'nin altında değil); üstte ev düğmesi var, metin yok. Sol kart eseri açar (bugünkü openArtwork), sağ kart yeni eser açar. Yeni eser ilk değişikliği alınca kategori kartı onu gösterir; bitmiş resim Eserlerim duvarında çerçeveli kalır. Yarım kalmış sayfaya dokunmak bugünkü gibi doğrudan devam ettirir. Ses: kart tıklama sesi; sesli adlar kaydedilince 'devam' ve 'yeni sayfa' klipleri. VoiceOver: 'Resmine devam et: Aslan' ve 'Yeni boş sayfa: Aslan'. Ebeveyn: Eserlerim'de uzun basma → ebeveyn kapısı → açılan sayfada 'Bu sayfayı yeniden boya (eskisi kalır)' satırı; Sil satırı olduğu gibi kalır. Boyama ekranı değişmez. HIG (tasarım hedefi, henüz denenmedi): dokunma hedefi uyumlu; Undo and redo sayfasının 'bütün değişiklikleri tek seferde geri alma yolu' önerisiyle uyumlu; veri kaybı olmadığı için uyarı gerekmiyor; özel animasyon olmadığı için Reduce Motion uyumlu; iPad'de iki yönde ve Split View'da kartlar sığar.",
+     "toddler_risk": "Düşük. Asıl risk, yeni sayfayı açan çocuğun bitmiş resmini kaybettiğini sanması; resim Eserlerim'de çerçeveli durduğu ve seçim yalnız bitmiş sayfada çıktığı için bu risk küçük. Silen ya da üzerine yazan bir 'sıfırla' düğmesi yüksek risk olurdu: tek kazara dokunuşla geri dönüşsüz kayıp."
+    },
+    {
+     "id": "P2",
+     "decision": "conditional",
+     "veto": false,
+     "conditions": [
+      "Yalnız Minik'te ve yalnız boyama sayfalarında çalışır; Büyük'te ve Çiz sayfasında yok.",
+      "Yalnız keçeli kalem çizgileri sayılır ve tetikler. Gökkuşağı, sprey, simli ve çıkartma sayılmaz, çünkü düz dolgu bunların görünüşünü değiştirir (simli bant %34, sprey noktaları %50-60 opak: lib/engine/render/page_layers.dart 169, 178, 189).",
+      "Eşik: bölgenin çizgi pikselleri hariç alanının %85'i boyanmış olmalı. Bu başlangıç değeri ölçülmedi; gerçek çocukla denemede ayarlanır. Boyalı kısmın en az üçte ikisi tek renk değilse hiçbir şey olmaz.",
+      "Yalnız dolgusu olmayan bölgede ve arka plan dışında çalışır (PageProgress.backgroundLabel ile aynı kural).",
+      "Görünüş ve ses dokunarak dolguyla aynı: parmağın kalktığı noktadan 220 ms açılma, dolgu sesi, hafif titreşim. Reduce Motion açıkken açılma yok.",
+      "Otomatik dolgu ayrı bir geri al adımıdır: ilk geri al yalnız dolguyu kaldırır. Silgi otomatik dolguyu yeniden tetiklemez.",
+      "Otomatik dolgu _onFilled yolundan geçer: fırçayla boyayan çocuk da bitiş kutlamasını alır ve eser isCompleted olur.",
+      "Ebeveynler alanında tek anahtar olur, varsayılan açık. Çocuğun ekranına düğme, menü ya da ayar eklenmez.",
+      "Hesap parmak kalkınca, dokunma yolunu bekletmeden yapılır; süresi düşük donanımlı Android'de (CobiPaint_Pixel) ölçülür. Kayıt şeması değişmez: otomatik dolgu sıradan bir RegionFill (bölge dolgusu) olarak saklanır."
+     ],
+     "rationale": "Şartlı onay veriyorum; evde en çok sevinç getirecek öneri bu. Üç yaşındaki çocuk keçeli kalemle bölgeyi doldurur ama köşeler beyaz kalır ve resim bitmemiş görünür. Bugün fırçayla boyanan sayfa hiç tamamlanmış sayılmıyor: PageProgress yalnız dolguları sayıyor (lib/engine/document/page_progress.dart 21), bitiş kontrolü yalnız dokunarak dolguda çalışıyor (lib/widgets/paint_canvas.dart 296, lib/screens/coloring_screen.dart 428-446); otomatik tamamlama bu boşluğu da kapatır. Kurul 'renkli örnek ve sihirli boya'yı 'doğru renk bu' baskısı yüzünden veto etmişti (plan/gece-raporu-2026-11-03.html bölüm 4); burada renk çocuğun seçtiği renk olduğu için o gerekçe işlemiyor. Büyük'te özelliği istemiyorum, çünkü 6 yaşındaki çocuk beyaz yeri bazen bilerek bırakıyor.",
+     "effort": "M",
+     "design": "Çocuk (yalnız Minik, boyama sayfası): Keçeli kalemle bir bölgeyi boyar. Parmağını kaldırdığında bölgenin %85'i boyanmışsa kalan beyaz köşeler aynı renkle, parmağın kalktığı noktadan açılarak dolar; dolgu sesi ve hafif titreşim gelir. Fırça çizgisi dolgunun üstünde kalır (plan bölüm 13, karar 6); keçeli kalem opak olduğu için görünen tek değişiklik beyaz köşelerin dolmasıdır. Sayfadaki bütün parmak boyu alanlar dolunca bitiş kutlaması gelir. Geri al önce otomatik dolguyu, sonra çizgiyi geri alır. Çocuğun ekranında yeni düğme yok. Ebeveyn: Ebeveynler alanında yeni 'Boyama' başlığı altında tek anahtar: 'Fırçayla boyarken kalan küçük boşlukları doldur (Minik)'. Varsayılan açık; altında tek cümle açıklama var. Teknik: ColoringScreen, PaintCanvas'ın var olan ama bağlanmamış onStrokeCommitted kancasını (lib/widgets/paint_canvas.dart 367) kullanır. Kapsama, bölgenin 1/4 çözünürlükteki bit haritasında çizgi boyunca fırça çapında diskler basılarak hesaplanır; sonuç sıradan bir RegionFill olarak kaydedilir ve eski sürümler de okur. HIG: Ayarlar sayfasının 'çoğu kişiye en iyi deneyimi veren varsayılan' ve 'ayar sayısını az tut' kurallarıyla uyumlu; 'göreve özel ayar görevin içinde' önerisinden gerekçeli sapma (Kids: ayarlar ebeveyn kapısının arkasında, Ç9); Reduce Motion uyumlu; ses Sessiz düğmesine, titreşim mevcut ebeveyn anahtarına bağlı.",
+     "toddler_risk": "Orta-düşük. Bölgenin aniden dolması şaşırtabilir; dokunarak dolgunun sesi ve açılması kullanıldığı için çocuk bunu bildiği bir şey olarak okur. Yanlış renk riski baskın renk kuralıyla, bilerek beyaz bırakılan yer riski Minik sınırı ve ebeveyn anahtarıyla azalır. Parmak kalkınca takılma olursa çocuk sonraki çizgiye geç başlar; bu yüzden süre ölçülmeli."
+    },
+    {
+     "id": "P3",
+     "decision": "reject",
+     "veto": false,
+     "conditions": [
+      "Yeniden oylama için öneri adı, görünüşü ve glifi belli bir kalem getirmeli.",
+      "Minik döngüsü (keçeli kalem → gökkuşağı → sprey → simli → çıkartma) 5 durumda kalır.",
+      "Büyük 7 durumu aşmaz: yeni kalem, gerçek çocukla denemede en az kullanılan Büyük durumunun yerini alır.",
+      "Yeni düğme, menü ya da kaydırıcı yok. Kalem deterministik olur (aynı çizgi her cihazda aynı görünür); bulanıklık ve animasyon yok, tek dokunuş iz bırakır, boyama sayfasında çizginin içinde kalır."
+     ],
+     "rationale": "Reddediyorum, veto yok. Öneri hangi kalemin geleceğini söylemiyor; kurul ancak adı ve davranışı belli bir kalemi oylayabilir. Fırça düğmesi döngüsel çalışıyor: Minik'te 5 durum var, keçeli kaleme dönmek en çok 4 dokunuş istiyor ve her yeni durum bu yolu uzatıyor (lib/screens/coloring_screen.dart 288-296). Büyük 7 durumla kurulun koyduğu sınırda. Evde bir kalemin eksikliğini görmüyorum; 6 fırça ve 16 çıkartma iki çocuğa da yetiyor, sırada ses klipleri, P1 ve P2 var.",
+     "effort": "M",
+     "design": "Yeniden gelirse kabul edeceğim biçim: Minik'te hiçbir şey değişmez. Büyük'te yeni kalem yalnız başka bir kalemin yerine geçer; fırça düğmesinde kendi glifi, rozette seçili renk, VoiceOver adı ve parmağın altında Fluent araç resmiyle gelir. Çiz sayfası için ayrı döngü yok; iki sayfa aynı döngüyü kullanır ve çocuk tek kural öğrenir. Yeni durum gerektirmeyen tek aday: iPad'de Apple Pencil basıncıyla değişen çizgi kalınlığı. Çizgi noktaları zaten x, y, basınç üçlüsü taşıyor, ama bugün basınç sabit 0,5 yazılıyor (lib/widgets/paint_canvas.dart 313 ve 336); parmakla çizen çocukta hiçbir şey değişmez, kaydedilen çizgi her cihazda aynı görünür. Ebeveynler alanına kalem ayarı eklenmez.",
+     "toddler_risk": "Minik'e eklenirse yüksek: döngü uzar ve keçeli kaleme dönmek daha çok dokunuş ister; menü ya da yeni düğme Ç1'i, Ç2'yi ve 375 pt sınırını bozar. Büyük'te yer değiştirme biçiminde düşük."
+    },
+    {
+     "id": "P4",
+     "decision": "conditional",
+     "veto": false,
+     "conditions": [
+      "Hazır boyalı sayfalar ayrı bir kategoride durur; normal sayfalar beyaz kalır ve çocuk bu kategoriyi kendisi seçer.",
+      "Önce parmak boyundan küçük ayrıntılar (göz, burun, parıltı) boyanır. Parmak boyu alanların en az üçte ikisi beyaz kalır ve sayfa denetimi testi bunu doğrular.",
+      "Hiçbir alan kilitli değil: hazır renk sıradan dolgu gibi değiştirilir, silinir, geri alınır.",
+      "Referans resim gösterilmez; 'doğru renk' ipucu, karşılaştırma ya da farklı kutlama yok.",
+      "Renkler elle girilmez: üretim hattı referanstan her seçili bölgenin bir iç noktasını ve rengini (x, y, argb) lib/data/builtin_images.dart'a yazar. Uygulama labelAt(x, y) ile bölgeyi bulur ve geri al geçmişine yazmadan başlangıç dolgusu yapar.",
+      "Sayfalar ayrı kimlik alır (ör. pc_1f401) ve normal sayfanın eseriyle karışmaz. Ücretsiz küme kuralı (bir kez ücretsiz olan hep ücretsiz) bu kategoriye de uygulanır.",
+      "P1'deki yeni sayfa kartı bu sayfalarda hazır boyalı başlangıç hâlini açar; kategori kartının küçük resmi de bu hâli gösterir."
+     ],
+     "rationale": "Şartlı onay veriyorum. Üç yaşındaki çocuğun parmağı göz, burun gibi küçük ayrıntılara yetmiyor; Minik'te zoom yok ve PageProgress bu kırıntıları zaten saymıyor (lib/engine/document/page_progress.dart 15, %10 × %10 kuralı), bu yüzden bitmiş resimde bu alanlar beyaz kalabiliyor. Hazır boyalı ayrıntılar resmi canlı gösterir, bitişi kısaltır ve dikkat süresi kısa çocuğa uyar. Kurul 'renkli örnek ve sihirli boya'yı 'doğru renk bu' baskısı yüzünden veto etmişti (gerekçe kayıtlı: plan/gece-raporu-2026-11-03.html bölüm 4); bu yüzden hazır boyalı sayfalar ayrı bir kategoride kalmalı ve büyük alanların çoğu beyaz olmalı. Renkler üretim hattında hazır: tool/pages/emoji2page.py düz renkli referansı üretiyor, tool/pages/build_pages.py şimdilik onu atıyor (113. satır).",
+     "effort": "M",
+     "design": "Ana ekranda diğer kategorilerle aynı görünen yeni bir kart, ör. 'Yarım resimler' (simge: yarısı boyalı bir emoji); kilit, rozet ya da 'yeni' etiketi yok. İçinde mevcut sayfaların hazır boyalı kopyaları, aynı seviye sırasıyla durur. Çocuk sayfayı açınca gözler, burun, parıltılar ve birkaç büyük alan sayfanın kendi renginde boyalı gelir; kalan beyaz alanları dolguyla ya da fırçayla boyar. Hazır renge dokunup başka renk koyabilir, silgiyle silebilir; geri al ve bitiş kutlaması aynı çalışır. Minik ve Büyük aynı içeriği görür. Ebeveyn: ayar yok; bu resimler Eserlerim'de diğerleri gibi durur. Üretim: build_pages.py her sayfa için seçilen bölgelerin (x, y, argb) listesini ve hazır boyalı küçük resmi üretir. Mağaza metni (2.3.1) özellik yayına girince güncellenir.",
+     "toddler_risk": "Düşük-orta. Çocuk sayfayı bitmiş sanıp bırakabilir; büyük alanların çoğu beyaz kaldığı için bu risk küçük. 5-6 yaşındaki çocuk hazır renklere uymaya zorlanabilir; kurulun veto gerekçesi olan 'doğru renk' baskısını ayrı kategori ve referanssız tasarım azaltır. Kilitli alan olsaydı işe yaramayan dokunuş 'bozuk uygulama' algısı yaratırdı; tasarımda kilit yok."
+    },
+    {
+     "id": "P5",
+     "decision": "reject",
+     "veto": false,
+     "conditions": [
+      "Yeniden oylama için: yalnız Büyük'te; Minik'te kart görünmez.",
+      "İsabet ölçülmez; başarısızlık, puan ya da tekrar zorunluluğu yok.",
+      "Boyama adımı sayfanın gerçek çizgi resmiyle yapılır; bölgeler kapalı kalır ve dolgu taşmaz.",
+      "P1 ve P2 yayına girdikten ve ses klipleri kaydedildikten sonra sıraya girer."
+     ],
+     "rationale": "Reddediyorum, veto yok; Büyük'e sınırlanırsa üç yaşa zarar vermez, ama bugün sırası değil. Çizgi izlemek üç yaşın ince motor becerisini aşıyor; kurul aynı mekaniği 'harf ve rakam izleme' için '3 yaş için erken' diye veto etti (plan/gece-raporu-2026-11-03.html bölüm 4). Çocuğun çizdiği çizgi kapalı alan üretmez; bölge motoru kapalı kontur ister ve 'fotoğraftan sayfa' açık alan ürettiği için veto yedi. Bu mod 6-8 yaşa hizmet ediyor; uygulamanın bandı '5 ve altı' ve iş L boyunda.",
+     "effort": "L",
+     "design": "Yeniden gelirse kabul edeceğim biçim: Yalnız Büyük'te, ana ekranda Çiz kartının yanında 'Adım adım' kartı. 10-20 basit konu mevcut emoji sayfalarının konturlarından üretilir; en çok 6 adım, önce büyük şekil, sonra ayrıntı. Her adımda sıradaki çizgi açık gri kesik çizgi olarak durur, animasyon yok. Çocuk istediği gibi çizer; çizdiği uzunluk kılavuzun yarısına ulaşınca parmak kalkınca sonraki adım görünür, isabet ölçülmez. Geri al bir adım geri götürür. Son adımda kılavuz, sayfanın gerçek çizgi resmine dönüşür; çocuğun çizgileri çizgi resmin altında kalır ve sayfa olağan boyama ekranıyla devam eder. Eser Eserlerim'e kaydedilir. Ebeveynler alanında ayar yok.",
+     "toddler_risk": "Minik'te yüksek: çizgi izlemek üç yaşın ince motor becerisini aşar, sonuç hedef resme benzemez ve hayal kırıklığı doğar; adımlar arası ilerleme yönlendirme ister. Büyük'e sınırlanırsa düşük-orta."
+    },
+    {
+     "id": "P6",
+     "decision": "reject",
+     "veto": true,
+     "conditions": [
+      "Koşul yok: reklam, reklam SDK'sı ve ağ izni hiçbir sürüme girmez; gelir yalnız Tam Sürüm'den gelir."
+     ],
+     "rationale": "Reddediyorum ve veto ediyorum. Uygulamanın vaadi 'reklam yok': mağaza metni ve anahtar kelimeler (store_listing.md 16-17, 65, 101, 113-119), ekran görüntülerindeki 'Reklam yok · İnternet yok · Hesap yok' şeridi ve uygulama içi gizlilik metni (lib/l10n/app_tr.arb 224) bunu söylüyor; bu vaatle indiren ebeveyne sonradan reklam göstermek güveni bozar. Apple 1.3 (bugün developer.apple.com'dan okudum) çocuk kategorisindeki uygulamanın üçüncü taraflara kişisel bilgi ya da cihaz bilgisi göndermesini yasaklıyor ve kategori bırakılsa bile sonraki güncellemelerde bu kurallara uymayı sürdürmeyi istiyor; kategoriden çıkıp reklam eklemek de kapalı. Reklam ağı ağ bağlantısı ve cihaz bilgisi ister: android/app/src/main/AndroidManifest.xml bugün INTERNET izni istemiyor, 'Data Not Collected' etiketi düşer ve App Review'a bant değişikliği için hazırlanan 'no ads, no network access' mektubu (plan/pazarlama-incelemesi-2026-11-03.html) boşa çıkar. Yalnız satın almayana reklam, kurulun 'çocuğun ekranı satın alma öncesi ve sonrası aynı' kuralını da bozar (.claude/skills/cobi-toddler-ux/SKILL.md 44-49).",
+     "effort": "L",
+     "design": "Kabul edeceğim tek biçim reklamsızlık: ücretsiz sürümde de çocuğun hiçbir ekranında reklam, satın alma çağrısı ya da Tam Sürüm hatırlatması yok. Gelir yalnız Ebeveynler alanındaki (ebeveyn kapısının arkası) Tam Sürüm satırından ve FullVersionScreen'den gelir; fiyat mağazadan okunur. Ebeveyne hatırlatma gerekiyorsa yalnız Ebeveynler alanında sabit bir satır olur; bildirim, açılır pencere ya da geri sayım yok. Ağ izni eklenmez; 'Data Not Collected' etiketi ve gizlilik metni olduğu gibi kalır. Gelir yetmezse Tam Sürüm'e yeni sayfa eklemek ve fiyat konuşulur, reklam konuşulmaz.",
+     "toddler_risk": "Çok yüksek: üç yaşındaki çocuk reklama kazara dokunur ve uygulamadan çıkar (Ç9); reklam içeriği yaşa uygun olmayabilir; satın almayan ailede çocuğun ekranı değişir. Ebeveynin güveni ve 'reklamsız' vaadi bozulur."
+    }
+   ]
+  },
+  {
+   "member": "Erken çocukluk gelişimi uzmanı (3–5 yaş): ince motor beceri, dikkat, hayal kırıklığı, özerklik",
+   "verdicts": [
+    {
+     "id": "P1",
+     "decision": "conditional",
+     "veto": false,
+     "conditions": [
+      "Baştan başlamak hiçbir şeyi silmez ve hiçbir şeyin üstüne yazmaz. Sayfa bir esere bağlanmadan açılır (ColoringScreen, existingArtwork yok). İlk değişiklikte yeni bir SavedArtwork oluşur. Eski resim Eserlerim'de kalır ve açılabilir.",
+      "Boyama ekranına temizle ya da sıfırla düğmesi konmaz (Ç7). ColoringDocument.clear() çocuk arayüzüne bağlanmaz. Böyle bir düğme gelirse veto ederim.",
+      "Seçim ekranında metin yoktur. İki büyük resim gösterir: çocuğun son resmi (Eserlerim'deki ahşap çerçevenin içinde) ve sayfanın boş hâli (beyaz kâğıt üstünde). Ekranda 82 pt ev düğmesi durur. Her kart en az bir sayfa kartı büyüklüğündedir, VoiceOver etiketi ve buton özelliği taşır.",
+      "Seçim yalnız kategori ekranında ve yalnız kayıtlı eseri olan sayfada çıkar. Eserlerim'den açmak (devam) ve Çiz kartı (hep boş sayfa) bugünkü gibi kalır.",
+      "Seviye sayacı eserleri değil farklı sayfaları sayar (lib/data/page_order.dart:26-28). Aynı sayfayı dört kez boyamak seviye atlatmaz.",
+      "Yeni ekran test/accessibility_test.dart'taki kılavuz kontrolünden geçer. 320, 375, 393 ve 430 pt genişlikte, yatayda ve iPad bölmesinde denenir."
+     ],
+     "rationale": "Şartlı onaylıyorum: baştan başlamak silme değil, yeni kâğıt olmalı. Üç yaşındaki çocuk sevdiği sayfayı tekrar tekrar boyamak ister; bu yaşta ustalaşma tekrarla olur. Bugün bitmiş bir resmi yeniden açıp boyayan çocuk, otomatik kayıtla eski resmin üstüne yazar ve eski hâl geri gelmez, çünkü geri al geçmişi yeniden açılışta boş başlar (lib/engine/document/coloring_document.dart:199, 229). Yeni kâğıt modeli bu kaybı da kapatır (Ç6), veri modeli de hazır: kategori kartı sayfanın en yeni eserini gösteriyor (lib/screens/category_screen.dart:64-67), eseri olmadan açılan sayfa ilk değişiklikte yeni eser yazıyor (lib/screens/coloring/artwork_autosaver.dart:63-72). Boyama ekranına konacak bir temizle düğmesi ise Ç7'ye aykırıdır; o biçimi veto ederim.",
+     "effort": "S",
+     "design": "Yer: kategori ekranı. Minik ve Büyük aynı. Çocuk boyanmış bir sayfa kartına dokununca tam ekran bir seçim açılır: solda (dikey telefonda üstte) kendi son resmi Eserlerim'deki ahşap çerçevenin içinde, sağda (altta) aynı sayfanın boş çizimi beyaz kâğıt üstünde. Metin yok. Sol üstte 82 pt ev düğmesi var, dokunuşta tık sesi çıkar, VoiceOver 'Resmime devam et' ve 'Yeni kâğıt' der. Çerçeveli resme dokunmak bugünkü gibi kaldığı yerden açar. Boş kâğıda dokunmak sayfayı bir esere bağlamadan açar; çocuğun ilk dokunuşunda Eserlerim'e yeni bir resim eklenir, eski resim yerinde kalır ve kategori kartı artık en yeni resmi gösterir. Eserlerim'den açmak ve Çiz kartı değişmez. Boyama ekranında yeni düğme yok. Ebeveyn için yeni ayar yok; resim silmek yine yalnız Eserlerim'de uzun basma ve ebeveyn kapısıyla olur.",
+     "toddler_risk": "Düşük. Seçim ekranı bir dokunuş ekler. Çocuk yanlışlıkla boş kâğıdı seçerse eski resmini kategori kartında değil Eserlerim'de bulur; silme olmadığı için kayıp yok. Asıl tehlike boyama ekranına konacak bir temizle düğmesi: tek dokunuşta resmin gitmesi bu yaşta gözyaşı demektir, bu yüzden şart olarak yazdım."
+    },
+    {
+     "id": "P2",
+     "decision": "conditional",
+     "veto": false,
+     "conditions": [
+      "Yalnız boyama sayfalarında, fırçanın içinde kaldığı bölgede (clipLabel) çalışır. Serbest çizim sayfasında hiç çalışmaz (lib/screens/coloring_screen.dart:682).",
+      "Yalnız düz renk bırakan fırçalar tetikler: Minik'te keçeli, Büyük'te keçeli ve pastel. Gökkuşağı, sprey, simli, neon, silgi ve çıkartma tetiklemez; çocuğun seçtiği doku boyanmaz.",
+      "Ölçüm bölge başına, ekranda görünen düz boyaya göre yapılır: silgiden sonra kalan boya sayılır, yarı saydam izler sayılmaz. Eşik Minik'te %80, Büyük'te %90. Eşikler yayından önce 3-5 çocukla doğrulanır. Ebeveyne eşik sürgüsü verilmez.",
+      "Zaten dolgusu olan bölgede tetiklenmez. Dolgunun rengi, çocuğun o bölgede en çok kullandığı renktir (eşitlikte son çizginin rengi). Uygulama yeni bir renk getirmez.",
+      "Dolgu fırça katmanının altına girer (lib/widgets/paint_canvas.dart:552-593). Çocuğun fırça izleri olduğu gibi kalır.",
+      "Bir parmak bir geri al adımıdır; ayna ve çıkartmadaki kural budur (.claude/skills/cobi-toddler-ux/SKILL.md:68, 75). Tamamlama onu tetikleyen çizginin adımına bağlanır. Geri al ikisini birlikte kaldırır, sonucu görünmeyen bir geri al adımı oluşmaz.",
+      "Tamamlama parmak kalkınca hemen görünür (hedef: en geç yaklaşık 150 ms). Ölçüm bir sonraki dokunuşu geciktirmez (Ç8). Bu, en yavaş desteklenen Android cihazda ölçülür.",
+      "Geri bildirim dokunarak doldurmanın aynısıdır: 220 ms dalga (Reduce Motion açıkken dalga yok), dolgu sesi, hafif titreşim. Yeni ses, parıltı ya da animasyon eklenmez.",
+      "Ebeveynler alanında (kapı arkasında) tek bir anahtar olur, varsayılan değeri açıktır. Anahtar kapalıyken davranış bugünküyle birebir aynıdır.",
+      "Kayıtlı resimler kendiliğinden değişmez; tamamlamayı yalnız yeni bir çizgi tetikler. Tamamlanan bölge PageProgress'e sayılır ve bitiş kutlaması gelebilir (lib/engine/document/page_progress.dart:21, lib/screens/coloring_screen.dart:436-445).",
+      "Testler şunları kapsar: eşik, hariç tutulan fırçalar, dolgusu olan bölge, geri al ve ileri al, silgi, anahtar kapalı. Ebeveynler ekranı kılavuz testinden geçer."
+     ],
+     "rationale": "Şartlı onaylıyorum: bu, gelişim psikolojisinde 'iskele' denen destek, yani çocuk işin çoğunu yapar, parmağının henüz yetmediği son köşeyi yetişkin (burada uygulama) tamamlar. Minik'te zoom yok ve fırça, sayfanın kısa kenarının %5'i kalınlığında sabit (lib/screens/coloring_screen.dart:680, 685); dar köşeye ulaşmak 3 yaşının ince motor kontrolünü aşıyor. Bugün fırçayla boyanan alan hiç 'dolu' sayılmıyor, çünkü PageProgress yalnız dolguları sayıyor (lib/engine/document/page_progress.dart:21); fırçayı seçen çocuk bitiş kutlamasını sayfada hiç görmüyor. Tamamlama çocuğun kendi rengiyle gelir ve çizgilerinin altına girerse resim yine onun resmidir. Riskler (geç gelen sürpriz, sonucu görünmeyen geri al, bilerek bırakılan beyazın boyanması) şartlarla kapanıyor.",
+     "effort": "M",
+     "design": "Yer: boyama ekranı; yeni düğme yok. Çocuk ne görür: Minik'te keçeliyle (Büyük'te keçeli ya da pastelle) bir alanı boyar. Parmağını kaldırdığında o alanın görünen boyası %80'i (Büyük'te %90'ı) geçtiyse, kalan beyaz köşeler o alanda en çok kullandığı renkle dolar. Dolgu, dokunarak doldurmadaki 220 ms dalgayla, aynı dolgu sesi ve hafif titreşimle gelir; Reduce Motion açıkken dalgasız belirir. Dolgu çizgilerin altına girer, fırça izleri olduğu gibi görünür. Geri al'a bir dokunuş o parmağın çizgisini ve tamamlamayı birlikte geri alır. Tamamlanan alan sayfanın bitişine sayılır; son alan da dolunca bilinen kutlama gelir. Serbest çizim sayfasında, gökkuşağı, sprey, simli ve neon fırçalarda ve zaten dolgusu olan alanda hiçbir şey değişmez. Ebeveyn ne görür: Ebeveynler alanında (kapı arkasında), yaş modunun altında 'Boyama' başlığı ve tek anahtar: 'Fırçayla boyarken boşlukları tamamla' (varsayılan açık). Altında tek cümle durur: 'Bir alanın çoğu fırçayla boyanınca kalan beyaz köşeler aynı renkle dolar.' Eşik ayarı yok.",
+     "toddler_risk": "Düşük. Tamamlama parmak kalkarken geldiği için çocuk onu kendi hareketinin sonucu olarak algılar. Dört risk var: ölçüm gecikirse sonradan gelen sürpriz; tam kaplı alanda sonucu görünmeyen bir geri al adımı; büyük çocuğun bilerek bıraktığı beyaz parlamanın boyanması; yavaş cihazda takılma. Şartlar dördünü de kapatıyor: 150 ms hedefi, bir parmak bir adım kuralı, Büyük'te %90 eşik ile ebeveyn anahtarı, ölçümün sonraki dokunuşu geciktirmemesi."
+    },
+    {
+     "id": "P3",
+     "decision": "conditional",
+     "veto": false,
+     "conditions": [
+      "Yeni düğme ve menü yok (3 Kasım kurul kararı). Minik döngüsü 5, Büyük döngüsü 7 durumda kalır. Yeni bir kalem ancak var olan bir durumun yerine girer.",
+      "Hangi durumun çıkacağına telemetriyle karar verilmez, çünkü Kids Category'de analitik yok. Karar 3-5 çocukla yapılan gözlem oturumundan çıkar.",
+      "Fırça seti her sayfada aynıdır. Serbest çizim sayfasına özel kalem olmaz.",
+      "Mevcut fırça kuralları geçerlidir: deterministik (_seeded), bulanıklık ve animasyon yok, bir dokunuş iz bırakır, kendi glyph'i var, rozet rengi korur, VoiceOver adı var, parmağın altında araç resmi durur.",
+      "Basınca, eğime, hıza ya da Apple Pencil'a bağlı davranış olmaz. İz telefonda ve iPad'de aynı görünür.",
+      "Minik'te hiçbir kalem çizginin dışına taşmaz; stayInside her zaman açıktır.",
+      "Boyut ya da saydamlık sürgüsü eklenmez. Büyük'teki boyut hücresi tek boyut kontrolü olarak kalır."
+     ],
+     "rationale": "Şartlı onaylıyorum, yalnız 'ekleme değil değiştirme' kuralıyla. Fırça düğmesinin döngüsü Minik'te beş, Büyük'te yedi durum; kurul yediyi bu kalıbın sınırı saydı (.claude/skills/cobi-toddler-ux/SKILL.md:79-89, lib/screens/coloring_screen.dart:288-296). Döngü uzadıkça üç yaşındaki çocuk keçeliye dönmek için daha çok dokunur ve aradığı izi kaybeder. Fırça seti her sayfada aynı kalmalı: aynı düğme her yerde aynı şeyi yaparsa çocuk sonucu tahmin eder ve kendi başına kullanır. 'Farklı kalem özellikleri' bugün somut bir aday değil; her aday tek tek ve bu şartlarla gelmeli.",
+     "effort": "M",
+     "design": "Yer: bugünkü fırça düğmesi. Yeni düğme, menü ya da ebeveyn ayarı yok; kapıyla ilgisi yok. Minik değişmez: keçeli, gökkuşağı, sprey, simli, çıkartma. Büyük yedi durumda kalır; yeni bir kalem, çocuk gözleminde en az seçilen durumun yerine girer. Örnek aday (yalnız Büyük): 'serbest kalem'. Keçeli gibi düz renk bırakır ama boyama sayfasında çizgilerin dışına da çizer (clipLabel 0); 5–6 yaşındaki çocuk sayfaya kendi eklemesini yapar (kediye top, gökyüzüne güneş). Çocuk düğmede kendine ait bir glyph görür (kalem ucu ve çizgiyi aşan dalga); rozet seçili rengi gösterir, VoiceOver adını söyler, parmağın altında araç resmi durur. Kalem her sayfada aynı davranır. Ebeveyn hiçbir şey görmez.",
+     "toddler_risk": "Orta; şartlarla düşük. Minik döngüsü uzarsa çocuk keçeliye dönmek için daha çok dokunur ve aradığı izi kaybeder. Sayfaya göre değişen fırça seti tahmin edilebilirliği bozar. Basınca ya da hıza bağlı kalem parmakla tutarsız iz bırakır; bulanık ya da hareketli iz aşırı uyaran olur."
+    },
+    {
+     "id": "P4",
+     "decision": "reject",
+     "veto": false,
+     "conditions": [
+      "Yeniden başvuru için: renkli büyük alan olmaz. Yalnız parmak eşiğinin altındaki ince detaylar (lib/engine/document/page_progress.dart:15) ve yalnız koyu 'mürekkep' detaylar (göz bebeği gibi) paletin siyahıyla hazır gelir.",
+      "Yeniden başvuru için: hazır detay her dolgu gibi yeniden boyanır ve silinir. Kilitli (yeniden boyanamayan) ön boyalı alan gelirse veto ederim, çünkü dokununca tepki vermeyen alan Ç8'i bozar.",
+      "Yeniden başvuru için: var olan sayfa PNG'leri değişmez. Tohum dolgu yalnız yeni başlayan esere uygulanır; kayıtlı resimler değişmez.",
+      "Yeniden başvuru için: hazır detay bitişe sayılmaz ve hiçbir sayfa açılışta bitmiş görünmez."
+     ],
+     "rationale": "Önerilen biçimde reddediyorum. Önceki kurul 'renkli örnek ve sihirli boya'yı, 'doğru renk bu' baskısı yarattığı ve çocuğun rengi seçme hakkını aldığı için veto etti (plan/gece-raporu-2026-11-03.html, bölüm 4); görevdeki 'gerekçe kaydedilmedi' notu eksik. Önceden güzelce boyanmış büyük alanlar aynı mekanizmadır: sayfanın içine gömülmüş bir renkli örnek. Kısa dikkat süresini seviyeler zaten çözüyor (1. seviye en çok 4 parmak alanı ve 10 bölge: lib/engine/region/page_check.dart:57-58); büyük alanı uygulama boyarsa 3 yaşının en kolay ve en keyifli dokunuşu elinden gider. Eser duvarındaki resim çocuğun olmalı; yetişkin renkleri resmi güzelleştirir ama sahipliği azaltır.",
+     "effort": "M",
+     "design": "Önerilen biçimde ret; kabul edeceğim biçim şu. Büyük renkli alan yok. Yalnız parmağın vuramayacağı ince detaylar (PageProgress'in parmak eşiğinin altındaki bölgeler: lib/engine/document/page_progress.dart:15) ve yalnız orijinal emojide koyu olanlar (göz bebeği, burun deliği) paletin siyahıyla (#212121) mürekkep gibi hazır gelir. Resim daha bitmiş görünür, renk kararı tamamen çocukta kalır. Sayfa hattı (tool/pages/build_pages.py) bölge başına nokta ve renk olarak tohum dolgu yazar; uygulama bunu yalnız yeni başlayan esere uygular, kayıtlı resimler değişmez. Var olan sayfa PNG'lerine dokunulmaz: aynı bölge algoritmasında dolgular etiket numarasıyla geri yükleniyor (lib/engine/document/coloring_document.dart:201, 212), PNG değişirse eski resimlerde renkler yanlış bölgeye düşer. Hazır detay her dolgu gibi yeniden boyanır ve silinir. Minik ve Büyük aynı; ebeveyn ayarı yok, kapıyla ilgisi yok.",
+     "toddler_risk": "Orta. 'Doğru renk' baskısı ve sahiplik kaybı var. En kolay büyük alan çocuğun elinden alınır. Ön boyalı alan kilitliyse dokununca bir şey olmaz (Ç8) ve çocuk uygulamayı bozuk sanar."
+    },
+    {
+     "id": "P5",
+     "decision": "reject",
+     "veto": true,
+     "conditions": [
+      "Yeniden başvuru için: Minik'te hiçbir biçimde görünmez. Veto, önerinin Minik'i de kapsayan bugünkü hâline yöneliktir.",
+      "Yeniden başvuru için: yalnız Büyük'te olur. Sayfa başına en çok 3-4 adım ve yalnız temel şekiller kullanılır (çizgi, daire, oval, basit eğri; üçgen en sonda).",
+      "Yeniden başvuru için: doğruluk yargısı, puan, süre ve hata sesi olmaz; her deneme sayılır.",
+      "Yeniden başvuru için: son adımda rehber gerçek çizgiye dönüşür, böylece dolgu sızmaz.",
+      "Yeniden başvuru için: içerik elle hazırlanır, önce en çok 6 sayfayla denenir ve karar çocuk gözlemiyle verilir."
+     ],
+     "rationale": "Reddediyorum; öneri Minik'i de kapsadığı için veto ediyorum, yalnız Büyük'e sınırlı bir yeniden başvuru veto almaz. Adım adım çizim çizgi izleme ve şekil kopyalama ister; yaygın görsel-motor gelişim normlarına göre çocuk daireyi yaklaşık 3, artıyı 4, kareyi 4,5–5, üçgeni 5 yaşında kopyalar. Çok adımlı bir hayvan çizimi 3 yaşındaki çocuk için ya başarısızlık olur ya da uygulama her karalamayı kabul eder ve adımların anlamı kalmaz. Önceki kurul harf ve rakam izlemeyi '3 yaş için erken' gerekçesiyle veto etti (plan/gece-raporu-2026-11-03.html, bölüm 4). Sayfalar emoji PNG'sinden üretiliyor ve çizgi sırası taşımıyor (tool/pages/build_pages.py); adımları elle yazmak çabayı L yapar.",
+     "effort": "L",
+     "design": "Önerilen biçimde ret; yeniden başvuru biçimi şu. Yalnız Büyük: ana ekranda ayrı bir 'adım adım' kartı olur; Minik'te kart yok. En çok 6 elle hazırlanmış sayfa, her biri 3–4 adım ve yalnız temel şekiller (çizgi, daire, oval, basit eğri; üçgen en sonda). Rehber açık gri kesikli bir çizgidir; çocuk üstünden çizer. Rehberin yaklaşık %70'i kaplanınca sonraki adım kendiliğinden gelir (P2'deki kaplama ölçümüyle); ek düğme yok. Doğruluk puanı, süre ve hata sesi yok; her deneme sayılır. Son adımda rehber gerçek çizgiye dönüşür, çocuğun çizgileri üstte kalır ve normal boyama başlar, böylece dolgu sızmaz. Ebeveyn hiçbir şey görmez; Büyük modu zaten kapı arkasında seçiliyor.",
+     "toddler_risk": "Minik'te yüksek. İzleme 3 yaşın görsel-motor becerisini aşar: çocuk kendi çizgisinin rehbere benzemediğini görür ve 'yapamıyorum' der. Çok adımlı bir yönergeyi okuma bilmeyen çocuğa ancak gösterimle anlatmak gerekir; uygulamada böyle bir rehber animasyonu yok ve fırçalar için animasyon kararla kapalı."
+    },
+    {
+     "id": "P6",
+     "decision": "reject",
+     "veto": true,
+     "conditions": [],
+     "rationale": "Reddediyorum ve veto ediyorum: üç veto ölçütünün üçü de karşılanıyor. Beş yaş altı çocuk reklamı içerikten ayıramaz ve ikna amacını anlamaz (AAP 2020, 'Digital Advertising to Children'); her şeye dokunan küçük çocuk için reklam, kazara uygulamadan çıkış (Ç9) ve boyamayı bölen bir ara ekran demektir. Apple 1.3 Kids Category'de üçüncü taraf reklamı kabul etmez; dar istisna bile ağ bağlantısı ve reklam SDK'sı ister, bu da 'Data Not Collected' etiketini, uygulama içi gizlilik metnini (lib/l10n/app_tr.arb:224: 'Hesap, reklam, analiz aracı ve internet bağlantısı yoktur') ve mağaza metnini (store_listing.md:16 ve 65: 'Reklam yok, internet yok') yalanlar. Yalnız satın almayana reklam göstermek çocuğun ekranını satın almaya göre değiştirir; kurul bunu tematik paketlerde veto etti (plan/gece-raporu-2026-11-03.html, bölüm 4) ve para kuralına yazdı (.claude/skills/cobi-toddler-ux/SKILL.md:44-49). Bugünkü ebeveynlere reklamsızlık sözü verildi; sonradan reklam eklemek bu güveni bozar.",
+     "effort": "L",
+     "design": "Reklam yok: ne çocuk ekranında ne kapı arkasında, ne ücretsiz sürümde ne tam sürümde. Ücretsiz sürümdeki çocuk ekranı bugünkü gibi kalır. Gelir için reklamsız yollar: App Store'da Promoted In-App Purchase (uygulamanın dışında, ebeveynin gördüğü ürün sayfası ve arama; plan/gelir-ve-yayin-raporu.html bölüm 2.1); Ebeveynler alanındaki Tam Sürüm ekranında neyin açıldığının açık anlatımı; ücretsiz 48 sayfanın kalitesi; mağaza metninde ücretsiz sürüm ile tam sürüm farkının açık yazılması.",
+     "toddler_risk": "Çok yüksek. Çocuk reklamı içerikten ayıramaz. Kazara bir dokunuş onu App Store'a ya da tarayıcıya çıkarır (Ç9). Ara ekran boyamayı böler ve dikkati dağıtır. Reklam içeriği yaşa uygun olmayabilir. Reklam, çocuk üzerinden ebeveyne satın alma baskısı kurar."
+    }
+   ]
+  }
+ ],
+ "synthesis": {
+  "results": [
+   {
+    "id": "P1",
+    "title": "Baştan başla: aynı sayfayı yeniden boyamak",
+    "outcome": "şartlı geçti",
+    "tally": "5/5 şartlı onay, 0 ret, veto yok",
+    "vetoes": [],
+    "conditions": [
+     "Baştan başlamak hiçbir şeyi silmez ve hiçbir şeyin üstüne yazmaz. Sayfa existingArtwork olmadan açılır; çocuğun ilk değişikliğinde yeni kopya yeni UUID ile kaydedilir; eski kopya Eserlerim'de kalır (lib/screens/coloring/artwork_autosaver.dart:63-72). Hiç dokunulmayan kopya kaydedilmez.",
+     "Boyama ekranına sıfırla ya da temizle düğmesi eklenmez (Ç7). ColoringDocument.clear() (lib/engine/document/coloring_document.dart:133-136) hiçbir çocuk kontrolüne bağlanmaz. Erken çocukluk uzmanı böyle bir düğmeye veto koyacağını yazdı.",
+     "Giriş yalnız ebeveyn kapısının arkasındadır: Eserlerim'de uzun basma, showParentalGate, alt sayfadaki yeni satır (lib/screens/my_artworks_screen.dart:114, 141-192). Kategori kartına uzun basma eklenmez: PressableCard 450 ms'den uzun basışı dokunuş saymıyor (lib/widgets/kid_button.dart:223), yavaş basan çocuk sayfa yerine kapıyı görür.",
+     "Çocuğa metinli “devam mı, yeni mi” iletişim kutusu gösterilmez (Ç1, Ç10). Hiçbir şey silinmediği için ebeveyne onay penceresi de gösterilmez. Sil satırı ve onay penceresi bugünkü gibi kalır (my_artworks_screen.dart:256-268).",
+     "Kategori kartı sayfanın updatedAt değeri en yeni olan kopyasını gösterir ve dokununca onu açar. Bugün liste sırası kullanılıyor (lib/screens/category_screen.dart:64-68) ve güncellenen eser listede yer değiştirmiyor (lib/providers/app_provider.dart:123-132).",
+     "Seviye sayacı eserleri değil farklı sayfaları sayar (originalImageId tekil; lib/data/page_order.dart:22-28). Aynı sayfanın kopyaları ve Çiz eserleri bir kez sayılır.",
+     "Satır yalnız sayfa çocuğun kataloğunda açıksa görünür (getImagesForCategory, lib/providers/app_provider.dart:102-107). Çiz eserinde, Tam Sürüm kilidindeki sayfada ve paketten çıkmış eski sayfada görünmez. Kopya kilidi aşmanın yolu olmaz.",
+     "parentsHint (lib/l10n/app_tr.arb:216, lib/l10n/app_en.arb:84) baştan boyamayı anar. Yenilikler metni (App Review 2.3.12) davranışı yazar. Mağaza açıklaması yalnız gerçeği söyler: yeni kopyayı ebeveyn açar.",
+     "Testler: kapı, satır ve boş sayfanın açılması; bir dolgudan sonra aynı sayfanın iki kopyası ve kategori kartının yenisini açması; dokunmadan çıkınca kopya oluşmaması; seviyenin farklı sayfa sayması. Satır test/accessibility_test.dart'taki meetsGuideline kontrolünden geçer. Alt sayfa 320, 375, 393 ve 430 pt genişlikte, yatayda ve iPad bölmesinde denenir."
+    ],
+    "design": "Çocuk (Minik ve Büyük aynı): hiçbir şey değişmez. Kategori kartı sayfanın en son boyanan kopyasını gösterir ve dokununca onu kaldığı yerden açar. Boyama ekranına düğme eklenmez. Çiz kartı her dokunuşta boş sayfa açmaya devam eder.\nEbeveyn (kapı arkası): Eserlerim'de resme basılı tutar ve ebeveyn kapısını geçer. Alt sayfada Sil'in üstünde yeni bir satır vardır: “Bu sayfayı baştan boya”, alt yazısı “Eski resim burada kalır” (EN “Colour this page again” / “The old picture stays here”). İkon Icons.note_add_outlined; renk kırmızı değil. Onay penceresi yok. Satıra dokununca aynı sayfa bembeyaz açılır ve ebeveyn cihazı çocuğa verir. Çocuk ilk dokunuşu yapınca yeni kopya Eserlerim'in başına gelir ve kategori kartı onu gösterir. Hiç dokunmadan çıkılırsa kopya oluşmaz ve kart eskisini göstermeye devam eder. Eski kopya duvarda kalır; açılınca kaldığı yerden devam eder; istenirse ayrıca silinir. parentsHint: “Ayarlar burada. Paylaşmak, yazdırmak, baştan boyamak ve silmek için Eserlerim'de bir resmi basılı tutun.” Yeni ayar yok.\nBu karara girmeyen (ayrı oy ister): çocuk yolu. Gelirse biçimi şudur: metinsiz tam ekran seçim, yalnız bitmiş sayfada (SavedArtwork.isCompleted); solda çocuğun resmi Eserlerim'deki ahşap çerçevede, sağda boş çizgi resim beyaz kâğıtta; iki büyük PressableCard (Minik'te en az 64 pt), 82 pt ev düğmesi, tık sesi, VoiceOver “Resmine devam et: Aslan” ve “Yeni boş sayfa: Aslan”; uzun basma yok. P2'den önce gelemez, çünkü fırçayla boyanan sayfa bugün hiç bitmiş sayılmıyor (lib/engine/document/page_progress.dart:21).\nHIG ve App Review: satır 56 pt, en az 44 pt (uyumlu); metin %200'de sarılır (uyumlu); VoiceOver etiketi ARB'den gelir (uyumlu); işlem yıkıcı olmadığı için onay yok (uyumlu); çocuk tarafında yeni dokunma hedefi yok (uyumlu); 1.3 kapı arkası (uyumlu); 4.0 ve 2.1 riski yok.",
+    "effort": "S: Flutter mühendisinin tahmini yarım gün. Motor değişikliği yok; otomatik kayıt sayfa başına birden çok kopyayı bugün destekliyor.",
+    "why": "Beş üye de şartlı onay verdi, veto yok. Ortak karar: baştan başlamak silme değil yeni kopyadır; Ç6 ve Ç7 korunur. Üyeler çocuk yolunda ayrıştı. Erken çocukluk uzmanı ve ebeveyn üye kategori ekranında metinsiz “devam / yeni kâğıt” seçimi istedi (ebeveyn yalnız bitmiş sayfada). Apple uzmanı bitmiş sayfanın kategoriden doğrudan yeni kopya açmasını önerdi. Ürün yöneticisi ve Flutter mühendisi girişi şart olarak kapı arkasına koydu. Çocuk yolu 3/5 destekle 4/5 eşiğine ulaşmadı. Beş üyenin şartlarını birlikte karşılayan tek biçim kapı arkasındaki ebeveyn yolu olduğu için birleşik tasarım budur. Çocuk yolu isteyen iki üyenin şartları bir çocuk yolu gelirse onun biçimini tanımlıyor; ebeveyn yolu bu şartları çiğnemiyor, ama istekleri bekliyor. Açık kalan risk: çocuk bitmiş bir sayfayı kategoriden açıp boyarsa otomatik kayıt eski hâlin üstüne yazar; yeniden açılışta geri al geçmişi boş başlar (lib/engine/document/coloring_document.dart:199-232). Kodda bir yan bulgu buldum: bugün her Çiz eseri ayrı bir 1. seviye sayfası sayılıyor (freeDrawPage seviye 1 ve pagesById içinde), dört serbest çizim çocuğu 2. seviyeye taşıyor. Farklı sayfa sayımı bunu da düzeltir."
+   },
+   {
+    "id": "P2",
+    "title": "Fırçayla boyamada otomatik tamamlama",
+    "outcome": "şartlı geçti",
+    "tally": "5/5 şartlı onay, 0 ret, veto yok",
+    "vetoes": [],
+    "conditions": [
+     "Yalnız boyama sayfalarında ve yalnız çizginin başladığı bölgede (Stroke.clipLabel > 0) çalışır. Çiz sayfasında (stayInside false, lib/screens/coloring_screen.dart:682) ve arka plan bölgesinde (PageProgress.backgroundLabel) çalışmaz.",
+     "Yalnız keçeli kalem (BrushKind.marker) tetikler ve yalnız keçeli izi sayılır. Gökkuşağı, pastel, sprey, simli, neon, silgi ve çıkartma tetiklemez. Bölgede silgiden sonra görünür kalan başka bir fırça izi varsa tamamlama yapılmaz, çünkü altına giren düz dolgu yarı saydam ya da çok renkli dokuyu değiştirir (pastel alfa 0,72, sprey 0,5–0,6, simli 0,34: lib/engine/render/page_layers.dart:120, 169, 178, 189).",
+     "Zaten dolgusu olan bölgede tetiklenmez.",
+     "Eşik tek sabittir: bölgenin ölçülebilir alanının en az %85'ini tek renkteki keçeli izi kaplar. Ölçülebilir alan, bölgenin çizgi altına girmeyen kısmıdır: başka bir bölgeye 8 px'ten uzak hücreler (LabelMap.area çizgi piksellerini de sayıyor: lib/engine/region/label_map.dart:19-20). Ölçülebilir hücre kalmayan bölgede tamamlama yapılmaz.",
+     "Kalan her beyaz boşluk parmak ucundan küçüktür (sayfa alanının %1'i, PageProgress'teki ölçü: lib/engine/document/page_progress.dart:15). Parmak boyu ya da daha büyük bir boşluk varsa tamamlama yapılmaz; bilerek bırakılan büyük beyaz korunur.",
+     "Renk çocuğun rengidir: %85'i kaplayan keçeli rengi. Uygulama yeni ya da “doğru” renk getirmez. Birden çok renkle boyanmış bölge tamamlanmaz.",
+     "Ebeveyne eşik sürgüsü verilmez. %85 başlangıç değeridir; yayından önce 3–5 çocukla elle denenerek doğrulanır, çünkü uygulamada analitik yok.",
+     "Tetik yalnız yeni bir keçeli çizginin bitişidir (parmak kalkınca). Geri al, ileri al, silgi, sayfa açılışı ve kayıtlı eserler tetiklemez; kayıtlı resim kendiliğinden değişmez.",
+     "Çizgi ve onun açtığı dolgu tek geri alma adımıdır: _StrokeCommand dolguyu ve önceki değeri taşır (lib/engine/document/coloring_document.dart:285-313). Bir geri al ikisini birlikte kaldırır, ileri al ikisini birlikte getirir (bir parmak, bir adım). Otomatik dolgusu geri alınan bölgede sayfa açık kaldıkça tamamlama tekrar yapılmaz.",
+     "Dolgu fırça katmanının altına girer (lib/widgets/paint_canvas.dart:552-593); çocuğun çizgileri olduğu gibi kalır. Kayıt biçimi değişmez: dolgu sıradan bir RegionFill (l, c, x, y) olur; x ve y bölgenin iç noktasıdır; şema sürümü artmaz.",
+     "Geri bildirim dokunarak doldurmanın aynısıdır: parmağın kalktığı noktadan 220 ms dalga, dolgu sesi, hafif titreşim. Reduce Motion açıkken dalga yok (paint_canvas.dart:233). Yeni ses, parıltı, animasyon, düğme, sayaç ya da metin eklenmez.",
+     "Tamamlama _onFilled yolundan geçer (lib/screens/coloring_screen.dart:428-446): bütün parmak boyu alanlar dolunca bilinen kutlama gelir ve eser isCompleted olur. PageProgress kuralı değişmez.",
+     "Ölçüm dart:ui kullanmayan, birim testli saf bir Dart modülündedir (ör. lib/engine/document/auto_complete.dart): 4 px'lik ızgara; çizgiler sırayla fırça çapında disklerle damgalanır; silgi boyayı kaldırır. Aynı çizgiler her cihazda aynı sonucu verir.",
+     "Performans: ölçüm yalnız parmak kalkınca ve yalnız o bölge için yapılır; sonraki dokunuşu geciktirmez. Bütçe: iOS 15'in en eski iPad'inde (A8: iPad Air 2, iPad mini 4) 300 bin piksellik bölge ve 100 çizgi için 4 ms. Aşarsa ölçüm Isolate.run'a taşınır ve sonuç yalnız o çizgi hâlâ son adımsa aynı adıma eklenir. Hedef: dolgu parmak kalktıktan en geç yaklaşık 150 ms sonra görünür. Bütçe henüz ölçülmedi; en eski iPad'de ve düşük donanımlı bir Android cihazda ölçülür (CobiPaint_Pixel emülatörü yalnız ön kontroldür).",
+     "Ayar Ebeveynler alanında, kapı arkasında tek anahtardır; iki modda geçerli, varsayılan açık. UserSettings'e yeni alan eklenir; eski kayıtlarda açık okunur. Anahtar kapalıyken davranış bugünküyle birebir aynıdır. Anahtar Tam Sürüm'e bağlı değildir.",
+     "Özellik 2.1.0 ve 2.1.1'e girmez. Mağaza metnine ve ekran görüntüsü alt yazısına yalnız yayından sonra yazılır (2.3.1). Yenilikler metni (2.3.12) davranışı ve anahtarı anlatır. 10 dil taslağına (lib/l10n/drafts/) anahtar eklenir.",
+     "Testler: %85 doldurur, altı doldurmaz; çok renkli bölge; parmak boyu boşluk; dışlanan fırçalar; dolu bölge; arka plan; Çiz sayfası; silgiden sonra yeniden ölçüm ve silginin tetiklememesi; tek adım geri al ve ileri al; geri alınan bölgede susma; JSON gidiş-dönüş; anahtar kapalı; kutlama; PaintCanvas widget testi; parents_screen_test ve meetsGuideline."
+    ],
+    "design": "Çocuk (Minik ve Büyük, aynı kural; yalnız boyama sayfaları): araç çubuğu, palet ve fırça döngüsü değişmez. Çocuk keçeli kalemle bir alanı, örneğin aslanın yelesini boyar ve parmağını kaldırır. Alanın ölçülebilir kısmının en az %85'i tek renkle boyalıysa ve kalan her beyaz boşluk parmak ucundan küçükse, boşluklar o renkle dolar. Dolgu, dokunarak doldurmadaki 220 ms dalgayla gelir (dolgu parmağın kalktığı noktadan daire gibi yayılır); dolgu sesi ve hafif titreşim çalar. Reduce Motion açıkken dolgu dalgasız belirir. Dolgu çizgilerin altına girer; fırça izleri olduğu gibi görünür. Geri al düğmesine bir dokunuş son çizgiyi ve dolguyu birlikte kaldırır; o alan sayfa açık kaldıkça bir daha kendiliğinden dolmaz. Bütün parmak boyu alanlar dolunca bilinen kısa kutlama gelir; fırçayla boyayan çocuk da görür. Gökkuşağı, pastel, sprey, simli, neon, çıkartma, silgi, dolgusu olan alan, arka plan ve Çiz sayfası bugünkü gibi davranır.\nEbeveyn (Ebeveynler alanı, kapı arkası): “Yaş modu” bölümünün hemen altında (lib/screens/parents_screen.dart:47) yeni “Boyama” bölümü ve tek SwitchListTile: “Fırçayla boyarken küçük boşlukları tamamla” (EN “Fill small gaps when colouring with the brush”). Alt yazı: “Keçeli kalemle bir alanın neredeyse tamamı tek renkle boyanınca kalan küçük beyaz köşeler aynı renkle dolar. İnce motor alıştırması için kapatabilirsiniz.” Varsayılan açık; iki mod için tek ayar; eşik sürgüsü yok.\nTeknik: ColoringScreen ayarı PaintCanvas'a verir. PaintCanvas keçeli çizgi bitişinde (paint_canvas.dart:340-369; onStrokeCommitted bugün ColoringScreen'e bağlı değil) ölçüm modülünü çağırır. Sonuç tetiklerse çizgi ve RegionFill tek komutla belgeye girer, dalga parmağın kalktığı noktadan başlar ve _onFilled çağrılır. UserSettings'e autoComplete alanı eklenir (JSON'da yoksa true).\nHIG ve App Review: yeni çocuk kontrolü yok (uyumlu); tek anahtar, iyi varsayılan, eşik sürgüsü yok (uyumlu: HIG Settings az ayar ve çoğu kişiye iyi gelen varsayılan ister); ayarın görev içinde değil kapı arkasında olması gerekçeli sapma (HIG göreve özgü seçeneği görevin içinde önerir; Ç9 çocuğun ayar değiştirmesini yasaklar); tek adımlık ve sonucu görünen geri al (uyumlu: HIG Undo and redo sonucu göstermeyi ve ilişkili değişiklikleri birlikte geri almayı önerir); Reduce Motion, VoiceOver etiketi, %200 metin, Sessiz düğmesi ve titreşim anahtarı (uyumlu). 1.3 ve 5.1.4'e etkisi yok (veri ve ağ yok); 4.0 riski yok; 2.1 için en eski iPad'de ölçüm açık iş.",
+    "effort": "M: saf Dart ölçüm modülü, komut modeline isteğe bağlı tek alan, PaintCanvas bağlantısı, ayar ve testler; ayrıca en eski iPad'de ölçüm ve çocuk denemesi. Flutter mühendisine göre motor riski orta; değişiklik mevcut coloring_document ve paint_canvas testleriyle çevrili.",
+    "why": "Beş üye de şartlı onay verdi, veto yok. Sahibin isteği karşılanıyor: fırçayla bir alanın çoğu boyanınca gerisi tamamlanır ve bir ebeveyn ayarı bunu kapatır. Gerekçe: Minik'te zoom yok ve fırça sayfanın kısa kenarının %5'i kalınlığında sabit (lib/screens/coloring_screen.dart:58, 680); 3 yaşın parmağı köşeleri kaçırır. Bugün fırçayla boyanan alan bitişe hiç sayılmıyor (page_progress.dart:21); bitiş kutlaması ve isCompleted işareti yalnız dokunarak doldurmada çalışıyor (paint_canvas.dart:296). Renk çocuğun kendi rengi olduğu için 3 Kasım'da veto edilen “renkli örnek ve sihirli boya”ya düşmez. Çelişen şartları çoğunlukla birleştirdim: eşik %85 tek sabit (Apple, ürün, Flutter ve ebeveyn üye; erken çocukluk uzmanı Minik'te %80, Büyük'te %90 istedi); iki mod (dört üye; ebeveyn üye yalnız Minik istedi); tek geri al adımı (dört üye ve mevcut “bir parmak, bir adım” kuralı; ebeveyn üye ayrı adım istedi); yalnız keçeli kalem (dört üye; erken çocukluk uzmanı Büyük'te pasteli de istedi, ama kendi “çocuğun seçtiği doku boyanmaz” şartı yarı saydam pasteli dışarıda bırakıyor). Tek renk kuralını en katı biçimiyle (Apple) aldım, çünkü o biçim diğer dört üyenin baskın renk şartlarını da sağlıyor. Karşılanmayan şartlar veto değil. Ebeveyn üyenin “Büyük'teki çocuk beyazı bilerek bırakır” kaygısını parmak boyu boşluk kuralı, geri alınan bölgede susma ve ebeveyn anahtarı karşılıyor."
+   },
+   {
+    "id": "P3",
+    "title": "Yeni kalem özellikleri",
+    "outcome": "şartlı geçti",
+    "tally": "4/5 şartlı onay, 1 ret (ebeveyn üye, vetosuz), veto yok",
+    "vetoes": [],
+    "conditions": [
+     "Yeni düğme, menü, uzun basma seçeneği, palet hücresi, boyut ya da saydamlık sürgüsü ve ebeveyn ayarı yok. Kalem özellikleri yalnız fırça düğmesinin döngüsünde yaşar (lib/screens/coloring_screen.dart:282-309).",
+     "Minik döngüsü beş durumda kalır: keçeli → gökkuşağı → sprey → simli → çıkartma. Büyük yedi durumu geçmez; yeni bir fırça ancak var olan bir Büyük durumunun yerine girer.",
+     "Yeni bir fırça bu kararla gelmez: adı, görünüşü, glifi ve hangi durumun yerine geçeceği belli bir aday ayrıca oylanır. Hangi durumun çıkacağına telemetriyle değil, 3–5 çocukla yapılan gözlemle karar verilir (Kids Category'de analitik yok).",
+     "Her fırça belirlenimcidir (_seeded, lib/engine/render/page_layers.dart:75-78); bulanıklık ve animasyon yok; tek dokunuş iz bırakır. Her durumun kendi glifi, KidButton(badgeColor:) rozeti, VoiceOver adı, TR ve EN ses klibi ve parmak altında Fluent UI Emoji araç resmi olur; glif kontrastı en az 3:1.",
+     "BrushKind'a yeni değer yalnız sona eklenir; adlar kayıtta saklanıyor (lib/engine/document/stroke.dart:3-7). Eski sürüm bilinmeyen fırçayı sessizce atar; bu kabul edilir.",
+     "Fırça seti her sayfada aynıdır; Çiz sayfasına özel kalem ya da döngü yok. Minik'te boyama sayfasındaki her fırça çizginin içinde kalır.",
+     "Hiçbir fırça ya da özellik Tam Sürüm'e kilitlenmez; çocuğun ekranı satın alma öncesi ve sonrası aynıdır.",
+     "Basınç yalnız Büyük'te ve yalnız Apple Pencil'da (PointerDeviceKind.stylus) etkilidir; eğime ve hıza bağlı davranış yok. Parmak girdisi sabit kalınlıkta kalır; Minik basıncı yok sayar. Basınç noktanın üçüncü değeri olarak kaydedilir (Stroke.points, stroke.dart:36; bugün hep 0,5 yazılıyor: lib/widgets/paint_canvas.dart:313, 336). Ayna kopyaları ve yeniden açılan resim basıncı kayıttan okur; eski kayıtlarda 0,5 olduğu için görünüm değişmez.",
+     "Performans: çizgi başına çizim çağrısı neonun 14 drawPath tavanını geçmez (page_layers.dart:242-268). Geri al bütün çizgileri yeniden pişirdiği için (page_layers.dart:425-462) en eski iOS 15 iPad'inde 200 çizginin yeniden pişmesi 300 ms altında kalır.",
+     "Testler: page_layers_test'teki belirlenimcilik testleri basınçlı çizgiyi kapsar; JSON gidiş-dönüş basınçla yapılır; parmak girdisinde basınç 0,5 kalır. iPad'de Apple Pencil ve parmakla, Split View ve döndürme dâhil denenir (2.1). Yenilikler metni (2.3.12) ve mağaza metni gerçekle tutarlı kalır."
+    ],
+    "design": "Yer: bugünkü fırça düğmesi. Yeni düğme, menü, sürgü ya da ebeveyn ayarı yok; kapıyla ilgisi yok.\nMinik: değişiklik yok. Döngü keçeli → gökkuşağı → sprey → simli → çıkartma olarak kalır; boyama sayfasında her fırça çizginin içinde kalır; Apple Pencil basıncı yok sayılır.\nBüyük: döngü aynı yedi durumda kalır. iPad'de Apple Pencil ile çizen çocuğun keçeli, pastel ve neon çizgisi bastırdıkça kalınlaşır, hafif dokununca incelir; hafif dokunuş da görünür iz bırakır. Parmakla çizim değişmez. Basınç her noktanın üçüncü değeri olarak kaydedilir; ayna kopyaları ve yeniden açılan resim kayıttan okur, resim her cihazda aynı görünür. Apple Pencil çift dokunuşu kapsam dışıdır ve yok sayılır.\nYeni bir fırça istenirse (ör. erken çocukluk uzmanının çizgi dışına da çizen “serbest kalem” örneği ya da Flutter mühendisinin desenli kalem örneği) Büyük'te çocuk gözleminde en az seçilen durumun yerine aday olarak ayrıca oylanır. Aday kendi glifi, rozet rengi, VoiceOver adı, ses klibi ve parmak altı araç resmiyle gelir.\nHIG ve App Review: basıncın kalınlığa bağlanması uyumlu (HIG Apple Pencil basıncı fırça boyutu gibi sürekli bir özelliğe bağlamayı ve basit tutmayı önerir); çift dokunuşun yok sayılması gerekçeli sapma (HIG uygun düştüğünde kullanıcının çift dokunuş ayarına saygıyı önerir; kurul Apple Pencil'a özgü kip onaylamadı); yeni dokunma hedefi yok (uyumlu); animasyon yok, Reduce Motion etkilenmez (uyumlu). 4.0 riski yok; 2.1 için iPad denemesi açık iş. Mağaza: yalnız yayından sonra iPad alt yazısına ve açıklamaya “Büyük modda Apple Pencil ile basınca duyarlı çizgi” eklenir; “6 fırça” sayısı değişmez.",
+    "effort": "M: CanvasGestureMachine bugün yalnız konum taşıyor; basınç girdi zincirine eklenir, değişken kalınlıklı çizim, testler ve iPad denemesi gelir. Yeni bir fırça durumu ayrıca glif, ses, araç resmi ve testlerle gelir; Flutter mühendisinin tahmini fırça başına bir-iki gün.",
+    "why": "Dört üye şartlı onay verdi; ebeveyn üye veto koymadan reddetti, çünkü öneri somut bir kalem söylemiyor. 4/5 ve veto yok olduğu için geçti. Geçen kapsam bir kalıp ve tek somut iş. Kalıp, 3 Kasım kararındaki döngü sınırlarını (Minik 5, Büyük 7) ve “ekleme değil yer değiştirme” kuralını sürdürür; döngü uzadıkça 3 yaşındaki çocuk keçeliye dönmek için daha çok dokunur. Somut iş Büyük'te Apple Pencil basıncıdır; Apple uzmanı, ürün yöneticisi, Flutter mühendisi ve ebeveyn üyenin kabul edeceği biçim bunu destekliyor. Erken çocukluk uzmanının “Apple Pencil'a bağlı davranış olmaz” şartı karşılanmadı; veto değil. Onun asıl kaygısını (resmin cihaza göre farklı görünmesi) basıncın kayda yazılması karşılıyor ve Minik hiç değişmiyor. Öncelik P1 ve P2'nin arkasında: ürün yöneticisine göre yedinci bir fırça ya da basınç ne indirmeyi ne Tam Sürüm kararını değiştirir."
+   },
+   {
+    "id": "P4",
+    "title": "Kısmen boyalı sayfalar",
+    "outcome": "reddedildi",
+    "tally": "3/5 şartlı onay (Apple, Flutter, ebeveyn üye), 2 ret (erken çocukluk, ürün yöneticisi), veto yok; 4/5 eşiğinin altında",
+    "vetoes": [],
+    "conditions": [
+     "Önerilen biçim (resmin büyük alanları önceden boyalı) yeniden getirilmez; 3 Kasım'da reddedilen “renkli örnek ve sihirli boya”nın gerekçesine düşer (plan/gece-raporu-2026-11-03.html bölüm 4).",
+     "Yeniden başvuru şartı: parmak boyu hiçbir alan önceden boyanmaz; yalnız PageProgress'in saymadığı, sayfa alanının %1'inden küçük ayrıntılar hazır gelir (lib/engine/document/page_progress.dart:15).",
+     "Yeniden başvuru şartı: hazır ayrıntı sıradan dolgudur; dokununca rengi değişir, silgi siler. Kilitli alan yok; erken çocukluk uzmanı kilitli alana veto koyacağını yazdı (Ç8).",
+     "Yeniden başvuru şartı: renk elle girilmez, üretim hattının zaten ürettiği renk referansından gelir (tool/pages/emoji2page.py; build_pages.py bugün referansı atıyor: img, _ref = make_page(...)). Tohum etiket numarasıyla değil nokta ve renkle saklanır. Sayfa PNG'leri değişmez, çünkü kayıtlı dolgular etiketle geri yükleniyor (lib/engine/document/coloring_document.dart:201-213).",
+     "Yeniden başvuru şartı: tohum yalnız yeni başlayan esere uygulanır; kayıtlı eserler değişmez. Tohum geri al geçmişine girmez ve bitişe sayılmaz; hiçbir sayfa açılışta bitmiş görünmez. Yalnız tohumu olan sayfa Eserlerim'e girmez ve maskot ipucu yine çıkar (lib/screens/coloring_screen.dart:243, 257 ve lib/screens/coloring/artwork_autosaver.dart:64 bugün document.isEmpty'ye bakıyor).",
+     "Yeniden başvuru şartı: kategori kartı sayfanın açılacak hâlini gösterir. Test her tohum noktasının küçük bir bölgeye düştüğünü ve PageProgress sonucunun değişmediğini doğrular.",
+     "Yeniden oylamada açık üç seçim: renk (erken çocukluk: yalnız göz bebeği gibi koyu “mürekkep” ayrıntılar, paletin siyahı #212121; Apple ve Flutter: kaynak renk, ton parçaları ve beyaz hariç), kapsam (Apple ve Flutter yalnız Minik; erken çocukluk iki mod), ayar (Flutter Ebeveynler alanında anahtar ister; Apple ayar istemez)."
+    ],
+    "design": "Bugün yapılacak bir şey yok. Önerilen biçim (resmin büyük alanları önceden güzelce boyalı) bir daha gelmez.\nYeniden başvuru için 4/5'e en yakın biçim “yalnız küçük ayrıntılar”dır: yeni bir sayfa açılınca göz bebeği, burun deliği gibi parmağın sığmadığı ayrıntılar hazır gelir; bütün parmak boyu alanlar beyaz kalır. Çocuk hazır ayrıntıya dokunursa seçtiği renk gelir; silgi ayrıntıyı siler. Yeni düğme, kart, kategori ya da metin yok. Erken çocukluk uzmanı, Apple uzmanı ve Flutter mühendisi bu biçimi zaten yazdı. Ebeveyn üyenin gerekçesi (Minik'te zoom yok, göz ve burun beyaz kalıyor) de bu biçimi destekliyor, ama onun şartı ayrı bir “Yarım resimler” kategorisiydi. Ürün yöneticisinin kabul edeceği tek biçim başka: yalnız sahne arka planı tek soluk renkle başlar, ayrı kart ya da kategori yok. Ayrı kategori ile “ayrı kart yok” şartı birbirini dışladığı için yeniden başvuru tek biçimle, normal sayfalarda küçük ayrıntılarla gelmeli.\nTeknik iz: build_pages.py her sayfa için küçük bölgelerin (x, y, argb) listesini renk referansından üretir ve lib/data/builtin_images.dart'a yazar. ColoringScreen yeni eser başlatırken listeyi başlangıç dolgusu olarak yükler. Maskot ipucu ve otomatik kayıt “çocuk bir şey yaptı mı” sorusuna bakar.",
+    "effort": "M: üretim hattında renk örnekleme ve tohum listesi, belgeye başlangıç dolgusu, “boş sayfa” varsayımının üç yerde düzeltilmesi ve testler.",
+    "why": "3/5 onay 4/5 eşiğinin altında; veto yok. Erken çocukluk uzmanı ve ürün yöneticisi, önceden boyanmış büyük alanların 3 Kasım'da 3/5 ve vetoyla reddedilen “renkli örnek ve sihirli boya”nın aynısı olduğunu söyledi: “doğru renk” baskısı yaratır, en kolay büyük alanı çocuğun elinden alır ve Eserlerim'deki resmin sahipliğini azaltır. Görevdeki “gerekçe kaydedilmedi” notu eksik: önceki ret gerekçeleri plan/gece-raporu-2026-11-03.html bölüm 4'te kayıtlı. Hızlı başarı ihtiyacını 1. seviye sayfalar (en çok 4 parmak boyu alan ve 10 bölge) ve P2 zaten karşılıyor."
+   },
+   {
+    "id": "P5",
+    "title": "Adım adım çizim modu",
+    "outcome": "reddedildi",
+    "tally": "0/5 onay, 5 ret, 1 veto (erken çocukluk uzmanı)",
+    "vetoes": [
+     "Erken çocukluk gelişimi uzmanı: veto Minik'i de kapsayan bugünkü biçime; yalnız Büyük'e sınırlı bir yeniden başvuruya veto koymayacağını yazdı."
+    ],
+    "conditions": [
+     "Erken çocukluk uzmanının vetosu yalnız şu şartları karşılayan bir yeniden başvuruyla kalkar: Minik'te hiçbir biçimde görünmez, yalnız Büyük'te olur.",
+     "En çok 6 elle hazırlanmış sayfa; sayfa başına 3–4 adım; yalnız temel şekiller (çizgi, daire, oval, basit eğri; üçgen en sonda).",
+     "Doğruluk yargısı, puan, süre, “yanlış” durumu ve hata sesi yok; her deneme sayılır; adım okuma gerektirmeden ilerler.",
+     "Rehber çizgi kayda girmeyen ayrı bir katmandır, en az 3:1 kontrastlıdır ve animasyonsuzdur.",
+     "Boyama aşaması çocuğun kapanmamış çizgisini değil sayfanın kendi çizgi resmini ve etiket haritasını kullanır; dolgu sızmaz (RegionBuilder yalnız yaklaşık 4 px'lik boşlukları kapatıyor: lib/engine/region/region_builder.dart:10, 18-20).",
+     "İçerik önce en çok 6 sayfayla çocuk gözleminde denenir. P1, P2 ve ses kayıtları yayına girmeden sıraya girmez. Kurulun harf ve rakam izleme vetosu bununla birlikte yeniden oylanır."
+    ],
+    "design": "Bugün yapılacak bir şey yok; 3 yaş çizmeyi Çiz sayfası ve aynayla keşfeder. Erken çocukluk uzmanının vetosu yukarıdaki şartları karşılayan yalnız Büyük biçimiyle kalkabilir, ama öneri 0/5 aldığı için veto kalksa da geçmez. Yeniden başvuruda üyelerin ayrıştığı iki seçim kalır: giriş yeri (ana ekranda ayrı kart, Çiz kartının içi ya da kategorilerin içi) ve adım ilerletme (rehberin yaklaşık %70'i kaplanınca kendiliğinden, P2'nin kaplama ölçeriyle, ya da araç çubuğunda büyük ok düğmesi). Düğmesiz ilerleme tercih edilir, çünkü Minik'te beşinci 82 pt düğme 375 pt telefona sığmıyor (_Metrics, lib/screens/coloring_screen.dart:72-91). Mağaza metni bu kipi “5 yaş ve altı” bandının özelliği gibi sunmaz.",
+    "effort": "L: sayfalar emoji PNG'sinden raster konturla üretiliyor ve çizim sırası taşımıyor (tool/pages/emoji2page.py); adımlar elle yazılır; yeni ekran, rehber katmanı, adım durumu ve testler gerekir. Flutter mühendisine göre haftalar.",
+    "why": "Beş üye de reddetti; erken çocukluk uzmanı öneri Minik'i de kapsadığı için veto etti. Adım adım çizim çizgi izleme ve şekil kopyalama ister; üyelerin aktardığı gelişim normlarına göre çocuk daireyi yaklaşık 3, artıyı 4, kareyi 4,5–5, üçgeni 5 yaşında kopyalar. Kurul aynı beceriyi isteyen harf ve rakam izlemeyi 3 Kasım'da “3 yaş için erken” gerekçesiyle veto etmişti; gerekçe plan/gece-raporu-2026-11-03.html bölüm 4'te kayıtlı. Çocuğun çizgisi kapalı bölge vermez; içerik hattı çizim sırası taşımaz; özellik 6 yaş üstünün “how to draw” kitlesine hitap eder, uygulamanın bandı ise “5 yaş ve altı”."
+   },
+   {
+    "id": "P6",
+    "title": "Tam Sürüm almayanlara reklam",
+    "outcome": "reddedildi",
+    "tally": "0/5 onay, 5 ret, 5 veto",
+    "vetoes": [
+     "Erken çocukluk gelişimi uzmanı: 5 yaş altı reklamı içerikten ayıramaz; reklam kazara çıkış (Ç9) ve boyamayı bölen ara ekran demektir.",
+     "Apple App Review ve HIG uzmanı: 1.3 cihaz bilgisinin üçüncü tarafa gitmesini yasaklıyor; Kids beklentisi kategori bırakılsa da sürüyor.",
+     "Ürün yöneticisi ve ASO/pazarlama: reklam ürün vaadini ve bütün mağaza varlığını yalanlar; gelir kaldıracı kapalı duran Tam Sürüm.",
+     "Kıdemli Flutter mühendisi: ağsız mimari ve “Data Not Collected” biter; satın almaya göre değişen çocuk ekranı; eski iPad'de bellek ve çökme riski.",
+     "Ebeveyn üye: “reklam yok” sözüyle indiren ebeveynin güveni bozulur; koşul yok."
+    ],
+    "conditions": [
+     "Vetoyu kaldıracak şart yok: beş üyeden hiçbiri şart yazmadı; ebeveyn üye reklamın, reklam SDK'sının ve ağ izninin hiçbir sürüme girmeyeceğini yazdı.",
+     "Reklam hiçbir biçimde yok: banner, geçiş reklamı, ödüllü reklam, reklam SDK'sı ve ağ izni; çocuk ekranında da kapı arkasında da; ücretsiz sürümde de Tam Sürüm'de de.",
+     "Çocuğun ekranı satın alma öncesi ve sonrası aynı kalır (.claude/skills/cobi-toddler-ux/SKILL.md:44-49): kilit, rozet, sayaç ve hatırlatma yok.",
+     "“Reklam yok”, “veri toplanmaz” ve “Data Not Collected” sözleri doğru kalır. Tam Sürüm de bunları bozmaz, çünkü ödemeyi Apple ve Google alır ve uygulama veri toplamaz."
+    ],
+    "design": "Reklam yok. Ücretsiz sürümdeki çocuk ekranı bugünkü gibi kalır. Gelir için reklamsız yollar: (1) kapı arkasındaki tek seferlik Tam Sürüm (COBI_IAP, lib/services/purchase_service.dart:22; FullVersionScreen, fiyat mağazadan okunur); (2) App Store ürün sayfasında Promoted IAP (uygulamanın dışında, ebeveynin gördüğü yerde; plan/gelir-ve-yayin-raporu.html bölüm 2.1); (3) FullVersionScreen'de değerin açık anlatımı: “201 sayfa, 3 seviye, Aile Paylaşımı ile 5 kişi”; (4) mağaza metninde ücretsiz sürümle Tam Sürüm farkının açık yazılması; (5) önceki kurulun geçirdiği Google Play yayını, yerelleştirme ve normal kategori olarak sezon temaları. Ürün yöneticisinin uyarısı sahibin kararını bekliyor: kilit açılınca 2.1.x kullanan çocuğun kategorilerindeki 201 sayfa 48'e iner (lib/providers/app_provider.dart:102-107). Kendi uygulamalarımızın tanıtımı oylanmadı: Apple uzmanı kapı arkasında SDK'sız statik bir satırı kabul edilebilir buluyor, Flutter mühendisi karşı.",
+    "effort": "L (yapılsaydı): ağ izni, reklam SDK'sı, kapı arkası tıklama, gizlilik manifesti ve etiketi, gizlilik politikası, COPPA ve GDPR uyumu, mağaza metni ve bütün ekran görüntülerinin yeniden üretimi.",
+    "why": "Beş üye de reddetti ve veto etti; üç veto ölçütü birlikte karşılanıyor. Apple kuralı: 1.3 ve 5.1.4 Kids Category'de üçüncü taraf reklamı kapatıyor. Dar istisna (belgeli, insan incelemeli bağlamsal reklam) bile bir reklam sunucusuna ağ isteği ister, 1.3 ise cihaz ve ağ bilgisinin üçüncü tarafa gitmesini yasaklıyor. Her durumda ağsız, “Data Not Collected” mimarisi biter; AdMob bu yüzden faz 0'da çıkarıldı. Kategoriden çıkmak çözüm değil: 1.3'e göre Kids beklentisi kategori bırakılsa da sonraki güncellemelerde sürer. Çocuk güvenliği: beş yaş altı çocuk reklamı içerikten ayıramaz (AAP 2020); kazara dokunuş uygulamadan çıkış demektir (Ç9); reklam kreatifi Ç1, Ç10 ve Reduce Motion kurallarının dışında kalır. Ebeveyn güveni: mağaza metni, anahtar kelimeler, ekran görüntüsü şeridi, gizlilik politikası ve App Review'a giden mektup reklamsızlık sözü veriyor. Yalnız satın almayana reklam göstermek “çocuk ekranı satın alma öncesi ve sonrası aynı” kuralını çiğner; kurul aynı gerekçeyle tematik paketleri veto etmişti. Gelir yolu kapı arkasındaki tek seferlik Tam Sürüm olarak kalır."
+   }
+  ],
+  "order": [
+   "1. P1-a (S): Seviye sayacını farklı sayfa sayar yap (lib/data/page_order.dart:22-28) ve kategori kartını updatedAt değeri en yeni olan kopyaya bağla (lib/screens/category_screen.dart:64-68). Bu adım yan bulguyu da kapatır: bugün her Çiz eseri ayrı bir 1. seviye sayfası sayılıyor, dört serbest çizim çocuğu 2. seviyeye taşıyor.",
+   "2. P1-b (S): Eserlerim'de kapı arkasındaki “Bu sayfayı baştan boya” satırı, katalog denetimi, parentsHint, testler ve Yenilikler metni. P1-a ile birlikte Flutter mühendisinin tahmini yarım gün.",
+   "3. P2 (M), sahibin asıl isteği: (a) saf Dart ölçüm modülü ve birim testleri; (b) _StrokeCommand'a isteğe bağlı dolgu ve geri alınan bölgede susma; (c) PaintCanvas'ta keçeli çizgi bitişine bağlantı, dalga, ses, titreşim ve _onFilled ile kutlama; (d) UserSettings alanı ve Ebeveynler alanındaki “Boyama” anahtarı; (e) en eski iPad'de ve düşük donanımlı bir Android cihazda ölçüm; (f) 3–5 çocukla %85 eşiğinin elle denenmesi.",
+   "4. P3 (M): Büyük'te Apple Pencil basıncı. Yeni bir fırça durumu yalnız somut aday ve ayrı kurul oyuyla sıraya girer.",
+   "Sürüm: P1 ve P2 2.1.1'den sonraki sürüme girer; 2.1.0 (App Review'da) ve 2.1.1'e (TestFlight'ta) hiçbiri girmez. Mağaza metni ve ekran görüntüsü alt yazıları yalnız yayından sonra değişir."
+  ],
+  "ads_requirements": [
+   "Karar reklamsızlık olduğu için bugün aşağıdakilerin hiçbiri değişmez; “Reklam yok” sözleri doğru kalır. Liste, reklam bir gün yeniden önerilirse neyin gerekeceğini ve neyin bozulacağını gösterir. Hukuki görüş değildir.",
+   "Apple 1.3: Kids Category uygulaması üçüncü taraf reklam içermemeli. Tek istisna bağlamsal reklamdır: reklam servisinin Kids Category için kamuya açık belgeli politikası olmalı ve servis reklam kreatiflerini yaşa uygunluk için insan eliyle incelemeli. Apple'ın Kids sayfası da reklam içeriğinin gösterilmeden önce insan tarafından incelenmesini şart koşuyor.",
+   "Apple 1.3: Kids uygulaması üçüncü tarafa kişisel bilgi ya da cihaz bilgisi gönderemez; cihazı ya da kullanıcıyı tanıtabilecek ağ bilgisi de buna girer. Apple'ın Kids sayfasına göre bu yasak yetişkin bölümünde de geçerli; tek istisna ebeveynin açık onayı. Her reklam isteği reklam sunucusuna ağ bilgisi taşır.",
+   "Apple 1.3 ve Ç9: uygulamadan çıkan her link ve satın alma fırsatı ebeveyn kapısının arkasında olmalı. Reklama dokunuş mağazaya ya da tarayıcıya çıktığı için her reklam tıklaması kapı ister.",
+   "Apple 1.3 ve 2.3.8: kategoriden çıkmak çözüm değil. Ebeveynler bir kez Kids kurallarını beklediyse uygulama kategori bırakılsa da sonraki güncellemelerde bu kurallara uyar. Kids dışındaki uygulama adında, altyazısında, ikonunda, ekran görüntülerinde ve açıklamasında çocuğu ana kitle gibi gösteremez; “Cobi Paint: Çocuk Boyama” adı ve “Küçük eller için boyama kitabı” altyazısı değişmek zorunda kalır.",
+   "Apple 5.1.4: çocuklara yönelik uygulama üçüncü taraf reklam ve analitik içermemeli; istisna yalnız 1.3'teki şartlarla. 5.1.4 çizimleri de kişisel veri örneği sayıyor; gizlilik politikası ve COPPA, GDPR gibi çocuk gizliliği yasalarına uyum zorunlu. Ebeveyn kapısı, veri toplama için yasal ebeveyn onayının yerine geçmez.",
+   "Apple 5.1.2: izleme için App Tracking Transparency izni gerekir; çocuk kitlede izleme ve IDFA kabul edilemez. Reklam ancak izlemesiz ve bağlamsal olabilir; ios/Runner/PrivacyInfo.xcprivacy:5-6'daki NSPrivacyTracking false kalır.",
+   "App Store gizlilik etiketi: “Data Not Collected” düşer. Reklam SDK'sının topladığı her veri türü (ör. cihaz kimliği, ürün etkileşimi, reklam verisi, tanılama) “Third-Party Advertising” amacıyla beyan edilir. Yaş anketindeki reklam yanıtı “Evet” olur (store_listing.md:138 bugün “Advertising: Hayır” diyor).",
+   "COPPA (ABD): çocuklara yönelik uygulama bütün kullanıcıları 13 yaş altı sayar. Kalıcı tanımlayıcılar (reklam kimliği, cihaz kimliği, IP) kişisel bilgidir. Davranışsal ya da kişiselleştirilmiş reklam doğrulanabilir ebeveyn onayı ister. Onaysız tek yol tanımlayıcının yalnız “iç işleyişi destek” için kullanılmasıdır; tanımda bağlamsal reklam ve reklam sıklığı sınırı var, profil çıkarma ve davranışsal reklam yok (16 CFR 312.2).",
+   "COPPA 2025 değişikliği (yürürlük 23 Haziran 2025, uyum tarihi 22 Nisan 2026, bugün geçerli): çocuğun kişisel bilgisini reklamcı gibi üçüncü taraflara açıklamak için ayrı ebeveyn onayı; yazılı veri saklama politikası; yazılı bilgi güvenliği programı. Gizlilik bildirimi tanımlayıcıların hangi iç işleyiş için toplandığını yazar; bu bildirim maddesini birincil kaynakta doğrulayamadım. SDK'nın topladığı veriden de uygulama sahibi sorumludur; reklam isteği çocuk işaretiyle (child-directed) yapılır.",
+   "GDPR ve ePrivacy (AB): cihazdaki tanımlayıcıya erişmek ePrivacy 5(3) gereği onay ister. Çocuğa doğrudan sunulan serviste onay, üye devlete göre 13–16 yaş altında ebeveynden alınır ve makul çabayla doğrulanır (m.8). Çocuğa pazarlama ve profil özel koruma ister (Gerekçe 38). Veri koruma etki değerlendirmesi (m.35) büyük olasılıkla gerekir; AB'de kuruluşu olmayan sorumlu AB temsilcisi atar (m.27); bilgilendirme çocuğun anlayacağı dilde olur (m.12, m.13).",
+   "UK ve Türkiye: veri işlenmeye başlanınca UK Children's Code uygulanır (profilleme varsayılan kapalı, yönlendirme tekniği yok, etki değerlendirmesi). KVKK'da aydınlatma, velinin açık rızası ve yurt dışına aktarım (m.9) kuralları devreye girer; bugünkü “veri işleme yok” durumu biter (plan/gelir-ve-yayin-raporu.html bölüm 3.3).",
+   "Google Play Families (Play yayını önceki kurulda geçti): reklam yalnız Families sertifikalı reklam SDK'sıyla gösterilir; çocuğa kişiselleştirilmiş ya da ilgi alanına dayalı reklam yok; açılışta geçiş reklamı, ekranı kaplayan bozucu reklam ve 5 saniyede kapanmayan reklam yok. Yalnız çocuklara yönelik uygulama Android reklam kimliğini (AAID) göndermez ve API 33+ hedefinde AD_ID izni istemez. Data safety ve “Reklam içerir” beyanı değişir; aşırı agresif ticari taktik kaldırma nedenidir.",
+   "Yaş doğrulama yasaları (Texas SB 2420 ve benzerleri; yürürlük durumu tartışmalı, doğrulamadım): reklam ya da para kazanma değişikliği “significant change” sayılabilir ve ebeveyn onayını yeniden isteyebilir (Apple Significant Change API).",
+   "Uygulama, Android: release manifestine INTERNET izni eklenir. android/app/src/main/AndroidManifest.xml bugün hiç izin istemiyor; INTERNET yalnız debug ve profile manifestlerinde var.",
+   "Uygulama, iOS: ios/Runner/PrivacyInfo.xcprivacy:9-10'daki boş NSPrivacyCollectedDataTypes listesi doldurulur; SDK kendi imzalı gizlilik manifestini getirir; SDK'nın istediği Info.plist girdileri eklenir.",
+   "Uygulama içi gizlilik metni yeniden yazılır: lib/l10n/app_tr.arb:224 (“Hesap, reklam, analiz aracı ve internet bağlantısı yoktur”) ve lib/l10n/app_en.arb:92 (“There are no accounts, ads, analytics or internet connections”). Metin Ebeveynler alanındaki PrivacyScreen'de görünüyor.",
+   "Ürün kuralı değişir: .claude/skills/cobi-toddler-ux/SKILL.md:42 (Kids Category'de reklam yok) ve 44-49 (çocuk ekranı satın alma öncesi ve sonrası aynı). Yalnız satın almayana reklam bu kuralı çiğner; kurul aynı gerekçeyle tematik paketleri veto etmişti. docs/ altına reklam ağının istediği app-ads.txt geri gelir (faz 0'da kaldırıldı).",
+   "Gizlilik politikası (docs/privacy_policy.html): Özet (satır 32; TR 87), “2. Topladığımız bilgiler: Hiçbiri” (39; TR 94), “6. Çocukların gizliliği (COPPA, GDPR, KVKK)” (65; TR 118) ve tarih (29; TR 84) yeniden yazılır. Politika sürümden önce yayınlanır.",
+   "Mağaza metni: tanıtım metnindeki “Reklam yok, internet yok, hesap yok” / “No ads, no internet, no accounts” (store_listing.md:16-17), açıklamadaki satırlar (65, 101) ve anahtar kelimeler “reklamsız” (113) ile “no ads” (116, 119) kaldırılır (2.3.1: doğru olmayan metadata).",
+   "Ekran görüntüleri: alt şerit “Reklam yok · İnternet yok · Hesap yok” (tool/store/caption_screenshots.py:38-41) kaldırılır; App Store Connect'teki bütün iPhone (TR 5, EN 4) ve iPad kareleri yeniden üretilip yüklenir.",
+   "Önceki beyanlar geçersiz kalır: App Review'a giden yaş bandı mektubu uygulamada reklam, üçüncü taraf analitik, hesap ve ağ erişimi olmadığını söylüyor (plan/pazarlama-incelemesi-2026-11-03.html bölüm 4.5); 2.1.0 yenilikleri “Reklamlar kaldırıldı” diyor; konum cümlesi “… reklam yok” ile bitiyor."
+  ],
+  "open_questions_for_owner": [
+   "P1 çocuk yolu: Çocuğun bitmiş bir sayfada kendi başına “yeni kâğıt” açabilmesini istiyor musunuz? Kurul bölündü: iki üye metinsiz seçim ekranı, bir üye doğrudan yeni kopya, iki üye yalnız ebeveyn yolu istedi. Bugünkü kararla yeni kopyayı yalnız ebeveyn açar; çocuk bitmiş sayfayı kategoriden açıp boyarsa eski hâlin üstüne yazar. İsterseniz seçim ekranı P2'den ve çocuk gözleminden sonra ayrı oylanır.",
+   "Çocuk gözlemi: 3–5 yaşında 3–5 çocukla 10–15 dakikalık bir gözlem oturumu ayarlayabilir misiniz? P2'nin %85 eşiği, P1 çocuk yolu ve P3'te hangi Büyük fırçasının çıkacağı buna bağlı; uygulamada analitik olmadığı için başka veri kaynağı yok.",
+   "P2 ayarı: Ebeveynler alanında iki modda geçerli, varsayılan açık tek anahtar ve sabit %85 eşik sizin için yeterli mi? “%80–90” aralığınız için ebeveyne eşik sürgüsü verilmedi (HIG: ayar sayısını az tut).",
+   "Sürüm: P1 ve P2 hangi sürümle çıksın (2.1.2 mi, 2.2.0 mı) ve ikisi aynı sürümde mi gitsin?",
+   "P3: “Farklı kalem özellikleri” derken hangi kalemi kastediyorsunuz (adı, görünüşü, Büyük'te hangi durumun yerine geçeceği)? Büyük'teki Apple Pencil basıncı isteğinizi karşılıyor mu? Somut aday olmadan yeni fırça oylanmaz.",
+   "P4: “Yalnız parmağın ulaşamadığı küçük ayrıntılar hazır gelir” biçimiyle yeniden oylama istiyor musunuz? İsterseniz renk (yalnız siyah “mürekkep” ayrıntı mı, kaynak renk mi) ve kapsam (yalnız Minik mi) tercihinizi yazın.",
+   "P5: Büyük için en çok 6 elle hazırlanmış adım adım sayfaya içerik zamanı ya da illüstratör bütçesi ayırır mısınız, yoksa konu kapansın mı?",
+   "Gelir: Reklam beş vetoyla reddedildi. Tam Sürüm kilidini (COBI_IAP) ne zaman açmayı planlıyorsunuz? Önkoşullar sizde: com.cobi.paint.full ürünü, Paid Apps sözleşmesi ve vergi formları, DSA trader beyanı (posta kutusu ve ayrı telefon), GVK 20/B istisna belgesi.",
+   "Eski kullanıcılar: Kilit açılınca 2.1.x kullanan çocuğun kategorilerindeki 201 sayfa 48'e iner; getImagesForCategory eski kullanıcıyı ayırmıyor (lib/providers/app_provider.dart:102-107). Eski kurulumlar bütün sayfaları korusun mu (iOS'ta StoreKit AppTransaction'daki ilk indirme sürümüyle)? Bu kararın gelire etkisi var.",
+   "Çapraz tanıtım: Ebeveynler alanında, kapının arkasında, SDK'sız ve ağsız statik bir “Diğer uygulamalarımız” satırı (ör. PairQuest) istiyor musunuz? Kurul bunu oylamadı; Apple uzmanı bu biçimi kabul edilebilir buluyor, Flutter mühendisi karşı."
+  ]
+ }
+}

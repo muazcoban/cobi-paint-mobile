@@ -23,23 +23,36 @@ void main() {
   final byId = {for (final p in pages) p.id: p};
 
   group('currentLevel', () {
+    // Enough pages per level to count different ones.
+    final levelPages = [
+      for (var i = 0; i < pagesPerLevel; i++) _page('one$i', 1),
+      for (var i = 0; i < pagesPerLevel; i++) _page('two$i', 2),
+      _page('three', 3),
+    ];
+    final levelById = {for (final p in levelPages) p.id: p};
+
     test('a new child starts at level 1', () {
       expect(currentLevel(UserSettings(), const [], byId), 1);
     });
 
-    test('moves up after enough pages of the current level were coloured', () {
-      final four = List.generate(pagesPerLevel, (i) => _artwork(i.isEven ? 'a' : 'd'));
-      expect(currentLevel(UserSettings(), four.take(pagesPerLevel - 1), byId), 1);
-      expect(currentLevel(UserSettings(), four, byId), 2);
+    test('moves up after enough different pages of the current level were coloured', () {
+      final four = List.generate(pagesPerLevel, (i) => _artwork('one$i'));
+      expect(currentLevel(UserSettings(), four.take(pagesPerLevel - 1), levelById), 1);
+      expect(currentLevel(UserSettings(), four, levelById), 2);
+    });
+
+    test('copies of one page count once', () {
+      final copies = List.generate(pagesPerLevel, (_) => _artwork('one0'));
+      expect(currentLevel(UserSettings(), copies, levelById), 1, reason: 'the same page four times is practice');
     });
 
     test('Minik mode stops at level 2, Büyük mode goes on to 3', () {
       final many = [
-        ...List.generate(pagesPerLevel, (_) => _artwork('a')),
-        ...List.generate(pagesPerLevel, (_) => _artwork('b')),
+        ...List.generate(pagesPerLevel, (i) => _artwork('one$i')),
+        ...List.generate(pagesPerLevel, (i) => _artwork('two$i')),
       ];
-      expect(currentLevel(UserSettings(), many, byId), littleModeMaxLevel);
-      expect(currentLevel(UserSettings(ageMode: AgeMode.big), many, byId), 3);
+      expect(currentLevel(UserSettings(), many, levelById), littleModeMaxLevel);
+      expect(currentLevel(UserSettings(ageMode: AgeMode.big), many, levelById), 3);
     });
 
     test('a level pinned by a parent wins', () {

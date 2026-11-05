@@ -39,6 +39,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get things => 'Things';
 
   @override
+  String get space => 'Space';
+
+  @override
+  String get music => 'Music';
+
+  @override
+  String get clothes => 'Clothes';
+
+  @override
   String get pageLevel => 'Page difficulty';
 
   @override
@@ -64,8 +73,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get fullVersionShort => 'Unlock all pages';
 
   @override
-  String get fullVersionDesc =>
-      'The free version has 8 pages in each category. The Full Version opens all 201 pages forever with one payment. There is no subscription. Your child\'s pictures stay in My Artworks either way.';
+  String fullVersionDesc(int count) {
+    return 'The free version has 8 pages in each category. The Full Version opens all $count pages forever with one payment. There is no subscription. Your child\'s pictures stay in My Artworks either way.';
+  }
 
   @override
   String get buy => 'Buy';
@@ -229,6 +239,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get delete => 'Delete';
 
   @override
+  String get paintAgain => 'Colour this page again';
+
+  @override
+  String get paintAgainHint => 'The old picture stays here';
+
+  @override
   String get deleteConfirmTitle => 'Delete Artwork';
 
   @override
@@ -258,7 +274,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get parentsHint =>
-      'Settings live here. To share, print or delete a picture, press and hold it in My Artworks.';
+      'Settings live here. To share, print, colour again or delete a picture, press and hold it in My Artworks.';
 
   @override
   String get ageMode => 'Mode';
@@ -275,6 +291,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get ageModeBigDesc => '16 colours, pinch to zoom, brush sizes, redo.';
+
+  @override
+  String get coloringSection => 'Colouring';
+
+  @override
+  String get autoComplete => 'Fill small gaps when colouring with the brush';
+
+  @override
+  String get autoCompleteDesc =>
+      'When nearly all of an area is coloured with the marker in one colour, the small white corners left fill with that colour. Turn it off for fine motor practice.';
 
   @override
   String get soundVolume => 'Volume';

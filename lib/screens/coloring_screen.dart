@@ -127,6 +127,9 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
   /// The age mode the last build saw; Büyük hands undo to the system.
   bool _big = false;
 
+  /// The Parents setting that finishes almost coloured regions.
+  bool _autoComplete = true;
+
   @override
   void initState() {
     super.initState();
@@ -468,6 +471,8 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
   Widget build(BuildContext context) {
     final mode = context.select<AppProvider, AgeMode>((p) => p.settings.ageMode);
     final big = mode == AgeMode.big;
+    // Read here, not in the layout builders below (select is build-only).
+    _autoComplete = context.select<AppProvider, bool>((p) => p.settings.autoComplete);
     if (big != _big) {
       // The mode changes in the Parents area; on a tablet this page can be
       // open behind it. Only channel calls, no state, so it is fine here.
@@ -487,7 +492,7 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
         child: Focus(
           autofocus: true,
           child: Scaffold(
-            backgroundColor: const Color(0xFFFFF4E6),
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
             body: SafeArea(
               child: LayoutBuilder(
                 builder: (context, constraints) {
@@ -686,6 +691,8 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
                       stickers: _stickerCodes,
                       stickerIndex: _stickerIndex,
                       stickerSize: side * (big ? _stickerSteps[_brushStep] : _stickerSteps[1]),
+                      autoComplete: !widget.image.freeDraw && _autoComplete,
+                      penPressure: big,
                       onFilled: _onFilled,
                       onStamped: _onStamped,
                     ),

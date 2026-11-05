@@ -32,7 +32,7 @@ class HomeScreen extends StatelessWidget {
     return PopScope(
       canPop: false,
       child: Scaffold(
-        backgroundColor: const Color(0xFFFFF4E6),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         body: SafeArea(
           child: Consumer<AppProvider>(
             builder: (context, provider, _) {
@@ -130,6 +130,7 @@ class _GalleryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final storage = context.read<AppProvider>().storageService;
+    final palette = AppTheme.current;
     final thumb = latest == null
         ? null
         : storage.resolveArtworkFile(latest!.thumbnailPath.isNotEmpty ? latest!.thumbnailPath : latest!.savedImagePath);
@@ -143,7 +144,9 @@ class _GalleryCard extends StatelessWidget {
       child: Container(
         height: 120,
         decoration: BoxDecoration(
-          gradient: const LinearGradient(colors: [Color(0xFFFFD54F), Color(0xFFFF8A65)]),
+          // The one card that takes the parents' theme; the tool buttons keep
+          // their fixed colours because a three-year-old learns them.
+          gradient: LinearGradient(colors: palette.cardGradient),
           borderRadius: BorderRadius.circular(24),
           boxShadow: [
             BoxShadow(color: Colors.black.withValues(alpha: 0.1), blurRadius: 10, offset: const Offset(0, 4)),
@@ -159,7 +162,7 @@ class _GalleryCard extends StatelessWidget {
               clipBehavior: Clip.antiAlias,
               child: thumb != null && thumb.existsSync()
                   ? Image.file(thumb, fit: BoxFit.cover)
-                  : const Icon(Icons.collections_rounded, size: 56, color: Color(0xFFFF8A65)),
+                  : Icon(Icons.collections_rounded, size: 56, color: palette.primary),
             ),
             const SizedBox(width: 16),
             Expanded(
@@ -305,6 +308,12 @@ String categoryName(AppLocalizations l10n, Category category) {
       return l10n.food;
     case 'things':
       return l10n.things;
+    case 'space':
+      return l10n.space;
+    case 'music':
+      return l10n.music;
+    case 'clothes':
+      return l10n.clothes;
     case 'import':
       return l10n.importedPages;
     default:

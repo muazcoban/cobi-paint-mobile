@@ -12,6 +12,10 @@ class AppThemeData {
   final Color secondaryDark;
   final Color background;
 
+  /// The My Artworks card on the home screen: light enough for dark text at
+  /// 4.5:1 on both ends.
+  final List<Color> cardGradient;
+
   const AppThemeData({
     required this.name,
     required this.icon,
@@ -22,6 +26,7 @@ class AppThemeData {
     required this.secondaryLight,
     required this.secondaryDark,
     required this.background,
+    required this.cardGradient,
   });
 }
 
@@ -46,7 +51,10 @@ class AppTheme {
       secondary: Color(0xFF4ECDC4),
       secondaryLight: Color(0xFF7EE8E2),
       secondaryDark: Color(0xFF36B5AD),
-      background: Color(0xFFFFF8F5),
+      // The page colour every child screen was tuned on; the other themes
+      // tint it, this one keeps it.
+      background: Color(0xFFFFF4E6),
+      cardGradient: [Color(0xFFFFD54F), Color(0xFFFF8A65)],
     ),
     'ocean': AppThemeData(
       name: 'Okyanus',
@@ -58,6 +66,7 @@ class AppTheme {
       secondaryLight: Color(0xFFFFCF8B),
       secondaryDark: Color(0xFFE59A2F),
       background: Color(0xFFF0F8FF),
+      cardGradient: [Color(0xFF8BC4EA), Color(0xFFFFCF8B)],
     ),
     'forest': AppThemeData(
       name: 'Orman',
@@ -69,6 +78,7 @@ class AppTheme {
       secondaryLight: Color(0xFFFFE082),
       secondaryDark: Color(0xFFFFA000),
       background: Color(0xFFF5FFF5),
+      cardGradient: [Color(0xFF98D99C), Color(0xFFFFE082)],
     ),
     'sunset': AppThemeData(
       name: 'Gün Batımı',
@@ -80,6 +90,7 @@ class AppTheme {
       secondaryLight: Color(0xFFCE93D8),
       secondaryDark: Color(0xFF8E24AA),
       background: Color(0xFFFFF3E0),
+      cardGradient: [Color(0xFFFF9E80), Color(0xFFCE93D8)],
     ),
   };
 

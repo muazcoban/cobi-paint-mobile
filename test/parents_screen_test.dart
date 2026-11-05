@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:cobi_paint_mobile/l10n/app_localizations.dart';
 import 'package:cobi_paint_mobile/providers/app_provider.dart';
 import 'package:cobi_paint_mobile/providers/locale_provider.dart';
 import 'package:cobi_paint_mobile/screens/parents_screen.dart';
+import 'package:cobi_paint_mobile/services/storage_service.dart';
 import 'package:cobi_paint_mobile/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -75,6 +78,42 @@ void main() {
     expect(text, contains('cobipaint@gmail.com'));
     expect(text, isNot(contains('Full Version')), reason: 'COBI_IAP is off in tests');
     expect(text, isNot(contains('purchase')));
+  });
+
+  testWidgets('the auto-complete switch is on by default and turns off', (tester) async {
+    final dir = Directory.systemTemp.createTempSync('cobi_parents_test');
+    addTearDown(() => dir.deleteSync(recursive: true));
+    final app = AppProvider(
+      storage: StorageService(documentsDirectory: () async => Directory('${dir.path}/docs')..createSync()),
+      cacheDirectory: () async => Directory('${dir.path}/cache')..createSync(),
+    );
+    await tester.runAsync(app.init);
+    await tester.pumpWidget(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider.value(value: app),
+          ChangeNotifierProvider(create: (_) => LocaleProvider()),
+        ],
+        child: MaterialApp(
+          theme: AppTheme.lightTheme,
+          locale: const Locale('en'),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: const ParentsScreen(),
+        ),
+      ),
+    );
+    await tester.pump();
+    final title = find.text('Fill small gaps when colouring with the brush');
+    await tester.scrollUntilVisible(title, 200, scrollable: find.byType(Scrollable).first);
+    await tester.pumpAndSettle();
+    final tile = find.ancestor(of: title, matching: find.byType(SwitchListTile));
+    expect(tester.widget<SwitchListTile>(tile).value, isTrue);
+    await tester.tap(tile);
+    await tester.runAsync(() => Future<void>.delayed(const Duration(milliseconds: 100)));
+    await tester.pumpAndSettle();
+    expect(app.settings.autoComplete, isFalse);
+    expect(tester.widget<SwitchListTile>(tile).value, isFalse);
   });
 
   testWidgets('theme names follow the app language', (tester) async {

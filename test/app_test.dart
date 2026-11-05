@@ -98,7 +98,8 @@ void main() {
     await tester.pumpAndSettle();
     final saved = app.savedArtworks.single;
     expect(app.storageService.resolveArtworkFile(saved.thumbnailPath).existsSync(), isTrue);
-    expect(find.bySemanticsLabel(saved.name), findsOneWidget, reason: 'the framed picture is on the wall');
+    expect(saved.name, 'Çizim', reason: 'the saved name stays Turkish');
+    expect(find.bySemanticsLabel('Drawing'), findsOneWidget, reason: 'the framed picture is on the wall, read in English');
   });
 
   testWidgets('a category lists its pages and opens one', (tester) async {
@@ -125,6 +126,37 @@ void main() {
     expect(find.byType(PaintCanvas), findsOneWidget);
     expect(find.bySemanticsLabel('Fill'), findsOneWidget, reason: 'a coloring page keeps the fill');
     expect(find.bySemanticsLabel('Mirror off'), findsNothing, reason: 'the mirror is only on the blank page');
+  });
+
+  testWidgets('on a 375 pt phone the new categories are a scroll away, keep the card size and open their pages',
+      (tester) async {
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    tester.view.devicePixelRatio = 2.0;
+    tester.view.physicalSize = const Size(750, 1624); // 375 x 812 pt
+
+    final app = provider();
+    await openHome(tester, app);
+    Finder card(String name) => find.ancestor(of: find.text(name), matching: find.byType(PressableCard));
+    final size = tester.getSize(card('Animals'));
+    // Two columns: (375 - 2 x 16 padding - 16 spacing) / 2 wide; the grid is the same for every card.
+    expect(size.width, closeTo(163.5, 0.01));
+
+    for (final (name, id) in [('Space', 'space'), ('Music', 'music'), ('Clothes', 'clothes')]) {
+      await tester.scrollUntilVisible(find.text(name), 120, scrollable: find.byType(Scrollable).first);
+      await tester.pumpAndSettle();
+      expect(tester.getSize(card(name)), size, reason: '$name has the same tap target as the first card');
+
+      await tester.tap(find.text(name));
+      await tester.pumpAndSettle();
+      expect(find.descendant(of: find.byType(CategoryScreen), matching: find.text(name)), findsOneWidget);
+      expect(app.getImagesForCategory(id).length, greaterThanOrEqualTo(12), reason: name);
+      expect(find.byType(PressableCard).hitTestable(), findsWidgets, reason: '$name shows its pages');
+
+      await tester.tap(find.bySemanticsLabel('Home'));
+      await tester.pumpAndSettle();
+      expect(find.byType(CategoryScreen), findsNothing);
+    }
   });
 
   testWidgets('the brush button cycles to stickers and a tap on the page sticks one', (tester) async {
@@ -228,7 +260,7 @@ void main() {
 
     // A long press asks the multiplication; the answer is read off the screen.
     Future<void> passGate() async {
-      await tester.longPress(find.bySemanticsLabel(saved.name));
+      await tester.longPress(find.bySemanticsLabel(app.pagesById[saved.originalImageId]!.localizedName('en')));
       await tester.pumpAndSettle();
       final task = tester.widget<Text>(find.byKey(const ValueKey('gate-task'))).data!;
       final parts = task.split(' × ');

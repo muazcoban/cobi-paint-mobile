@@ -112,6 +112,16 @@ ul.tight li, ol.tight li { margin: 3px 0; }
     <li><a href="#acik">Açık kalan işler</a></li>
     <li><a href="#ortam">Ortam notları</a></li>
     <li><a href="#sabah">Sabah: PR'lar, Faz 2 ve testler</a></li>
+    <li><a href="#ayna">Faz 3: ayna çizimi</a></li>
+    <li><a href="#cikartma">Faz 4: çıkartmalar</a></li>
+    <li><a href="#firca">Faz 5: ek fırçalar</a></li>
+    <li><a href="#android-aktarim">Faz 6: Android'de galeriye kayıt ve yazdırma</a></li>
+    <li><a href="#ipad-geri-al">Faz 7: iPad'de sistem geri al ve klavye kısayolları</a></li>
+    <li><a href="#yayin">Yayın hazırlığı: sürüm 2.1.0, App Store Connect, iki ajan</a></li>
+    <li><a href="#inceleme-duzeltmeleri">Faz 8: 2.1.1 inceleme düzeltmeleri</a></li>
+    <li><a href="#vitrin">Faz 9: vitrin dönüşümü ve tema düzeltmesi</a></li>
+    <li><a href="#kurul-5-kasim">Faz 10: 5 Kasım kurulu, baştan boya ve otomatik tamamlama</a></li>
+    <li><a href="#kalem-ve-icerik">Faz 11: Apple Pencil basıncı ve yeni içerik</a></li>
   </ol>
 </nav>
 
@@ -447,7 +457,82 @@ ul.tight li, ol.tight li { margin: 3px 0; }
 <tr><td>K-06 UIScene yaşam döngüsü</td><td>Apple iOS 27 SDK ile derlenen uygulamalarda şart koşuyor; Flutter 3.38'den beri destekli. Elle geçiş: <code>AppDelegate</code> artık <code>FlutterImplicitEngineDelegate</code>, eklenti kaydı <code>didInitializeImplicitFlutterEngine</code> içinde; <code>Info.plist</code>'e <code>UIApplicationSceneManifest</code> (FlutterSceneDelegate, storyboard Main). <code>KidFlutterViewController</code> ve kenar jesti kanalı storyboard üzerinden aynen kalıyor; sallayınca geri al kapalı kalıyor.</td><td><code>ios/Runner/AppDelegate.swift</code>, <code>ios/Runner/Info.plist</code></td></tr>
 <tr><td>K-14 CI iOS derlemesi</td><td>GitHub Actions'a <code>ios-build</code> işi: macos-15 runner'ında en yeni Xcode 26 seçilir, <code>flutter build ios --release --no-codesign</code>. Build 1'deki dağıtım hedefi hatası türü artık PR'da yakalanır. Depo herkese açık, dakika ücretsiz.</td><td><code>.github/workflows/ci.yml</code></td></tr>
 </tbody></table></div>
-<p>Doğrulama: <code>flutter analyze</code> temiz, 145 test geçiyor (yeni: 3 ebeveyn alanı testi, 4 erişilebilirlik ve boyut testi, 1 mağaza hatası testi). UIScene derlemesi CobiPaint iPhone simülatöründe (iOS 18) denendi: açılış, ana ekran, Çiz sayfası, yatay döndürme ve geri dönüş; sistem günlüğünde eklenti ya da sahne hatası yok, süreç ayakta kaldı. Gerçek cihazda denenmedi; 2.1.1 TestFlight'a çıkınca iPhone 12'de açılış ve kapı kontrol edilmeli. Açık kalan P2'ler: K-11 ve K-12 (işlem yok), K-13 (ikon iOS 26 görünümü; Xcode 26 simülatörü yok), M-03/M-04/H-02 (IAP ile birlikte), H-08 (erişilebilirlik etiketleri; gerçek cihazda VoiceOver turu sonrası).</p>
+<p>Doğrulama: <code>flutter analyze</code> temiz, 145 test geçiyor (yeni: 3 ebeveyn alanı testi, 4 erişilebilirlik ve boyut testi, 1 mağaza hatası testi). UIScene derlemesi CobiPaint iPhone simülatöründe (iOS 18) denendi: açılış, ana ekran, Çiz sayfası, yatay döndürme ve geri dönüş; sistem günlüğünde eklenti ya da sahne hatası yok, süreç ayakta kaldı. Gerçek cihazda denenmedi. 4 Kasım 15:00: PR #9 merge edildi (CI'da ios-build işi 4,7 dakikada geçti), <code>v2.1.1</code> etiketiyle Xcode Cloud Build 8 başarılı; 2.1.1 (8) TestFlight'ta "Ready to Submit", Tester grubunda. Kullanıcı iPhone 12'de (iOS 26.1) denedi: açılış, kapı ve paylaşım sorunsuz, UIScene geçişi cihazda doğrulandı; 2.1.0 onaylanıp yayına çıkınca 2.1.1 ASC'de ayrı sürüm olarak gönderilir. Açık kalan P2'ler: K-11 ve K-12 (işlem yok), K-13 (ikon iOS 26 görünümü; Xcode 26 simülatörü yok), M-03/M-04/H-02 (IAP ile birlikte), H-08 (erişilebilirlik etiketleri; gerçek cihazda VoiceOver turu sonrası).</p>
+
+<h2 id="vitrin">19. Faz 9: vitrin dönüşümü ve tema düzeltmesi</h2>
+<p>5 Kasım. Kullanıcının App Store Connect verisi (son 90 gün): Cobi Paint 982 gösterim, ürün sayfası geçişi yaklaşık %1,7; PairQuest 471 gösterim, %1,3; indirme ve oturum "Not Enough Data". Darboğaz arama sonucundan ürün sayfasına geçiş; orada görünen üç şey ikon, ad ve ilk üç ekran görüntüsü. Ad, altyazı ve anahtar kelimeler 2.1.0 ile değişti (incelemede); bu fazda ekran görüntüleri ele alındı. İkinci konu kullanıcının cihaz denemesinden: Ebeveynler alanındaki tema seçimi yalnız ayarlar ekranını boyuyordu.</p>
+<div class="table-wrap"><table>
+<thead><tr><th>İş</th><th>Yapılan</th><th>Dosya</th></tr></thead>
+<tbody>
+<tr><td>Tema bütün uygulamaya</td><td>Ana ekran, kategori, boyama, Eserlerim ve açılış ekranları artık temanın sayfa rengini alıyor (<code>Theme.of(context).scaffoldBackgroundColor</code>); ana ekrandaki Eserlerim kartı temanın açık renk çiftini kullanıyor. Araç düğmeleri ve palet bilerek sabit: üç yaşındaki çocuk renkleri işaret olarak öğreniyor. <code>AppProvider.updateSettings</code> temayı kendisi uyguluyor, açılışta kayıtlı tema yükleniyor. Test: tema seçimi ana ekranı ve boyama ekranını boyuyor, yeniden açılışta korunuyor.</td><td><code>lib/screens/*.dart</code>, <code>lib/providers/app_provider.dart</code>, <code>test/theme_test.dart</code></td></tr>
+<tr><td>Başlıklı ekran görüntüleri</td><td><code>tool/store/caption_screenshots.py</code>: ham karelere üstte başlık bandı (%14, Avenir Next Bold, 0xFF2D3142 krem üstünde), altta "Reklam yok · İnternet yok · Hesap yok" şeridi, kare yuvarlatılmış köşe ve gölgeyle ortada; boyutlar değişmez. Sıra pazarlama raporuna göre: dolgu, çizgi, serbest çizim, ana ekran, Eserlerim, kapı. Üretilen: iPhone TR 5 kare, iPhone EN 4 kare (<code>build/store_screenshots/*_captioned/</code>). iPhone "kapı" karesi aslında ana ekrandı, kenara alındı. iPad ham kareleri başlıklarla uyuşmuyor (dolgu yerine ipucu, serbest çizim yerine filiz sayfası, kapı yerine ana ekran): iPad seti yeniden çekilmeli.</td><td><code>tool/store/caption_screenshots.py</code></td></tr>
+</tbody></table></div>
+<p>Kullanım: 2.1.1 App Store Connect'te açıldığında iPhone 6,1" TR ve EN setleri bu başlıklı karelerle değiştirilir; 2.1.0'ın karelerine inceleme sırasında dokunulmaz. iPad seti aynı gün yeniden çekildi: yeni "CobiPaint iPad" simülatörü (iPad Pro 13" M4, iOS 18.5, Türkçe, durum çubuğu 9:41), yedi kare: dolgu (salyangoz, üç alan), çizgi (mavi karalama halkada kalıyor), kutlama (ekran kaydından konfeti karesi), serbest çizim (dört yönlü ayna, gökkuşağı, simli, çıkartma), ana ekran, Eserlerim (sekiz resim), ebeveyn kapısı; <code>build/store_screenshots/ipad13_tr_v2_captioned/</code>. Çekim sırasında iki düzeltme: varsayılan Mercan temasının sayfa rengi eski krem (0xFFFFF4E6) oldu ve her temaya kendi Eserlerim kartı renkleri verildi (Mercan eski sarı-turuncuyu korur; koyu yazı en düşük 5,4:1). Kalan: iPhone setinde kutlama karesi ve 9:41 durum çubuğu; iPhone setleri de yeni simülatörden yeniden çekilebilir. Gözlem: iPad 13" ana ekranında kartların altı boş kalıyor (yedi kart iki sıra); büyük ekranda kartları büyütmek ayrı bir iyileştirme. İkon için Product Page Optimization testi ikon varyantlarının ikiliye eklenmesini ister (2.1.2 adayı). Testler: 146 geçiyor, analiz temiz.</p>
+
+<h2 id="kurul-5-kasim">20. Faz 10: 5 Kasım kurulu, baştan boya ve otomatik tamamlama</h2>
+<p>Kullanıcının 5 Kasım akşamı önerdiği işler beş üyeli kurula gitti (erken çocukluk uzmanı, App Review ve HIG uzmanı, ürün ve ASO, Flutter mühendisi, ebeveyn; kural 4/5 ve veto). Oylar ve birleştirilmiş tasarımlar <code>plan/kurul-2026-11-05.json</code> dosyasında. Kategori ve içerik artırma kurula gitmedi; mevcut üretim hattının genişlemesi olarak ayrı bir worktree'de yürüyor.</p>
+<div class="table-wrap"><table>
+<thead><tr><th>No</th><th>Öneri</th><th>Sonuç</th><th>Oy</th></tr></thead>
+<tbody>
+<tr><td>P1</td><td>Baştan başla: aynı sayfayı yeniden boyamak</td><td>şartlı geçti</td><td>5/5 şartlı onay, 0 ret, veto yok</td></tr>
+<tr><td>P2</td><td>Fırçayla boyamada otomatik tamamlama</td><td>şartlı geçti</td><td>5/5 şartlı onay, 0 ret, veto yok</td></tr>
+<tr><td>P3</td><td>Yeni kalem özellikleri</td><td>şartlı geçti</td><td>4/5 şartlı onay, 1 ret (ebeveyn üye, vetosuz), veto yok</td></tr>
+<tr><td>P4</td><td>Kısmen boyalı sayfalar</td><td>reddedildi</td><td>3/5 şartlı onay (Apple, Flutter, ebeveyn üye), 2 ret (erken çocukluk, ürün yöneticisi), veto yok; 4/5 eşiğinin altında</td></tr>
+<tr><td>P5</td><td>Adım adım çizim modu</td><td>reddedildi</td><td>0/5 onay, 5 ret, 1 veto (erken çocukluk uzmanı)</td></tr>
+<tr><td>P6</td><td>Tam Sürüm almayanlara reklam</td><td>reddedildi</td><td>0/5 onay, 5 ret, 5 veto</td></tr>
+</tbody></table></div>
+<p><strong>Yapılanlar</strong> (branch <code>faz10/bastan-boya-ve-tamamlama</code>, <code>faz9</code> üstüne):</p>
+<ul>
+<li><strong>Baştan boya (P1).</strong> Eserlerim'de uzun basma ve kapıdan sonra "Bu sayfayı baştan boya / Eski resim burada kalır": sayfa boş açılır, ilk dokunuşta yeni kopya kaydedilir, dokunmadan çıkılırsa kopya oluşmaz, hiçbir şey silinmez. Çocuğun ekranına düğme eklenmedi. Kategori kartı artık en son boyanan kopyayı açıyor; otomatik seviye farklı sayfaları sayıyor (yan bulgu: dört Çiz eseri çocuğu 2. seviyeye taşıyordu). Uçtan uca test: <code>test/paint_again_test.dart</code>.</li>
+<li><strong>Otomatik tamamlama (P2).</strong> Keçeli kalemle bir alanın ölçülebilir kısmının en az %85'i tek renkle boyanınca ve parmak boyu boşluk kalmayınca kalan köşeler o renkle dolar; dokunarak doldurmanın dalgası, sesi ve titreşimiyle gelir, kutlamaya sayılır. Çizgiyle tek geri al adımı; geri alınan bölge sayfa açık kaldıkça bir daha dolmaz. Ebeveynler alanında "Boyama" bölümü, tek anahtar, varsayılan açık. Ölçüm bu Mac'te 313.600 piksellik bölge ve 100 çizgi için ortalama 2,85 ms; kurulun bütçesi en eski iPad'de 4 ms, cihazda ölçülmedi.</li>
+<li><strong>Test sayısı:</strong> 163, analiz temiz.</li>
+<li><strong>Simülatörde denendi</strong> (CobiPaint iPhone, debug derleme, balina sayfası). Keçeliyle karnın üstünde zikzak çizdim: parmak kalkınca bölge çizgilere kadar doldu; kalemin hiç ulaşmadığı sağ alt uç da doldu. Tek geri al çizgiyi ve dolguyu birlikte kaldırdı. Aynı zikzağı yeniden çizince bölge bir daha dolmadı, köşeler beyaz kaldı. Eserlerim'de uzun basma ve kapıdan sonra yeni satır göründü; sayfa boş açıldı, ilk dolguda yeni kopya kaydedildi, eski kopya yerinde kaldı ve Hayvanlar kartı yeni kopyayı gösterdi. Cihazda (en eski iPad, düşük donanımlı Android) süre ölçümü hâlâ açık.</li>
+</ul>
+<div class="grid g2">
+  <figure><img src="img/faz10-tamamlama.jpg" alt="Otomatik tamamlama ve geri aldıktan sonraki deneme"><figcaption>Solda ilk deneme: zikzak bitince bölge çizgilere kadar doldu. Sağda geri aldıktan sonra aynı zikzak: tamamlama gelmedi, köşeler beyaz.</figcaption></figure>
+  <figure><img src="img/faz10-bastan-boya.jpg" alt="Eserlerim alt sayfası"><figcaption>Kapıdan sonraki alt sayfa: "Colour this page again / The old picture stays here" satırı Paylaş ile Sil arasında.</figcaption></figure>
+</div>
+<p><strong>Sahibe açık sorular</strong> (kurulun listesi): P1 çocuk yolu (çocuk kendi başına "yeni kâğıt" açabilsin mi), 3–5 çocukla 10–15 dakikalık gözlem oturumu (%85 eşiği ve P3 için), P2 tek anahtar yeterli mi, P1 ve P2 hangi sürümle (2.1.2 mi 2.2.0 mı), P3'te hangi kalem kastediliyor (Büyük'te Apple Pencil basıncı karşılıyor mu), P4 için "yalnız parmağın ulaşamadığı küçük ayrıntılar hazır gelir" biçimiyle yeniden oylama isteniyor mu. Reklam beş vetoyla reddedildi; kurulun gerekçesi: Kids 1.3, "reklam yok" sözü, ağsız mimari ve "Data Not Collected".</p>
+
+<h2 id="kalem-ve-icerik">21. Faz 11: Apple Pencil basıncı ve yeni içerik</h2>
+<p>Branch <code>faz11/kalem-basinci</code>, <code>faz10</code> üstüne. Kurulun sıradaki işi P3 ile arka planda yürüyen içerik çalışması bu dalda birleşti. 193 test geçiyor, analiz temiz; hiçbir şey push edilmedi.</p>
+<p><strong>Apple Pencil basıncı (P3, <code>6bf4b13</code>).</strong> Büyük modda iPad'de keçeli kalem, pastel ve neon çizgisi bastırdıkça kalınlaşır, hafif dokunuşta incelir; en hafif dokunuş da görünür iz bırakır. Kurulun şartları:</p>
+<ul>
+<li><strong>Kapsam dar.</strong> Yalnız Büyük, yalnız iOS'ta kalem girdisi, yalnız bu üç fırça. Parmak, Minik, gökkuşağı, sprey ve simli fırça eskisi gibi çizer. Yeni düğme, menü, sürgü ya da ayar yok.</li>
+<li><strong>Basınç kayıtta.</strong> Her noktanın üçüncü değeri, iOS'un verdiği kuvvetin yarısı ve kayıt dosyasının tuttuğu onda bire yuvarlanmış hâli. Ortalama dokunuş 0,5'e, yani parmak kalınlığına düşer. Yeniden açılan resim ve ayna kopyaları çizildiği gibi görünür. Kalem kalkarken kuvvet sıfır gelir; çizgi son hareketin basıncıyla biter.</li>
+<li><strong>Çizim yolu.</strong> Basınçlı çizgi her katmanda tek bir dolgu şekli: yumuşak kısımlarda bir şerit, uçlarda ve keskin dönüşlerde birer disk, hepsi aynı yönde sarılı. Kendini kesen karalamada delik kalmaz, yarı saydam pastel üst üste binen yerde koyulaşmaz, neon 14 çizim çağrısında kalır. Otomatik tamamlama Pencil çizgisini çizildiği kalınlıkla sayar.</li>
+</ul>
+<p>Bu Mac'te (flutter_tester, yazılımla piksel basma) 200 çizginin yeniden pişme süresi:</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Fırça</th><th>Parmak</th><th>Apple Pencil</th></tr></thead>
+<tbody>
+<tr><td>Keçeli kalem</td><td>32 ms</td><td>32 ms</td></tr>
+<tr><td>Pastel</td><td>94 ms</td><td>91 ms</td></tr>
+<tr><td>Neon</td><td>750 ms</td><td>1.098 ms</td></tr>
+</tbody></table></div>
+<p>Test ortamı GPU kullanmadığı için parmakla çizilen neon bile burada kurulun 300 ms bütçesini aşıyor; sayılar yalnız ikisinin oranını gösteriyor. İlk sürümde neon beş kat yavaştı. Geniş hale katmanlarında örnekleri seyreltip büyük disklerin kenar sayısını sınırlayınca fark %46'ya indi. iPad'de Apple Pencil ile deneme, Split View ve döndürme dâhil, henüz yapılmadı; simülatör kalem basıncı veremiyor.</p>
+<figure><img src="img/faz11-kalem-basinci.jpg" alt="Basınçlı ve basınçsız fırça çizgileri"><figcaption>Soldan keçeli kalem, pastel, neon. Üst sıra parmak, ikinci sıra uçlarda hafif, ortada sert basılan Pencil. Altta Pencil karalaması, kendini kesen halka ve keskin dönüş; delik yok.</figcaption></figure>
+<p><strong>Yeni içerik (birleştirme <code>f970012</code>).</strong> Arka plandaki ajan master üstünde çalıştı; dalını inceleyip bu dala birleştirdim. Çakışma çıkmadı; yerelleştirme dosyalarını yeniden ürettim, fark çıkmadı.</p>
+<ul>
+<li><strong>Sayılar.</strong> Üç yeni kategori: Uzay (13), Müzik (16), Giysiler (24). Doğa 13'ten 27'ye, Bitkiler 19'dan 24'e, Eşyalar 23'ten 44'e, Araçlar 20'den 32'ye, Hayvanlar 81'den 82'ye çıktı. Toplam 201'den 307 sayfaya. Her kategoride tam 8 ücretsiz sayfa var.</li>
+<li><strong>Ajanın kararları.</strong> Yeni kartlar ana ekranda eski altı kartın arkasına geldi. Sayfa denetiminden geçen 21 aday gözle elendi: soyut karolar, Japonca yazılı çiçek, insan figürlü paraşüt gibi. Yayımlanmış hiçbir sayfa kategori değiştirmedi; kayıtlı resimler sayfa kimliğini saklıyor.</li>
+<li><strong>Düzeltilen hatalar.</strong> Sayfa betiği tireli ve aksanlı adları indiremiyordu (yoyo, tişört, pinyata, T-Rex). Kategori kartları İngilizcede de Türkçe adı okuyordu. "İce cream" gibi İngilizce adlar Türkçe büyük İ alıyordu. Tam Sürüm metnindeki sabit "201" artık sayfa sayısından geliyor.</li>
+<li><strong>Benim eklediklerim.</strong> P1 testi kategori kartını eserin Türkçe adıyla arıyordu; kart artık uygulama dilinde okunduğu için testi sayfanın adına çevirdim (<code>283ea00</code>). Tam Sürüm metni ekranın adını "Resimlerim" yazıyordu; uygulamanın her yerindeki "Eserlerim" yaptım.</li>
+<li><strong>Simülatörde denendi.</strong> Ana ekranda üç yeni kart eski kartlarla aynı boyutta görünüyor. Uzay kategorisi açılıyor, kuyruklu yıldız sayfası dokunuşla taşmadan doluyor. Eski kategorilere eklenen 1. seviye sayfalar kategori içinde bazı eski sayfaların yerini birkaç kare kaydırıyor.</li>
+</ul>
+<figure><img src="img/faz11-yeni-kategoriler.jpg" alt="Yeni kategoriler ve boyanmış kuyruklu yıldız"><figcaption>Solda ana ekranın sonu: Uzay, Müzik, Giysiler. Sağda Uzay'daki kuyruklu yıldız, iki dokunuşla boyanmış.</figcaption></figure>
+<p><strong>Mağaza metni.</strong> Bu özelliklerle çıkacak sürümün "Yenilikler" taslağı (TR ve EN) ve yeni sayılı tanıtım ve açıklama satırları <code>store_listing.md</code> dosyasında. App Store Connect'e dokunmadım; metin yalnız o sürümle girer.</p>
+<p><strong>Açık kalanlar:</strong> iPad'de Apple Pencil denemesi; P2 ve P3 için en eski iPad'de ve düşük donanımlı Android'de süre ölçümü; içerikle çıkan sürümde "Notes for Review" metni; on taslak dildeki yeni kategori adlarının yerli okuması.</p>
+<p><strong>Sonradan eklenen:</strong> Eserlerim'de VoiceOver eseri kayıtlı Türkçe adla okuyordu. Etiketi artık sayfanın kimliğinden, uygulamanın dilindeki adla üretiyorum; kayıtlı veri değişmedi. Uygulamadan kalkmış bir sayfanın eseri kayıtlı adıyla okunur. Ayrıca kendi üstüne geri dönen bir Pencil çizgisinde geniş neon katmanının sıfır uzunluklu parça üretebildiği bir uç durumu kapattım.</p>
+<p><strong>Bağımsız inceleme.</strong> Bir alt ajan faz9–11'in <code>lib/</code> farkını benim gerekçelerimi görmeden okudu. Çökme, geri al bozulması ya da kayıt hatası bulmadı. Dört düşük önemli bulgu getirdi. Her birini önce düşen bir testle doğruladım, sonra düzelttim:</p>
+<ul>
+<li><strong>Yeniden açılan resimde desen kayıyordu</strong> (<code>c9ee109</code>, master'da da vardı). Pastel tanesi, sprey ve simin dağılımı ilk noktadan tohumlanıyor; kayıt dosyası koordinatı onda bir piksele yuvarladığı için açılan resimde bütün noktalar yer değiştiriyordu. Noktalar artık çizilirken o ızgaraya yazılıyor.</li>
+<li><strong>Tamamlama, görünür kalan sprey noktalarının altına dolgu koyabiliyordu</strong> (<code>2477f28</code>). Başka fırçanın boyası yarım fırça boyuyla sayılıyordu; sprey, sim, pastel tanesi ve neon halesi daha uzağa ulaşıyor. Her fırça artık boyasının ulaştığı uzaklıkla sayılıyor.</li>
+<li><strong>İleri al, "bir daha tamamlama" işaretini kaldırmıyordu</strong> (<code>2477f28</code>). Silinip yeniden boyanan bölge sayfa açıkken bir daha tamamlanmıyordu.</li>
+<li><strong>Avuç kalemden önce değerse kalem çizmiyordu</strong> (<code>b57ad79</code>). Kalem artık önce değen avucu ya da parmağı devralıyor; kalem çizerken başka dokunuş yok sayılıyor, avuç ekranda dururken art arda çizgi çekilebiliyor. İki parmakla yakınlaştırma aynı. iPad'de denenmedi.</li>
+</ul>
+<p>Test sayısı 201, analiz temiz.</p>
+
 </div>
 
 </body>

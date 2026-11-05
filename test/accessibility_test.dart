@@ -99,7 +99,7 @@ void main() {
     await tester.tap(find.text('My Artworks'));
     await tester.pumpAndSettle();
     final saved = app.savedArtworks.single;
-    expect(find.bySemanticsLabel(saved.name), findsOneWidget);
+    expect(find.bySemanticsLabel(app.pagesById[saved.originalImageId]!.localizedName('en')), findsOneWidget);
     await expectGuidelines(tester);
 
     // The sheet asks the platform what it can do; without an engine the
@@ -113,7 +113,7 @@ void main() {
     });
     addTearDown(() => tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(channel, null));
 
-    await passGate(tester, find.bySemanticsLabel(saved.name));
+    await passGate(tester, find.bySemanticsLabel(app.pagesById[saved.originalImageId]!.localizedName('en')));
     expect(find.text('Share'), findsOneWidget, reason: 'the grown-up sheet is open');
     expect(find.text('Delete'), findsOneWidget);
     await expectGuidelines(tester);

@@ -25,7 +25,7 @@ class CategoryScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: const Color(0xFFFFF4E6),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
         child: Column(
           children: [
@@ -61,10 +61,13 @@ class CategoryScreen extends StatelessWidget {
                   if (images.isEmpty) {
                     return Center(child: Text(category.icon, style: const TextStyle(fontSize: 96)));
                   }
-                  // Latest artwork per page: lists are newest first.
+                  // The most recently coloured copy of each page: a page can
+                  // have several (a grown-up can start it again), and an edit
+                  // does not move an artwork in the list.
                   final latest = <String, SavedArtwork>{};
                   for (final a in provider.savedArtworks) {
-                    latest.putIfAbsent(a.originalImageId, () => a);
+                    final seen = latest[a.originalImageId];
+                    if (seen == null || a.updatedAt.isAfter(seen.updatedAt)) latest[a.originalImageId] = a;
                   }
                   return LayoutBuilder(
                     builder: (context, constraints) => GridView.builder(
@@ -101,7 +104,8 @@ class _PageCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PressableCard(
-      semanticLabel: image.name,
+      // VoiceOver reads the page name in the app's language.
+      semanticLabel: image.localizedName(Localizations.localeOf(context).languageCode),
       onTap: () {
         SoundService().playClickSound();
         final existing = artwork;

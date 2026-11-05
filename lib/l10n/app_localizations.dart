@@ -158,6 +158,24 @@ abstract class AppLocalizations {
   /// **'Eşyalar'**
   String get things;
 
+  /// Space category: planets, moons, stars, a flying saucer
+  ///
+  /// In tr, this message translates to:
+  /// **'Uzay'**
+  String get space;
+
+  /// Music category: instruments, notes, a microphone
+  ///
+  /// In tr, this message translates to:
+  /// **'Müzik'**
+  String get music;
+
+  /// Clothes category: things a child wears, hats, shoes and bags included
+  ///
+  /// In tr, this message translates to:
+  /// **'Giysiler'**
+  String get clothes;
+
   /// No description provided for @pageLevel.
   ///
   /// In tr, this message translates to:
@@ -206,11 +224,11 @@ abstract class AppLocalizations {
   /// **'Bütün sayfaları aç'**
   String get fullVersionShort;
 
-  /// No description provided for @fullVersionDesc.
+  /// Full Version screen; count is the number of bundled coloring pages, read from the app
   ///
   /// In tr, this message translates to:
-  /// **'Ücretsiz sürümde her kategoriden 8 sayfa var. Tam Sürüm, 201 sayfanın hepsini bir kez ödemeyle sonsuza kadar açar. Abonelik yoktur. Çocuğunuzun boyadığı resimler her durumda Resimlerim\'de kalır.'**
-  String get fullVersionDesc;
+  /// **'Ücretsiz sürümde her kategoriden 8 sayfa var. Tam Sürüm, {count} sayfanın hepsini bir kez ödemeyle sonsuza kadar açar. Abonelik yoktur. Çocuğunuzun boyadığı resimler her durumda Eserlerim\'de kalır.'**
+  String fullVersionDesc(int count);
 
   /// No description provided for @buy.
   ///
@@ -530,6 +548,18 @@ abstract class AppLocalizations {
   /// **'Sil'**
   String get delete;
 
+  /// No description provided for @paintAgain.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu sayfayı baştan boya'**
+  String get paintAgain;
+
+  /// No description provided for @paintAgainHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Eski resim burada kalır'**
+  String get paintAgainHint;
+
   /// Delete confirmation title
   ///
   /// In tr, this message translates to:
@@ -587,7 +617,7 @@ abstract class AppLocalizations {
   /// No description provided for @parentsHint.
   ///
   /// In tr, this message translates to:
-  /// **'Ayarlar burada. Paylaşmak, yazdırmak ve silmek için Eserlerim\'de bir resmi basılı tutun.'**
+  /// **'Ayarlar burada. Paylaşmak, yazdırmak, baştan boyamak ve silmek için Eserlerim\'de bir resmi basılı tutun.'**
   String get parentsHint;
 
   /// No description provided for @ageMode.
@@ -619,6 +649,24 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'16 renk, iki parmakla yakınlaştırma, fırça boyutları, ileri al.'**
   String get ageModeBigDesc;
+
+  /// No description provided for @coloringSection.
+  ///
+  /// In tr, this message translates to:
+  /// **'Boyama'**
+  String get coloringSection;
+
+  /// No description provided for @autoComplete.
+  ///
+  /// In tr, this message translates to:
+  /// **'Fırçayla boyarken küçük boşlukları tamamla'**
+  String get autoComplete;
+
+  /// No description provided for @autoCompleteDesc.
+  ///
+  /// In tr, this message translates to:
+  /// **'Keçeli kalemle bir alanın neredeyse tamamı tek renkle boyanınca kalan küçük beyaz köşeler aynı renkle dolar. İnce motor alıştırması için kapatabilirsiniz.'**
+  String get autoCompleteDesc;
 
   /// No description provided for @soundVolume.
   ///

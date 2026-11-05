@@ -26,7 +26,7 @@ class MyArtworksScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      backgroundColor: const Color(0xFFFFF4E6),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
         child: Column(
           children: [
@@ -72,6 +72,12 @@ class MyArtworksScreen extends StatelessWidget {
                       ),
                     );
                   }
+                  // VoiceOver reads a picture by its page's name in the app's
+                  // language; the saved name (always Turkish) is only kept for
+                  // pages that are no longer in the app.
+                  final pages = provider.pagesById;
+                  final languageCode = Localizations.localeOf(context).languageCode;
+                  String labelOf(SavedArtwork a) => pages[a.originalImageId]?.localizedName(languageCode) ?? a.name;
                   return LayoutBuilder(
                     builder: (context, constraints) => GridView.builder(
                       padding: const EdgeInsets.all(16),
@@ -81,7 +87,10 @@ class MyArtworksScreen extends StatelessWidget {
                         mainAxisSpacing: 16,
                       ),
                       itemCount: provider.savedArtworks.length,
-                      itemBuilder: (context, index) => _ArtworkCard(artwork: provider.savedArtworks[index]),
+                      itemBuilder: (context, index) {
+                        final artwork = provider.savedArtworks[index];
+                        return _ArtworkCard(artwork: artwork, label: labelOf(artwork));
+                      },
                     ),
                   );
                 },
@@ -97,7 +106,10 @@ class MyArtworksScreen extends StatelessWidget {
 class _ArtworkCard extends StatelessWidget {
   final SavedArtwork artwork;
 
-  const _ArtworkCard({required this.artwork});
+  /// What VoiceOver reads for the picture.
+  final String label;
+
+  const _ArtworkCard({required this.artwork, required this.label});
 
   @override
   Widget build(BuildContext context) {
@@ -106,7 +118,7 @@ class _ArtworkCard extends StatelessWidget {
       artwork.thumbnailPath.isNotEmpty ? artwork.thumbnailPath : artwork.savedImagePath,
     );
     return PressableCard(
-      semanticLabel: artwork.name,
+      semanticLabel: label,
       onTap: () {
         SoundService().playClickSound();
         openArtwork(context, artwork);
@@ -149,6 +161,16 @@ class _ArtworkCard extends StatelessWidget {
     final origin = box == null ? null : box.localToGlobal(Offset.zero) & box.size;
     final hasBlankPage =
         !artwork.originalImagePath.contains('/imported/') && !artwork.originalImagePath.endsWith('/blank.png');
+    // A fresh copy of the same page, only for a page the child can open
+    // from a category: not the Draw page, not a page behind the Full
+    // Version lock, not one that left the app. Nothing is deleted.
+    final catalog = context.read<AppProvider>();
+    final page = catalog.pagesById[artwork.originalImageId];
+    final freshPage = page != null &&
+            !page.freeDraw &&
+            catalog.getImagesForCategory(page.category).any((p) => p.id == page.id)
+        ? page
+        : null;
     final action = await showModalBottomSheet<String>(
       context: context,
       showDragHandle: true,
@@ -180,6 +202,13 @@ class _ArtworkCard extends StatelessWidget {
                 leading: const Icon(Icons.print_outlined),
                 title: Text(exports.print ? l10n.printBlankPage : l10n.shareBlankPage),
                 onTap: () => Navigator.pop(sheetContext, exports.print ? 'printBlank' : 'blank'),
+              ),
+            if (freshPage != null)
+              ListTile(
+                leading: const Icon(Icons.note_add_outlined),
+                title: Text(l10n.paintAgain),
+                subtitle: Text(l10n.paintAgainHint),
+                onTap: () => Navigator.pop(sheetContext, 'again'),
               ),
             ListTile(
               leading: const Icon(Icons.delete_outline_rounded, color: Color(0xFFE53935)),
@@ -253,6 +282,10 @@ class _ArtworkCard extends StatelessWidget {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.shareError)));
           }
         }
+      case 'again':
+        // The same page, blank and not tied to this artwork: the first
+        // touch saves a new copy, and the old picture stays on the wall.
+        await Navigator.push(context, MaterialPageRoute(builder: (_) => ColoringScreen(image: freshPage!)));
       case 'delete':
         final yes = await showDialog<bool>(
           context: context,

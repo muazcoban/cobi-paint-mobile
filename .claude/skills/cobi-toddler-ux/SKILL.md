@@ -55,6 +55,31 @@ Apple's Human Interface Guidelines (read the current pages; HIG changes every WW
   has no keyboard bindings either. Büyük binds Cmd-Z / Shift-Cmd-Z on Apple platforms and
   Ctrl-Z / Ctrl-Shift-Z / Ctrl-Y elsewhere (`_keyboardUndo`). Shake-to-undo stays off for
   everyone (`applicationSupportsShakeToEdit = false` in AppDelegate): a child shakes the device.
+- Colour again (council, 5 Nov 2026): a grown-up long-presses a picture in My Artworks, passes the
+  gate and taps "Colour this page again": the page opens blank and not tied to the artwork; the
+  first touch saves a new copy, an untouched copy is never saved, nothing is deleted. Never put a
+  reset or clear control on a child's screen (Ç7). Category cards open the newest copy (updatedAt);
+  the automatic level counts different pages. A child's own "new paper" path needs its own vote.
+- Auto-complete (council, 5 Nov 2026, `lib/engine/document/auto_complete.dart`): only the marker on
+  a coloring page; one colour over at least 85% of the region's measurable area (8 px clear of the
+  lines); no other brush paint in the region, each brush counted as far as its paint reaches (spray, glitter,
+  pastel grain and neon glow go well past half the size), and no second colour; no white gap of a fingertip
+  (1% of the page) left. Same reveal, sound and haptic as a tap fill; one undo step with its stroke;
+  an undone completion is not repeated while the page is open (redo lifts that hold). Parents switch, on by default.
+- Apple Pencil pressure (council, 5 Nov 2026, `lib/engine/render/pressure_outline.dart`): only
+  Büyük, only a stylus on iOS, only the marker, the pastel and the neon. The third value of every
+  point is the force / 2 rounded to the tenth (0.5 = a finger, so an average touch is the finger
+  width); width factor 0.35 at the lightest touch to 1.65, smoothed along the line. A stroke with
+  pressure is one filled outline per layer, so the neon keeps its 14 draw calls. Minik, fingers and
+  the other brushes store 0.5 and draw as before. No button, menu, slider or setting for it; a new
+  brush only replaces a Büyük state as a concrete candidate with its own vote.
+- Pen versus palm (5 Nov 2026, `CanvasGestureMachine`): a pen takes over from a palm or finger that
+  landed first and drops what it started; while the pen draws every other touch is ignored; two
+  fingers still pinch. Stroke points go in on the tenth-pixel grid the saved file keeps, because the
+  scatter of the pastel, spray and glitter is seeded by the first point.
+- Rejected on 5 Nov 2026: partly coloured pages (3/5), step-by-step drawing (0/5, veto for Minik;
+  a Büyük-only proposal may come back), advertising for users without the Full Version (0/5, five
+  vetoes: Kids rule 1.3, the "no ads" promise, the network-free design).
 - Exports (3 Nov 2026): Android's share sheet has no Print or Save, so behind the gate My Artworks
   offers Save to gallery, Print and Print blank page through `ExportService`
   (`lib/services/export_service.dart`, channel `cobi.paint/export` in `MainActivity.kt`: MediaStore
@@ -103,6 +128,14 @@ python3 tool/pages/build_pages.py --work /tmp/cobi-pages --dart ~/flutter/sdk/fl
 Levels come from the page check (same rule in `PageCheck.level` and `level_for`): 1 = up to
 4 finger-sized areas and 10 regions, 3 = 8+ finger areas or 16+ regions, else 2. Pages are never
 locked; a category lists the child's current level first (`lib/data/page_order.dart`).
+
+Catalog rules (5 Nov 2026, nine categories, 307 pages): an entry that cannot ship keeps
+`"skip": "<reason>"` and `test/builtin_images_test.dart` keeps the catalog and the bundle identical.
+A page id is `<category>_<code>` and saved artworks store it with the asset path, so a shipped page
+never changes category. A new category goes last on the home screen (children find cards by
+place), gets exactly 8 free pages, mostly level 1, and a spoken-name row in `tool/voice/README.md`.
+Passing the page check is not enough: look at the new pages and drop the ones a 3-year-old would not
+recognise (abstract tiles, text inside the art, near-duplicates of a page already in the app).
 
 For hand-drawn art, run the check before adding a page:
 

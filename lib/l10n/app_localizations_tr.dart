@@ -39,6 +39,15 @@ class AppLocalizationsTr extends AppLocalizations {
   String get things => 'Eşyalar';
 
   @override
+  String get space => 'Uzay';
+
+  @override
+  String get music => 'Müzik';
+
+  @override
+  String get clothes => 'Giysiler';
+
+  @override
   String get pageLevel => 'Sayfa zorluğu';
 
   @override
@@ -64,8 +73,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get fullVersionShort => 'Bütün sayfaları aç';
 
   @override
-  String get fullVersionDesc =>
-      'Ücretsiz sürümde her kategoriden 8 sayfa var. Tam Sürüm, 201 sayfanın hepsini bir kez ödemeyle sonsuza kadar açar. Abonelik yoktur. Çocuğunuzun boyadığı resimler her durumda Resimlerim\'de kalır.';
+  String fullVersionDesc(int count) {
+    return 'Ücretsiz sürümde her kategoriden 8 sayfa var. Tam Sürüm, $count sayfanın hepsini bir kez ödemeyle sonsuza kadar açar. Abonelik yoktur. Çocuğunuzun boyadığı resimler her durumda Eserlerim\'de kalır.';
+  }
 
   @override
   String get buy => 'Satın al';
@@ -229,6 +239,12 @@ class AppLocalizationsTr extends AppLocalizations {
   String get delete => 'Sil';
 
   @override
+  String get paintAgain => 'Bu sayfayı baştan boya';
+
+  @override
+  String get paintAgainHint => 'Eski resim burada kalır';
+
+  @override
   String get deleteConfirmTitle => 'Eseri Sil';
 
   @override
@@ -258,7 +274,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get parentsHint =>
-      'Ayarlar burada. Paylaşmak, yazdırmak ve silmek için Eserlerim\'de bir resmi basılı tutun.';
+      'Ayarlar burada. Paylaşmak, yazdırmak, baştan boyamak ve silmek için Eserlerim\'de bir resmi basılı tutun.';
 
   @override
   String get ageMode => 'Mod';
@@ -276,6 +292,16 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String get ageModeBigDesc =>
       '16 renk, iki parmakla yakınlaştırma, fırça boyutları, ileri al.';
+
+  @override
+  String get coloringSection => 'Boyama';
+
+  @override
+  String get autoComplete => 'Fırçayla boyarken küçük boşlukları tamamla';
+
+  @override
+  String get autoCompleteDesc =>
+      'Keçeli kalemle bir alanın neredeyse tamamı tek renkle boyanınca kalan küçük beyaz köşeler aynı renkle dolar. İnce motor alıştırması için kapatabilirsiniz.';
 
   @override
   String get soundVolume => 'Ses seviyesi';

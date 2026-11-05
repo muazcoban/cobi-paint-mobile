@@ -19,6 +19,10 @@ class UserSettings {
   final double soundVolume;
   final AgeMode ageMode;
 
+  /// Finish a region the marker has almost covered in one colour (council,
+  /// 5 Nov 2026). On by default, for both modes.
+  final bool autoComplete;
+
   UserSettings({
     this.selectedTheme = 'coral',
     this.soundEnabled = true,
@@ -28,6 +32,7 @@ class UserSettings {
     this.firstFills = 0,
     this.soundVolume = 0.7,
     this.ageMode = AgeMode.little,
+    this.autoComplete = true,
   });
 
   // Settings saved by older versions may carry keys that no longer exist
@@ -43,6 +48,7 @@ class UserSettings {
       firstFills: (json['firstFills'] as num?)?.toInt() ?? 0,
       soundVolume: ((json['soundVolume'] as num?) ?? 0.7).toDouble(),
       ageMode: json['ageMode'] == AgeMode.big.name ? AgeMode.big : AgeMode.little,
+      autoComplete: json['autoComplete'] ?? true,
     );
   }
 
@@ -56,6 +62,7 @@ class UserSettings {
       'firstFills': firstFills,
       'soundVolume': soundVolume,
       'ageMode': ageMode.name,
+      'autoComplete': autoComplete,
     };
   }
 
@@ -68,6 +75,7 @@ class UserSettings {
     int? firstFills,
     double? soundVolume,
     AgeMode? ageMode,
+    bool? autoComplete,
   }) {
     return UserSettings(
       selectedTheme: selectedTheme ?? this.selectedTheme,
@@ -78,6 +86,7 @@ class UserSettings {
       firstFills: firstFills ?? this.firstFills,
       soundVolume: soundVolume ?? this.soundVolume,
       ageMode: ageMode ?? this.ageMode,
+      autoComplete: autoComplete ?? this.autoComplete,
     );
   }
 }

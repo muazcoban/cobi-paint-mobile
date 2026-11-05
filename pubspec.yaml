@@ -61,6 +61,9 @@ flutter:
     - assets/pages/vehicles/
     - assets/pages/nature/
     - assets/pages/things/
+    - assets/pages/space/
+    - assets/pages/music/
+    - assets/pages/clothes/
     - assets/pages/free/
     - assets/licenses/
     - assets/sounds/

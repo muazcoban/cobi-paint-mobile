@@ -27,6 +27,9 @@ kararı: her cihazda aynı, sıcak ve lisansı temiz bir ses).
 | category_vehicles | Araçlar | Vehicles |
 | category_nature | Doğa | Nature |
 | category_things | Eşyalar | Things |
+| category_space | Uzay | Space |
+| category_music | Müzik | Music |
+| category_clothes | Giysiler | Clothes |
 | color_0 | Kırmızı | Red |
 | color_1 | Turuncu | Orange |
 | color_2 | Sarı | Yellow |
@@ -59,5 +62,5 @@ Renk sırası `lib/screens/coloring_screen.dart` içindeki `littlePalette` ve `b
 `color_9`–`color_15` yalnız Büyük modda duyulur. Renk adları `lib/l10n/app_*.arb` dosyasındaki
 `colorNames` listesiyle aynı olmalıdır.
 
-Sayfa adları (201 sayfa × 2 dil) ikinci aşamadır: anahtar `page_<kod>` (ör. `page_1f34e`),
+Sayfa adları (307 sayfa × 2 dil) ikinci aşamadır: anahtar `page_<kod>` (ör. `page_1f34e`),
 metin `tool/pages/catalog.json` içindeki `nameTr` ve `nameEn`.
