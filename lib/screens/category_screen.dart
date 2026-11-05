@@ -101,7 +101,8 @@ class _PageCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PressableCard(
-      semanticLabel: image.name,
+      // VoiceOver reads the page name in the app's language.
+      semanticLabel: image.localizedName(Localizations.localeOf(context).languageCode),
       onTap: () {
         SoundService().playClickSound();
         final existing = artwork;

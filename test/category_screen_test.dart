@@ -11,14 +11,14 @@ import 'package:provider/provider.dart';
 void main() {
   final animals = Category.getDefaultCategories().firstWhere((c) => c.id == 'animals');
 
-  Future<void> pumpCategory(WidgetTester tester) async {
+  Future<void> pumpCategory(WidgetTester tester, {Locale locale = const Locale('tr')}) async {
     // Built-in pages need no storage, so the provider works without init()
     await tester.pumpWidget(
       ChangeNotifierProvider(
         create: (_) => AppProvider(),
         child: MaterialApp(
           theme: AppTheme.lightTheme,
-          locale: const Locale('tr'),
+          locale: locale,
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           home: CategoryScreen(category: animals),
@@ -34,6 +34,19 @@ void main() {
     expect(find.text('Hayvanlar'), findsOneWidget);
     expect(find.byType(Image), findsWidgets);
     expect(find.byType(KidButton), findsOneWidget, reason: 'one big home button');
+  });
+
+  testWidgets('a page tile is read out in the app language', (tester) async {
+    final handle = tester.ensureSemantics();
+    // The first animal page is the mouse: level 1 comes first for a new child.
+    await pumpCategory(tester);
+    expect(find.bySemanticsLabel('Fare'), findsOneWidget);
+
+    await pumpCategory(tester, locale: const Locale('en'));
+    await tester.pumpAndSettle();
+    expect(find.bySemanticsLabel('Mouse'), findsOneWidget);
+    expect(find.bySemanticsLabel('Fare'), findsNothing);
+    handle.dispose();
   });
 
   testWidgets('page tiles and the home button meet the tap target and label guidelines', (tester) async {
