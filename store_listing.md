@@ -4,12 +4,12 @@ Bu metin uygulamanın 3 Kasım 2026'daki hâlini anlatır. App Store Connect'te 
 metinle dolduruldu (3 Kasım akşamı; Türkçe birincil, İngilizce (ABD) eklendi); canlı 1.0 metni hâlâ eski
 ("60+ resim", galeriden yükleme) ve 2.1.0 yayına girince değişir. Google Play kaydı yok.
 
-> **Sonraki içerik sürümü (5 Kasım 2026):** Repoda 9 kategoride 307 sayfa var. Yeni kategoriler Uzay (13),
-> Müzik (16) ve Giysiler (24); Doğa 27, Bitkiler 24, Eşyalar 44, Araçlar 32 sayfaya çıktı. 2.1.0 (App
+> **Sonraki içerik sürümü (5 Kasım 2026):** Repoda 9 kategoride 310 sayfa var. Yeni kategoriler Uzay (13),
+> Müzik (16) ve Giysiler (24); Doğa 28, Bitkiler 25, Eşyalar 45, Araçlar 32 sayfaya çıktı. 2.1.0 (App
 > Review) ve 2.1.1 (TestFlight) bu sayfaları içermez, bu yüzden aşağıdaki 201 / 6 kategori / "200'den fazla"
 > sayıları o iki sürüm için doğrudur ve şimdi değişmez. Yeni sayılar bu içerikle çıkan sürümde App Store
 > Connect'e yazılır; bu iş App Store Connect'i değiştirmedi. Sayı geçen her yerin altında o sürümün metni
-> "Sonraki içerik sürümünde" notuyla duruyor. "Notes for Review" alanı da üç yeni kategoriyi ve 106 yeni
+> "Sonraki içerik sürümünde" notuyla duruyor. "Notes for Review" alanı da üç yeni kategoriyi ve 109 yeni
 > sayfayı anlatmalı (App Review 2.3.1). Ayrıntı: `plan/icerik-genisletme-2026-11-05.html`.
 
 ## App Name (30 karakter)
@@ -25,8 +25,8 @@ metinle dolduruldu (3 Kasım akşamı; Türkçe birincil, İngilizce (ABD) eklen
 - EN: New Cobi Paint: 201 coloring pages in 6 categories, one-tap fill that stays in the lines, 6 brushes, 16 stickers and mirror drawing. No ads, no internet, no accounts. (166)
 
 Sonraki içerik sürümünde yalnız sayılar değişir, uzunluk aynı kalır:
-- TR: Yepyeni Cobi Paint: 9 kategoride 307 boyama sayfası, taşmayan tek dokunuş dolgu, 6 fırça, 16 çıkartma ve aynalı serbest çizim. Reklam yok, internet yok, hesap yok. (163)
-- EN: New Cobi Paint: 307 coloring pages in 9 categories, one-tap fill that stays in the lines, 6 brushes, 16 stickers and mirror drawing. No ads, no internet, no accounts. (166)
+- TR: Yepyeni Cobi Paint: 9 kategoride 310 boyama sayfası, taşmayan tek dokunuş dolgu, 6 fırça, 16 çıkartma ve aynalı serbest çizim. Reklam yok, internet yok, hesap yok. (163)
+- EN: New Cobi Paint: 310 coloring pages in 9 categories, one-tap fill that stays in the lines, 6 brushes, 16 stickers and mirror drawing. No ads, no internet, no accounts. (166)
 
 ---
 
@@ -128,13 +128,13 @@ saving let your child color without asking for help.
 Sürüm numarası (2.1.2 ya da 2.2.0) henüz kararlaştırılmadı.
 
 ### Turkish
-- 3 yeni kategori: Uzay, Müzik ve Giysiler. Toplam 307 boyama sayfası.
+- 3 yeni kategori: Uzay, Müzik ve Giysiler. Toplam 310 boyama sayfası.
 - Bir resmi baştan boyamak için Eserlerim'de resmi basılı tutun, ebeveyn sorusunu yanıtlayın ve "Bu sayfayı baştan boya"ya dokunun. Eski resim yerinde kalır.
 - Keçeli kalemle bir alanın neredeyse tamamı boyanınca kalan küçük beyaz köşeler kendiliğinden dolar. Ebeveynler alanından kapatabilirsiniz.
 - Büyük modda iPad'de Apple Pencil ile bastırdıkça keçeli kalem, pastel ve neon çizgisi kalınlaşır.
 
 ### English
-- 3 new categories: Space, Music and Clothes. 307 coloring pages in all.
+- 3 new categories: Space, Music and Clothes. 310 coloring pages in all.
 - To color a picture again, press and hold it in My Artworks, answer the grown-up question and tap "Colour this page again". The old picture stays.
 - When the marker has covered nearly all of an area, the last small white corners fill in by themselves. You can turn this off in the Parents area.
 - In Big mode on iPad, marker, pastel and neon lines get thicker as you press harder with Apple Pencil.
@@ -151,7 +151,7 @@ App Review bu alanı İngilizce okur. Kapı bilgisi `lib/widgets/parental_gate.d
   locks for 30, 60 and then 120 seconds, and it closes itself after 20 seconds without a tap.
 - Share, "Share blank page", "Colour this page again" and Delete are behind the same gate: press and hold
   a picture in My Artworks.
-- New in this version: three categories (Space, Music, Clothes) with 106 new coloring pages, 307 in all,
+- New in this version: three categories (Space, Music, Clothes) with 109 new coloring pages, 310 in all,
   made from Microsoft's Fluent UI Emoji (MIT licence, shown in the Parents area). "Colour this page again"
   opens a blank copy and keeps the old picture. When the marker has covered nearly all of an area, the
   last small white corners fill in by themselves; parents can turn this off in the Parents area. In Big

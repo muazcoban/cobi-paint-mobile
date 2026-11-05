@@ -129,7 +129,7 @@ Levels come from the page check (same rule in `PageCheck.level` and `level_for`)
 4 finger-sized areas and 10 regions, 3 = 8+ finger areas or 16+ regions, else 2. Pages are never
 locked; a category lists the child's current level first (`lib/data/page_order.dart`).
 
-Catalog rules (5 Nov 2026, nine categories, 307 pages): an entry that cannot ship keeps
+Catalog rules (5 Nov 2026; nine categories, 310 pages on 6 Nov): an entry that cannot ship keeps
 `"skip": "<reason>"` and `test/builtin_images_test.dart` keeps the catalog and the bundle identical.
 A page id is `<category>_<code>` and saved artworks store it with the asset path, so a shipped page
 never changes category. A new category goes last on the home screen (children find cards by

@@ -892,6 +892,14 @@
    "subgroup": "plant-other"
   },
   {
+   "code": "1f330",
+   "name": "chestnut",
+   "nameTr": "kestane",
+   "nameEn": "chestnut",
+   "category": "plants",
+   "subgroup": "food-vegetable"
+  },
+  {
    "code": "1f32d",
    "name": "hot dog",
    "nameTr": "sosisli sandviç",
@@ -1757,6 +1765,14 @@
    "subgroup": "sky & weather"
   },
   {
+   "code": "1f302",
+   "name": "closed umbrella",
+   "nameTr": "kapalı şemsiye",
+   "nameEn": "closed umbrella",
+   "category": "nature",
+   "subgroup": "sky & weather"
+  },
+  {
    "code": "1f380",
    "name": "ribbon",
    "nameTr": "kurdele",
@@ -2115,6 +2131,14 @@
    "nameEn": "tent",
    "category": "things",
    "subgroup": "place-other"
+  },
+  {
+   "code": "1f58c",
+   "name": "paintbrush",
+   "nameTr": "fırça",
+   "nameEn": "paintbrush",
+   "category": "things",
+   "subgroup": "writing"
   },
   {
    "code": "1f30d",
