@@ -22,7 +22,12 @@ class VoiceService {
 
   /// Created on the first clip, so a build without clips (and the tests)
   /// never touches the audio plugin.
-  AudioPlayer get _speaker => _player ??= AudioPlayer()..setPlayerMode(PlayerMode.lowLatency);
+  /// No position updater: it would ask for a frame on every vsync while a
+  /// clip plays, and forever on Android, whose low-latency players never
+  /// report the end (see SoundService).
+  AudioPlayer get _speaker => _player ??= AudioPlayer()
+    ..positionUpdater = null
+    ..setPlayerMode(PlayerMode.lowLatency);
 
   Future<void> _loadManifest() async {
     try {
