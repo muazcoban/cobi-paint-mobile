@@ -692,6 +692,7 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
                       stickerIndex: _stickerIndex,
                       stickerSize: side * (big ? _stickerSteps[_brushStep] : _stickerSteps[1]),
                       autoComplete: !widget.image.freeDraw && _autoComplete,
+                      penPressure: big,
                       onFilled: _onFilled,
                       onStamped: _onStamped,
                     ),

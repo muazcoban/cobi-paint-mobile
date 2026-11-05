@@ -33,11 +33,20 @@ LabelMap squarePage() {
 }
 
 /// Back-and-forth rows across the square between [fromX] and [toX].
-Stroke rows(int label, {int argb = blue, BrushKind kind = BrushKind.marker, double fromX = 28, double toX = 172, double gap = 14, double size = 22}) {
+Stroke rows(
+  int label, {
+  int argb = blue,
+  BrushKind kind = BrushKind.marker,
+  double fromX = 28,
+  double toX = 172,
+  double gap = 14,
+  double size = 22,
+  double pressure = defaultPressure,
+}) {
   final points = <double>[];
   var leftToRight = true;
   for (var y = 28.0; y <= 172; y += gap) {
-    points.addAll([leftToRight ? fromX : toX, y, 0.5, leftToRight ? toX : fromX, y, 0.5]);
+    points.addAll([leftToRight ? fromX : toX, y, pressure, leftToRight ? toX : fromX, y, pressure]);
     leftToRight = !leftToRight;
   }
   return Stroke(kind: kind, argb: argb, size: size, clipLabel: label, points: Float32List.fromList(points));
@@ -90,6 +99,15 @@ void main() {
 
     test('strokes of another region add nothing', () {
       expect(AutoComplete.evaluate(map, [rows(background)], inside), isNull);
+    });
+
+    test('an Apple Pencil stroke counts with the width it was drawn with', () {
+      expect(AutoComplete.evaluate(map, [rows(inside, pressure: 0.0)], inside), isNull,
+          reason: 'the lightest touch leaves white bands between the rows');
+      expect(AutoComplete.evaluate(map, [rows(inside, gap: 22, size: 14)], inside), isNull,
+          reason: 'a line this thin at the finger pressure leaves bands');
+      expect(AutoComplete.evaluate(map, [rows(inside, gap: 22, size: 14, pressure: 1.0)], inside), isNotNull,
+          reason: 'a hard press covers them');
     });
   });
 

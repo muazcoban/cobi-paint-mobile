@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
+import 'package:flutter/foundation.dart' show defaultTargetPlatform;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -37,6 +38,7 @@ class PaintCanvas extends StatefulWidget {
     this.stickerIndex = 0,
     this.stickerSize = 0,
     this.autoComplete = false,
+    this.penPressure = false,
     this.onFilled,
     this.onStrokeCommitted,
     this.onStamped,
@@ -80,6 +82,11 @@ class PaintCanvas extends StatefulWidget {
   /// Finish a region the marker has almost covered (see AutoComplete); the
   /// completion arrives like a tap fill and calls [onFilled].
   final bool autoComplete;
+
+  /// Let the Apple Pencil's pressure set the width of the marker, the
+  /// pastel and the neon (Büyük mode, council of 5 November 2026). Fingers,
+  /// other brushes and other platforms keep the brush's own width.
+  final bool penPressure;
 
   /// A region was filled from a tap; good moment for sound and haptics.
   final void Function(int label)? onFilled;
@@ -142,6 +149,11 @@ class _PaintCanvasState extends State<PaintCanvas> with SingleTickerProviderStat
   final List<double> _live = [];
   BrushKind? _liveKind;
   int _liveClip = 0;
+
+  // Pressure of the pointer event being handled, and the last one of every
+  // pointer that is down.
+  double _eventPressure = defaultPressure;
+  final Map<int, double> _lastPressure = {};
 
   // Stickers under the finger, committed together when it lifts.
   final List<Sticker> _liveStamps = [];
@@ -318,10 +330,10 @@ class _PaintCanvasState extends State<PaintCanvas> with SingleTickerProviderStat
       _bump();
       return;
     }
+    _liveKind = widget.tool == CanvasTool.eraser ? BrushKind.eraser : widget.brush;
     _live
       ..clear()
-      ..addAll([p.dx, p.dy, 0.5]);
-    _liveKind = widget.tool == CanvasTool.eraser ? BrushKind.eraser : widget.brush;
+      ..addAll([p.dx, p.dy, _pointPressure()]);
     _liveClip = _liveKind != BrushKind.eraser && widget.stayInside
         ? widget.document.map.labelAt(p.dx.floor(), p.dy.floor())
         : 0;
@@ -343,9 +355,13 @@ class _PaintCanvasState extends State<PaintCanvas> with SingleTickerProviderStat
     final p = _toPage(local);
     final n = _live.length;
     if ((Offset(_live[n - 3], _live[n - 2]) - p).distance < 0.75) return;
-    _live.addAll([p.dx, p.dy, 0.5]);
+    _live.addAll([p.dx, p.dy, _pointPressure()]);
     _bump();
   }
+
+  /// The pressure stored with the next point of the live stroke: the pen's
+  /// for the brushes that follow it, the default for the rest.
+  double _pointPressure() => pressureBrushes.contains(_liveKind) ? _eventPressure : defaultPressure;
 
   void _strokeEnd() {
     if (_stamping) {
@@ -468,10 +484,35 @@ class _PaintCanvasState extends State<PaintCanvas> with SingleTickerProviderStat
 
   // Pointer plumbing ---------------------------------------------------------
 
-  void _onPointerDown(PointerDownEvent e) => _gestures.pointerDown(e.pointer, e.localPosition, e.timeStamp);
-  void _onPointerMove(PointerMoveEvent e) => _gestures.pointerMove(e.pointer, e.localPosition, e.timeStamp);
-  void _onPointerUp(PointerUpEvent e) => _gestures.pointerUp(e.pointer, e.localPosition, e.timeStamp);
-  void _onPointerCancel(PointerCancelEvent e) => _gestures.pointerCancel(e.pointer);
+  void _onPointerDown(PointerDownEvent e) {
+    _eventPressure = _lastPressure[e.pointer] = _pressureOf(e);
+    _gestures.pointerDown(e.pointer, e.localPosition, e.timeStamp);
+  }
+
+  void _onPointerMove(PointerMoveEvent e) {
+    _eventPressure = _lastPressure[e.pointer] = _pressureOf(e);
+    _gestures.pointerMove(e.pointer, e.localPosition, e.timeStamp);
+  }
+
+  void _onPointerUp(PointerUpEvent e) {
+    // A pencil reports no force once it has lifted: the line ends at the
+    // pressure of its last move.
+    _eventPressure = _lastPressure.remove(e.pointer) ?? defaultPressure;
+    _gestures.pointerUp(e.pointer, e.localPosition, e.timeStamp);
+  }
+
+  void _onPointerCancel(PointerCancelEvent e) {
+    _lastPressure.remove(e.pointer);
+    _gestures.pointerCancel(e.pointer);
+  }
+
+  /// The stored pressure of [e]: the Apple Pencil's force when
+  /// [PaintCanvas.penPressure] is on, the default for a finger, a mouse and
+  /// on other platforms (the council chose the Apple Pencil only).
+  double _pressureOf(PointerEvent e) =>
+      widget.penPressure && e.kind == ui.PointerDeviceKind.stylus && defaultTargetPlatform == TargetPlatform.iOS
+          ? storedPressure(e.pressure)
+          : defaultPressure;
 
   @override
   Widget build(BuildContext context) {

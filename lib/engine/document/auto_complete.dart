@@ -146,14 +146,15 @@ class AutoComplete {
     return (argb: colours[winner], x: seedX, y: seedY);
   }
 
-  /// Sets every grid cell within the brush radius of the stroke's path.
+  /// Sets every grid cell within the brush radius of the stroke's path; an
+  /// Apple Pencil stroke counts with the width it was drawn with.
   static void _stamp(Stroke stroke, RegionInfo region, int gw, int gh, Int32List owner, int value) {
-    final radius = stroke.size / 2;
-    final r2 = radius * radius;
-    final spacing = math.max(step.toDouble(), radius / 2);
+    final base = stroke.size / 2;
+    final factors = stroke.hasPressure ? pressureFactors(stroke) : null;
     final pts = stroke.points;
 
-    void disc(double cx, double cy) {
+    void disc(double cx, double cy, double radius) {
+      final r2 = radius * radius;
       final minX = math.max(0, ((cx - radius - region.left) / step).floor());
       final maxX = math.min(gw - 1, ((cx + radius - region.left) / step).ceil());
       final minY = math.max(0, ((cy - radius - region.top) / step).floor());
@@ -167,14 +168,17 @@ class AutoComplete {
       }
     }
 
-    disc(pts[0], pts[1]);
+    double radiusAt(int point) => factors == null ? base : base * factors[point];
+
+    disc(pts[0], pts[1], radiusAt(0));
     for (var i = 3; i < pts.length; i += 3) {
       final ax = pts[i - 3], ay = pts[i - 2], bx = pts[i], by = pts[i + 1];
+      final ra = radiusAt(i ~/ 3 - 1), rb = radiusAt(i ~/ 3);
       final length = math.sqrt((bx - ax) * (bx - ax) + (by - ay) * (by - ay));
-      final n = math.max(1, (length / spacing).ceil());
+      final n = math.max(1, (length / math.max(step.toDouble(), math.min(ra, rb) / 2)).ceil());
       for (var k = 1; k <= n; k++) {
         final t = k / n;
-        disc(ax + (bx - ax) * t, ay + (by - ay) * t);
+        disc(ax + (bx - ax) * t, ay + (by - ay) * t, ra + (rb - ra) * t);
       }
     }
   }

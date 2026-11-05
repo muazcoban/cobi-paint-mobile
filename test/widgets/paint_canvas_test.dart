@@ -5,6 +5,7 @@ import 'package:cobi_paint_mobile/engine/document/coloring_document.dart';
 import 'package:cobi_paint_mobile/engine/document/stroke.dart';
 import 'package:cobi_paint_mobile/engine/region/region_builder.dart';
 import 'package:cobi_paint_mobile/widgets/paint_canvas.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -43,6 +44,7 @@ void main() {
     double stickerSize = 0,
     void Function(int count)? onStamped,
     bool autoComplete = false,
+    bool penPressure = false,
     void Function(int label)? onFilled,
   }) async {
     final rgba = twoRegionPage();
@@ -66,6 +68,7 @@ void main() {
             stickerSize: stickerSize,
             onStamped: onStamped,
             autoComplete: autoComplete,
+            penPressure: penPressure,
             onFilled: onFilled,
           ),
         ),
@@ -94,6 +97,66 @@ void main() {
     await gesture.up();
     await tester.pump();
   }
+
+  // A pencil (or another [kind]) drawn through page points, each with the
+  // force iOS reports; it lifts a little further on with no force, as an
+  // Apple Pencil does.
+  Future<void> drawWith(
+    WidgetTester tester,
+    List<(double, double, double)> path, {
+    PointerDeviceKind kind = PointerDeviceKind.stylus,
+  }) async {
+    const pointer = 9;
+    var time = Duration.zero;
+    final (x0, y0, f0) = path.first;
+    await tester.sendEventToBinding(PointerDownEvent(
+        pointer: pointer, kind: kind, position: at(tester, x0, y0), pressure: f0, pressureMax: 4.17, timeStamp: time));
+    for (final (x, y, f) in path.skip(1)) {
+      time += const Duration(milliseconds: 16);
+      await tester.sendEventToBinding(PointerMoveEvent(
+          pointer: pointer, kind: kind, position: at(tester, x, y), pressure: f, pressureMax: 4.17, timeStamp: time));
+    }
+    final (xl, yl, _) = path.last;
+    time += const Duration(milliseconds: 16);
+    await tester.sendEventToBinding(PointerUpEvent(
+        pointer: pointer, kind: kind, position: at(tester, xl + 4, yl), pressure: 0, pressureMax: 4.17, timeStamp: time));
+    await tester.pump();
+  }
+
+  List<double> pressures(Stroke stroke) => [for (var i = 2; i < stroke.points.length; i += 3) stroke.points[i]];
+
+  const pencilPath = [(20.0, 50.0, 0.4), (40.0, 50.0, 1.0), (60.0, 50.0, 2.0), (80.0, 50.0, 3.0)];
+
+  testWidgets('in Büyük mode an Apple Pencil marker keeps the pressure of every point', (tester) async {
+    await pumpCanvas(tester, tool: CanvasTool.marker, penPressure: true);
+    await drawWith(tester, pencilPath);
+    final stroke = document.strokes.single;
+    final p = pressures(stroke);
+    expect(p.first, closeTo(0.2, 1e-6), reason: 'a light first touch');
+    expect(p, anyElement(closeTo(defaultPressure, 1e-6)), reason: 'an average touch is the finger width');
+    expect(p.last, closeTo(1.0, 1e-6), reason: 'the lift-off reports no force; the line ends at the last pressure');
+    expect(stroke.hasPressure, isTrue);
+  }, variant: TargetPlatformVariant.only(TargetPlatform.iOS));
+
+  testWidgets('a finger, Minik mode and the brushes without pressure keep the brush width', (tester) async {
+    await pumpCanvas(tester, tool: CanvasTool.marker, penPressure: true);
+    await drawWith(tester, pencilPath, kind: PointerDeviceKind.touch);
+    expect(document.strokes.single.hasPressure, isFalse, reason: 'a finger');
+
+    await pumpCanvas(tester, tool: CanvasTool.marker);
+    await drawWith(tester, pencilPath);
+    expect(document.strokes.single.hasPressure, isFalse, reason: 'a pencil in Minik mode');
+
+    await pumpCanvas(tester, tool: CanvasTool.marker, brush: BrushKind.rainbow, penPressure: true);
+    await drawWith(tester, pencilPath);
+    expect(document.strokes.single.hasPressure, isFalse, reason: 'the rainbow brush');
+  }, variant: TargetPlatformVariant.only(TargetPlatform.iOS));
+
+  testWidgets('a stylus on Android keeps the brush width', (tester) async {
+    await pumpCanvas(tester, tool: CanvasTool.marker, penPressure: true);
+    await drawWith(tester, pencilPath);
+    expect(document.strokes.single.hasPressure, isFalse);
+  });
 
   testWidgets('a marker that covers nearly all of a region completes it like a tap fill', (tester) async {
     final filled = <int>[];

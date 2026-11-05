@@ -8,6 +8,7 @@ import 'package:flutter/painting.dart';
 import '../document/coloring_document.dart';
 import '../document/stroke.dart';
 import '../region/label_map.dart';
+import 'pressure_outline.dart';
 import 'symmetry.dart';
 
 /// Draws black line art with its brightness turned into transparency, so
@@ -50,8 +51,14 @@ Paint strokePaint(Stroke stroke) => Paint()
 /// Draws [stroke] in its own style. Every brush is deterministic: the
 /// scattered ones (crayon, spray, glitter) take their randomness from
 /// [_seeded], so the same stroke looks the same on every device, after every
-/// reload and in every mirror copy.
+/// reload and in every mirror copy. A marker, pastel or neon stroke drawn
+/// with the Apple Pencil in Büyük mode follows its pressure
+/// ([_drawWithPressure]); every other stroke has the brush's own width.
 void drawStroke(Canvas canvas, Stroke stroke) {
+  if (stroke.hasPressure && pressureBrushes.contains(stroke.kind)) {
+    _drawWithPressure(canvas, stroke);
+    return;
+  }
   final path = strokePath(stroke.points);
   switch (stroke.kind) {
     case BrushKind.marker:
@@ -265,6 +272,42 @@ void _drawNeon(Canvas canvas, Path path, Stroke stroke) {
       ..strokeWidth = stroke.size * 0.36
       ..color = Color.lerp(color, const Color(0xFFFFFFFF), 0.7)!,
   );
+}
+
+/// The marker, the pastel and the neon with the width following the pen:
+/// the same colours, alphas and layers as their fixed-width versions, each
+/// layer one filled outline ([PressureSpine.outline]) instead of a stroked
+/// path, so the neon keeps its 14 draw calls.
+void _drawWithPressure(Canvas canvas, Stroke stroke) {
+  final spine = PressureSpine.of(stroke);
+  final color = Color(stroke.argb);
+  final paint = Paint()..isAntiAlias = true;
+  switch (stroke.kind) {
+    case BrushKind.crayon:
+      canvas.drawPath(spine.outline(0.9), paint..color = color.withValues(alpha: 0.72));
+      // The grain follows the line: wider where the pencil pressed harder.
+      final random = _seeded(stroke);
+      final grain = Paint()..color = color.withValues(alpha: 0.35);
+      final base = stroke.size / 2;
+      for (final (at, half) in spine.every(math.max(2.0, stroke.size * 0.22))) {
+        final factor = half / base;
+        final radius = math.max(1.0, stroke.size * 0.11 * factor);
+        final spread = stroke.size * 0.5 * factor;
+        for (var i = 0; i < 2; i++) {
+          final off = Offset((random.nextDouble() * 2 - 1) * spread, (random.nextDouble() * 2 - 1) * spread);
+          canvas.drawCircle(at + off, radius, grain);
+        }
+      }
+    case BrushKind.neon:
+      for (var i = 0; i < 12; i++) {
+        final t = i / 11;
+        canvas.drawPath(spine.outline(3.0 - 1.85 * t), paint..color = color.withValues(alpha: 0.03 + 0.17 * t * t));
+      }
+      canvas.drawPath(spine.outline(0.85), paint..color = color);
+      canvas.drawPath(spine.outline(0.36), paint..color = Color.lerp(color, const Color(0xFFFFFFFF), 0.7)!);
+    default:
+      canvas.drawPath(spine.outline(1), paint..color = color);
+  }
 }
 
 /// The bitmaps behind a coloring page: region fills, committed brush
