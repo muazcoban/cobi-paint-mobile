@@ -17,7 +17,7 @@ Apple's Human Interface Guidelines (read the current pages; HIG changes every WW
 | Ç1 | No reading needed | Every control is an icon plus sound; the flow works with all text hidden |
 | Ç2 | Huge targets | Phone: primary controls 80-84 pt, palette dots 68-72 pt; tablet 112-120 pt. On a 375 pt phone the dots shrink to about 61 pt, but each dot takes taps across its whole grid pitch (about 73 pt). A hit area is never under 64 pt in Minik mode (HIG minimum 44 pt applies everywhere) |
 | Ç3 | No pinch, two-finger or double-tap requirement | Zoom only in Büyük mode |
-| Ç4 | Forgiving taps | A finger that slides still taps if it lifts within 12 lp of the control (`ForgivingTap`); the palette picks the dot under the lifted finger |
+| Ç4 | Forgiving taps | A finger that slides still taps if it lifts within 12 lp of the control (`ForgivingTap`), unless the slide scrolled the list around it by more than 12 lp: a swipe on a card scrolls, it never opens the card; the palette picks the dot under the lifted finger |
 | Ç5 | Palms and extra fingers do nothing | The first finger owns the canvas (`CanvasGestureMachine`) |
 | Ç6 | Nothing is lost | Autosave 400 ms after a change, on leaving and on going to the background; no Save button |
 | Ç7 | Undo always visible; no clear-all button | If a clear-all is ever added, it goes behind the parental gate |
@@ -137,7 +137,7 @@ Levels come from the page check (same rule in `PageCheck.level` and `level_for`)
 4 finger-sized areas and 10 regions, 3 = 8+ finger areas or 16+ regions, else 2. Pages are never
 locked; a category lists the child's current level first (`lib/data/page_order.dart`).
 
-Catalog rules (5 Nov 2026, nine categories, 307 pages): an entry that cannot ship keeps
+Catalog rules (5 Nov 2026; nine categories, 310 pages on 6 Nov): an entry that cannot ship keeps
 `"skip": "<reason>"` and `test/builtin_images_test.dart` keeps the catalog and the bundle identical.
 A page id is `<category>_<code>` and saved artworks store it with the asset path, so a shipped page
 never changes category. A new category goes last on the home screen (children find cards by
