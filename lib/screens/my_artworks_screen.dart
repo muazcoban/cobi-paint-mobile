@@ -72,6 +72,12 @@ class MyArtworksScreen extends StatelessWidget {
                       ),
                     );
                   }
+                  // VoiceOver reads a picture by its page's name in the app's
+                  // language; the saved name (always Turkish) is only kept for
+                  // pages that are no longer in the app.
+                  final pages = provider.pagesById;
+                  final languageCode = Localizations.localeOf(context).languageCode;
+                  String labelOf(SavedArtwork a) => pages[a.originalImageId]?.localizedName(languageCode) ?? a.name;
                   return LayoutBuilder(
                     builder: (context, constraints) => GridView.builder(
                       padding: const EdgeInsets.all(16),
@@ -81,7 +87,10 @@ class MyArtworksScreen extends StatelessWidget {
                         mainAxisSpacing: 16,
                       ),
                       itemCount: provider.savedArtworks.length,
-                      itemBuilder: (context, index) => _ArtworkCard(artwork: provider.savedArtworks[index]),
+                      itemBuilder: (context, index) {
+                        final artwork = provider.savedArtworks[index];
+                        return _ArtworkCard(artwork: artwork, label: labelOf(artwork));
+                      },
                     ),
                   );
                 },
@@ -97,7 +106,10 @@ class MyArtworksScreen extends StatelessWidget {
 class _ArtworkCard extends StatelessWidget {
   final SavedArtwork artwork;
 
-  const _ArtworkCard({required this.artwork});
+  /// What VoiceOver reads for the picture.
+  final String label;
+
+  const _ArtworkCard({required this.artwork, required this.label});
 
   @override
   Widget build(BuildContext context) {
@@ -106,7 +118,7 @@ class _ArtworkCard extends StatelessWidget {
       artwork.thumbnailPath.isNotEmpty ? artwork.thumbnailPath : artwork.savedImagePath,
     );
     return PressableCard(
-      semanticLabel: artwork.name,
+      semanticLabel: label,
       onTap: () {
         SoundService().playClickSound();
         openArtwork(context, artwork);

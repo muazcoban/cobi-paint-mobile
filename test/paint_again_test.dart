@@ -92,6 +92,10 @@ void main() {
     await tester.pump(const Duration(milliseconds: 500));
     await settle(tester, () => app.savedArtworks.isNotEmpty, reason: 'autosave wrote the picture');
     final first = app.savedArtworks.single;
+    // Tiles read the page name in the app's language; the artwork keeps the
+    // name it was saved with.
+    final page = builtInImages.firstWhere((p) => p.id == first.originalImageId);
+    final label = page.localizedName('en');
     await goHome(tester); // back to the category
     await goHome(tester); // back home
     // The home list is still scrolled down to Food; the gallery card is above.
@@ -103,7 +107,7 @@ void main() {
     await tester.tap(find.text('My Artworks'));
     await tester.pumpAndSettle();
     final handle = tester.ensureSemantics();
-    await passGate(tester, find.bySemanticsLabel(first.name));
+    await passGate(tester, find.bySemanticsLabel(label));
     expect(find.text('Colour this page again'), findsOneWidget);
     expect(find.text('The old picture stays here'), findsOneWidget);
     await expectLater(tester, meetsGuideline(iOSTapTargetGuideline));
@@ -122,7 +126,7 @@ void main() {
     expect(app.savedArtworks, hasLength(1));
 
     // Again, and this time the child colours it: a second copy appears.
-    await passGate(tester, find.bySemanticsLabel(first.name));
+    await passGate(tester, find.bySemanticsLabel(label));
     await tester.tap(find.text('Colour this page again'));
     await settle(tester, () => find.byType(PaintCanvas).evaluate().isNotEmpty, reason: 'the fresh page loaded');
     await tester.pumpAndSettle();
@@ -137,14 +141,12 @@ void main() {
     await goHome(tester); // back home
     await settle(tester, () => find.text('Food').evaluate().isNotEmpty, reason: 'home again');
 
-    // The category card opens the newest copy. The card reads the page name
-    // in the app's language; the artwork keeps the name it was saved with.
-    final page = builtInImages.firstWhere((p) => p.id == first.originalImageId);
+    // The category card opens the newest copy.
     await tester.ensureVisible(find.text('Food'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Food'));
     await tester.pumpAndSettle();
-    await tester.tap(find.bySemanticsLabel(page.localizedName('en')).hitTestable().first);
+    await tester.tap(find.bySemanticsLabel(label).hitTestable().first);
     await settle(tester, () => find.byType(PaintCanvas).evaluate().isNotEmpty, reason: 'the page loaded');
     await tester.pumpAndSettle();
     expect(tester.widget<ColoringScreen>(find.byType(ColoringScreen)).existingArtwork?.id, newest.id);

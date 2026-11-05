@@ -98,7 +98,8 @@ void main() {
     await tester.pumpAndSettle();
     final saved = app.savedArtworks.single;
     expect(app.storageService.resolveArtworkFile(saved.thumbnailPath).existsSync(), isTrue);
-    expect(find.bySemanticsLabel(saved.name), findsOneWidget, reason: 'the framed picture is on the wall');
+    expect(saved.name, 'Çizim', reason: 'the saved name stays Turkish');
+    expect(find.bySemanticsLabel('Drawing'), findsOneWidget, reason: 'the framed picture is on the wall, read in English');
   });
 
   testWidgets('a category lists its pages and opens one', (tester) async {
@@ -259,7 +260,7 @@ void main() {
 
     // A long press asks the multiplication; the answer is read off the screen.
     Future<void> passGate() async {
-      await tester.longPress(find.bySemanticsLabel(saved.name));
+      await tester.longPress(find.bySemanticsLabel(app.pagesById[saved.originalImageId]!.localizedName('en')));
       await tester.pumpAndSettle();
       final task = tester.widget<Text>(find.byKey(const ValueKey('gate-task'))).data!;
       final parts = task.split(' × ');
