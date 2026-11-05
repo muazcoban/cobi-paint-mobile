@@ -36,6 +36,7 @@ class PaintCanvas extends StatefulWidget {
     this.stickers = const [],
     this.stickerIndex = 0,
     this.stickerSize = 0,
+    this.autoComplete = false,
     this.onFilled,
     this.onStrokeCommitted,
     this.onStamped,
@@ -75,6 +76,10 @@ class PaintCanvas extends StatefulWidget {
 
   /// Sticker width in page pixels.
   final double stickerSize;
+
+  /// Finish a region the marker has almost covered (see AutoComplete); the
+  /// completion arrives like a tap fill and calls [onFilled].
+  final bool autoComplete;
 
   /// A region was filled from a tap; good moment for sound and haptics.
   final void Function(int label)? onFilled;
@@ -282,8 +287,15 @@ class _PaintCanvasState extends State<PaintCanvas> with SingleTickerProviderStat
     final argb = widget.color.toARGB32();
     if (label == 0 || document.fillOf(label) == argb) return;
 
-    // Set up the reveal before the document notifies the layers.
-    final r = document.map.region(label);
+    _prepareReveal(p, label);
+    document.fillAt(x, y, argb);
+    widget.onFilled?.call(label);
+  }
+
+  /// Sets up the fill reveal from [p] across [label] before the document
+  /// notifies the layers.
+  void _prepareReveal(Offset p, int label) {
+    final r = widget.document.map.region(label);
     _revealOrigin = p;
     _revealRadius = [
       Offset(r.left.toDouble(), r.top.toDouble()),
@@ -292,8 +304,6 @@ class _PaintCanvasState extends State<PaintCanvas> with SingleTickerProviderStat
       Offset(r.right + 1.0, r.bottom + 1.0),
     ].map((c) => (c - p).distance).reduce(math.max);
     _revealPending = true;
-    document.fillAt(x, y, argb);
-    widget.onFilled?.call(label);
   }
 
   void _strokeStart(Offset local) {
@@ -362,7 +372,15 @@ class _PaintCanvasState extends State<PaintCanvas> with SingleTickerProviderStat
     if (kind == BrushKind.eraser) {
       widget.document.erase(stroke, widget.eraseFills ? _labelsAlong(stroke) : const {});
     } else {
-      widget.document.addStroke(stroke);
+      // The last corners of an almost coloured region: the same reveal,
+      // sound and haptic as a tap fill, from where the finger lifted.
+      final completion = widget.autoComplete ? widget.document.completionFor(stroke) : null;
+      if (completion != null) {
+        final n = stroke.points.length;
+        _prepareReveal(Offset(stroke.points[n - 3], stroke.points[n - 2]), stroke.clipLabel);
+      }
+      widget.document.addStroke(stroke, completion: completion);
+      if (completion != null) widget.onFilled?.call(stroke.clipLabel);
     }
     widget.onStrokeCommitted?.call(kind);
     _bump();

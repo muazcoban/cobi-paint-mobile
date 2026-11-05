@@ -283,6 +283,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get ageModeBigDesc => '16 colours, pinch to zoom, brush sizes, redo.';
 
   @override
+  String get coloringSection => 'Colouring';
+
+  @override
+  String get autoComplete => 'Fill small gaps when colouring with the brush';
+
+  @override
+  String get autoCompleteDesc =>
+      'When nearly all of an area is coloured with the marker in one colour, the small white corners left fill with that colour. Turn it off for fine motor practice.';
+
+  @override
   String get soundVolume => 'Volume';
 
   @override

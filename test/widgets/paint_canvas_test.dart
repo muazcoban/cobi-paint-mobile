@@ -42,6 +42,8 @@ void main() {
     List<String> stickers = const [],
     double stickerSize = 0,
     void Function(int count)? onStamped,
+    bool autoComplete = false,
+    void Function(int label)? onFilled,
   }) async {
     final rgba = twoRegionPage();
     document = ColoringDocument(RegionBuilder.build(rgba, 200, 100, options: const RegionBuilderOptions(gapPx: 0)));
@@ -63,6 +65,8 @@ void main() {
             stickers: stickers,
             stickerSize: stickerSize,
             onStamped: onStamped,
+            autoComplete: autoComplete,
+            onFilled: onFilled,
           ),
         ),
       ),
@@ -74,6 +78,45 @@ void main() {
 
   Offset at(WidgetTester tester, double pageX, double pageY) =>
       tester.getTopLeft(find.byType(PaintCanvas)) + Offset(pageX * 2, pageY * 2);
+
+  // Back-and-forth marker rows over the right half, 6 page px apart with an
+  // 8 px brush: nearly all of it, short of the corners by the lines.
+  Future<void> colourRightHalf(WidgetTester tester) async {
+    final gesture = await tester.startGesture(at(tester, 106, 6));
+    var leftToRight = true;
+    for (var y = 6.0; y <= 94; y += 6) {
+      for (var i = 0; i <= 6; i++) {
+        final x = leftToRight ? 106.0 + i * 15 : 196.0 - i * 15;
+        await gesture.moveTo(at(tester, x, y));
+      }
+      leftToRight = !leftToRight;
+    }
+    await gesture.up();
+    await tester.pump();
+  }
+
+  testWidgets('a marker that covers nearly all of a region completes it like a tap fill', (tester) async {
+    final filled = <int>[];
+    await pumpCanvas(tester, tool: CanvasTool.marker, autoComplete: true, onFilled: filled.add);
+    await colourRightHalf(tester);
+
+    expect(document.strokes, hasLength(1));
+    expect(document.fillOf(right()), red.toARGB32(), reason: 'the corners filled with the marker colour');
+    expect(filled, [right()], reason: 'it goes the tap-fill way: sound, haptic, celebration check');
+    document.undo();
+    expect(document.strokes, isEmpty);
+    expect(document.fillOf(right()), 0, reason: 'one finger, one undo step');
+  });
+
+  testWidgets('with the setting off the marker never fills', (tester) async {
+    final filled = <int>[];
+    await pumpCanvas(tester, tool: CanvasTool.marker, onFilled: filled.add);
+    await colourRightHalf(tester);
+
+    expect(document.strokes, hasLength(1));
+    expect(document.fillOf(right()), 0);
+    expect(filled, isEmpty);
+  });
 
   testWidgets('a tap fills the region under the finger', (tester) async {
     await pumpCanvas(tester);

@@ -284,6 +284,16 @@ class AppLocalizationsTr extends AppLocalizations {
       '16 renk, iki parmakla yakınlaştırma, fırça boyutları, ileri al.';
 
   @override
+  String get coloringSection => 'Boyama';
+
+  @override
+  String get autoComplete => 'Fırçayla boyarken küçük boşlukları tamamla';
+
+  @override
+  String get autoCompleteDesc =>
+      'Keçeli kalemle bir alanın neredeyse tamamı tek renkle boyanınca kalan küçük beyaz köşeler aynı renkle dolar. İnce motor alıştırması için kapatabilirsiniz.';
+
+  @override
   String get soundVolume => 'Ses seviyesi';
 
   @override

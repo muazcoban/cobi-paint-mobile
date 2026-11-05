@@ -632,6 +632,24 @@ abstract class AppLocalizations {
   /// **'16 renk, iki parmakla yakınlaştırma, fırça boyutları, ileri al.'**
   String get ageModeBigDesc;
 
+  /// No description provided for @coloringSection.
+  ///
+  /// In tr, this message translates to:
+  /// **'Boyama'**
+  String get coloringSection;
+
+  /// No description provided for @autoComplete.
+  ///
+  /// In tr, this message translates to:
+  /// **'Fırçayla boyarken küçük boşlukları tamamla'**
+  String get autoComplete;
+
+  /// No description provided for @autoCompleteDesc.
+  ///
+  /// In tr, this message translates to:
+  /// **'Keçeli kalemle bir alanın neredeyse tamamı tek renkle boyanınca kalan küçük beyaz köşeler aynı renkle dolar. İnce motor alıştırması için kapatabilirsiniz.'**
+  String get autoCompleteDesc;
+
   /// No description provided for @soundVolume.
   ///
   /// In tr, this message translates to:
