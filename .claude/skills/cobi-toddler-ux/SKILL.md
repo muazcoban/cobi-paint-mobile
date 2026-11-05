@@ -73,6 +73,14 @@ Apple's Human Interface Guidelines (read the current pages; HIG changes every WW
   pressure is one filled outline per layer, so the neon keeps its 14 draw calls. Minik, fingers and
   the other brushes store 0.5 and draw as before. No button, menu, slider or setting for it; a new
   brush only replaces a Büyük state as a concrete candidate with its own vote.
+- Scene mode, "Manzara" (council, night of 5-6 Nov 2026, `plan/kurul-2026-11-05-manzara.json`): passed
+  5/5 with conditions, not in 2.2.0. One card after Clothes, both modes, not behind the gate; a tray
+  between canvas and palette; a tap places a piece on its fixed slot (drag also works, nearest free
+  slot); a placed piece never moves, undo takes it back, the eraser never removes it; colouring as on
+  a page. The word plays when a piece is placed, when it is finished and when sky, grass or river is
+  first coloured: "Çiçek… flower!" in Turkish, "Flower!" in English. No written word, no quiz, no
+  score, no microphone in any version. Recorded human voice only (20 clips); behind `COBI_SCENE`, the
+  card shows only when the clips are bundled. The store says what happens, never "teaches English".
 - Pen versus palm (5 Nov 2026, `CanvasGestureMachine`): a pen takes over from a palm or finger that
   landed first and drops what it started; while the pen draws every other touch is ignored; two
   fingers still pinch. Stroke points go in on the tenth-pixel grid the saved file keeps, because the

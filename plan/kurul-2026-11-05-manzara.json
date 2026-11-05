@@ -1,0 +1,825 @@
+{
+ "votes": [
+  {
+   "member": "Ürün yöneticisi ve ASO/pazarlama",
+   "decision": "conditional",
+   "veto": false,
+   "conditions": [
+    "Yer: ana ekranda yeni 'Manzara' kartı açılır (EN 'Scenes', simge 🏞️). Kart ızgaranın en sonunda, Giysiler'den sonra durur. Mevcut kartların yeri ve sırası değişmez (lib/screens/home_screen.dart:66-71; skill kuralı: çocuk kartı yerinden bulur). Ayrı bir uygulama modu, 'İngilizce modu' anahtarı ya da başka bir ana ekran değişikliği olmaz.",
+    "Minik ve Büyük aynı akışı kullanır. Sahnede boyama yalnız kovayla yapılır: Minik'te 9 renk ve silgi, Büyük'te 16 renk ve silgi. Sahnede fırça, çıkartma ve ayna yoktur. Böylece taşınan parçanın boyası onunla gider. Yalnız keçeliyle çalışan otomatik tamamlama (lib/engine/document/coloring_document.dart:97) burada devreye girmez. Minik'te yakınlaştırma, parça büyütme ve döndürme yoktur (Ç3).",
+    "Sahne ekranının araç çubuğu: ev, kova, parça kutusu (sepet) ve geri al; Büyük'te bunlara ileri al eklenir. Sepet bu ekranda fırçanın yerini alır. Çiz sayfasında da ayna kovanın yerini alıyor (lib/screens/coloring_screen.dart:565-586). Minik'te 4, Büyük'te 5 düğme sınırı korunur (_Metrics, coloring_screen.dart:83). Başka hiçbir ekranın araç çubuğu değişmez.",
+    "Palet alanının iki hâli vardır. Kova seçiliyken renkler görünür. Sepet seçiliyken o manzaranın 8 parça karosu görünür. İki hâl de aynı KidPalette ızgarasını kullanır; Minik'te telefonda hücre 70 pt'dir ve hiçbir hedef 64 pt'nin altına inmez (Ç2). Karolar renksiz çizgi resimdir. 'Renkli örnek ve sihirli boya' 3 Kasım'da 'doğru renk bu' baskısı gerekçesiyle veto edildi (plan/gece-raporu-2026-11-03.html bölüm 4). Bir renge dokunmak kovaya döndürür; çıkartmada da bugün böyle (coloring_screen.dart:340-351).",
+    "Yerleştirmek için dokunmak tek başına yeter. Karoya dokunulunca parça kendi bölgesine (gökyüzü, çimen ya da nehir) ve oradaki boş bir yere iner. Karodan sürükleyip bırakmak da çalışır, ama hiçbir iş sürüklemeye bağlı değildir (HIG Drag and drop: 'Offer alternative ways to accomplish drag-and-drop actions'). Sepet hâlinde yerleşik bir parçaya dokunmak onu kaldırır ve adını söyletir. Sürüklemek parçayı taşır. Palet alanına bırakılan parça kutuya döner. Manzara dışına bırakılan parça önceki yerine döner (HIG: geçersiz bırakmada kaynağa dönüş). Kova hâlinde dokunuş her zaman boyar ve parça kımıldamaz.",
+    "Her yerleştirme, taşıma, kutuya koyma ve dolgu tek bir geri alma adımıdır. Temizle ya da hepsini kaldır düğmesi yoktur (Ç7). Aynı parçadan birden çok konabilir. 16 parça sınırına gelinince hata gösterilmez; karo yine adını söyler. Parçalar üst üste binebilir ve son dokunulan üstte durur. Üst üste binme hiçbir parçayı bitirilemez yapmaz. Tamamen altta kalan bir parça manzaranın bitmesini engellemez.",
+    "Kelime üç durumda birer kez çalar: parça yerleşince, sepet hâlinde parçaya dokununca ve parça bitince. Parça, görünen bütün parmak boyu bölgeleri dolunca biter. Bitişte parçanın üstünde kısa bir parıltı olur. Bütün parçalar ve arka plan bölgeleri bitince bilinen kutlama (showCelebration) bir kez gelir. Bitmiş parçayı yeniden boyamak kelimeyi tekrar çalmaz. Yazılı kelime yalnız sesle birlikte görünür: 1,5 sn, küçük harf, en az 28 pt, kontrast en az 4,5:1; dokunma hedefi değildir. Ses yoksa yazı da çıkmaz. Reduce Motion açıkken uçuş, parıltı ve konfeti yoktur. Soru, sınav, puan, yıldız ve 'yanlış' durumu yoktur (Ç10).",
+    "Dil: uygulama dili ne olursa olsun kelime İngilizcedir. Her parçanın tek bir klibi olur: assets/voice/en/word_<anahtar>.mp3. VoiceService.say dil kodunu çağırandan aldığı için sahne 'en' verir (lib/services/voice_service.dart:45-56). Uygulamayı İngilizce kullanan çocuk da aynı kelimeyi duyar; onun için bu nesnenin adını öğrenmektir. MVP'de Türkçe kelime yoktur. Mevcut 'Sesli adlar' anahtarı kelimeleri de susturur; yeni ayar eklenmez. Bu anahtar bugün yalnız uygulama dilinde klip varsa görünüyor (lib/screens/parents_screen.dart:160-163). İngilizce kelime klipleri varken de görünmesi gerekir.",
+    "Ev parçasının kelimesi 'house' olur. 'home' bir yer kavramıdır, resimdeki binanın adı değildir. Türkçede ikisi de 'ev' olduğu için Türk öğrencinin bilinen hatasını öğretmeyelim. Katalogdaki kelimeler ABD ve İngiltere İngilizcesinde aynı olanlardan seçilir; ladybug/ladybird ya da truck/lorry gibi ikililer girmez.",
+    "Ses kaydı şartı: katalogdaki her kelimenin İngilizce klibi pakette değilse kip yayına girmez. Klipler gelene kadar kod, COBI_IAP gibi bir --dart-define derleme bayrağıyla yayın paketinin dışında kalır. Gizli ya da yarım özellik gönderilmez (App Review 2.3.1). Kelimeleri İngilizceyi anadili düzeyinde konuşan bir ses okur. tool/voice/README.md'deki seslendirmen bu düzeyde değilse kelimeler için ayrı bir ses kullanılır. Telaffuzu bir İngilizce öğretmeni dinler ve seslendirmenden yazılı hak devri alınır. Mikrofon, çocuğun kendi sesini kaydetmesi, konuşma tanıma ve cihazın konuşma motoru kullanılmaz (5.1.4; ses için alınan kurul kararı). README'ye 'scenes' ve 'word_*' satırları eklenir. Aynı kayıt oturumunda bugünkü 39 satır da kaydedilir. Sebebi şu: EN anahtar kelimelerdeki 'learning' sözcüğü, kaydı olmayan sesli renk adlarına dayanıyor (store_listing.md:171; plan/pazarlama-incelemesi-2026-11-03.html bölüm 2.3).",
+    "Saklama ve yeniden açma: manzara Eserlerim'de sıradan bir eser olarak durur. Parçaların türü, konumu ve sırası ile her parçanın boyası saklanır. Otomatik kayıt 400 ms sonra yapılır (Ç6). Hiç dokunulmamış manzara kaydedilmez. Yeniden açılan manzara kaldığı yerden devam eder. Kapı arkasındaki uzun basma menüsü aynı kalır: paylaş, yazdır, baştan kur, sil. Manzara eserleri seviye sayacına girmez, çünkü pagesById içinde yoklar (lib/data/page_order.dart:28-31).",
+    "İçerik hattı: parçalar tool/pages/catalog.json'daki kaynaktan (Fluent UI Emoji, MIT, sabit commit) emoji2page.py ile üretilir. Parçanın dışı şeffaf, içi opak beyaz olur; emoji2page.py bugün beyaz zeminli gri görüntü yazıyor (satır 60). Katalogda her parçanın ayrı bir 'word' alanı olur (ör. lale için 'flower'). Sayfa denetimi parçanın sahnedeki boyutunda çalışır. Projenin RegionBuilder'ını ve PageProgress'in %1 parmak kuralını kullanarak ölçtüm. Sahnenin 1/4 genişliğinde araba, ördek, gökkuşağı, tekne ve uçurtma hiç parmak boyu bölge tutmuyor; ev 7 bölgesinden yalnız 1'ini tutuyor (betik: /private/tmp/claude-501/-Users-muazcobanos-Work-Workspace-Cobi-Paint-Mobile/ed955974-f6d6-4880-9d51-962c5cb4a230/scratchpad/piece_check/piece_check.dart). Bu yüzden en küçük parça sahne genişliğinin 1/4'ü, ev 0,4'ü olur. En az bir parmak boyu bölgesi olmayan parça kataloğa girmez. Arka plan (gökyüzü, çimen, nehir) elle çizilmiş basit bir SVG olur; nehir Fluent'te yok. Katalogla paketin aynı kalmasını bir test denetler (test/builtin_images_test.dart gibi).",
+    "Mağaza metni yalnız yayında olanı söyler (2.3.1). TR örneği: 'Manzara kur, boya; boyadığın her parçanın İngilizce adını duy (sun, house, tree).' 'İngilizce öğretir', 'İngilizce öğrenir', 'dil gelişimini destekler', 'kelime hazinesi' gibi sonuç vaatleri ve rakip adları yazılmaz (2.3.7). EN vitrinde 'learn English' yazılmaz; 'hear the name of everything they colour' yazılır. TR anahtar kelimelere 'ingilizce' yalnız özellik yayındayken eklenir; bu sözcüğün arama hacmini doğrulayamadım. Ekran görüntülerinden biri gerçek arayüzde kelime balonunu gösterir (2.3.3). Bu karenin ilk üçe girip girmeyeceği Product Page Optimization ile denenir; bu Apple'ın deneyidir ve uygulamaya analitik eklemez. Yenilikler (2.3.12) ve Notes for Review metinleri özelliği, kayıtların insan sesi olduğunu ve mikrofon kullanılmadığını anlatır.",
+    "Para: MVP'nin manzarası ve 8 parçası ücretsiz kümededir ve hep ücretsiz kalır. Sonraki manzaralar Tam Sürüm'le gelir. Çocuğun ekranında kilit, rozet ya da 'daha fazla' karosu olmaz. Bir manzaranın parça kutusu satın almadan önce ve sonra aynıdır. FullVersionScreen ancak o manzaralar yayındayken 've tüm manzaralar' der.",
+    "Sıra: iş, PR #10 yayına girdikten ve Tam Sürüm (COBI_IAP) kararı verildikten sonra başlar. Motor işinden önce kaba bir prototip 3–5 çocukla denenir; bu denemede kelimeyi ebeveyn sesli söyler. Dokunma ile sürükleme oranı ve kova ile sepet arasındaki geçiş görülmeden L büyüklüğündeki iş başlamaz.",
+    "Bitti sayılmadan önce: yeni ekranlar meetsGuideline kontrolünden geçer (test/accessibility_test.dart). Ekranlar 320, 375, 393 ve 430 pt genişlikte, yatayda, iPad'de ve Split View'da denenir. Reduce Motion, Sessiz anahtarı, VoiceOver ve %200 metin boyutu kontrol edilir. VoiceOver karoyu 'Güneş, sun' diye okur; yerleşik parçada 'Kutuya koy' özel eylemi bulunur."
+   ],
+   "toddler_risk": "Orta; şartlar karşılanırsa düşük-orta. Birinci risk sürükle-bırak. 3 yaşındaki çocuk sürüklerken parmağını kaldırır; parça yolda kalır ya da yanlış yere düşer. Dokunmak tek başına yetmezse çocuk ilk adımda takılır. İkinci risk palet alanının iki hâli. Kova seçiliyken parçayı taşımaya çalışan çocuk bölgeyi boyar. Sepet seçiliyken boyamaya çalışan çocuk parçayı oynatır. Üçüncü risk küçük ölçek. Ölçtüğüm 26 adayda, sahnenin 1/4 genişliğinde parça başına 0–2 parmak boyu bölge kalıyor. Boyut şartı konmazsa bazı parçalar hiç bitmez ve kelime hiç gelmez. Dördüncü risk kayıp hissi. Yanlışlıkla kutuya bırakılan ya da başka bir parçanın altında kalan ev 'evim gitti' ağlamasına yol açar; geri al ve parçanın eski yerine dönmesi bunu karşılar. Beşinci risk ses yükü: on çiçek on kez 'flower' der, bu yüzden klip kısa kalmalı. Soru ya da puan eklenirse başarısızlık durumu doğar (Ç10). Okuma gerekmez ve uygulamadan çıkış yolu yoktur.",
+   "rationale": "Plan, sesli TR/EN adları 'Ebeveyn eğitici özelliğe ödeme yapıyor' gerekçesiyle 'Should' listesine almıştı (plan/cobi-paint-yeniden-dogus-plani.html bölüm 9); bu kip o değeri somut hâle getirir, birincil kategori Education'ı ve Türkiye vitrinindeki 'ingilizce' aramalarını dürüstçe destekler. Vitrindeki darboğaz arama sonucundan ürün sayfasına geçiş (982 gösterim, yaklaşık %1,7; plan/gece-raporu-2026-11-03.html bölüm 19) ve kelime balonu görünen gerçek bir ekran görüntüsü bu oranı artırabilecek en güçlü yeni kare. Lingokids İngilizceyi abonelikle müfredat olarak, Bimi Boo ve KidloLand boyamayı içerik hacmiyle satıyor; biz boyamayı merkezde tutup kelimeyi ödül olarak verirsek reklamsız, internetsiz ve tek seferlik bir konum açılır (bu birleşimin rakiplerde olmadığını doğrulamadım). Değerin tamamı kayıtlı sese bağlı ve bugün hiçbir klip kayıtlı değil; klipsiz kip yalnız bir sahne oyuncağıdır ve mağaza 'İngilizce' diyemez (2.3.1). Üç yaş için dokunarak yerleştirme, renksiz karolar, sınavsız akış ve 'house' şart; ölçümüm, küçük boyutta çizilen parçaların boyut sınırı olmadan bitirilemeyeceğini gösteriyor. İş L büyüklüğünde; PR #10 yayınından, Tam Sürüm kararından ve ses kayıt oturumundan sonra, kaba bir prototiple yapılan çocuk denemesinin ardından sıraya girmeli.",
+   "effort": "L",
+   "design": "Yer ve giriş: Ana ekranda Giysiler'den sonra yeni bir 'Manzara' kartı durur (EN 'Scenes', 🏞️). Karta dokununca tık sesi ve 'Manzara!' klibi gelir. Bu ayrı bir uygulama modu değil, bir karttır. MVP'de tek arka plan olduğu için kart doğrudan yeni bir manzara açar. Çiz kartında olduğu gibi her dokunuş yeni bir manzaradır. Eski manzaralar Eserlerim'de durur ve Eserlerim kartı en sonuncuyu gösterir (home_screen.dart:51-53). İkinci arka plan gelince kart önce iki büyük resimli seçenek gösterir. Minik ve Büyük aynı akışı görür.\n\nÇocuğun gördüğü: Üstte ev, kova, sepet ve geri al düğmeleri var (Büyük'te ileri al da). Ortada kare manzara kartı durur: gökyüzü, yeşil tepe ve ortasından akan nehir; hepsi boyanabilir çizgi resim. Altta palet alanı var. İlk açılışta sepet seçilidir ve palet alanında 8 renksiz parça karosu durur: güneş, bulut, kuş, ağaç, çiçek, ev, köpek, balık. 6 sn dokunulmazsa ipucu güneş karosunun üstünde nabız atar.\n\nYerleştirme: Çocuk güneş karosuna dokunur. Güneş kısa bir uçuşla gökyüzünün sağ üstüne iner; Reduce Motion açıkken doğrudan belirir. 'sun' sesi gelir ve parçanın üstünde 1,5 sn 'sun' balonu görünür. Ev çimene, balık nehre, kuş gökyüzüne iner; yer doluysa en yakın boş yere iner. Çocuk karodan sürükleyip parçayı istediği yere de bırakabilir; güneşi çimene koymak serbesttir. Sepet hâlinde yerleşik bir parçaya dokunmak onu kaldırır ve adını söyletir. Sürüklenen parça taşınır ve son dokunulan parça üstte durur. Palet alanına bırakılan parça kutuya döner. Manzara dışına bırakılan parça eski yerine uçar. Parçaların boyu sabittir ve sahne genişliğinin 1/4'ü ile 0,4'ü arasındadır; büyümezler, dönmezler.\n\nBoyama: Kovaya ya da bir renge dokununca palet alanı 9 renk ve silgiyi gösterir (Büyük'te 16 renk). Bir bölgeye dokunmak onu anında boyar: 220 ms dalga, dolgu sesi ve hafif titreşim (Ç8). Bir parçanın görünen bütün parmak boyu bölgeleri dolunca parçanın üstünde kısa bir parıltı olur ve kelime yeniden söylenir. Gökyüzü boyanınca 'sky', çimen boyanınca 'grass', nehir boyanınca 'river' duyulur. Bütün parçalar ve arka plan bitince bilinen konfeti bir kez gelir. Boyanmış bir parça taşınınca boyası da onunla gider. Geri al her adımı tek tek geri alır; temizle düğmesi yoktur. Bu ekranda fırça, çıkartma ve ayna yoktur.\n\nDil: Türkçe ve İngilizce uygulamada aynı İngilizce klip çalar. Türk çocuğu 'house' kelimesini duyar. Uygulamayı İngilizce kullanan çocuk nesnenin adını duyar. 'home' kelimesi kullanılmaz.\n\nEbeveynin gördüğü (kapı arkası): Ebeveynler alanına yeni ayar eklenmez. parentsHint metnine bir cümle eklenir: 'Manzara kartında çocuk parçaları yerleştirip boyar; biten her parçanın İngilizce adını duyar. Sesli adlar kapalıysa kelimeler de susar.' Sesli adlar anahtarı, İngilizce kelime klipleri varken de görünür. Eserlerim'de manzara sıradan bir eserdir. Uzun basma ve kapıdan sonra şu seçenekler çıkar: paylaş, galeriye kaydet, yazdır, baştan kur (aynı arka planla boş manzara) ve sil. Kipin kendisi kapının arkasında değildir; kapı yalnız bu yetişkin işlerini korur.\n\nPara: MVP ücretsizdir. Sonraki arka planlar (çiftlik, deniz, gece, kış) kendi 6–8 parçasıyla Tam Sürüm'e girer. Çocuğun ekranında kilit, rozet ya da 'daha fazla' karosu olmaz.\n\nMağaza: Yenilikler metni: 'Yeni Manzara kartı: güneşi, evi, ağacı yerleştir ve boya; boyadığın her parçanın İngilizce adını duy.' Yeni ekran görüntüsü gerçek arayüzden çekilir: ev boyanmış, üstünde 'house' balonu görünür. Başlığı 'Boya, İngilizcesini duy' / 'Colour it, hear its name' olur. Notes for Review şunu söyler: kelimeleri bir insan okudu; mikrofon ve ağ bağlantısı kullanılmıyor.\n\nTeknik iz (kararı Flutter mühendisi verir): Parça çıkartma modeline benzer (kod, x, y, boy; lib/engine/document/sticker.dart), ama boyanabilir. Parça bırakılınca arka plan ve parçalar tek bir çizgi resimde birleşir. Bölge haritası isolate'te yeniden kurulur (sayfa başına 7–39 ms). Boyalar, parçanın kendi koordinatındaki noktayla yeniden bulunur; ColoringDocument.restore bugün de bölgeyi noktadan buluyor (coloring_document.dart:233-235). Hangi bölgenin hangi parçaya ait olduğunu, aynı anda çizilen bir parça kimliği haritası söyler. Sürükleme sırasında yalnız parçanın resmi kayar; harita parça bırakılınca kurulur.\n\nHIG ve App Review: Dokunma hedefleri Minik'te en az 64 pt, telefonda 70 pt (tasarımda uyumlu). Sürüklemenin dokunarak yapılan bir karşılığı var ve bırakma geri alınabiliyor (HIG Drag and drop; uyumlu). Geçersiz bir yere bırakılan parça kaynağına döner (uyumlu). Yapım sırasında doğrulanacaklar: balonda 4,5:1 kontrast, Reduce Motion davranışı, VoiceOver etiketleri ve 'Kutuya koy' özel eylemi, iPad yatayda ve Split View'da iki sütunlu parça kutusu. 1.3 ve 5.1.4: dış bağlantı, satın alma, reklam, analitik ve mikrofon yok (uyumlu). 2.3.1: metin ve klip şartlarına bağlı. 2.1: bellek ihtiyacı küçük; 8 parça türü 512 px RGBA ile yaklaşık 8 MB.\n\nBu karara girmeyenler (ayrı oy ister): normal sayfalar bitince İngilizce adın söylenmesi (307 sayfa; tool/voice/README.md'deki 'page_<kod>' ikinci aşaması), Türkçe ve İngilizce kelimenin birlikte söylenmesi, Büyük'te parça büyütme ve fırça, ikinci arka plan ve yeni parçalar.",
+   "mvp": "Ana ekranın en sonunda bir 'Manzara' kartı. Kart doğrudan yeni bir manzara açar; tek arka planda gökyüzü, tepe ve nehir var. Parça kutusunda 8 parça: güneş, bulut, kuş, ağaç, çiçek, ev, köpek, balık. Parça dokunarak yerleştirilir ve sürüklenerek taşınır; palet alanına bırakılan parça kutuya döner. Boyama yalnız kovayla yapılır (Minik'te 9, Büyük'te 16 renk ve silgi). Parça yerleşince ve bitince İngilizce kelime duyulur ve balonda görünür. Bütün manzara bitince bilinen konfeti gelir. Her adım tek geri al adımıdır. Manzara Eserlerim'e kaydedilir ve kapı arkasındaki menüyle yönetilir. 11 İngilizce klip (8 parça ile sky, grass, river) ve iki dilde kart adı kaydedilir. Hepsi ücretsizdir. MVP'de olmayanlar: parça büyütme, döndürme, fırça, çıkartma, ikinci arka plan, Türkçe kelime, yeni ayar, soru ve puan. Klipler pakette değilse kip yayın paketine girmez. MVP'den önce aynı akışın kaba bir prototipi 3–5 çocukla denenir.",
+   "catalog": [
+    {
+     "piece": "sun",
+     "tr": "güneş",
+     "en": "sun",
+     "note": "Fluent 2600, seviye 1. Sayfada 2 bölge var; sahnenin 1/4 genişliğinde 2'si de parmak boyu kalıyor (ölçtüm). Gökyüzüne iner. MVP."
+    },
+    {
+     "piece": "cloud",
+     "tr": "bulut",
+     "en": "cloud",
+     "note": "Fluent 2601, seviye 1. 2 bölge; 1/4 genişlikte 1 parmak boyu bölge. Gökyüzüne iner. MVP."
+    },
+    {
+     "piece": "bird",
+     "tr": "kuş",
+     "en": "bird",
+     "note": "Fluent 1f426, seviye 1. 5 bölge; 1/4 genişlikte yalnız gövde parmak boyu, göz ve gaga bitiş için sayılmaz. Gökyüzüne iner. MVP."
+    },
+    {
+     "piece": "tree",
+     "tr": "ağaç",
+     "en": "tree",
+     "note": "Fluent 1f333 (yaprak döken ağaç), seviye 1. 2 bölge; 1/4–0,4 genişlikte yalnız taç parmak boyu, ince gövde bitiş için sayılmaz. Çimene iner. MVP."
+    },
+    {
+     "piece": "flower",
+     "tr": "çiçek",
+     "en": "flower",
+     "note": "Fluent 1f337 lale, seviye 1; 1f33c papatya da olur. 3 bölge; 1/4 genişlikte 1, 1/5 genişlikte 0 parmak boyu bölge, bu yüzden en küçük parça boyu 1/4. Kelime 'flower' olur, 'tulip' değil. Çimene iner. MVP."
+    },
+    {
+     "piece": "house",
+     "tr": "ev",
+     "en": "house",
+     "note": "Fluent 1f3e0, seviye 2. 7 bölge; 1/3 genişlikte 1, 0,4 genişlikte 3 parmak boyu bölge, bu yüzden en büyük parça (0,4). Kelime 'house' olur, 'home' değil. Çimene iner. MVP."
+    },
+    {
+     "piece": "dog",
+     "tr": "köpek",
+     "en": "dog",
+     "note": "Fluent 1f415, seviye 2. 8 bölge; 1/4–0,4 genişlikte yalnız gövde parmak boyu, tek dokunuşla biter. Kulak ve burnu boyamak isteğe bağlı. Çimene iner. MVP."
+    },
+    {
+     "piece": "fish",
+     "tr": "balık",
+     "en": "fish",
+     "note": "Fluent 1f41f, seviye 1. 3 bölge; 1/4 genişlikte 1 parmak boyu bölge. Nehre iner. MVP."
+    },
+    {
+     "piece": "river",
+     "tr": "nehir",
+     "en": "river",
+     "note": "Fluent UI Emoji'de yok. Parça değil, elle çizilmiş arka planda tek büyük bir bölge. Boyanınca 'river' duyulur. MVP."
+    },
+    {
+     "piece": "sky",
+     "tr": "gökyüzü",
+     "en": "sky",
+     "note": "Arka plan bölgesi, elle çizilir. Boyanınca 'sky' duyulur. MVP."
+    },
+    {
+     "piece": "grass",
+     "tr": "çimen",
+     "en": "grass",
+     "note": "Arka plandaki tepe bölgesi, elle çizilir. Boyanınca 'grass' duyulur. MVP."
+    },
+    {
+     "piece": "cat",
+     "tr": "kedi",
+     "en": "cat",
+     "note": "Fluent 1f408, seviye 2. 12 bölge; 1/4–1/3 genişlikte 1 parmak boyu bölge. Çimene iner. İkinci dalga."
+    },
+    {
+     "piece": "rabbit",
+     "tr": "tavşan",
+     "en": "rabbit",
+     "note": "Fluent 1f407, seviye 1. 6 bölge; 1/3 genişlikte 2 parmak boyu bölge. Çimene iner. İkinci dalga."
+    },
+    {
+     "piece": "duck",
+     "tr": "ördek",
+     "en": "duck",
+     "note": "Fluent 1f986, seviye 2. 8 bölge; 1/4 genişlikte 0, 1/3 genişlikte 1 parmak boyu bölge, bu yüzden en az 1/3 genişlik. Nehre iner. İkinci dalga."
+    },
+    {
+     "piece": "rainbow",
+     "tr": "gökkuşağı",
+     "en": "rainbow",
+     "note": "Fluent 1f308, seviye 2. 6 bant; 1/4 genişlikte 0, 0,4 genişlikte 4 parmak boyu bölge. Yalnız büyük bir gökyüzü parçası olarak girer. İkinci dalga."
+    },
+    {
+     "piece": "car",
+     "tr": "araba",
+     "en": "car",
+     "note": "Fluent 1f697, seviye 2. 14 bölge; 1/4 genişlikte 0, 1/3 genişlikte 1 parmak boyu bölge, sadeleştirilmesi şart. Tekne (26f5) de aynı durumda. İkinci dalga."
+    }
+   ],
+   "child_test": "Düzen: her çocuk 10–15 dk oynar. Bir iPad ve 375 pt genişliğinde bir telefon kullanılır. Ebeveyn yanında durur ama yönlendirmez. Uygulamada analitik olmadığı için gözlemci bir sayım kâğıdı tutar. Önce kaba prototip denenir ve kelimeyi ebeveyn söyler; sonra aynı deneme kayıtlı kliplerle tekrarlanır.\n\nİzlenecekler:\n(1) İlk parça: çocuk ilk parçayı yardımsız kaç saniyede koyuyor? Kaç çocuk dokunuyor, kaç çocuk sürüklüyor? Kaç sürükleme yolda düşüyor ya da yanlış yere bırakılıyor? Hedef: 5 çocuğun en az 4'ü ilk 30 sn içinde bir parça koyar.\n(2) Kova ve sepet: çocuk boyamak isterken kaç kez parçayı oynatıyor, taşımak isterken kaç kez boyuyor? Sepete kendiliğinden dönüyor mu?\n(3) Kelime: çocuk kelimeyi duyunca tekrar ediyor mu, gülüyor mu, ebeveynine bakıyor mu? Yerleştirmedeki kelime mi, bitişteki kelime mi daha çok tepki alıyor? Oturum sonunda ebeveyn bir parçayı gösterip oyun gibi 'Bunun İngilizcesi neydi?' diye sorar. Kaç kelime geldiği 3 yaş ve 5 yaş için ayrı yazılır. Hedef: en az 3 çocuk en az bir kelimeyi kendiliğinden tekrar eder.\n(4) Bitiş: küçük bölge ya da üst üste binme yüzünden bitmeyen parça var mı? Çocuk parıltıyı fark ediyor mu?\n(5) Kayıp: çocuk parçayı yanlışlıkla kutuya bırakıyor mu, altta kalan bir parça yüzünden şaşırıyor ya da ağlıyor mu? Geri al'ı kullanıyor mu?\n(6) Tanıma: 3 yaşındaki çocuk renksiz karoları ve Fluent evini adlandırabiliyor mu ('ev', 'güneş')?\n(7) Tekrar: çocuk aynı parçadan kaç tane koyuyor? Tekrarlanan kelime ebeveyni rahatsız ediyor mu?\n(8) Telefon: 375 pt ekranda manzara kalabalık görünüyor mu, parçalar parmağa yetecek büyüklükte mi?\n(9) Süre: çocuk manzarada kaç dakika kalıyor ve sonra nereye gidiyor?\n(10) Ebeveyn görüşmesi (2 dk): Ebeveyn bunu İngilizce öğrenimi olarak algıladı mı? Ses ve telaffuz hakkında ne düşünüyor? 'house' seçimini doğru buluyor mu? Bu özellik için Tam Sürüm'e para verir mi? Mağaza cümlesini doğru buluyor mu?\n\nDurdurma ölçütü: çocukların çoğu sürüklemede takılıp dokunarak yerleştirmeyi bulamıyorsa ya da kelimeye hiç tepki vermiyorsa motor işi başlamaz."
+  },
+  {
+   "member": "Kıdemli Flutter mühendisi (bu kod tabanını bilen; efor, motor, kayıt biçimi, ses, eski iPad performansı, test edilebilirlik)",
+   "decision": "conditional",
+   "veto": false,
+   "conditions": [
+    "Ayrı bir mod olur, kategori olmaz. Ana ekranda Giysiler'den sonra, en sona tek bir kart eklenir; hiçbir kartın yeri değişmez (lib/models/category.dart:40-41 kuralı). Boyama sayfalarının araç çubuğu ve paleti değişmez. Tek yeni denetim, sahne ekranındaki parça sepetidir. Kart, kategori kartı gibi en yeni sahneyi açar. Boş sahne yalnız Eserlerim'de, kapı arkasındaki 'baştan' satırıyla açılır (P1).",
+    "MVP'de serbest yerleştirme yok: sahne, üst üste binmeyen sabit yuvalardan oluşur. Minik'te her parçanın tek bir yeri vardır. Büyük'te bırakılan parça, kendi türünün en yakın boş yuvasına oturur. Taşıma, döndürme, büyütme, üst üste bindirme ve parça başına ayrı katman ayrı oy ister. Gerekçe: 1024 px'lik 12 parça, dolgu, fırça ve çizgi katmanlarıyla yaklaşık 144 MB GPU belleği tutar; bu, 2 GB'lık A8 iPad için risklidir.",
+    "Bırakma anında RegionBuilder çalışmaz ve etiket numaraları kaymaz. Arka plan 1..B numaralarını alır; s numaralı yuva B + 64·s + yerel etiket numaralarını alır. Parçanın hazır etiket haritası, parçanın kendi arka planı dışarıda kalarak yuvaya kopyalanır. Yerleştirme bir geri al adımıdır. Geri al, parçayı sepete döndürür ve arka plan etiketlerini aynen geri koyar. Böylece dolgular, çizgi kırpması (clipLabel), _completionUndone ve geri al komutları geçerli kalır.",
+    "Restore, çizginin clipLabel değerini dolgulardaki gibi ilk noktasından yeniden bulur. Bugün yalnız dolgular noktadan bulunuyor (coloring_document.dart:235); çizgi ise numarasıyla olduğu gibi okunuyor (coloring_document.dart:243). Kırpma bölgesi zaten ilk noktadan alınıyor (paint_canvas.dart:338-340), bu yüzden düzeltme ucuz; sayfalardaki gizli bir riski de kapatır. Kayda 'scene': {id, v, placed: [{s, k}]} anahtarı eklenir, şema 2 kalır. Yayınlanmış bir sahnenin yuvaları ve parça çizimleri değişmez; yeni yerleşim yeni bir sahne kimliği alır.",
+    "Sahnede arka plan bölgesi yoktur. Gökyüzü dahil her parmak boyu alan boyanır, otomatik tamamlanır ve bitişe sayılır. Bunun için PageProgress.backgroundLabel sahnede 0 döndürür (çağrıldığı yerler: coloring_document.dart:99, page_progress.dart:14, coloring_screen.dart:249).",
+    "Parçalar mevcut üretim hattının uzantısıyla üretilir: aynı sabitlenmiş Fluent commit'inden, yuva boyunda ve kalın çizgiyle (emoji2page.py --size ve --line). 1024 px'lik sayfa küçültülerek kullanılmaz. Arka plan (gökyüzü, tepe, çimen, nehir) elle çizilmiş bir SVG'dir, çünkü Unicode'da nehir emojisi yok. Sahne testi şunları denetler: her parçanın yuva boyunda sahnenin %1'i kadar en az bir alanı var; yuvalar çakışmıyor; parça başına en çok 63 etiket var; katalog ile paket aynı (builtin_images_test gibi).",
+    "Parça bitti sayılır: parçanın sahnenin %1'inden büyük her alanında dolgu varsa (dokunarak ya da otomatik tamamlamayla). O an parça kısa bir zıplama yapar (Reduce Motion açıkken yapmaz) ve İngilizce adı duyulur. Bitmiş parçaya sonraki her dolgu dokunuşu adı tekrarlar; aynı parça için 1,5 sn bekleme vardır. Bütün sahne bitince bugünkü konfeti bir kez çıkar; parça başına konfeti yoktur.",
+    "Ses: her parça ve adı olan her arka plan alanı için bir İngilizce klip olur (assets/voice/en/scene_<kelime>.mp3). Klipler tool/voice/README.md kurallarıyla insan sesiyle kaydedilir; TTS kullanılmaz. Uygulama dili ne olursa olsun kelime İngilizce çalar. Kart yalnız --dart-define=COBI_SCENE=true ile ve bütün klipler paketteyken görünür (testle denetlenir); kayıt yoksa hiçbir yayında görünmez. Ebeveynler alanına 'İngilizce kelimeleri söyle' anahtarı gelir; İngilizce sahne klipleri paketteyken görünür. Bugünkü sesli adlar anahtarı yalnız uygulama dilinin kliplerine bakıyor (parents_screen.dart:163). Bu yüzden Türkçe klip yokken İngilizce kelimeleri kapatmanın yolu kalmamalı.",
+    "Söylenen kelime 'house' olur, 'home' olmaz. Ayrıca ev düğmesi zaten bir ev simgesi ve adı 'home'. Minik'te ekranda yazı yok. Büyük'te kelime 2 sn parçanın altında görünür; dokunuşu engellemez (IgnorePointer), resme ve PNG'ye girmez. Sepette renkli Fluent resmi değil, parçanın çizgi resmi durur; renkli örnek 3 Kasım'da 'doğru renk bu' baskısı gerekçesiyle veto edildi.",
+    "Eserlerim ve kapı arkası: sahne eseri sahne ekranında açılır; openArtwork bugün her eseri ColoringScreen'e yolluyor (my_artworks_screen.dart:315-329). 'Boş sayfayı yazdır', çocuğun kurduğu sahnenin çizgilerini basar; bugün boş originalImagePath basılıyor (my_artworks_screen.dart:260). VoiceOver sahne adını uygulama dilinde okur (my_artworks_screen.dart:80). Sahne, seviye sayacına (currentLevel, lib/data/page_order.dart) girmez.",
+    "Performans: yerleştirme, en eski iPad'de (A8) 100 ms içinde biter. Bu süreye etiket kopyası, arka plan bölge istatistikleri, çizgi resminin birleştirilmesi, dolgu katmanı ve gerekirse fırça katmanının yeniden çizimi girer. 250 ms'lik uçuş animasyonu bu süreyi örter. Bellek bir sayfa kadardır (tek 1024² belge). Gerçek cihazda ölçülmeden yayın yok; CobiPaint_Pixel yalnız ön kontroldür.",
+    "Testler: birim testleri etiket bileşimini ve geri dönüşünü, yerleştir/geri al/ileri al adımlarını, JSON gidiş-dönüşünü, clipLabel'in yeniden bulunmasını, parça bitti kuralını ve en yakın boş yuva seçimini kapsar. Katalog testi eklenir. Widget testleri dokunarak ve sürükleyerek koymayı, tuval dışına bırakmayı ve yeri kalmayan parçanın soluk hücresini kapsar. Sahne ekranı meetsGuideline'dan geçer; 320, 375, 393 ve 430 pt genişlikte, yatayda ve iPad bölmesinde denenir. Minik'te sepetin isabet alanı 375 pt'de en az 64 pt'dir.",
+    "Mağaza ve sıra: kayıtlar ve çocuk denemesi bitmeden mağaza metninde, ekran görüntüsünde ve Yenilikler'de mod anılmaz. Sonra yalnız davranış yazılır: 'Parçalarla manzara kur ve boya; boyanan parça İngilizce adını söyler.' 'İngilizce öğretir' ya da 'dil gelişimini destekler' gibi bir sonuç iddiası yazılmaz (2.3). İş PR #10 yayınlandıktan sonra ayrı dalda başlar; 2.1.x'e girmez. İlk sahne ücretsizdir ve hep ücretsiz kalır. Sonraki sahneler Tam Sürüm adayıdır; çocuğun ekranında kilit görünmez."
+   ],
+   "toddler_risk": "Şartsız orta, şartlarla düşük. (1) Sürükle-bırak 3 yaş için zor: parmak yolda kalkar ve parça yanlış yere düşer. Dokunarak koymak ve her bırakışta parçanın kendi yerine oturması bunu başarısızlıksız yapar. (2) Küçük parçada parmak boyu alan kalmıyor. 1024×768 sahnede 240 px'te 21 parçanın 4'ünde hiç yok. O zaman çocuk komşu bölgeyi boyar, 'bitti' gelmez ve kelime duyulmaz. Bu yüzden Minik'te en çok 5 büyük parça olur. (3) Ev düğmesi bir ev simgesi (Icons.home_rounded). Sepette evi arayan çocuk bu düğmeye basıp sahneden çıkabilir. Kayıp olmaz, ama hayal kırıklığı olur. (4) Yabancı kelime 3 yaşındaki çocuğa anlamsız gelebilir ya da dikkatini dağıtabilir. Bunun için ebeveyn anahtarı ve aynı parça için 1,5 sn tekrar beklemesi var. (5) Boşalan sepet hücresi 'bozuldu' diye okunabilir. (6) Fırçayla boyayan çocuk dolgu yapmadığı için parçayı bitiremez. Kelimeyi yalnız parçayı koyarken duyar. (7) iPhone Sessiz konumdayken klipler de susar, çünkü ses oturumu bütün uygulama için ambient (sound_service.dart:46-51). Minik'te yazı, hata durumu ve temizle düğmesi yok.",
+   "rationale": "Fikir değerli ve motorun çoğunu yeniden kullanabilir, ama bugünkü belge her bırakmada yeniden kurulan bir etiket haritasını taşıyamaz. Harita belgede sabit (coloring_document.dart:33), çizgiler bölgeyi numarayla saklıyor (stroke.dart:109) ve restore yalnız dolguları noktadan yeniden buluyor (coloring_document.dart:235, 243); bu yüzden her bırakmada RegionBuilder çalıştırmak numaraları kaydırır, kırpmayı ve geri al geçmişini bozar. Güvenli yol, üst üste binmeyen sabit yuvalar ve sabit etiket aralıkları: parçanın hazır etiket haritası yuvaya kopyalanır, tek belge, otomatik tamamlama, PageProgress, kayıt ve geri al bugünkü gibi çalışır, eski iPad'de bellek bir sayfa kadar kalır. Ölçtüm: 1024 px'lik sayfalar 1024×768 sahnede 240 px'e küçülünce 21 parçanın 4'ünde parmak boyu alan (sahnenin %1'i) hiç kalmıyor, 14'ünde yalnız bir tane kalıyor, 180 px'te 11'inde hiç yok; bu yüzden Minik'te en çok 5 büyük parça olur ve parçalar yuva boyunda, kalın çizgiyle yeniden üretilir. Öğrenme yarısı tümüyle insan sesi kaydına bağlı; kayıtlar gelmeden kart görünmemeli ve mağaza yalnız davranışı anlatmalı. Efor L: yaklaşık 11–13 iş günü (motor 3, ekran ve sepet 2, içerik hattı ve arka plan çizimi 2–3, ses ve Ebeveynler 1, kayıt ve Eserlerim 1, testler ve eski iPad ölçümü 2) ve bir kayıt seansı; iş PR #10 yayınlandıktan sonra ayrı dalda başlar.",
+   "effort": "L",
+   "design": "Yeri ve modlar: Ana ekranda Giysiler'den sonra, en sona yeni bir kart gelir: 🏞️, adı 'Manzara' / 'Landscape'. Kartın adı kayıtlı sesle söylenir. Kart bir kategori değildir; dokununca doğrudan sahne ekranı açılır. Daha önce başlanmış bir sahne varsa en yenisi kaldığı yerden açılır (kategori kartı gibi). Mod hem Minik'te hem Büyük'te vardır.\n\nEkran: Boyama ekranının aynısıdır. Üstte ev, boya, fırça döngüsü ve geri al düğmeleri (Büyük'te ileri al da) durur; altta palet durur. Tuval ile paletin arasında, yalnız bu ekranda olan tek satırlık bir parça sepeti vardır. Yatay düzende sepet paletin yanında tek sütun olur. Tuval karedir (1024×1024, sayfalarla aynı oran). Çizgi resmi bir çayırdır: gökyüzü, iki tepe, çimen ve alttan geçen bir nehir. Hepsi boyanır.\n\nSepet (okuma gerektirmez): Menü, kaydırma ya da sayfa yoktur. Minik'te 5 parça vardır: güneş, bulut, ev, ağaç, çiçek. Hücreler KidPalette gibi kısıtlara göre boyutlanır. İsabet alanı ızgara aralığının tamamıdır: 375 pt'lik telefonda yaklaşık 70 pt, tablette 112 pt. Büyük'te 8 parça vardır (ek olarak kuş, ördek, gökkuşağı); hücreler 52 pt'dir, telefonda iki sıradır. Hücrede parçanın renkli resmi değil, siyah çizgi resmi durur. VoiceOver hücreyi 'Ev, house' diye okur ('house' İngilizce telaffuzla); hücre düğme özelliği taşır.\n\nKoymak: Dokunmak yeter. Parça hücreden sahnedeki yerine 250 ms'de uçar. Bu sırada dolgu sesi, hafif titreşim ve İngilizce adı ('House!') duyulur. Reduce Motion açıkken parça uçmadan belirir. Sürüklemek de çalışır: parça parmağın altında 1,2 kat büyür. Tuvalde nereye bırakılırsa bırakılsın, Minik'te kendi yerine, Büyük'te kendi türünün en yakın boş yerine oturur. Tuvalin dışına bırakılırsa sessizce sepete döner. Yerleşen parçanın hücresinde silik, kesik çizgili gölgesi kalır. Yeri kalmayan parça soluk ve etkisiz görünür (pasif geri al düğmesi gibi). Taşıma, döndürme, büyütme ve üst üste bindirme yoktur; yerleşen parça resmin parçası olur.\n\nKaldırmak: Yalnız geri al ile. Yerleştirme tek adımdır; geri al parçayı sepete uçurur. Silgi boyayı siler, parçayı kaldırmaz. Temizle düğmesi yoktur (Ç7).\n\nBoyamak: Sayfadaki gibidir: dokunarak dolgu, fırça döngüsü ve çıkartmalar, keçeli kalemle otomatik tamamlama, Büyük'te zoom ve Apple Pencil basıncı. Boş sahnede, Minik'teki ipucu maskotu 6 sn sonra sepetin ilk hücresini gösterir.\n\nDuymak: İngilizce ad iki anda duyulur: parça konunca ve parçanın parmak boyu (sahnenin %1'i) alanlarının hepsi dolunca. Parça bitince kısa bir zıplama yapar (Reduce Motion açıkken yapmaz). Bitmiş parçaya sonraki her dolgu dokunuşu adı tekrarlar; aynı parça için 1,5 sn bekleme vardır. Gökyüzü, çimen, nehir ve tepe alanları da dolunca kendi adlarını söyler. Uygulama dili ne olursa olsun kelime İngilizcedir: Türk çocuk 'house' duyar. İngilizce kullanan çocuk da 'house' duyar; onun için bu bir 'adını duy' oyunudur. Parça konunca Türkçe adın da söylenip söylenmeyeceğine erken çocukluk üyesi karar verir; motor iki dili de taşır. Bütün sahne bitince bugünkü kısa konfeti bir kez çıkar. Ekran okuyucu açıkken klip çalmaz; kelimeyi VoiceOver İngilizce okur.\n\nYazı: Minik'te hiç yazı yoktur. Büyük'te söylenen kelime 2 sn parçanın altında küçük harfle görünür (en az 24 pt, kontrast en az 4,5:1). Yazı dokunuşu engellemez, resme ve kayda girmez.\n\nEbeveyn (kapı arkası): Ebeveynler alanına 'İngilizce kelimeleri söyle / Say the English words' anahtarı gelir; varsayılan açıktır ve İngilizce sahne klipleri paketteyse görünür. Eserlerim'de sahne, diğer resimlerle aynı ahşap çerçevede durur. Resme basılı tutulup kapı geçilince şu satırlar çıkar: Paylaş, Galeriye kaydet, Yazdır, 'Boş sahneyi yazdır' (çocuğun koyduğu parçaların çizgileriyle), 'Bu sahneyi baştan kur' (boş bir sahne açar, eskisi kalır), Sil. Modun kendisi çocuğa açıktır; ayarlar, dışa aktarma ve baştan kurma kapının arkasındadır.\n\nSatın alma: İlk sahne ve parçaları ücretsizdir ve hep ücretsiz kalır. Yeni sahneler (çiftlik, deniz) ileride Tam Sürüm'le gelir. Çocuğun ekranında kilit, rozet ya da 'daha fazla' kutusu olmaz.\n\nTeknik: Tek ColoringDocument ve tek PageLayers kullanılır. Sahnenin etiket haritası, arka planın haritası ile yuvalara kopyalanan parça haritalarından birleştirilir; numaralar sabit kalır. Çizgi resmi de arka planın ve parçaların çizgilerinden birleştirilir: önce parçanın içi beyazla örtülür, sonra parçanın çizgisi çizilir. Kayda 'scene' anahtarı eklenir. Küçük resim ve PNG, bugünkü renderArtworkPngs ile birleşik çizgi resminden üretilir.",
+   "mvp": "Tek sahne: 'Çayır'. Gökyüzü, tepe, çimen ve nehir alanlarının dördü de boyanır ve adını söyler. Minik'te 5 parça var (güneş, bulut, ev, ağaç, çiçek); her biri sahnede kendi yerine oturur. Büyük'te 8 parça var (ek olarak kuş, ördek, gökkuşağı); ağacın ve çiçeğin ikişer yeri olur. Sepetten dokununca ya da sürükleyince parça yerine uçar; yerleştirme bir geri al adımıdır. Parça konunca ve parmak boyu alanları dolunca İngilizce adı duyulur. Bunun için 8 parça ve 4 arka plan alanı için 12 İngilizce klip, kart adı için 2 klip gerekir; hepsi tek bir kayıt seansında biter. MVP'de taşıma, üst üste bindirme, büyütme, Türkçe kelime klibi ve parça başına katman yok. Kayıt, otomatik tamamlama, konfeti ve Eserlerim sayfalardaki gibi çalışır. Ebeveynler alanında tek anahtar var. Mod ücretsizdir. Kart COBI_SCENE bayrağıyla, klipler pakete girince açılır. Daha küçük bir ön adım da mümkün (ayrı oy, S): mevcut sayfalarda resim bitince İngilizce adını çalmak. page_<kod> klipleri tool/voice/README.md'de zaten ikinci aşama olarak duruyor. Bu adım, 'kelime çocuğun ilgisini çekiyor mu' sorusunu motor işi olmadan çocukla test eder.",
+   "catalog": [
+    {
+     "piece": "2600",
+     "tr": "güneş",
+     "en": "sun",
+     "note": "Fluent UI Emoji'de var (sayfa nature_2600, seviye 1). 1024×768 sahnede, küçültülmüş sayfayla 240 px'te 2 parmak boyu alan. Minik'te var."
+    },
+    {
+     "piece": "2601",
+     "tr": "bulut",
+     "en": "cloud",
+     "note": "Fluent'te var (seviye 1). 240–400 px'te 1 parmak boyu alan. Minik'te var."
+    },
+    {
+     "piece": "1f3e0",
+     "tr": "ev",
+     "en": "house",
+     "note": "Fluent'te var (seviye 2). Kelime 'home' değil 'house'. 180 px'te parmak boyu alan yok; 240–320 px'te 1, 400 px'te 3. Minik'te en büyük yuva bu parçanın."
+    },
+    {
+     "piece": "1f333",
+     "tr": "ağaç",
+     "en": "tree",
+     "note": "Fluent'te var (yaprak döken ağaç, seviye 1); kelime 'tree'. 180–400 px'te 1 parmak boyu alan (taç). Minik'te var."
+    },
+    {
+     "piece": "1f337",
+     "tr": "çiçek",
+     "en": "flower",
+     "note": "Fluent'te var (lale çizimi, seviye 1); kelime 'tulip' değil 'flower'. 180 px'te parmak boyu alan yok; en az 240 px'lik yuva gerekir. Minik'te var."
+    },
+    {
+     "piece": "1f426",
+     "tr": "kuş",
+     "en": "bird",
+     "note": "Fluent'te var (seviye 1). 1 parmak boyu alan. Büyük'te var."
+    },
+    {
+     "piece": "1f986",
+     "tr": "ördek",
+     "en": "duck",
+     "note": "Fluent'te var (seviye 2), nehir yuvasına oturur. 240 px'te parmak boyu alan yok; 320 px'te 2. Yalnız Büyük'te ve büyük yuvada."
+    },
+    {
+     "piece": "1f308",
+     "tr": "gökkuşağı",
+     "en": "rainbow",
+     "note": "Fluent'te var (seviye 2), gökyüzü yuvasına oturur. 240 px'te parmak boyu alan yok; 320 px'te 3. Yalnız Büyük'te ve büyük yuvada."
+    },
+    {
+     "piece": "1f41f",
+     "tr": "balık",
+     "en": "fish",
+     "note": "Fluent'te var (seviye 1), nehir yuvasına oturur. 1 parmak boyu alan. İkinci aşamada gelir."
+    },
+    {
+     "piece": "26f5",
+     "tr": "tekne",
+     "en": "boat",
+     "note": "Fluent'te var (yelkenli tekne, seviye 2); kelime 'boat'. 240 px'te parmak boyu alan yok, 320 px'te 1. İkinci aşamada gelir."
+    },
+    {
+     "piece": "1f407",
+     "tr": "tavşan",
+     "en": "rabbit",
+     "note": "Fluent'te var (seviye 1). 1 parmak boyu alan. İkinci aşamada gelir."
+    },
+    {
+     "piece": "1f344",
+     "tr": "mantar",
+     "en": "mushroom",
+     "note": "Fluent'te var (seviye 2). 240–320 px'te 1, 400 px'te 3 parmak boyu alan. İkinci aşamada gelir."
+    },
+    {
+     "piece": "arka plan",
+     "tr": "gökyüzü",
+     "en": "sky",
+     "note": "Fluent'te yok; elle çizilmiş arka planın alanı. Dolunca adını söyler."
+    },
+    {
+     "piece": "arka plan",
+     "tr": "çimen",
+     "en": "grass",
+     "note": "Fluent'te yok; arka plan alanı."
+    },
+    {
+     "piece": "arka plan",
+     "tr": "nehir",
+     "en": "river",
+     "note": "Unicode'da nehir emojisi yok. Arka planda alttan geçen şerit olarak çizilir. Sahibin istediği 'nehir' böyle gelir; sürüklenen bir parça olmaz."
+    },
+    {
+     "piece": "arka plan",
+     "tr": "tepe",
+     "en": "hill",
+     "note": "Fluent'te dağ (26f0) var, ama arka planda sade bir tepe daha iyi çalışır. Kelebek (1f98b) kataloğa girmedi: 14–16 küçük bölgesi var ve 240 px'te parmak boyu alanı kalmıyor."
+    }
+   ],
+   "child_test": "Oturum 10–15 dakika sürer, 3–5 çocukla (en az ikisi 3 yaşında). Mod Minik'tir; bir iPad ve bir telefon kullanılır. Ses açık, Sessiz anahtarı kapalıdır. Ebeveyn yanda durur ama yardım etmez. Uygulamada analitik olmadığı için bir gözlemci sayıları kâğıda yazar. İlk 2 dakika hiç yönerge verilmez. Şunlara bakılır:\n(1) Çocuk sepete dokunmayı kendisi buluyor mu, yoksa sürüklemeyi mi deniyor? İlk yerleştirmeye kadar kaç saniye geçiyor?\n(2) Sürüklemelerin kaçı yolda bitiyor? Parçanın kendi yerine uçması çocuğu şaşırtıyor mu? 'Oraya koymak istedim' diye itiraz eden oluyor mu?\n(3) Boşalan ya da soluklaşan sepet hücresi 'bozuldu' diye okunuyor mu? Çocuk ikinci bir ev koymaya çalışıyor mu?\n(4) Kaç çocuk evi ararken ev düğmesine basıp sahneden çıkıyor?\n(5) Çocuk İngilizce kelimeyi fark ediyor mu? Kaç kez kendiliğinden tekrar ediyor? 'Ne dedi?' diye soruyor mu? Kelimeyi yeniden duymak için bitmiş parçaya dokunuyor mu?\n(6) Her parçada dokunuşların kaçı komşu bölgeyi boyuyor? En zor parça hangisi? En riskli olanlar çiçek ve ağaç gövdesi.\n(7) Fırçayla boyayan çocuk parçayı bitirip kelimeyi duyabiliyor mu? Kaç parça hiç bitmiyor?\n(8) Renk adı klibi parçanın kelimesini kesiyor mu?\n(9) Çocuk sahnede kaç dakika kalıyor, normal bir sayfaya göre? Sahne kartına kendiliğinden geri dönüyor mu?\n(10) Ebeveyn anahtarı buluyor mu? Modu 'İngilizce öğretir' diye mi, 'İngilizce adını söyler' diye mi anlatıyor?\nBir hafta sonra (isteğe bağlı): ebeveyn çocuğa parçaların resmini gösterip 'Bunun İngilizcesi ne?' diye sorar. 2–3 kelimeyi hatırlayan çocuk sayısı, mağaza metninde 'öğren' fiilinin kullanılıp kullanılamayacağını belirler."
+  },
+  {
+   "member": "Ebeveyn üye (3 ve 6 yaşında iki çocuk; Türkçe konuşulan ev, ebeveynler çocukların İngilizce kelime edinmesini istiyor)",
+   "decision": "conditional",
+   "veto": false,
+   "conditions": [
+    "Ses olmadan yayın yok: Her parçanın ve adı söylenen her arka plan bölgesinin İngilizce kelimesi insan sesiyle kaydedilmeden mod yayına girmez. Kayıtlar gelene kadar mod, COBI_IAP gibi bir derleme bayrağının arkasında kapalı kalır (ör. COBI_SCENE). Klibi olmayan parça tepsiye girmez ve bunu bir test denetler (test/builtin_images_test.dart'ın katalog ile paket eşitliğini denetlemesi gibi). Cihazın konuşma motoru kullanılmaz (tool/voice/README.md).",
+    "Telaffuz: İngilizce kelimeleri anadili İngilizce olan ya da o düzeyde konuşan biri okur. Bütün kelimeler tek aksanla kaydedilir; mağazanın İngilizce yerelleştirmesi en-US olduğu için ABD İngilizcesi. Biçim README'deki gibidir: tek kelime, artikelsiz, 0,5–1,5 sn, −16 LUFS. README'nin 'aynı seslendirmen iki dili okur' kuralı bu kliplerde ancak seslendirmen bu düzeydeyse geçerlidir. Anahtar word_<kelime>, klasör assets/voice/en/; Manzara kartının sesli adı için de README'ye satır eklenir.",
+    "Kelime: Her parçanın tek İngilizce kelimesi temel düzey addır, yani çocuğun ilk öğrendiği genel ad. Ev parçası 'house' der (home değil); ağaç 'tree' (deciduous tree değil), çiçek 'flower' (tulip değil), araba 'car' (automobile değil). Kelime her uygulama dilinde İngilizcedir. Türkçe uygulamada renk ve kategori adları bu sürümde Türkçe kalır.",
+    "Okuma ve sınav yok: Minik'te de Büyük'te de ekranda yazılı kelime yok. 'Evi bul' gibi soru, doğru/yanlış, puan, yıldız, kelime sayacı, ilerleme çubuğu ve seri yok. Bırakılan her parça bir yere oturur; 'yanlış yer' durumu ve hata sesi yok.",
+    "Dokun ya da sürükle: Tepsideki karoya dokunmak parçayı kendi türündeki boş yere gönderir (güneş göğe, ördek nehre); o tür doluysa en yakın boş yere. Sürüklemek parçayı parmağın kalktığı noktaya en yakın boş yere bırakır. İkisi de çalışır, çünkü HIG Drag and drop sürüklemeye alternatif bir yol sunmayı öneriyor. Sürükleme uzun basma istemez (LongPressDraggable kullanılmaz); parça parmak değer değmez kalkar, parmağın hemen üstünde görünür ve hedef yer parlar. Sahnenin dışında bırakılan parça kendi karosuna döner.",
+    "Tepsi renksiz: Karolar parçanın boyanmamış, siyah çizgili hâlini gösterir. Renkli emoji gösterilmez, çünkü renkli örnek 3 Kasım'da 'doğru renk bu' baskısı gerekçesiyle veto yedi (plan/gece-raporu-2026-11-03.html bölüm 4).",
+    "Dokunma hedefi ve düzen: Minik'te karo en az 64 pt; 375 pt telefonda tek sırada 4 karo (yaklaşık 79 pt, hesap), tablette 6 karo. Büyük'te karo en az 44 pt. Dikeyde tepsi paletin üstünde tek sıra, yatayda paletin yanında tek sütundur. 320, 375, 393 ve 430 pt genişlikte, yatayda ve iPad Split View'da denenir. Yeni ekran test/accessibility_test.dart'taki meetsGuideline kontrolüne girer.",
+    "Araç çubuğu aynı kalır: ev, kova, fırça, geri al (Büyük'te ileri al). Yeni düğme, menü ya da mod anahtarı yok; tepsi tek yeni kontroldür. Geri al son konan parçayı kaldırır ve parça karosuna döner. Silgi parçayı hiçbir zaman kaldırmaz, yalnız boyayı siler; bugün silgi çıkartmaları söküyor (lib/engine/document/coloring_document.dart:113-122), parçalar bu kuralın dışında kalır.",
+    "Sabit yerler: Sahnede 6 sabit yer var: gökte 2, çimende 3, nehirde 1. Bütün parçalar aynı boydadır ve birbirini örtmez. İlk sürümde taşıma ve büyütme yok. Bütün yerler dolunca tepsi gizlenir; geri al tepsiyi geri getirir. Bir sahnede her parça bir kez konur; boşalan karoya katalogdaki sıradaki parça gelir. Parça eklenince ya da kalkınca çocuğun mevcut boyası yer ya da renk değiştirmez; parçanın içi beyaz başlar.",
+    "Parça kalitesi: Parçalar sayfalarla aynı hattan üretilir (Fluent UI Emoji, MIT, sabit commit; tool/pages/emoji2page.py); sahnedeki boyutlarında ve sayfalarla aynı çizgi kalınlığında çizilir, elle düzenlenmez. Denetim parçayı sahnedeki boyutunda ölçer: her bölge ya parmak boyundadır (sahnenin %1'i, lib/engine/document/page_progress.dart:15) ya da sayılmayan kırıntıdır. Bir parçada en çok 3 parmak boyu bölge olur. Geçemeyen parça katalogda 'skip' ile kalır. Her parçayı bir insan telefonda, sahnenin içinde gözle kontrol eder.",
+    "Kelime anları: Kelime parça konunca bir kez, parça bitince bir kez çalar. Parça bitti demek, bütün parmak boyu bölgeleri boyandı demektir. Her dolgu dokunuşunda kelime çalmaz. Gökyüzü, çimen ve nehir ilk boyandığında adları bir kez çalar. Sahnedeki bütün parçalar bitince bilinen 1,1 sn kutlama bir kez gelir (lib/screens/coloring_screen.dart:443-447). P2 otomatik tamamlama parça bölgelerinde aynen çalışır. Reduce Motion açıkken parçanın uçuşu yok, parça yerinde belirir.",
+    "Ses ayarı: Yeni ayar yok; kelimeler mevcut 'Sesli adlar' anahtarına bağlanır. Anahtar bugün yalnız uygulama dilinin kliplerine bakıyor (lib/screens/parents_screen.dart:160-175); İngilizce kelime klipleri varsa Türkçe uygulamada da görünür. Klipler uygulamanın ortak ambient ses oturumunu izler (lib/services/sound_service.dart:48-56), yani sessiz modda susar. HIG Playing audio dil öğrenme uygulamasını Playback örneği olarak verdiği için bu bir gerekçeli sapmadır: sessize alınmış telefon çocuğun elinde konuşmamalı. Ebeveynler alanına bunu söyleyen tek satır eklenir. VoiceOver açıkken klip çalmadığı için (lib/services/voice_service.dart:46) karo etiketi İngilizceyi de okur: 'Ev, house'.",
+    "Kayıt ve açılış: Sahne diğer sayfalar gibi kendiliğinden kaydedilir (Ç6); hiç dokunulmamış sahne kaydedilmez. Sahne Eserlerim'de çocuğun öteki resimleri gibi durur ve kapı arkası menü aynı kalır. Manzara kartı en yeni sahne bitmediyse onu açar, bittiyse yeni boş sahne açar. Bitmiş sahne demek, en az bir parça var ve bütün parçalar boyandı demektir. Takılan çocuk için ebeveyn Eserlerim'deki kapı arkası 'Bu sayfayı baştan boya' satırıyla yeni boş sahne açar (P1 kalıbı). Sahneler seviye sayacına girmez (lib/data/page_order.dart:24-38).",
+    "Yer ve para: Manzara kartı ana ekranda son kategori kartından sonra gelir; çocuklar kartları yerinden bulduğu için mevcut kartların yeri değişmez. Kart, arka plan ve 8 temel parça ücretsizdir. Tam Sürüm katalogdaki diğer parçaları tepsinin sırasına ekler. Kilit, rozet ve 'daha fazla' karosu yok; çocuğun ekranı satın almadan önce ve sonra aynı düzende kalır.",
+    "Gizlilik: Mikrofon, konuşma tanıma, 'tekrar et' puanlaması, ağ, analitik ve reklam yok. Yeni izin istenmez. 'Data Not Collected' etiketi ve gizlilik metni değişmez. Yeni metinler (kart adı, Ebeveynler alanı satırı) TR ve EN yazılır, 10 dil taslağına anahtar eklenir.",
+    "Mağaza: Metin yalnız yayından sonra ve yalnız gerçeği yazar: çocuk parçaların İngilizce adını insan sesinden duyar. Kelime sayısı ücretsiz sürüm ve Tam Sürüm için ayrı yazılır. 'İngilizce öğretir', 'dil gelişimini destekler', 'eğitimciler hazırladı' gibi kanıtsız ifade yok; 2.3.1 uygulamada olmayan bir özelliği tanıtmayı yanıltıcı pazarlama sayıyor. Notes for Review modu, insan sesi kayıtlarını, mikrofonsuz ve ağsız çalışmayı anlatır; Yenilikler metni davranışı yazar (2.3.12).",
+    "Sıra: Mod 2.1.0 ve 2.1.1'e girmez. Önce tool/voice/README.md'deki mevcut kayıt listesi ve P1, P2 yayına girer. Kod yazılmadan önce kâğıt ya da TestFlight prototipiyle 3–5 çocukla gözlem yapılır; yer sayısı ve dokun/sürükle dengesi bu gözlemle kesinleşir.",
+    "Veto notu: Kayıtsız ya da cihazın konuşma motoruyla çıkan, Minik'te soru, yazı ya da başarısızlık durumu içeren, ya da mağazada 'İngilizce öğretir' diyen bir sürüme veto koyarım; bu üçü ebeveynin güvenini ve 2.3.1'i bozar."
+   ],
+   "toddler_risk": "Orta. Sürüklerken 3 yaşındaki çocuğun parmağı yolda kalkabilir. Parça en yakın boş yere oturduğu ve dokunarak koyma da çalıştığı için bu bir başarısızlığa dönmez, ama çocuk parçanın istediği yere gitmediğine itiraz edebilir. Araç çubuğu, tepsi ve palet ekranda üç sıra kontrol demektir; iPhone SE boyunda tuval yaklaşık 300 pt'ye iner (hesap, ölçmedim). Minik'te zoom olmadığı için parçanın içindeki bölgeler parmağa küçük gelebilir; parça başına en çok 3 parmak boyu bölge şartı bunu sınırlar. Renkli tepsi 'doğru renk' baskısı yaratır; tepsi bu yüzden renksiz. Her dokunuşta konuşan ses ebeveyni bezdirir ve sesi kapattırır; kelime bu yüzden yalnız iki anda çalar. Kart her seferinde yeni sahne açarsa 'resmim gitti' ağlaması başlar; kart bu yüzden bitmemiş sahneyi açar. Sahne dolunca kaybolan tepsi çocuğu şaşırtabilir; geri al tepsiyi geri getirir. Yanlış telaffuzla kaydedilmiş kelime yanlış öğretir; anadili düzeyinde ses şartı bunu önler.",
+   "rationale": "Şartlı onay veriyorum; bu modu evde iki çocuğum için de isterim. Çocuk evi kendi eliyle koyup boyadığı anda 'house' duyarsa kelime hem resme hem kendi işine bağlanır; plan da ebeveynin 'eğitici' özelliğe ödeme yaptığını yazıyor (plan/cobi-paint-yeniden-dogus-plani.html bölüm 9). Ama modun asıl değeri olan ses bugün yok: hiçbir klip kaydedilmedi ve eksik klip sessizce atlanıyor (lib/services/voice_service.dart:47-49). Kayıtsız çıkan bir 'İngilizce modu' sessiz bir sahne oyunu olur ve mağazada vaat edilip verilmeyen özellik 2.3.1'e takılır. Tasarımı üç yaşa göre daraltıyorum: dokunarak da koyma, sabit yerler, renksiz tepsi, yazısız ve sınavsız akış. Ev parçası 'home' değil 'house' demeli, çünkü İngilizce resimli kitapta ev resmine house denir ve home 'evimiz, yuvamız' kavramıdır.",
+   "effort": "L",
+   "design": "Yeri: Ana ekranda yeni bir Manzara kartı (çalışma adı; EN 'Scene'). Kart beyazdır, kategori kartlarıyla aynı boydadır ve U+1F3DE 'national park' emojisini taşır; son kategori kartından sonra gelir, mevcut kartların yeri değişmez. Kategori değildir, çünkü kategori bir sayfa listesi açar; Manzara kartı Çiz kartı gibi doğrudan sahneyi açar. Minik'te ve Büyük'te aynı kurallarla vardır. Mod ebeveyn kapısının arkasında değildir; yalnız ayarlar, Eserlerim menüsü ve Tam Sürüm kapının arkasındadır.\n\nÇocuğun gördüğü (Minik): Siyah çizgili boş bir sahne açılır: gökyüzü, tepeler, çimen ve ortadan akan bir nehir; hepsi boyanabilir. Üstte bilinen araç çubuğu durur (ev, kova, fırça, geri al). Tuvalin altında, paletin üstünde tek sıra tepsi vardır: telefonda 4, tablette 6 büyük karo. Her karoda bir parçanın boyanmamış çizgi resmi görünür. Çocuk karoya dokunursa parça kendi türündeki boş yere uçar ve kelime duyulur ('Sun!'). Karodan parmağını kaydırırsa parça parmağın hemen üstünde onu izler ve en yakın boş yer parlar. Parmağını kaldırınca parça o yere oturur ve kelime duyulur. Boşalan karoya katalogdaki sıradaki parça gelir. 6 yer dolunca tepsi kaybolur ve tuval büyür. Boyama bildiği gibidir: kovayla dokun-doldur, fırça döngüsü, otomatik tamamlama, çıkartma, silgi. Bir parçanın bütün parmak boyu bölgeleri boyanınca dolgu sesinin ardından kelime bir kez daha duyulur ('House!'). Gökyüzü, çimen ve nehir ilk boyandığında 'Sky!', 'Grass!', 'River!' duyulur; bu büyük alanlar ilk dokunuşta hızlı bir başarı verir. Sahnedeki bütün parçalar bitince bilinen kısa kutlama gelir. Geri al son adımı geri alır; son konan parçayı da kaldırıp karosuna döndürür. Boş sahnede 6 sn dokunulmazsa maskot ipucu bir parmağın karodan sahneye kaydığını gösterir; yalnız ilk 3 parçaya kadar, ekran okuyucu açıkken asla.\n\nNeden ikisi birden: Sahibin istediği sürükle-bırak çoğu 3 yaşındaki çocuk için yapılabilir, ama parmak yolda kalkar. Dokunarak koyma güvenlik ağıdır ve HIG Drag and drop sayfasının önerdiği alternatif yoldur. Bırakılan parça her zaman bir yere oturur; balık göğe konursa komiktir, hata değildir.\n\nBüyük: Aynı sahne ve kurallar geçerlidir. Telefonda 5 karo (yaklaşık 61 pt), tablette 8 karo. Zoom, fırça boyu, Apple Pencil basıncı ve ileri al bugünkü gibi çalışır. Yazılı kelime yok: Türkçe okumayı yeni söken 6 yaşındaki çocuk 'house'u Türkçe kuralla 'ho-u-se' diye okur. Yazılı kelime ileride yalnız Büyük için ayrı oyla gelebilir.\n\nDil: Kelime her uygulama dilinde İngilizcedir. Türkçe uygulamada Manzara evin 'İngilizce köşesi' olur: renk ve kategori adları (kayıtlıysa) Türkçe, parça adları İngilizce duyulur. İngilizce uygulamadaki çocuk aynı kelimeleri anadilinde duyar; 3 yaş için bu da değerli bir ad öğrenme anıdır. 'House' mu 'home' mu: house. Türkçe 'ev' iki anlamı da taşıdığı için ebeveyne bu ayrımı Ebeveynler alanındaki tek satırda anlatmak yeter.\n\nSonradan dokununca: Konmuş parçaya dokunmak onu boyar, kelime çalmaz. Her dokunuş Ç8 gereği anında boyamalıdır; boyayan çocuğu sesle bölmek ve her dokunuşta konuşmak evde ebeveyni bezdirir. Kelimeyi yeniden duymanın yolu yeni bir sahne kurmaktır.\n\nKayıt ve Eserlerim: Sahne ilk değişiklikte kaydedilir, sonra her değişiklikten 400 ms sonra yeniden; hiç dokunulmamış sahne kaydedilmez. Sahne Eserlerim'de çocuğun öteki resimleri arasında durur ve küçük resimde parçalar görünür. Manzara kartı en yeni sahne bitmediyse onu, bittiyse yeni boş sahne açar. Eserlerim'den açılan sahnede boş yer varsa tepsi görünür. Sahne yeniden açılınca geri al geçmişi boş başlar (bugünkü davranış: lib/engine/document/coloring_document.dart:222-255); konmuş parçalar artık geri alınamaz, yalnız boş yerlere yenisi eklenir. Takılan çocuk için ebeveyn Eserlerim'de kapı arkasındaki 'Bu sayfayı baştan boya' satırıyla yeni boş sahne açar.\n\nEbeveynin gördüğü: Ebeveynler alanında yeni ayar yok. 'Sesli adlar' anahtarı İngilizce kelimeleri de kapsar ve klipler varken görünür. Altında tek satır durur: 'Manzara'da parçaların İngilizce adı söylenir (ev: house). Sessiz modda duyulmaz.' Eserlerim'deki kapı arkası menü (paylaş, galeriye kaydet, yazdır, baştan boya, sil) aynı kalır. Tam Sürüm ekranı yeni parçaları anlatır; fiyat yalnız orada görünür.\n\nTam Sürüm: Kart, arka plan ve 8 temel parça (güneş, bulut, ağaç, çiçek, ev, köpek, kedi, ördek) ücretsizdir. Tam Sürüm 5 parçayı daha (kuş, kelebek, araba, tavşan, balık) tepsinin sırasına ekler. Kilit, rozet ya da 'daha fazla' karosu yok.\n\nİçerik hattı: tool/pages/catalog.json'a benzer bir parça listesi tutulur: Fluent kodu, Türkçe ad, İngilizce temel düzey kelime, yer türü (gök, çimen, nehir) ve free alanı. İndirme ve QuickLook adımları build_pages.py'den gelir; emoji2page.py parçayı sahnedeki boyutunda, sayfalarla aynı çizgi kalınlığında çizer. Arka plan Fluent UI Emoji'de olmadığı için betikle çizilir: ufuk, tepeler ve nehrin iki dalgalı çizgisi. Denetim her parçayı sahnenin içinde ölçer; bir test her parçanın klibini arar; her parça telefonda gözle kontrol edilir. Lisans aynıdır (MIT, Ebeveynler alanında gösteriliyor).\n\nMağaza (yalnız yayından sonra): TR 'Manzara: güneşi, ağacı, evi sahneye koy ve boya; her parçanın İngilizce adını gerçek bir insan sesinden duy.' EN 'Scene: place the sun, a tree and a house, colour them and hear each name in a real human voice.' Kelime sayısı yazılır; 'öğretir' yazılmaz. 'ingilizce' anahtar kelimesi ancak yayından sonra eklenir.\n\nİkinci adım (her biri ayrı oy, çocuk gözleminden sonra): Manzara'da renk adlarının da İngilizce söylenmesi (kayıt listesinde en/color_0–15 zaten var). Ebeveynler alanında kapı arkasında statik bir kelime listesi: resim, Türkçe ad, İngilizce kelime; dokununca kayıt çalar, ebeveyn telaffuzu oradan dinleyip çocukla tekrar eder; takip, rozet ve istatistik yok. Yurt dışındaki Türk aileler için 'kelime dili: Türkçe' seçeneği. İkinci arka plan (gece: ay, yıldız; kış: kardan adam). Büyük'te konmuş parçayı taşıma.\n\nHIG ve App Review (tasarım hedefi, denenmedi): Dokunma hedefleri uyumlu. Sürükle-bırak için dokunarak koyma alternatifi uyumlu. Geri al uyumlu. Başarısız bırakmada parçanın karosuna dönmesi uyumlu. Reduce Motion uyumlu. VoiceOver etiketi uyumlu. Sessiz mod gerekçeli sapma (ambient korunur, gerekçe şartlarda). App Review 1.3 ve 5.1.4 uyumlu: ağ, analitik, reklam ve dış bağlantı yok, satın alma kapının arkasında. 2.3.1 riski yalnız mağaza metninde.",
+   "mvp": "Ana ekranda son kategori kartından sonra Manzara kartı. Tek arka plan: gökyüzü, tepeler, çimen, nehir. 8 ücretsiz parça: güneş, bulut, ağaç, çiçek, ev, köpek, kedi, ördek. 6 sabit yer (gökte 2, çimende 3, nehirde 1). Dokunarak ya da sürükleyerek koyma; renksiz tepsi; bilinen boyama araçları ve otomatik tamamlama. Kelime parça konunca ve parça bitince bir kez çalar; gökyüzü, çimen ve nehir ilk boyandığında adını söyler. Sahne bitince bilinen kutlama gelir; otomatik kayıt ve Eserlerim aynen çalışır. Minik ve Büyük aynı kurallarla; ekranda yazı yok; Ebeveynler alanında yeni ayar yok, yalnız tek satır not. Gereken kayıt: anadili düzeyinde bir sesle 11 İngilizce klip (8 parça, sky, grass, river) ve kartın sesli adı. Klipler gelmeden mod derleme bayrağının arkasında kapalı kalır. Taşıma, yazılı kelime, İngilizce renk adları, ebeveyn kelime listesi, Tam Sürüm parçaları ve ikinci arka plan sonraki adımlardır.",
+   "catalog": [
+    {
+     "piece": "sun",
+     "tr": "güneş",
+     "en": "sun",
+     "note": "Fluent UI Emoji 'Sun' (2600) var; sayfa olarak nature_2600, seviye 1. Gökteki yer. Ücretsiz set."
+    },
+    {
+     "piece": "cloud",
+     "tr": "bulut",
+     "en": "cloud",
+     "note": "Fluent 'Cloud' (2601) var; nature_2601, seviye 1. Gökteki yer. Ücretsiz set."
+    },
+    {
+     "piece": "tree",
+     "tr": "ağaç",
+     "en": "tree",
+     "note": "Fluent 'Deciduous tree' (1f333) var; plants_1f333, seviye 1. Kelime temel düzeyde: 'deciduous tree' değil 'tree'. Çimen. Ücretsiz set."
+    },
+    {
+     "piece": "flower",
+     "tr": "çiçek",
+     "en": "flower",
+     "note": "Fluent 'Tulip' (1f337) var; plants_1f337, seviye 1. Kelime 'tulip' değil 'flower', Türkçesi 'lale' değil 'çiçek'. Çimen. Ücretsiz set."
+    },
+    {
+     "piece": "house",
+     "tr": "ev",
+     "en": "house",
+     "note": "Fluent 'House' (1f3e0) var; things_1f3e0, seviye 2; pencereler parça boyunda sayılmayan kırıntı olur. 'home' değil 'house': resimdeki bina house'tur. Çimen. Ücretsiz set."
+    },
+    {
+     "piece": "dog",
+     "tr": "köpek",
+     "en": "dog",
+     "note": "Fluent 'Dog' (1f415) var; animals_1f415, seviye 2. Çimen. Ücretsiz set."
+    },
+    {
+     "piece": "cat",
+     "tr": "kedi",
+     "en": "cat",
+     "note": "Fluent 'Cat' (1f408) var; animals_1f408, seviye 2. Türkiye'de sokakta her gün görülen hayvan. Çimen. Ücretsiz set."
+    },
+    {
+     "piece": "duck",
+     "tr": "ördek",
+     "en": "duck",
+     "note": "Fluent 'Duck' (1f986) var; animals_1f986, seviye 2. Nehirdeki yerin doğal sahibi; ücretsiz sette nehir yeri boş kalmasın diye var."
+    },
+    {
+     "piece": "bird",
+     "tr": "kuş",
+     "en": "bird",
+     "note": "Fluent 'Bird' (1f426) var; animals_1f426, seviye 1. Gökteki yer. Tam Sürüm."
+    },
+    {
+     "piece": "butterfly",
+     "tr": "kelebek",
+     "en": "butterfly",
+     "note": "Fluent 'Butterfly' (1f98b) var; sayfa olarak seviye 3. Kanat desenleri parça boyunda kırıntıya döner; parça denetiminden geçemezse çıkar. Gök. Tam Sürüm."
+    },
+    {
+     "piece": "car",
+     "tr": "araba",
+     "en": "car",
+     "note": "Fluent 'Automobile' (1f697) var; vehicles_1f697, seviye 2. Kelime 'automobile' değil 'car'. Çimen. Tam Sürüm."
+    },
+    {
+     "piece": "rabbit",
+     "tr": "tavşan",
+     "en": "rabbit",
+     "note": "Fluent 'Rabbit' (1f407) var; animals_1f407, seviye 1. Çimen. Tam Sürüm."
+    },
+    {
+     "piece": "fish",
+     "tr": "balık",
+     "en": "fish",
+     "note": "Fluent 'Fish' (1f41f) var; animals_1f41f, seviye 1. Nehirdeki yer; göğe konursa da 'yanlış' yok. Tam Sürüm."
+    },
+    {
+     "piece": "sky",
+     "tr": "gökyüzü",
+     "en": "sky",
+     "note": "Parça değil, arka planın bölgesi; Fluent UI Emoji'de yok, betikle çizilir. İlk dokunuşta hızlı başarı. Ücretsiz."
+    },
+    {
+     "piece": "grass",
+     "tr": "çimen",
+     "en": "grass",
+     "note": "Arka planın bölgesi; Fluent UI Emoji'de yok, betikle çizilir. Ücretsiz."
+    },
+    {
+     "piece": "river",
+     "tr": "nehir",
+     "en": "river",
+     "note": "Sahibin örneği. Fluent UI Emoji'de nehir yok; U+1F30A 'water wave' bir deniz dalgasıdır, nehre benzemez. Arka plana iki dalgalı çizgiyle betikle çizilir; ilk boyandığında 'river' der. Ücretsiz."
+    }
+   ],
+   "child_test": "Kurulum: Minik mod, bir iPad ve 375 pt genişlikte bir telefon; ses açık, sessiz mod kapalı. 3–5 çocuk, en az ikisi 3 yaşında. Ebeveyn yanında oturur ama yardım etmez; gözlemci yalnız not alır. Çocuğa görev verilmez, yalnız 'Bak, burada resim yapılıyor' denir. Video ancak ebeveynin yazılı onayıyla çekilir ve paylaşılmaz.\n\nGözlenecekler:\n1) Kartı bulmak: Çocuk Manzara kartını kendisi buluyor mu? Telefonda kart için kaydırmak gerekir.\n2) İlk hamle: Karoya dokunuyor mu, sürüklüyor mu? İlk parçayı kaç saniyede koyuyor?\n3) Sürükleme: 3 yaşındakilerden kaçı sürüklemeyi tamamlıyor? Parmak yolda kaç kez kalkıyor? Parça en yakın yere oturunca çocuk itiraz ediyor mu?\n4) Renksiz karo: Çocuk parçayı tanıyor mu, Türkçe adını söylüyor mu? Boyanmamış parçanın çıkmasına şaşırıyor ya da üzülüyor mu?\n5) Kelime: Duyunca bakıyor, gülüyor, tekrar ediyor mu? Kendiliğinden 'house' diyen var mı? Oturum sonunda ebeveyn oyun gibi 'house nerede?' diye sorunca gösterebiliyor mu? Bu yalnız nottur; 15 dakika öğrenme kanıtı değildir ve mağaza iddiasına dayanak olmaz.\n6) Boyama: Parçanın içindeki bölgeleri tutturabiliyor mu? Yanlış bölgeyi kaç kez boyuyor, geri ala basıyor mu? Telefonda tuval küçük kalıyor mu?\n7) Sahne dolunca: Tepsi kaybolunca ne yapıyor, parça arıyor mu? Geri alla parça değiştirmeyi keşfediyor mu?\n8) Taşıma isteği: Konmuş parçayı sürüklemeye çalışan var mı? O anda ne oluyor: parça boyanıyor mu, çocuk şaşırıyor mu?\n9) Komik yerleştirme: Balığı göğe koymak gibi denemeler keyif mi veriyor, karışıklık mı yaratıyor?\n10) Ses yükü: Oturumdan sonra ebeveyne sorulur: Kelimeler fazla mı tekrarlandı? Türkçe renk adı ile İngilizce kelime karışık geldi mi? Evde telefon sessiz modda mı duruyor?\n11) Süre: Çocuk kaç dakikada sıkılıyor? Sahneyi bitiren ve kutlamayı gören var mı? Ana ekrana çıkıp kartı yeniden açınca kendi sahnesini buluyor mu?\n\nKarar eşikleri: 3 yaşındakilerin yarısından çoğu sürüklemeyi tamamlayamıyorsa dokunarak koyma ana yol olur ve ipucu dokunmayı gösterir. Parçanın içinde ıskalama sıksa yer sayısı 6'dan 4'e iner ve parçalar büyür. Çocuklar konmuş parçayı taşımaya çalışıyorsa Büyük için taşıma ayrı oylanır. Ebeveynler sesi fazla bulursa yalnız 'parça bitince' anı kalır, 'konunca' anı kalkar."
+  },
+  {
+   "member": "Erken çocukluk gelişimi uzmanı (3–5 yaş): ince motor beceri, dikkat, hayal kırıklığı, özerklik, ikinci dilde erken kelime öğrenimi",
+   "decision": "conditional",
+   "veto": false,
+   "conditions": [
+    "Yer: ana ekranın en sonunda, Giysiler kartından sonra yeni bir “Manzara” kartı. Mevcut kartların yeri değişmez, çünkü çocuk kartı yerinden bulur. Kart Minik'te ve Büyük'te var, kapı arkasında değil. Bir kategorinin içine konmaz, çünkü sayfadan farklı davranır.",
+    "Araç çubuğuna düğme eklenmez: sahne ekranında da ev, kova, fırça, geri al (Büyük'te ileri al) ve palet var. Tek yeni öğe tepsi (parçaların durduğu şerit): Minik'te tek sırada 4 hücre, hücre en az 72 pt (375 pt telefonda 78 pt sığar), tablette 112 pt. Tepside kaydırma ve sayfa yok; parçalar her açılışta aynı sırada (Ç2).",
+    "Çocuğun ekranında yazı yok; kelime yalnız sesle gelir. v1'de yazılı İngilizce kelime Minik'te de Büyük'te de yok: Türkçe harf-ses eşlemesini yeni öğrenen çocukta “flower” yazımı karışıklık yaratır (Ç1).",
+    "Sınav yok: puan, yıldız, sayaç, süre, “doğru/yanlış” sesi ve “Hangisi flower?” sorusu yok. Her yerleştirme geçerli; güneş çimene de konabilir. Bunlardan biri tasarıma girerse veto ederim, çünkü 3 yaşa başarısızlık durumu getirir (Ç10).",
+    "Dokunarak yerleştirme her zaman çalışır: tepsideki parçaya dokununca parça kendi yuvasına (sahnede parçanın oturduğu sabit yer), o doluysa en yakın boş yuvaya uçar. Sürükleme de çalışır: parmak sahnede nerede kalkarsa parça en yakın boş yuvaya oturur, tepside kalkarsa hücresine döner. 20 lp altındaki kayma dokunuş sayılır (CanvasGestureMachine.tapSlop, lib/engine/input/canvas_gestures.dart:55). İkinci parmak ve avuç parça almaz (Ç5). HIG Drag and drop sayfası da sürüklemeye bir alternatif sunmayı ve geri almayı öneriyor.",
+    "Tepsi yalnız yerleştirir, tuval yalnız boyar. Yerleşen parça taşınmaz. Silgi parçayı sökmez, yalnız boyayı siler. Parçayı geri al kaldırır ve parça tepsideki hücresine döner; bir yerleştirme bir geri al adımıdır (Ç7).",
+    "Az ve büyük parça: Minik'te en çok 4 yuva ve parça sahnenin kısa kenarının yaklaşık yarısı; Büyük'te 6 yuva ve yaklaşık üçte biri, çünkü yakınlaştırma yalnız Büyük'te (Ç3). Parçalar çakışmaz. Yaklaşık ölçümüm (assets/pages PNG'lerini 512 px'e indirip bölge alanlarını saydım, kare sahne): üçte bir boyda ev 6 parmak boyu bölgeden 1'ine, lale 3'ten 1'ine iniyor; ördek, gökkuşağı ve kelebekte hiç kalmıyor. Yarı boyda ev 3, lale 2, güneş 2 bölge tutuyor. Parmak eşiği sahnenin %1'i (lib/engine/document/page_progress.dart:15).",
+    "Parça kontrolü üretim hattındadır: her parça sahnedeki boyutunda ölçülür. Nesneyi tanıtan bölge (evin duvarı, çiçeğin taç yaprakları, kuşun gövdesi) parmak boyu değilse parça o modda yer almaz. Katalog ile paket bir testle eşit tutulur (test/builtin_images_test.dart gibi).",
+    "Bitti kuralı: parça, sahnedeki boyutunda parmak boyu olan bütün bölgeleri boyanınca biter (PageProgress kuralı parça başına, lib/engine/document/page_progress.dart:11-24). P2 otomatik tamamlaması sayılır, çıkartma sayılmaz. Zemin bölgesi ilk dolguda biter. Sahne bitince bilinen kısa kutlama (showCelebration) bir kez çalar; parça başına yeni animasyon yok.",
+    "Kelimenin zamanı: parça yerleşince ve parça bitince birer kez; zemin bölgesi (gökyüzü, çimen, nehir) ilk boyanınca bir kez. Boyama sırasında başka konuşma yok. Hızlı art arda yerleştirmede yeni kelime öncekini keser (bugünkü VoiceService davranışı); kuyruk yok.",
+    "Dil: Türkçe cihazda önce Türkçe ad, yaklaşık yarım saniye ara, sonra İngilizce ad (“Çiçek… flower!”); sıra hep aynı. Tek dilli çocuk bir nesneye ikinci adı, başka bir dilden geldiğini fark edince daha kolay kabul eder (Au ve Glusman 1990). İngilizce cihazda yalnız İngilizce ad gelir. İki klip arka arkaya çalınacağı için birincinin bitişi beklenir; VoiceService bugün yeni klipte öncekini kesiyor (lib/services/voice_service.dart:51).",
+    "Kelimeler elle seçilir, temel düzey (gündelik, genel ad) ve somut olur: house (home değil), flower (tulip değil), tree (deciduous tree değil), boat (sailboat değil). tool/pages/catalog.json'daki nameEn bu iş için kullanılmaz. Her yeni sahne en az iki eski kelimeyi tekrar eder ve en çok üç yeni kelime getirir, çünkü alıcı kelime (duyunca tanınan kelime) günler boyunca tekrarla oluşur.",
+    "Ses: insan sesi kaydı; cihazın konuşma motoru kullanılmaz (önceki kurul kararı). İngilizce kelimeler doğal İngilizce söyleyişle okunur; Türkçe seslendirmen bunu yapamıyorsa İngilizce kelimeler için ikinci bir insan sesi kullanılır (tool/voice/README.md'deki “aynı seslendirmen” kuralına tek istisna). Eksik klip sessiz atlanır. VoiceOver açıkken klip susar ve iki ad parçanın erişilebilirlik etiketinde okunur.",
+    "Boya kaybolmaz ve yer değiştirmez: yeni parça yerleşince çocuğun önceki boyası yerinde kalır. Dolgu ve çizgi, bölgesini kayıtlı noktasından bulur; restore bugün yalnız algoritma değişince noktaya bakıyor (lib/engine/document/coloring_document.dart:235). Bırakılan parça en eski desteklenen iPad'de 300 ms içinde boyanabilir olur ve bu arada gelen dokunuş kaybolmaz (bütçe, ölçülmedi).",
+    "Kayıt: sahne Eserlerim'de bir eser olur ve otomatik kaydedilir (Ç6). Kart en son güncellenen sahneyi açar. Yeni boş sahne yalnız kapı arkasındaki “baştan boya” yoluyla açılır (P1). Seviye sayacı sahneyi saymaz; lib/data/page_order.dart:29 pagesById'de olmayan eseri bugün de atlıyor.",
+    "Ebeveyn (kapı arkasında): “Sesli adlar” anahtarının altında “Kelimelerin ikinci dili: Kapalı / İngilizce / Türkçe” seçimi; klip yoksa görünmez (K-04 kuralı, lib/screens/parents_screen.dart:160-176). Resimli, salt okunur bir kelime listesi. Çocuğun ne duyduğu kaydedilmez; ağ ve analitik yok (1.3, 5.1.4).",
+    "Ücret: ilk sahne ve onun bütün kelimeleri herkese açık. Ek sahneler Tam Sürüm kuralıyla gelir: çocuğun ekranında kilit, rozet ya da “daha fazla” kartı yok.",
+    "Mağaza yalnız gerçeği söyler: “parçaların adını Türkçe ve İngilizce, gerçek bir insan sesinden duyar”. “İngilizce öğretir”, “kelime dağarcığını geliştirir” gibi sonuç iddiası yok (2.3). “İngilizce” sözü, klipler pakete girmeden ne mağazada ne Yenilikler'de ne uygulamada geçer.",
+    "Yayından önce 3–5 çocukla gözlem yapılır; Minik'te sürüklemenin kalıp kalmayacağı ve kelimenin zamanı bu gözleme göre kesinleşir. Yeni ekran test/accessibility_test.dart kılavuz kontrolüne girer ve 320, 375, 393, 430 pt genişlikte, yatayda, iPad bölmesinde ve Reduce Motion açıkken (uçuş yok) denenir."
+   ],
+   "toddler_risk": "Orta; şartlarla düşük. (1) Sürükleme: okul öncesi dokunmatik ekran çalışmalarında (ör. Vatavu ve ark. 2015, Nacher ve ark. 2015; sayılarını burada doğrulamadım) dokunma en güvenilir jesttir. 3 yaşında sürüklemede parmak yolda kalkar ve parça istenmeyen yere düşer; dokunarak yerleştirme ve en yakın boş yuvaya oturma bunu kapatır. (2) Gizli kip: aynı tuvalde parçayı taşımak ve boyamak karışırsa çocuk boyamak isterken parçayı kaydırır; tepsi yalnız yerleştirir, tuval yalnız boyar. (3) İnce motor: üçte bir boydaki parçada evin çatısı ve ağacın gövdesi parmak eşiğinin altına düşer. Çocuk komşu bölgeyi boyar, parça bitmez, kelime gelmez; Minik'te yarı boy ve parça kontrolü bunu kapatır. (4) Aşırı ses: her dokunuşta konuşan uygulama boyamayı böler ve ebeveyni yorar; kelime yalnız iki anda gelir, ana anahtar ebeveynde. (5) Yanlış eşleme: “home”, “tulip”, “deciduous tree” gibi adlar nesnenin gündelik adını öğretmez. (6) Tek nesneye tek ad eğilimi: tek dilli 3 yaş “O flower değil, çiçek!” diyebilir; zararsızdır, sabit sıra (önce Türkçe) bunu yumuşatır. (7) Sınav, puan ya da “Hangisi?” sorusu eklenirse başarısızlık durumu doğar; bu biçime veto koyarım.",
+   "rationale": "Şartlı onaylıyorum. Sahne kurmak 3–5 yaşın sevdiği yerleştirme ve hikâye oyunudur; boyamayla birleşince kelime, çocuğun o an baktığı ve kendi seçtiği nesneye bağlanır. 3–5 yaşta ikinci dilde alıcı kelime (duyunca tanınan kelime), dikkat nesnedeyken duyulan kısa, somut, temel düzey bir adla ve günler boyunca tekrarla oluşur; tek duyuş yetmez ve sonuç ölçülmeden “öğretir” denemez (Hirsh-Pasek ve ark. 2015, plan/icerik-arastirma-raporu.html [33]). Bu yüzden kelime yerleştirme ve bitiş anında gelir; uygulamanın parçayı “tanıması” gerekmez, çünkü parçayı çocuk koyar ve uygulama kimliğini ve bölgelerini zaten bilir (lib/engine/document/page_progress.dart:11-24 kuralı parça başına). Sürükle-bırak 3 yaşta yapılabilir ama güvenilir değil; dokunarak yerleştirme her zaman çalışmalı ve yerleşen parça boyarken oynamamalı, yoksa tek tuvalde “taşı” ile “boya” karışır. Ölçümüm parçaların sahnede küçülünce parmak boyu bölgelerini kaybettiğini gösteriyor; bu yüzden Minik'te az ve büyük parça şart, resmin adı da “home” değil “house” olmalı.",
+   "effort": "L",
+   "design": "Yer: Ana ekranın en sonunda, Giysiler kartından sonra “Manzara” kartı (🏞, diğer kartlar gibi sistem emojisi; sesli adı “Manzara!” / “Scene!”, çalışma adı). Mevcut kartlar yerinde kalır. Kart Minik'te ve Büyük'te var, kapı arkasında değil.\n\nÇocuk ne görür: Kart son sahneyi açar, yoksa boş sahneyi. Ekran boyama ekranının aynısıdır: üstte ev, kova, fırça ve geri al (Büyük'te ileri al), altta palet. Tuvalde siyah çizgili beyaz bir zemin vardır: gökyüzü, çimen ve çimenin içinden geçen bir nehir. Tuval ile palet arasında tepsi durur: Minik'te tek sırada 4 hücre (güneş, ev, ağaç, çiçek), Büyük'te 6 (bulut ve kuş eklenir). Hücrelerde parçaların çizgi resmi görünür.\n\nYerleştirme: Çocuk güneşe dokunur. Güneş 220 ms'de kendi yuvasına uçar, dolgu sesi ve hafif titreşim gelir, ardından ses: “Güneş… sun!”. Sürükleyen çocukta parça parmağın altında hafifçe büyür ve parmağı izler. Parmak sahnede kalkınca parça en yakın boş yuvaya kayar; tepside kalkarsa hücresine döner. Reduce Motion açıkken uçuş ve kayma yoktur, parça yerinde belirir. Yerleşen parçanın hücresinde soluk bir çerçeve kalır; gri, kilitli ya da “bitti” görünümü yoktur. Boş sahnede 6 sn dokunulmazsa mevcut maskot halkası (IdleHint, yalnız Minik) tepsideki ilk parçayı gösterir.\n\nBoyama: Her şey bugünkü gibidir: kova dolgusu, fırça döngüsü (çıkartma dâhil; döngü her sayfada aynı), silgi, otomatik tamamlama. Yeni parça bırakılınca önceki boya yerinde kalır.\n\nKelime: Parçanın parmak boyu bütün bölgeleri boyanınca kelime bir kez daha gelir: “Ev… house!”. Gökyüzü, çimen ve nehir ilk boyandıklarında adlarını söyler: “Nehir… river!”. Parça başına yeni animasyon ya da ek ses yoktur; kelime “bitti” işaretidir. Bütün parçalar ve zemin bitince bilinen kısa konfeti ve başarı sesi bir kez çalar. Yazılı kelime yoktur.\n\nDüzeltme: Geri al son adımı alır; son adım yerleştirmeyse parça tepsideki hücresine döner. Yerleşen parça taşınmaz. Silgi parçayı sökmez, yalnız boyayı siler.\n\nDil: Türkçe cihazda “Çiçek”, yarım saniye ara, “flower”. İngilizce cihazda yalnız “Flower”. Ebeveyn isterse ikinci dil Türkçe olur (“Flower… çiçek”); bu, yurt dışında yaşayıp çocuğuna Türkçe kazandırmak isteyen aileye yarar. Klipler zaten iki dilde kaydedildiği için ek kayıt gerekmez.\n\nMinik ve Büyük: Mekanik aynıdır. Minik: 4 yuva, parça sahnenin kısa kenarının yaklaşık yarısı, 9 renk, yakınlaştırma yok. Büyük: 6 yuva, parça yaklaşık üçte bir, 16 renk, yakınlaştırma, fırça boyu. Büyük'te serbest yerleştirme ve parçayı taşıma, gözlemden sonra ayrı oyla gelebilir.\n\nEbeveyn (kapı arkasında): Ebeveynler alanında “Sesli adlar” anahtarının altında “Kelimelerin ikinci dili: Kapalı / İngilizce / Türkçe” seçimi durur (Türkçe cihazda varsayılan İngilizce, İngilizce cihazda Kapalı; klip yoksa görünmez). Altında “Manzara kelimeleri” listesi: her parçanın resmi, Türkçe ve İngilizce adı ve tek cümle: “Kelimeleri çocuğunuzla birlikte söyleyin.” Eserlerim'de sahne bir resim gibi durur; uzun basma ve kapıdan sonra Paylaş, Yazdır, Baştan boya (boş sahne açar, eski sahne kalır) ve Sil satırları çıkar.\n\nKayıt: Sahne belgesi zemin kimliğini, yerleşen parçaları (kimlik, yuva, sıra), dolguları, çizgileri ve çıkartmaları tutar; otomatik kayıt 400 ms sonra çalışır. Kart en son güncellenen sahneyi açar. Seviye sayacı sahneyi saymaz.\n\nİçerik hattı: Yeni bir katalog (ör. tool/scenes/scenes.json) sahneleri (zemin dosyası, yuva dikdörtgenleri, parça listesi, free) ve parçaları (Fluent kodu, elle seçilmiş Türkçe ve İngilizce kelime, tercih edilen yuva) tutar. Betik çizgiyi emoji2page.py ile üretir, parçanın dışını saydam bırakır, parça kontrolünü sahnedeki boyutta yapar ve Dart listesini yazar; bir test katalog ile paketi eşit tutar. Zemin elle çizilir, çünkü Fluent UI Emoji'de nehir, çimen ve gökyüzü yok; sayfa kontrolünden 1. seviye geçer. tool/voice/README.md'ye “Manzara kelimeleri” tablosu (anahtar word_<kod>) eklenir.\n\nÜcret: İlk sahne (bahçe) ve bütün kelimeleri ücretsizdir. Deniz, çiftlik ve gece gibi ek sahneler Tam Sürüm kuralıyla gelir; çocuğun ekranında kilit yoktur.\n\nKayıtlar gelmeden: Kod sessiz çalışır (eksik klip atlanır), ama mod mağazada, Yenilikler'de ve uygulamada “İngilizce” sözüyle anılmaz. Önerim modun kliplerle birlikte çıkması: 9 kelime × 2 dil ve kart adı için 2 klip, toplam 20 klip.\n\nMağaza (yayından sonra): “Manzara: Güneşi, evi, ağacı resmine yerleştirir, boyar ve her birinin adını Türkçe ve İngilizce, gerçek bir insan sesinden duyar.”",
+   "mvp": "Tek sahne, bahçe: elle çizilmiş zemin (gökyüzü, çimen, nehir; sayfa kontrolünden 1. seviye geçer). Minik'te 4 parça (güneş, ev, ağaç, çiçek), Büyük'te 6 (bulut ve kuş eklenir); hepsi Fluent UI Emoji'den emoji2page.py ile, dışı saydam. Dokunarak ve sürükleyerek yerleştirme, en yakın boş yuvaya oturma; taşıma yok, geri al parçayı tepsiye döndürür. Kelime parça yerleşince ve bitince, zemin bölgesi ilk boyanınca gelir. Kayıt işi: 9 kelime × 2 dil = 18 klip ve kart adı için 2 klip, insan sesiyle. Sahne Eserlerim'de kaydedilir; kart en son sahneyi açar; yeni sahneyi ebeveyn kapı arkasındaki “baştan boya” ile açar. Ebeveynler alanında ikinci dil seçimi ve resimli kelime listesi. Herkese ücretsiz. Mağazaya tek dürüst cümle. Kapsam dışı (sonraki oylar): ek sahneler, Büyük'te serbest yerleştirme ve taşıma, bitmiş parçaya dokununca kelimeyi yeniden duymak, yazılı kelime, sahne sonunda kelimelerin topluca tekrarı.\nDaha ucuz bir ön deneme, ayrı oy olarak: mevcut sayfalarda bitiş kutlamasıyla birlikte sayfanın adını iki dilde söylemek, önce ücretsiz 72 sayfada. tool/voice/README.md:65-66 sayfa adlarını zaten “ikinci aşama” diye planlıyor; ama ad, catalog.json'daki nameEn değil elle seçilmiş temel düzey kelime olmalı (“sport utility vehicle” değil “car”). Bu deneme yeni ekran yazmadan kayıt hattını ve kelimenin zamanını çocukla sınar.",
+   "catalog": [
+    {
+     "piece": "güneş (☀ 2600)",
+     "tr": "güneş",
+     "en": "sun",
+     "note": "Fluent UI Emoji'de var; sayfa olarak 1. seviye (nature_2600, ücretsiz). Yarı boyda 2, üçte bir boyda 2 parmak boyu bölge. Bahçe sahnesi, Minik."
+    },
+    {
+     "piece": "ev (🏠 1f3e0)",
+     "tr": "ev",
+     "en": "house",
+     "note": "Fluent'te var; sayfa 2. seviye. Yarı boyda 3, üçte bir boyda 1 parmak boyu bölge. “home” değil “house”: resim bir bina. Ev düğmesinin İngilizce VoiceOver adı “Home” (lib/l10n/app_en.arb:3) ve simgesi ev; karışıklığın kaynağı bu olabilir. Bahçe, Minik."
+    },
+    {
+     "piece": "ağaç (🌳 1f333)",
+     "tr": "ağaç",
+     "en": "tree",
+     "note": "Fluent'te var (deciduous tree); 1. seviye. Taç tek büyük bölge (%29,5); ikinci bölge %1,4 ile sayılmaz. Bahçe, Minik."
+    },
+    {
+     "piece": "çiçek (🌷 1f337, lale)",
+     "tr": "çiçek",
+     "en": "flower",
+     "note": "Fluent'te var; 1. seviye. Kelime “tulip” değil “flower”. Yarı boyda 2 bölge. Ayçiçeği (1f33b) 3. seviye, uygun değil. Bahçe, Minik."
+    },
+    {
+     "piece": "bulut (☁ 2601)",
+     "tr": "bulut",
+     "en": "cloud",
+     "note": "Fluent'te var; 1. seviye; tek büyük bölge. Bahçe, Büyük; Minik'te ikinci sahnede."
+    },
+    {
+     "piece": "kuş (🐦 1f426)",
+     "tr": "kuş",
+     "en": "bird",
+     "note": "Fluent'te var; 1. seviye; gövde tek büyük bölge (%30), gaga ve göz sayılmaz. Bahçe, Büyük."
+    },
+    {
+     "piece": "balık (🐟 1f41f)",
+     "tr": "balık",
+     "en": "fish",
+     "note": "Fluent'te var; 1. seviye; tek büyük bölge. Nehir ya da deniz sahnesi."
+    },
+    {
+     "piece": "tekne (⛵ 26f5, yelkenli)",
+     "tr": "tekne",
+     "en": "boat",
+     "note": "Fluent'te var; 2. seviye. Kelime “sailboat” değil “boat”. Yarı boyda 2 bölge. Deniz sahnesi."
+    },
+    {
+     "piece": "ördek (🦆 1f986)",
+     "tr": "ördek",
+     "en": "duck",
+     "note": "Fluent'te var; 2. seviye. Üçte bir boyda parmak boyu bölge kalmıyor, yarı boyda 4: yalnız büyük yuvada. Nehir ya da çiftlik sahnesi."
+    },
+    {
+     "piece": "tavşan (🐇 1f407)",
+     "tr": "tavşan",
+     "en": "rabbit",
+     "note": "Fluent'te var; 1. seviye; yarı boyda 2 bölge. Çiftlik ya da bahçe."
+    },
+    {
+     "piece": "kedi (🐈 1f408)",
+     "tr": "kedi",
+     "en": "cat",
+     "note": "Fluent'te var; 2. seviye; gövde tek büyük bölge (%20), küçük ayrıntılar sayılmaz. Bahçe ya da çiftlik."
+    },
+    {
+     "piece": "köpek (🐕 1f415)",
+     "tr": "köpek",
+     "en": "dog",
+     "note": "Fluent'te var; 2. seviye; kedi gibi tek büyük bölge (%21). Bahçe ya da çiftlik."
+    },
+    {
+     "piece": "ay (🌙 1f319, hilal)",
+     "tr": "ay",
+     "en": "moon",
+     "note": "Fluent'te var; 1. seviye; tek bölge. Gece sahnesi."
+    },
+    {
+     "piece": "yıldız (⭐ 2b50)",
+     "tr": "yıldız",
+     "en": "star",
+     "note": "Fluent'te var; 1. seviye; tek bölge. Gece sahnesi."
+    },
+    {
+     "piece": "dağ (⛰ 26f0)",
+     "tr": "dağ",
+     "en": "mountain",
+     "note": "Fluent'te var; 1. seviye; üçte bir boyda bile 2 bölge. Kelime 3 yaş için daha zor; Büyük ya da sonraki sahne."
+    },
+    {
+     "piece": "nehir (zemin bölgesi)",
+     "tr": "nehir",
+     "en": "river",
+     "note": "Fluent UI Emoji'de nehir yok (dalga 1f30a nehir değil); parça değil, elle çizilen zeminin bölgesi. Gökyüzü/sky ve çimen/grass da zemin bölgesi olarak aynı kuralla söylenir."
+    }
+   ],
+   "child_test": "Kurulum: bir iPad ve 375 pt'lik bir telefon, Minik mod, ses açık, Sessiz anahtarı kapalı. Klipler hazır değilse prototip kayıt (ör. sahibin sesi) yeter. Çocuğa tek cümle söylenir: “Burada bir resim yapabilirsin.” Yetişkin göstermez; çocuk 30 sn takılırsa önce not alır, sonra yardım eder. Her çocuk 10–15 dk oynar. Ebeveyn izni alınır, yüz kaydedilmez, yalnız not tutulur; çocuk istediği an bırakır.\nİzlenecekler:\n1. Manzara kartını kendisi buluyor mu (telefonda kaydırma gerekir)?\n2. İlk yerleştirme: dokunuyor mu, sürüklüyor mu? İlk 60 sn içinde yardımsız parça koyabiliyor mu? Sürüklemede parmak yolda kaç kez kalkıyor?\n3. Parça en yakın yuvaya kayınca şaşırıyor ya da itiraz ediyor mu (“oraya koymuştum”)?\n4. Yerleşen parçayı taşımaya çalışıyor mu, kaç kez? Tepsideki parçayı boyamaya çalışıyor mu? Ev düğmesini ev parçası sanıyor mu?\n5. Sahne boyundaki parçanın bölgelerini vurabiliyor mu? Kaç dokunuş komşu bölgeye kaçıyor? İlk parça kaç dakikada bitiyor?\n6. Kelime gelince parçaya bakıyor mu, kelimeyi kendiliğinden tekrar ediyor mu, gülüyor mu, ilgisiz mi, rahatsız mı? Kelimeyi yeniden duymak için parçaya tekrar dokunuyor mu?\n7. Geri al ile parçanın tepsiye dönmesini anlıyor mu?\n8. Hayal kırıklığı işaretleri (“olmuyor”, iç çekme, yetişkine bakma, bırakıp gitme): kaç kez ve hangi anda?\n9. Oturum sonunda, uygulamanın dışında, gözlemci çocuğun sahnesini gösterip oyun gibi iki kez sorar: “Hangisi sun?”, “Hangisi house?”. Yanlışta düzeltme yapılmaz; sonuç kâğıda yazılır, uygulamaya hiçbir şey kaydedilmez. Bu tek oturumluk bir işarettir, öğrenme kanıtı değildir.\n10. Ebeveyne sorulur: ses fazla mıydı, mod kendiliğinden anlaşıldı mı, kelime listesini kullanır mı, “house” mu “home” mu bekliyordu?\nKarar eşikleri: 5 çocuğun en az 4'ü ilk dakikada yardımsız parça koyamıyorsa Minik'te yalnız dokunarak yerleştirme kalır. Yuvaya kayma 2 ya da daha çok çocukta itiraz doğuruyorsa yuvalar çoğalır ya da büyür. Kelime 2 ya da daha çok çocukta boyamayı bölüyorsa kelime yalnız bitişte söylenir. İlk parçanın bitmesi 3 dakikayı geçiyorsa parça sayısı azalır ya da parça büyür. Bitmiş parçaya tekrar dokunma sık görülürse “dokununca kelimeyi yeniden söyle” ayrı oya gelir."
+  },
+  {
+   "member": "Apple App Review ve HIG uzmanı (Kids Category: 1.3, 5.1.4, 2.3, HIG, erişilebilirlik)",
+   "decision": "conditional",
+   "veto": false,
+   "conditions": [
+    "Dokunarak yerleştirme ana yoldur ve sürükleme hiçbir işin tek yolu olmaz: kutudaki parçaya dokunmak onu sahnedeki doğal yerine koyar. Bu şartı HIG Drag and drop ('Offer alternative ways to accomplish drag-and-drop actions') ve Accessibility ('Offer alternatives to gestures') koyuyor. Her bırakış geçerlidir: parmak sahnede nerede kalkarsa parça oraya iner, kutunun üstünde kalkarsa kutuya döner. 'Yanlış yer' sesi, sallanma ya da hata durumu yoktur (Ç10).",
+    "Sürükleme yalnız uygulama içi bir jesttir. Parça ve sahne, sistem sürükle-bırakının kaynağı ya da hedefi olmaz (UIDragInteraction ve NSItemProvider yok). Böylece iPad'de Split View ve Slide Over'da hiçbir resim başka uygulamaya çıkamaz, dışarıdan resim de giremez (1.3, Ç9; kurulun 'fotoğraftan sayfa' vetosu).",
+    "Kelimeler pakette duran insan sesi kayıtlarıdır ve tool/voice/README.md biçimine uyar (MP3, mono, 0,5–1,5 sn, −16 LUFS). Cihazın konuşma motoru, mikrofon, konuşma tanıma, 'tekrar et' puanlaması ve ağ kullanılmaz. ios/Runner/PrivacyInfo.xcprivacy ve 'Data Not Collected' etiketi değişmez (1.3, 5.1.4; COPPA çocuğun ses kaydını kişisel bilgi sayar). İngilizce klipleri anadili İngilizce olan ya da akıcı konuşan bir seslendirmen okur; README'deki 'aynı ses iki dili okur' kuralı bu klipler için gevşetilir.",
+    "Ev parçasının kelimesi 'house'dur, 'home' değil. 'home' binayı değil yuvayı anlatır. Resmi yanlış adlandıran kelime eğitsel iddiayı bozar (2.3.1) ve ev düğmesinin VoiceOver adıyla çakışır (lib/l10n/app_en.arb:3 'Home').",
+    "Kayıtlar gelmeden mod App Store sürümüne girmez. Sahne kartını bir derleme bayrağı açar (COBI_IAP gibi). Bir test, kutudaki her parçanın tr ve en klibinin pakette olduğunu doğrular; TestFlight'ta mod bayrakla denenir. Mağaza metni, ekran görüntüsü, Notes for Review ve Yenilikler modu yalnız kliplerle çıkan sürümde anlatır (2.3.1(a), 2.3.12). Ebeveynlerdeki 'Sesli adlar' anahtarı, uygulama dilinde klip olmasa da çalınabilen bir klip varsa görünür. Bugün anahtar yalnız uygulama dilini kontrol ediyor (lib/screens/parents_screen.dart:163); yalnız İngilizce klipler gelirse ebeveyn kelimeleri kapatamaz.",
+    "Mağaza metni olanı anlatır, sonuç vaat etmez. İzinli cümle: 'Boyadığı her parçanın İngilizce adını duyar.' Yasak ifadeler: 'İngilizce öğretir', 'İngilizce öğrenir', 'iki dilli', 'kelime hazinesini geliştirir', 'kanıtlanmış' ve paketteki kliplerden fazla kelime sayısı. Altyazı değişmez (2.3.7: altyazıda doğrulanamayan ürün iddiası olmaz). İngilizce vitrin 'İngilizce öğrenme' demez, çünkü orada çocuk kendi dilinde ad duyar.",
+    "Mod ücretsizdir ve hiçbir parça ya da arka plan kilitli değildir. Çocuğun ekranı satın almadan önce ve sonra aynıdır: kilit, rozet ve 'daha fazla' hücresi yoktur (1.3, kurul kuralı).",
+    "VoiceOver: kutudaki her hücre bir düğmedir ve parçanın adını okur. Sahnedeki her parça durumunu okur ('Çiçek, boyandı, flower'); İngilizce kısım İngilizce dil özniteliğiyle okunur. Yerleşmiş parçada beş özel eylem olur: sola, sağa, yukarı ve aşağı taşı, kutuya koy. VoiceOver açıkken VoiceService susar (lib/services/voice_service.dart:46). Bu yüzden bitişteki kelimeyi VoiceOver duyurusu verir.",
+    "Kelime tek kanaldan verilmez: her kelimeyle hafif titreşim ve parçanın kısa vurgusu gelir (HIG Feedback, Accessibility). Bir ad klibi, çalan İngilizce kelimeyi kesmez; bugün yeni klip öncekini kesiyor (lib/services/voice_service.dart:10-11). Ses oturumu ambient kalır (lib/services/sound_service.dart:51) ve sessiz düğmesine uyar. Ebeveynler alanı bunu bir cümleyle söyler ve kelime listesini gösterir. Reduce Motion açıkken uçuş, zıplama ve geri dönüş yerine solma kullanılır ve konfeti çıkmaz (lib/widgets/motion.dart:8).",
+    "Dokunma hedefi: kutu hücreleri palet hücreleriyle aynıdır (Minik'te telefonda 70 pt, tablette 112 pt). Sahnedeki en küçük parça 375 pt telefonda Minik'te en az 64 pt, 320 pt Split View'da en az 44 pt olur. Yeni ekran test/accessibility_test.dart'taki meetsGuideline denetimine girer.",
+    "Bir parça, gösterildiği boyutta parmak ucundan büyük olan ve görünür kalan bütün bölgeleri dolunca biter. Başka bir parçanın altında kalan bölge sayılmaz; görünen her beyaz nokta boya alır. Bitişte İngilizce kelime çalar. Sahnedeki en az 3 parçanın hepsi bitince bilinen kutlama bir kez gelir. Yıldız, puan, sayaç ve 'aferin' sesi yoktur.",
+    "Sahne bir eserdir: 400 ms sonra, çıkışta ve arka plana geçişte kaydedilir (Ç6) ve Eserlerim'den kaldığı yerden açılır. Paylaş, kaydet, yazdır ve sil kapının arkasında kalır. Seviye sayacı sahneyi saymaz; lib/data/page_order.dart:29-30 sayfa olmayan bir eseri bugün de atlıyor.",
+    "Sahne kartı ana ekranın en sonuna, Giysiler'den sonra girer. Kartın ikonu ev değildir, çünkü ev düğmesi zaten ev simgesi. Boyama ve Çiz sayfaları değişmez. Sahne ekranında Minik'te 4, Büyük'te 5 düğme kalır, çünkü Parçalar düğmesi fırçanın yerini alır (_Metrics, lib/screens/coloring_screen.dart:83).",
+    "App Review 2.1 için deneme listesi: iPhone 320, 375, 393 ve 430 pt; yatay telefon; iPad iki yönde; Split View ve Stage Manager'da sürükleme sırasında pencere boyutunun değişmesi; VoiceOver; en büyük metin. En eski iPad'de (A8, 2 GB) 20 parçalık sahnede bellek ölçülür. Parça etiket haritaları 1024² değil, parçanın kendi çözünürlüğünde tutulur."
+   ],
+   "toddler_risk": "Orta. Sürükle-bırak 3 yaşındaki çocuğun en zor dokunuşudur: parmak yolda kalkar ve parça istenmeyen yere iner. Dokunarak yerleştirme ve 'her bırakış geçerli' kuralı bunu zararsız kılar. Kutunun paletin yerini alması iki durum demektir. Parçaları koyan çocuk renkleri bulamayıp takılabilir; bu en büyük risk ve çocukla denenmeli. Parçalar sahnede tam sayfadan küçük görünür. Parmak ucundan küçük bölgeler boyanamaz. Başka parçanın altında kalan bir bölge parçanın bitmesini engellerse çocuk kelimeyi hiç duymaz. Ev düğmesi ev simgesi olduğu için ev parçasını arayan çocuk sahneden çıkabilir; iş kaydedildiği için kayıp olmaz ama çocuk şaşırır. Sık klip (ad, kelime, pop sesi) aşırı uyarıma döner. İngilizce kelimeyi duymak çocuğa zarar vermez. Asıl risk ebeveynin güveninde: 'İngilizce öğretir' vaadi tutulmazsa güven sarsılır.",
+   "rationale": "Şartlı onay veriyorum, veto yok. Öneri kendi doğasıyla Apple kurallarına dokunmuyor: kelimeler pakette ve insan sesiyle kayıtlı; ağ, mikrofon ve veri yok, yani 1.3, 5.1.4 ve 'Data Not Collected' etiketi aynen kalır. Bir nesnenin adını duymak 3 yaşındaki çocuk için yaşa uygun bir dinleme işidir. Kurulun veto ettiği harf izleme ve sayıyla boyama gibi ince motor beceri ya da başarısızlık durumu istemez ve birincil kategori Education ile tutarlıdır. Risk üç yerde: mağaza metni sonuç vaat ederse 2.3.1 ve 2.3.7 çiğnenir; sürükleme tek yol olursa HIG Drag and drop ile Accessibility'nin 'alternatif yol sun' kuralı çiğnenir; kelime yalnız sesle verilirse sessiz modda ve VoiceOver'da bilgi kaybolur. Ev parçası için doğru kelime 'house'dur; 'home' resmi yanlış adlandırır ve ev düğmesinin adıyla çakışır.",
+   "effort": "L",
+   "design": "Yer: Ana ekranda yeni bir kart, ızgaranın en sonunda (Giysiler'den sonra), kategori kartı biçiminde. Simgesi 🏞️ (Fluent 'National park'), adı 'Sahne' / 'Scene'; dokununca 'Sahne!' klibi çalar. Kart, Çiz kartı gibi her dokunuşta yeni bir sahne açar; eski sahneler Eserlerim'de durur. Minik ve Büyük'te kart da akış da aynıdır. Mod kapının arkasında değildir.\n\nEkran: Boyama ekranının iskeleti kullanılır; sahne karedir (1:1), 375 pt telefonda 351 pt olur. Araç çubuğu Minik'te ev, kova, Parçalar ve geri al düğmelerinden oluşur; Büyük'te ileri al eklenir. Parçalar düğmesi fırçanın yerine geçer ve glifi Fluent ağaç resmidir. MVP sahnesinde fırça ve çıkartma yoktur; çocuk kova ve silgiyle boyar.\n\nParça kutusu: Parçalar düğmesi seçiliyken kutu, paletin alanını aynen kullanır; böylece durum değişince sahne yerinden oynamaz. Minik'te 10 hücre vardır (5×2; telefonda 70 pt, tablette 112 pt), Büyük'te aynı alanda 12 parça. Hücrede parçanın siyah çizgili beyaz hâli durur, renkli emoji değil (kurulun 'doğru renk' vetosu). Kaydırma, sayfa ve yazı yoktur. Kova düğmesi ya da bir renk paleti geri getirir. Parçalar durumunda 6 sn dokunuş olmazsa kova düğmesi bir kez nabız gibi atar (Reduce Motion açıkken yalnız vurgu halkası).\n\nYerleştirme: Kutudaki parçaya dokunmak onu kendi bölgesinde boş bir yere koyar. Güneş, bulut ve kuş göğe; ev, ağaç, çiçek, tavşan ve araba çimene; balık ve tekne nehre gider. Sürükleme de çalışır: parmak 3 pt kayınca yarı saydam kopya parmağı izler ve parmak nerede kalkarsa parça oraya iner. Parmak kutunun üstünde kalkarsa parça kutuya döner; kutu bunu parmak kalkmadan önce vurgular. Yerleşmiş parça Parçalar durumunda tek parmakla taşınır ve dokunulan parça öne gelir. Kutuya bırakılan parça sahneden kalkar. Parçalar üst üste binebilir. Her yerleştirme, taşıma ve kaldırma tek geri al adımıdır; geri al parçayı eski yerine ya da kutuya kaydırarak döndürür (HIG: geri almanın sonucu görünür olmalı). Sahnede en çok 20 parça olur; sahne dolunca kutu hücreleri soluklaşır.\n\nBoyama: Kova durumunda parçaya ya da arka plana dokunmak o bölgeyi parmak inince doldurur (Ç8). Arka plan üç büyük bölgedir: gökyüzü, çimen, nehir.\n\nÇocuğun duyduğu: Türkçe uygulamada parçayı koyunca Türkçe adını ('çiçek'), parça bitince İngilizce kelimeyi ('flower') duyar. Arka plan bölgesi dolunca 'sky', 'grass' ya da 'river' çalar. Parçalar durumunda dokunulan şey adını söyler: bitmemiş parça Türkçe, bitmiş parça İngilizce, arka plan bölgesi Türkçe. Yeniden boyamak kelimeyi tekrarlamaz. İngilizce uygulamada iki an da İngilizcedir; çocuk kendi dilinde ad duyar. Taslak dillerde koyunca o dilin klibi (yoksa sessiz), bitişte İngilizce kelime çalar. Kelimeyle birlikte hafif titreşim gelir ve parça bir kez zıplar (Reduce Motion: 0,6 sn vurgu halkası). Sahnedeki en az 3 parçanın hepsi bitince bilinen kutlama bir kez çalar (lib/widgets/celebration.dart).\n\nYazılı kelime: Minik'te yoktur (Ç1; lib/models/coloring_image.dart:4 'Spoken, never shown to the child'). Büyük'te bitişte parçanın altında 2 sn 'flower' yazısı görünür: en az 4,5:1 kontrast, Dynamic Type ile %200'e kadar büyür, resme kaydedilmez.\n\nEbeveyn (kapının arkasında): Bugünkü 'Sesli adlar' anahtarı bütün klipleri kapatır. Ebeveynler alanında yeni bir 'Sahne' bölümü olur. Bölümde tek anahtar var: 'Parça bitince İngilizce adını söyle'. Anahtar yalnız uygulama dili İngilizce değilken görünür ve varsayılan olarak açıktır; kapalıyken bitişte Türkçe ad çalar. Altında 15 satırlık kelime listesi (çiçek – flower) ve tek cümle durur: 'Kelimeleri duymak için cihazın sessiz modunu kapatın.' Eserlerim'de sahneye basılı tutup kapıyı geçen ebeveyn Paylaş, Galeriye kaydet, Yazdır ve Sil satırlarını görür; 'Baştan boya' sahnede yoktur.\n\nKayıt: Sahne bir eserdir. JSON'da arka plan kimliği, parçalar (kod, x, y, boyut, sıra) ve her parçanın kendi bölge dolguları (RegionFill gibi nokta ve renk) tutulur. MVP'de fırça olmadığı için otomatik tamamlama devreye girmez; fırça sonradan gelirse P2 kuralı parça bölgesinde aynen çalışır.\n\nİçerik hattı: tool/scenes/pieces.json (kod, Fluent adı, nameTr, nameEn, bölge, boyut) aynı pinli Fluent commit'inden ve aynı MIT lisansıyla üretilir. Çizgi emoji2page.py yöntemiyle çizilir, ama parçanın sahnedeki gerçek boyutunda ve arka planla aynı kalınlıkta; parçanın dışı saydam kalır. Bugünkü 1024 px sayfayı küçültmek 11 px çizgiyi 3–4 px'e indirir (tool/pages/emoji2page.py:22). Parça ölçeğinde sayfa denetimi yapılır: en çok 4 parmak alanı ve 10 bölge; parmaktan küçük kısımlar komşu bölgeye katılır. Kelebek (seviye 3) ve uğur böceği (ABD'de 'ladybug', İngiltere'de 'ladybird') ilk kataloğa girmez.\n\nMağaza (yalnız kliplerle çıkan sürümde): TR metin 'Sahne: güneşi, evi, ağacı yerleştir ve boya; boyadığın her parçanın İngilizce adını duy.' EN metin 'Scene: place the sun, a house and a tree, colour them and hear each one's name.' Notes for Review kartın yerini, dokunma ve sürüklemeyi, kliplerin pakette olduğunu ve mikrofon, ağ ve veri olmadığını yazar. Bütün mod ücretsizdir.\n\nHIG ve App Review sonucu (tasarım hedefi, henüz denenmedi): sürüklemeye alternatif yol, geri alınabilir bırakış, bırakış geri bildirimi, ses yanında titreşim ve vurgu: uyumlu. Minik'te yazılı kelimenin olmaması: gerekçeli sapma (kitle okuma bilmiyor; kelime listesi Ebeveynler'de). Ambient ses oturumu: gerekçeli sapma (HIG Playing audio, yabancı dil öğreten uygulamaya Playback örneğini veriyor; biz sessiz düğmesine ve ebeveynin çalan müziğine saygıyı seçiyoruz). 1.3 ve 5.1.4: uyumlu. 2.3.1 ve 2.3.7: yalnız şartlardaki metinle uyumlu.",
+   "mvp": "Kayıtlar gelince bayrakla açılan tek bir sahne: çayır arka planı (gökyüzü, çimen, nehir), Minik'te 10, Büyük'te 12 parça (kataloğa bakın). Dokunarak yerleştirme ve sürükleme; Parçalar durumunda taşıma ve kutuya geri koyma; kova ve silgiyle boyama; her adım tek geri al. Parçayı koyunca uygulama dilinde ad, parça bitince İngilizce kelime çalar: 15 kelime × 2 dil = 30 klip, kart adı için 2 klip daha. Eserlerim'e otomatik kayıt, VoiceOver etiketleri ve beş özel eylem, Reduce Motion, titreşim, Büyük'te yazılı kelime, Ebeveynler'de tek anahtar ve kelime listesi. MVP'de olmayanlar: fırça, çıkartma, otomatik tamamlama, parça büyütme ve döndürme, ikinci arka plan, 'Baştan boya' ve öğrenilen kelime sayacı. İstenirse bundan da küçük bir ön adım var: arayüzü değiştirmeden, Ebeveynler anahtarıyla, bitmiş boyama sayfasında sayfanın İngilizce adı söylenir. catalog.json'da nameEn hazır ve bu klipler README'deki 'sayfa adları' aşamasıyla aynıdır. Bu adım, kelime ödülünün çocukta işe yarayıp yaramadığını sahne ekranı yapılmadan gösterir.",
+   "catalog": [
+    {
+     "piece": "Güneş",
+     "tr": "güneş",
+     "en": "sun",
+     "note": "Fluent 'Sun' var: nature_2600 sayfası (seviye 1) ve 'sun' çıkartması pakette. Bölge: gök."
+    },
+    {
+     "piece": "Bulut",
+     "tr": "bulut",
+     "en": "cloud",
+     "note": "Fluent 'Cloud' var: nature_2601 (seviye 1); çıkartma olarak da pakette. Bölge: gök."
+    },
+    {
+     "piece": "Ev",
+     "tr": "ev",
+     "en": "house",
+     "note": "Fluent 'House' var: things_1f3e0 (seviye 2). Kapı ve pencere küçük olduğu için parça en az sahne kenarının %40'ı boyutunda gösterilir. Kelime 'house', 'home' değil. Bölge: çimen."
+    },
+    {
+     "piece": "Ağaç",
+     "tr": "ağaç",
+     "en": "tree",
+     "note": "Fluent 'Deciduous tree' var: plants_1f333 (seviye 1). Kelime 'tree', 'deciduous tree' değil. Bölge: çimen."
+    },
+    {
+     "piece": "Çiçek",
+     "tr": "çiçek",
+     "en": "flower",
+     "note": "Fluent 'Tulip' var: plants_1f337 (seviye 1). 'Blossom' (papatya, plants_1f33c, seviye 1) yedek. Kelime 'flower', 'tulip' değil. Bölge: çimen."
+    },
+    {
+     "piece": "Kuş",
+     "tr": "kuş",
+     "en": "bird",
+     "note": "Fluent 'Bird' var: animals_1f426 (seviye 1). Bölge: gök."
+    },
+    {
+     "piece": "Balık",
+     "tr": "balık",
+     "en": "fish",
+     "note": "Fluent 'Fish' var: animals_1f41f (seviye 1). Bölge: nehir."
+    },
+    {
+     "piece": "Tavşan",
+     "tr": "tavşan",
+     "en": "rabbit",
+     "note": "Fluent 'Rabbit' var: animals_1f407 (seviye 1). ABD ve İngiltere İngilizcesinde aynı kelime. Bölge: çimen."
+    },
+    {
+     "piece": "Tekne",
+     "tr": "tekne",
+     "en": "boat",
+     "note": "Fluent 'Sailboat' var: vehicles_26f5 (seviye 2); altındaki dalga nehre uyar. Kelime 'boat', 'sailboat' değil. Bölge: nehir."
+    },
+    {
+     "piece": "Araba",
+     "tr": "araba",
+     "en": "car",
+     "note": "Fluent 'Automobile' var: vehicles_1f697 (seviye 2). Kelime 'car'. Bölge: çimen."
+    },
+    {
+     "piece": "Balon",
+     "tr": "balon",
+     "en": "balloon",
+     "note": "Fluent 'Balloon' var: things_1f388 (seviye 1). Yalnız Büyük kutusunda; Minik'te çocukların tanımadığı bir parçanın yedeği. Bölge: gök."
+    },
+    {
+     "piece": "Ördek",
+     "tr": "ördek",
+     "en": "duck",
+     "note": "Fluent 'Duck' var: animals_1f986 (seviye 2). Yalnız Büyük kutusunda; Minik yedeği. Bölge: nehir."
+    },
+    {
+     "piece": "Nehir (arka plan bölgesi)",
+     "tr": "nehir",
+     "en": "river",
+     "note": "Unicode'da nehir emojisi yok, bu yüzden Fluent'ta da yok. Nehir arka planın bir bölgesi olur: ya elle çizilmiş kıvrımlı bir bant ya da çerçevesi kırpılmış Fluent 'National park' (🏞️; pinli commit'te var, suyu geniş ve göle benziyor). Su göle benzerse kelime 'river' değil 'water' olur."
+    },
+    {
+     "piece": "Gökyüzü (arka plan bölgesi)",
+     "tr": "gökyüzü",
+     "en": "sky",
+     "note": "Emoji değil; arka planın üst bölgesi."
+    },
+    {
+     "piece": "Çimen (arka plan bölgesi)",
+     "tr": "çimen",
+     "en": "grass",
+     "note": "Emoji değil; arka planın alt bölgesi."
+    }
+   ],
+   "child_test": "Oturum: 10–15 dakika, 3–5 yaşında 3–5 çocuk, Minik mod, bir iPad ve bir telefon, ses açık, sessiz mod kapalı. Ebeveynin izniyle yalnız not tutulur, yüz videosu çekilmez; uygulama veri toplamaz. Çocuğa yönerge verilmez, yalnız 'istediğin gibi oyna' denir. İzlenecekler: (1) Sahne kartını yardımsız bulup açıyor mu? Hedef: 5 çocuktan en az 3'ü ilk parçayı 30 sn içinde koyar. (2) Kutudaki parçaya dokunuyor mu, sürüklüyor mu? Sürüklemelerin kaçında parmak yolda kalkıyor? Parça istemediği yere inince çocuk ne yapıyor: üzülüyor mu, geri al'a mı basıyor, umursamıyor mu? (3) Parça koyduktan sonra renkleri yardımsız buluyor mu? 10 sn'den uzun takılmaları ve yardım isteklerini say; hedef çocuk başına en çok bir yardım. (4) Kova durumunda parçayı taşımaya çalışıp boyayınca şaşırıyor mu? (5) Hangi parçanın hangi bölgesine isabet edemiyor? Bitmeden bırakılan, kelimesi hiç duyulmayan parça kalıyor mu? (6) İngilizce kelimeye tepkisi ne: başını kaldırıyor mu, gülüyor mu, kelimeyi kendiliğinden tekrarlıyor mu ('flavır'), parçayı gösteriyor mu? Kelimeyi yeniden duymak için parçaya dokunuyor mu? Türkçe addan İngilizce kelimeye geçiş 'ne dedi?' sorusu doğuruyor mu? (7) Her parçayı yardımsız Türkçe adlandırabiliyor mu? İki çocuğun tanımadığı parça yedekle (balon, ördek) değişir. (8) Ev parçasını ararken ev düğmesine basıp sahneden çıkan oluyor mu? (9) Parçayı kazara kutuya bırakıp kaybeden ve geri al'ı kullanan oluyor mu? (10) Dakikada kaç klip çalıyor ve ebeveyn 'çok ses' diyor mu? Ebeveyne iki soru: Modun ne yaptığını okumadan anladınız mı? 'Boyadığı her parçanın İngilizce adını duyar' cümlesi beklentinizi karşılıyor mu, yoksa daha fazlasını mı beklediniz?"
+  }
+ ],
+ "synthesis": {
+  "id": "P7",
+  "title": "Manzara: parçayı koy, boya, adını Türkçe ve İngilizce duy",
+  "outcome": "şartlı geçti",
+  "tally": "5/5 şartlı onay (onay 0, şartlı onay 5, ret 0), veto yok; 4/5 eşiği aşıldı. İki üyenin koşullu veto çizgisi var. Erken çocukluk uzmanı sınav, puan ve “Hangisi flower?” sorusuna veto koyacağını yazdı. Ebeveyn üye kayıtsız ya da cihaz sesiyle çıkan sürüme, Minik'te yazıya, soruya ve başarısızlık durumuna, mağazada “İngilizce öğretir” sözüne veto koyacağını yazdı. Birleşik tasarım bunların hiçbirini içermiyor.",
+  "vetoes": [],
+  "conditions": [
+   "Yer: Ana ekranda Giysiler kartından sonra, ızgaranın en sonunda tek bir Manzara kartı durur (EN Scene). Simgesi 🏞️ sistem emojisidir, diğer kartlar gibi (Fluent adı National park). Mevcut kartların yeri ve sırası değişmez. Kart Minik'te ve Büyük'te vardır, kapı arkasında değildir; dokununca tık sesi ve “Manzara!” klibi çalar.",
+   "Kart en yeni bitmemiş sahneyi kaldığı yerden açar. En yeni sahne bittiyse (kutlama görüldüyse) ya da hiç sahne yoksa boş sahne açar. Hiç dokunulmamış sahne kaydedilmez. Ebeveyn, Eserlerim'de kapı arkasındaki “Bu sahneyi baştan kur” satırıyla aynı düzende boş bir sahne açar; eski sahne yerinde kalır (P1 kalıbı).",
+   "Araç çubuğu değişmez: ev, kova, fırça döngüsü (çıkartma dâhil) ve geri al; Büyük'te ileri al. Yeni düğme, menü ya da kip yoktur. Tek yeni öğe tepsidir (parçaların durduğu şerit): dikeyde tuval ile palet arasında tek sıra, yatayda paletin yanında tek sütun. Tepsi yalnız yerleştirir, tuval yalnız boyar.",
+   "Tepsi: Minik'te 4 hücre (güneş, ev, ağaç, çiçek), Büyük'te 6 (bulut ve kuş eklenir). Sıra her açılışta aynıdır; kaydırma, sayfa ve yazı yoktur. Minik'te hücre 70 pt'dir (_Metrics.cell; tablette 112 pt) ve isabet alanı ızgara aralığının tamamıdır (375 pt telefonda yaklaşık 88 pt, hesap); 64 pt altına inmez. Büyük'te hücre paletin 6 sütunlu ızgarasıyla aynıdır (375 pt telefonda yaklaşık 48 pt, hesap; 44 pt altına inmez). Hücrede parçanın boyanmamış siyah çizgi resmi durur; renkli emoji gösterilmez (3 Kasım “doğru renk” vetosu).",
+   "Yerleştirme: Dokunmak tek başına yeter; parça 220 ms'de kendi yuvasına, o doluysa en yakın boş yuvaya uçar. Sürükleme de çalışır: 20 pt'yi (CanvasGestureMachine.tapSlop, canvas_gestures.dart:55) geçen kayma sürüklemedir, uzun basma istenmez. Parça parmağın biraz üstünde, 1,2 kat büyük izler ve parmağa en yakın boş yuva hafifçe parlar. Parmak tuvalde kalkınca parça o yuvaya oturur. Parmak kendi hücresinin üstünde ya da 12 pt yakınında kalkarsa bu dokunuş sayılır (Ç4) ve parça yerine uçar. Tepsinin başka bir yerinde ya da tuval dışında kalkarsa parça sessizce hücresine döner. İkinci parmak ve avuç parça almaz (Ç5). Her bırakış geçerlidir: ev gökyüzündeki boş yuvaya da oturabilir; “yanlış yer” sesi, sallanma ya da hata durumu yoktur (Ç10).",
+   "Yuvalar (sahnede parçanın oturduğu sabit yerler) üst üste binmez: Minik'te 4 (gökyüzünde 1, çimende 3), Büyük'te 6 (gökyüzünde 3, çimende 3). Yuva boyları farklı olabilir; kaba sahnede Minik yuvaları 1024 px sahnede 280–400 px, Büyük'ün ek yuvaları 240–260 px. Parça oturduğu yuvanın boyunda çizilir. Bir parça, sahnedeki her yuva boyunda parça kontrolünden geçmeden o sahneye girmez. Yuva çerçevesi yalnız sürükleme sırasında görünür.",
+   "Her parça bir sahnede bir kez konur. Yerleşen parçanın hücresinde soluk, kesik çizgili bir çerçeve kalır; gri ya da kilitli görünüm yoktur. Bu hücreye dokunmak sahnedeki parçayı 0,6 sn ışık halkasıyla gösterir, kelime çalmaz.",
+   "Düzeltme: Yerleşen parça taşınmaz. Bir yerleştirme bir geri al adımıdır; geri al parçayı hücresine uçurur, Büyük'te ileri al geri koyar. Silgi yalnız boyayı siler, parçayı asla sökmez (bugün silgi çıkartmaları söküyor: coloring_document.dart:113-122; parçalar bu kuralın dışında kalır). Temizle düğmesi yoktur (Ç7). Yeniden açılan sahnede geri al geçmişi boş başlar (bugünkü davranış); konmuş parçalar kalır, boş yuvaya yenisi konabilir.",
+   "Boyama sayfadakinin aynısıdır: kova, fırça döngüsü, çıkartma, silgi, keçeli kalemle otomatik tamamlama (P2), Büyük'te yakınlaştırma ve Apple Pencil basıncı. Yeni parça konunca önceki boya yerinde kalır: parçanın içi beyaz başlar, altında kalan boya silinmez ve geri alınca yeniden görünür.",
+   "Sayılan bölge (sahnede bitişe sayılan bölge): alanı sahnenin en az %1'idir (PageProgress kuralı) ve en geniş yerine sahne kenarının en az %6'sı çapında bir daire sığar (351 pt tuvalde yaklaşık 21 pt; eşik gözlemde kesinleşir). İnce şeritler sayılmaz, çocuk isterse boyar. Gökyüzü, çimen ve nehir de sayılır: sahnede PageProgress.backgroundLabel 0 döner (çağrıldığı yerler: page_progress.dart:14, coloring_document.dart:99, coloring_screen.dart:249).",
+   "Bitiş: Parça, sayılan bütün bölgeleri dolunca biter (dokunarak ya da otomatik tamamlamayla; çıkartma ve otomatik tamamlanmamış fırça boyası sayılmaz). O an kelime çifti çalar, hafif titreşim gelir ve parçanın çevresinde 0,6 sn hareketsiz bir ışık halkası yanar. Bütün yuvalar dolu ve sahnedeki sayılan bütün bölgeler boyalıyken bilinen kısa kutlama (showCelebration, 1,1 sn, başarı sesi) bir kez gelir. Son dolgu hem parçayı hem sahneyi bitirirse önce kelime, sonra kutlama gelir. Parça başına konfeti, yıldız, puan ya da sayaç yoktur.",
+   "Kelime anları: parça yerleşince bir kez, parça bitince bir kez, her zemin kelimesi (gökyüzü, çimen, nehir) sahnede ilk boyandığında bir kez. Boyarken, yeniden boyarken, parçaya ya da soluk hücreye dokunurken kelime çalmaz. Yeni kelime çifti çalan çifti keser, kuyruk yoktur. Renk ve araç adı klibi çalan bir çifti kesmez, o an atlanır.",
+   "Dil: Türkçe uygulamada kelime çifti çalar: Türkçe kelime, yaklaşık 0,5 sn ara, İngilizce kelime (“Çiçek… flower!”); sıra hep aynıdır. İngilizce uygulamada yalnız İngilizce kelime çalar (“Flower!”). Taslak dillerde yalnız İngilizce kelime çalar.",
+   "Kelimeler elle seçilir; temel düzey ve somut adlardır: house (home değil), flower (tulip değil), tree (deciduous tree değil), moon (crescent moon değil); Türkçesi çiçek (lale değil), ağaç (yaprak döken ağaç değil), ay (hilal değil). tool/pages/catalog.json'daki nameTr ve nameEn bu iş için kullanılmaz. İngilizce kelimeler ABD ve İngiltere İngilizcesinde aynı olanlardan seçilir.",
+   "Yazı yok: v1'de Minik'te de Büyük'te de ekranda yazılı kelime yoktur (Ç1). Büyük'te yazılı kelime ancak 5–6 yaş gözleminden sonra ayrı oyla gelir.",
+   "Sınav yok: puan, yıldız, sayaç, süre, ilerleme çubuğu, seri, “doğru/yanlış” sesi, “Hangisi flower?” ya da “Evi bul” sorusu yoktur. Mikrofon, konuşma tanıma ve “tekrar et” puanlaması yoktur. Bunlardan biri tasarıma girerse erken çocukluk uzmanı ve ebeveyn üye veto eder.",
+   "Ses kaydı: Kelimeler insan sesiyle kaydedilir; cihazın konuşma motoru kullanılmaz. Kod COBI_SCENE bayrağının (--dart-define=COBI_SCENE=true) arkasında birleşir. Kart yalnız bayrak açık ve sahnedeki her kelimenin tr ve en klibi paketteyken görünür; bir test bunu denetler. Kayıtlar gelmeden mod hiçbir App Store sürümünde görünmez ve mağazada, Yenilikler'de ya da uygulamada anılmaz.",
+   "Ebeveyn (kapı arkası): Sesli adlar anahtarı, uygulamanın çalabileceği herhangi bir klip varken görünür (bugün yalnız uygulama dilinin kliplerine bakıyor: parents_screen.dart:163). Sahne klipleri paketteyken altında Manzara kelimeleri seçimi durur: Türkçe uygulamada Türkçe ve İngilizce (varsayılan), Yalnız İngilizce, Yalnız Türkçe; İngilizce uygulamada Yalnız İngilizce (varsayılan), İngilizce ve Türkçe; taslak dillerde seçim görünmez. Altında tek cümle (“Kelimeleri duymak için cihazın sessiz modunu kapatın.”) ve resimli, salt okunur 9 satırlık kelime listesi durur. parentsHint metnine bir cümle eklenir. Çocuğun ne duyduğu kaydedilmez.",
+   "Ses oturumu ambient kalır ve Sessiz anahtara uyar (sound_service.dart:50-51); bu HIG Playing audio'ya göre gerekçeli sapmadır. VoiceOver açıkken klip çalmaz (voice_service.dart:46). Hücre ve parça etiketleri iki kelimeyi okur (“Güneş, sun”; İngilizce kısım İngilizce dil özniteliğiyle); biten parça “boyandı” değerini taşır ve bitiş VoiceOver duyurusuyla bildirilir.",
+   "Erişilebilirlik ve denemeler: Reduce Motion açıkken uçuş yerine solma kullanılır, ışık halkası hareketsizdir, konfeti çıkmaz. Yeni ekran test/accessibility_test.dart'taki meetsGuideline denetimine girer. Ekran 320, 375, 393 ve 430 pt genişlikte, yatay telefonda, iPad'de iki yönde, Split View ve Stage Manager'da, VoiceOver, Sessiz anahtar ve en büyük metin boyuyla denenir. Sürüklerken pencere boyu değişirse sürükleme iptal olur, parça hücresine döner. Sürükleme yalnız uygulama içidir: sahne ve parça sistem sürükle-bırakının kaynağı ya da hedefi olmaz (UIDragInteraction ve NSItemProvider yok).",
+   "Kayıt ve Eserlerim: Sahne sıradan bir eserdir; ilk değişiklikte, sonra her değişiklikten 400 ms sonra, çıkışta ve arka plana geçişte kaydedilir (Ç6). Eserlerim'den açılan sahne, sahne ekranında açılır (bugün openArtwork her eseri ColoringScreen'e yolluyor: my_artworks_screen.dart:315). Kapı arkası menü bugünkü satırları taşır; “Bu sayfayı baştan boya” burada “Bu sahneyi baştan kur” olur; “Boş sayfayı yazdır” sahnenin parçalarıyla birleşik çizgi resmi basar (bugün originalImagePath basılıyor: my_artworks_screen.dart:258-260). Seviye sayacı sahneyi saymaz (page_order.dart:28-31 sayfa olmayan eseri bugün de atlıyor).",
+   "Motor: Bırakma anında RegionBuilder çalışmaz ve etiket numaraları kaymaz: zemin 1..B, s yuvası B + 64·s + parçanın yerel numarası. Parçanın hazır etiket haritası, parçanın dışı hariç yuvaya kopyalanır; geri al zemin etiketlerini aynen geri koyar. Kayda isteğe bağlı scene anahtarı eklenir ({id, v, placed: [{s, k}]}), şema 2 kalır. Restore, çizginin clipLabel değerini dolgular gibi noktasından yeniden bulur (bugün numarasıyla okunuyor: coloring_document.dart:239-244). Yayınlanmış bir sahnenin yuvaları ve parça çizimleri değişmez; değişiklik yeni sahne kimliği alır. Tek 1024² belge kullanılır; parça etiket haritaları parçanın kendi çözünürlüğünde tutulur.",
+   "Performans: Yerleştirme en eski desteklenen iPad'de (A8, 2 GB) 100 ms içinde biter, yani 220 ms uçuşun altında kalır. Uçuş sırasında gelen dokunuş kaybolmaz, yerleştirme bitince işlenir. Gerçek cihazda ölçülmeden yayın yoktur; CobiPaint_Pixel yalnız ön kontroldür.",
+   "İçerik hattı ve parça kontrolü: Parçalar tool/pages/catalog.json'daki sabit Fluent UI Emoji commit'inden (MIT) emoji2page.py ile her yuva boyunda, zeminle aynı 11 px çizgiyle ve dışı saydam üretilir; 1024 px sayfa küçültülmez. Kontrol her parçayı her yuva boyunda ölçer: nesneyi tanıtan bölge (evin duvarı, çiçeğin çanağı, kuşun gövdesi) sayılan bölge olmalıdır; Minik'te parça başına en çok 3 sayılan bölge, her parçada en çok 63 etiket olur. Zemin, bütün yuvalar dikdörtgen olarak dolu sayıldığında da her zemin bölgesini sayılan bölge olarak tutar. Katalog ile paketi bir test eşit tutar (test/builtin_images_test.dart gibi). Her parçaya bir insan telefonda, sahnenin içinde bakar.",
+   "Ücret: İlk sahne (v1'deki tek sahne), parçaları ve kelimeleri herkese ücretsizdir ve hep ücretsiz kalır. Çocuğun ekranında kilit, rozet ya da “daha fazla” hücresi yoktur; ekran satın almadan önce ve sonra aynıdır.",
+   "Mağaza: Metin yalnız kliplerle çıkan sürümde ve yalnız davranışı anlatan cümleyle değişir. “İngilizce öğretir/öğrenir”, “iki dilli”, “kelime dağarcığını geliştirir”, “dil gelişimini destekler”, “kanıtlanmış”, “eğitimciler hazırladı” yazılmaz; altyazı değişmez.",
+   "Sıra: P7 2.2.0'a girmez; 2.2.0 yayına girdikten sonra ayrı dalda başlar. Motor işinden önce kaba prototiple 3–5 çocuk gözlenir; yayından önce gerçek kliplerle ikinci gözlem yapılır."
+  ],
+  "design": "Ana ekranın sonundaki Manzara kartı, boyama ekranıyla aynı iskelette bir sahne açar. Tuvalde elle çizilmiş bir zemin (gökyüzü, çimen ve nehirden oluşan arka plan) durur. Çocuk tuval ile palet arasındaki tepsiden bir parçaya dokunur ya da parçayı sürükler; parça sahnedeki sabit bir yuvaya oturur ve adı söylenir. Çocuk parçaları ve zemini bildiği araçlarla boyar; parça bitince adı bir kez daha söylenir. Her şey bitince bilinen kutlama gelir. Ekranda yazı, soru, puan ve kilit yoktur.\n\n1. Giriş\n- Kart Giysiler'den sonra, ızgaranın en sonunda durur; beyazdır, kategori kartlarıyla aynı boydadır. Simgesi 🏞️ (sistem emojisi, diğer kartlar gibi), adı Manzara / Scene. Dokununca tık sesi ve “Manzara!” klibi çalar.\n- Telefondaki iki sütunlu ızgarada kart altıncı sıranın solunda kalır; görmek için kaydırmak gerekir.\n- Kart en yeni bitmemiş sahneyi kaldığı yerden açar. En yeni sahne bittiyse ya da hiç sahne yoksa boş sahne açar.\n- Kart yalnız COBI_SCENE bayrağı açık ve 20 klibin hepsi paketteyken görünür. Minik'te ve Büyük'te vardır, kapı arkasında değildir.\n\n2. Çocuğun gördüğü (Minik, dikey telefon)\n- Üstte bilinen araç çubuğu: ev, kova, fırça, geri al.\n- Ortada kare tuval: siyah çizgili beyaz bir bahçe; gökyüzü, ufuk, çimen ve çimenin içinden kıvrılarak akan bir nehir.\n- Tuvalin altında tepsi: tek sırada 4 büyük hücre; güneş, ev, ağaç, çiçek. Hücrelerde parçaların boyanmamış çizgi resmi var.\n- En altta bilinen palet: 9 renk ve silgi.\n- Boş sahnede 6 sn dokunuş olmazsa maskot halkası (IdleHint) tepsideki ilk parçayı gösterir. Bu yalnız Minik'te olur, VoiceOver açıkken asla; çocuk toplam 3 parça koyunca bir daha çıkmaz.\n\n3. Parça koymak\n- Dokunmak: Çocuk güneşe dokunur. Güneş 220 ms'de gökyüzündeki yuvasına uçar; dolgu sesi ve hafif titreşim gelir; ardından “Güneş… sun!” duyulur.\n- Sürüklemek: Parmak 20 pt'den fazla kayarsa parça parmağın biraz üstünde, 1,2 kat büyük izler; parmağa en yakın boş yuva hafifçe parlar. Parmak tuvalde kalkınca parça o yuvaya kayıp oturur. Parmak kendi hücresinin üstünde kalkarsa bu dokunuş sayılır ve parça yerine uçar. Tepsinin başka bir yerinde ya da tuval dışında kalkarsa parça sessizce hücresine döner.\n- Her bırakış geçerlidir: ev gökyüzündeki boş yuvaya da oturabilir. Parça oturduğu yuvanın boyunda çizilir; her parça her yuva boyunda önceden denetlenir.\n- Yerleşen parçanın hücresinde soluk, kesik çizgili bir çerçeve kalır. Bu hücreye dokunmak sahnedeki parçayı 0,6 sn ışık halkasıyla gösterir; kelime çalmaz.\n- Reduce Motion açıkken uçuş ve kayma yerine parça yerinde solarak belirir.\n\n4. Boyamak\n- Her şey boyama sayfasındaki gibidir: kova dolgusu parmak inince başlar, 220 ms dalga, ses ve titreşim gelir (Ç8). Fırça döngüsü, çıkartma, silgi ve keçeli kalemle otomatik tamamlama aynıdır.\n- Gökyüzü, çimen ve nehir de boyanır ve bitişe sayılır.\n- Boyalı bir yere yeni parça konursa çocuğun boyası yerinde kalır: parçanın içi beyaz başlar, altındaki boya silinmez ve geri alınca yeniden görünür.\n\n5. Bitiş\n- Sayılan bölge: alanı sahnenin en az %1'i olan ve en geniş yerine sahne kenarının en az %6'sı çapında bir daire sığan bölge. Örnek: evde duvar ve kapı sayılır; ince taban şeridi ve çatı bandı sayılmaz.\n- Parçanın sayılan bütün bölgeleri boyanınca parça biter: hafif titreşim, parçanın çevresinde 0,6 sn hareketsiz bir ışık halkası ve kelime çifti.\n- Bütün yuvalar dolu ve sayılan bütün bölgeler boyalıyken bilinen kısa kutlama (1,1 sn konfeti ve başarı sesi) bir kez gelir. Son dolgu hem parçayı hem sahneyi bitirirse önce kelime, sonra kutlama gelir. Reduce Motion açıkken konfeti yoktur.\n\n6. Çocuğun duyduğu (Türkçe uygulama)\n  karta dokunur → tık + “Manzara!”\n  parça yuvaya oturur → dolgu sesi + titreşim → “Güneş… sun!”\n  parçanın sayılan son bölgesi boyanır → titreşim + ışık halkası → “Güneş… sun!”\n  gökyüzü sahnede ilk kez boyanır → “Gökyüzü… sky!” (çimen: “Çimen… grass!”, nehir: “Nehir… river!”)\n  renge ya da araca dokunur → bugünkü renk ya da araç adı (çift çalıyorsa atlanır)\n  sahne biter → kelime biter → konfeti + başarı sesi\n- Kelime çifti: önce Türkçe kelime, yaklaşık 0,5 sn ara, sonra İngilizce kelime. İngilizce uygulamada yalnız “Sun!”. Taslak dillerde yalnız İngilizce kelime.\n- Boyarken, yeniden boyarken ve parçaya dokunurken kelime çalmaz. Hızlı art arda konan parçalarda yeni çift öncekini keser; kuyruk yoktur.\n\n7. Düzeltmek\n- Geri al son adımı alır; son adım yerleştirmeyse parça hücresine geri uçar. Büyük'te ileri al parçayı geri koyar.\n- Yerleşen parça taşınmaz. Silgi parçayı sökmez, yalnız boyayı siler. Temizle düğmesi yoktur.\n\n8. Büyük\n- Aynı zemin ve kurallar geçerlidir. Tepside 6 parça var: güneş, ev, ağaç, çiçek, bulut, kuş. 6 yuva var: gökyüzünde 3, çimende 3. Telefonda tepsi tek sıradır ve paletin 6 sütunlu ızgarasını kullanır.\n- 16 renk, yakınlaştırma, fırça boyu, Apple Pencil basıncı, ileri al ve sistem geri alması (üç parmak, Cmd-Z) sayfalardaki gibidir.\n- Yazılı kelime yoktur (v1). Minik'te kurulan bir sahne Büyük'te kendi 4 yuvasıyla açılır; palet ve yakınlaştırma o anki moda uyar.\n\n9. Ebeveyn (kapı arkası)\n- Sesli adlar ana anahtarı, uygulamanın çalabileceği bir klip varken görünür.\n- Altında Manzara kelimeleri seçimi durur. Türkçe uygulamada: Türkçe ve İngilizce (varsayılan), Yalnız İngilizce, Yalnız Türkçe. İngilizce uygulamada: Yalnız İngilizce (varsayılan), İngilizce ve Türkçe. Seçim yalnız sahne klipleri paketteyken görünür; taslak dillerde görünmez.\n- Tek cümle: “Kelimeleri duymak için cihazın sessiz modunu kapatın.”\n- Resimli, salt okunur Manzara kelimeleri listesi: 9 satır; parçanın çizgi resmi, Türkçe ve İngilizce kelime; altında “Kelimeleri çocuğunuzla birlikte söyleyin.”\n- parentsHint metnine bir cümle eklenir: Manzara kartında çocuk parçaları koyup boyar ve adlarını duyar; Sesli adlar kapalıysa kelimeler de susar.\n- Eserlerim: sahne öteki resimler gibi çerçevede durur, küçük resimde parçalar görünür. Basılı tutup kapıyı geçen ebeveyn bugünkü satırları görür. “Bu sahneyi baştan kur” aynı düzende boş bir sahne açar ve eskisini bırakır. “Boş sayfayı yazdır” bu sahnenin birleşik çizgi resmini basar.\n\n10. Kayıt\n- Sahne ilk değişiklikte (ilk yerleştirme ya da ilk dolgu) kaydedilir; sonra her değişiklikten 400 ms sonra, çıkışta ve arka plana geçişte (Ç6). Hiç dokunulmamış sahne kaydedilmez.\n- Belge bugünkü ColoringDocument JSON'udur (şema 2). İsteğe bağlı scene anahtarı sahne kimliğini ve yerleşen parçaları (yuva, parça) tutar. Yeniden açılınca geri al geçmişi boş başlar; konmuş parçalar kalır.\n- Seviye sayacı sahneyi saymaz.\n\n11. İçerik ve teknik iz\n- İçerik: tool/scenes/scenes.json sahneleri (zemin dosyası; yuvalar: dikdörtgen ve varsayılan parça; ücretsiz bilgisi) ve parçaları (Fluent kodu, Türkçe ve İngilizce kelime, klip anahtarı) tutar. Betik, build_pages.py'nin indirme ve çizim adımlarını kullanır. emoji2page.py her parçayı her yuva boyunda, zeminle aynı 11 px çizgiyle çizer ve parçanın dışını saydam bırakır. Zemin elle çizilir. Betik lib/data/builtin_scenes.dart'ı yazar.\n- Motor: tek 1024² belge ve tek PageLayers kullanılır. Etiket haritası (her pikselin hangi bölgeye ait olduğunu tutan harita) sabit numara aralıklarıyla birleşir: zemin 1..B, s yuvası B + 64·s + parçanın yerel numarası. Bırakma anında RegionBuilder çalışmaz; yerleştirme ve geri alma yalnız yuvanın piksellerini değiştirir. Çizgi resmi önce parçanın içini beyazla örter, sonra parçanın çizgisini çizer. Küçük resim ve PNG birleşik çizgi resminden üretilir.\n- Android: davranış aynıdır; TalkBack etiketleri kullanılır; Material'in 48 dp hedefi 70 pt hücreyle karşılanır; sistem geri tuşu boyama ekranındaki gibi kaydedip çıkar.\n\n12. HIG ve App Review sonucu (tasarım hedefi; kod yazılınca yeniden denetlenir; HIG sayfaları 5 Kasım 2026'da okundu)\n- Dokunma hedefi: uyumlu. Tepsi hücresi palet ızgarasını kullanır; Minik'te isabet alanı 64 pt'nin, her yerde 44 pt'nin altına inmez.\n- Güvenli alan ve kenar boşlukları: uyumlu (boyama ekranının SafeArea iskeleti).\n- Kontrast ve Dynamic Type: uyumlu. Çocuk ekranında yazı yok; Ebeveynler metni %200'e kadar ölçeklenir.\n- Reduce Motion: uyumlu (solma, hareketsiz halka, konfeti yok).\n- VoiceOver: uyumlu (hücreler düğme, “Güneş, sun” etiketi, biten parçada “boyandı”, bitiş duyurusu). Gerekçeli sapma: taşıma özel eylemi yok, çünkü taşıma yok; kaldırma geri al düğmesiyle yapılır.\n- Sürükle-bırak: uyumlu. HIG Drag and drop alternatif yol istiyor (“Offer alternative ways to accomplish drag-and-drop actions”); karşılığı dokunarak yerleştirme. Bırakış geri alınır; parça parmağı izler ve hedef yuva parlar; geçersiz bırakışta parça kaynağına döner.\n- Standart jestler: uyumlu. Ekran kenarı jestleri değişmez; sürükleme tepsiden başlar; ikinci parmak ve avuç parça almaz.\n- Haptik ve ses: uyumlu (her kelimede hafif titreşim; sesin yanında görsel halka). Gerekçeli sapma: ses oturumu ambient ve Sessiz anahtara uyar. HIG Playing audio yabancı dil öğreten uygulamaya Playback örneğini veriyor; biz sessize alınmış cihazın çocuğun elinde konuşmamasını ve çalan müziğe saygıyı seçtik; Ebeveynler'de bunu söyleyen bir cümle var.\n- iPad yön ve çoklu pencere: uyumlu hedef. Yatayda tepsi sütundur; 320 pt bölmede kontroller 44 pt altına inmez; sürüklerken pencere değişirse sürükleme iptal olur.\n- Düzeltilecek eksikler (bugünkü kod; P7 ile kapanır): parents_screen.dart:163 (Sesli adlar yalnız uygulama dilinin kliplerine bakıyor); voice_service.dart:51 (yeni klip öncekini kesiyor, çift için sıralı çalma gerekir); coloring_document.dart:113-122 (silgi çıkartmaları söküyor, parçalar dışarıda kalmalı); coloring_document.dart:239-244 (restore çizginin clipLabel'ını numarayla okuyor); my_artworks_screen.dart:258-260 ve 315 (boş sayfa yazdırma ve eser açma sahneyi bilmiyor); page_progress.dart:33 (zemin dışlanıyor, sahnede 0 olmalı); PageProgress ve PageCheck yalnız alana bakıyor (sahnede kalınlık şartı eklenir).\n- App Review: 1.3 uyumlu (reklam, analitik ve dış bağlantı yok; Tam Sürüm kapı arkasında). 5.1.4 uyumlu (mikrofon, ağ ve veri yok; gizlilik etiketi değişmez). 2.3.1, 2.3.7 ve 2.3.12 yalnız mağaza şartlarıyla uyumlu. 4.0 uyumlu (yerel Flutter ekranı, web görünümü yok). 2.1 riski: iPad Split View'da sürüklerken pencere değişimi ve A8 iPad'de bellek; ikisi de deneme listesinde.",
+  "mvp_scope": "Tek sahne (Bahçe), herkese ücretsiz:\n- Elle çizilmiş zemin: gökyüzü, çimen, nehir.\n- Minik: 4 yuva ve 4 parça (güneş, ev, ağaç, çiçek). Büyük: 6 yuva ve 6 parça (bulut ve kuş eklenir).\n- Dokunarak ve sürükleyerek yerleştirme, en yakın boş yuva, geri al ile kaldırma; taşıma yok.\n- Boyama sayfadakinin aynısı: kova, fırça döngüsü, çıkartma, silgi, otomatik tamamlama.\n- Sayılan bölge kuralı (alan ve kalınlık); parça bitişinde kelime, titreşim ve ışık halkası; bilinen kutlama.\n- Kelime çifti üç anda: yerleşince, parça bitince, zemin kelimesi ilk boyanınca.\n- Ana ekran kartı; Eserlerim'e otomatik kayıt; kapı arkasında “Bu sahneyi baştan kur” ve “Boş sayfayı yazdır”.\n- Ebeveynler: Sesli adlar düzeltmesi, Manzara kelimeleri seçimi, sessiz mod cümlesi, resimli kelime listesi.\n- VoiceOver etiketleri ve bitiş duyurusu, Reduce Motion, titreşim.\n- 20 klip (9 kelime × 2 dil, kart adı × 2); COBI_SCENE bayrağı ve klip testi; klipler pakette değilse kart görünmez.\n- Mağazada tek dürüst cümle, yalnız bu sürümle.\n\nMVP'de olmayanlar: ikinci sahne, taşıma, serbest yerleştirme, büyütme ve döndürme, yazılı kelime, parçaya dokununca kelimeyi yeniden duymak, Manzara'da İngilizce renk adları, Tam Sürüm parçaları. Mikrofon, soru ve puan hiçbir sürümde yok.",
+  "later_scope": "Her biri çocuk gözleminden sonra ayrı oy ister:\n- Büyük'te yerleşen parçayı taşıma, serbest yerleştirme, büyütme ve döndürme. Motorda parça başına katman ya da yeniden etiketleme gerekir. Flutter mühendisi 12 parça × 1024 px için yaklaşık 144 MB GPU belleği uyarısı yaptı; A8 iPad'de ölçülmeden gelmez.\n- Büyük'te parça bitince 2 sn yazılı kelime. 5–6 yaş gözlemine ve Türkçe okuma karışıklığı riskine bağlı.\n- Bitmiş parçaya dokununca kelimeyi yeniden duymak (gözlemde sık istenirse).\n- Yeni sahneler: nehir ya da deniz (balık, ördek, tekne), çiftlik (kedi, köpek, tavşan, ördek), gece (ay, yıldız, bulut). Kural: her yeni sahne en az iki eski kelimeyi tekrar eder, en çok üç yeni kelime getirir. Ücretleri sahibin kararı. İkinci sahne gelince kartın nasıl seçtireceği (iki büyük resim ya da sıra) ayrı oy.\n- Ebeveyn kelime listesinde dokununca klibin çalması.\n- Manzara'da renk adlarının İngilizce söylenmesi (en/color_* kayıt listesinde zaten var).\n- Boyama sayfalarının bitişinde temel düzey adın iki dilde söylenmesi (README'deki page_<kod> aşaması; 307 sayfa için elle seçilmiş kelime, ör. sport utility vehicle değil car). 72 ücretsiz sayfayla, P7'den önce ucuz bir ön deneme olarak da oylanabilir.\n- Kalınlık şartının boyama sayfalarına (PageProgress, PageCheck) uygulanması.\n- Tam Sürüm'le ek sahne ya da parça; çocuğun ekranında kilit olmadan.",
+  "first_catalog": [
+   {
+    "piece": "Güneş · 2600",
+    "tr": "güneş",
+    "en": "sun",
+    "fluent": "Sun",
+    "note": "MVP, Minik ve Büyük; gökyüzü yuvası. Sayfa seviyesi 1. Ölçüm: sahne kenarının 0,25–0,50'si boyunda 2 parmak boyu bölge; kaba sahnede 340 px'te disk %4,3 ile sayılır, ışınlar %0,8'in altında kalır."
+   },
+   {
+    "piece": "Ev · 1f3e0",
+    "tr": "ev",
+    "en": "house",
+    "fluent": "House",
+    "note": "MVP, Minik ve Büyük; çimen yuvası, sahnenin en büyük yuvası. Seviye 2. Kelime house, home değil: resim bir bina; Home ev düğmesinin İngilizce VoiceOver adı (app_en.arb:3). Ölçüm: 0,33 boyda 1, 0,40'ta 3 parmak boyu bölge. Kaba sahnede 400 px'te duvar %4,1 ve kapı %1,5 sayılır; taban şeridi (369×37 px) ve çatı bandı alan kuralını geçer ama kalınlık şartıyla sayılmaz."
+   },
+   {
+    "piece": "Ağaç · 1f333",
+    "tr": "ağaç",
+    "en": "tree",
+    "fluent": "Deciduous tree",
+    "note": "MVP, Minik ve Büyük; çimen yuvası, taç gökyüzüne taşar. Seviye 1. Kelime tree ve ağaç; deciduous tree ve yaprak döken ağaç değil. Ölçüm: her boyda 1 bölge (taç); kaba sahnede 380 px'te taç %6,0; gövde sayılmaz."
+   },
+   {
+    "piece": "Çiçek · 1f337",
+    "tr": "çiçek",
+    "en": "flower",
+    "fluent": "Tulip",
+    "note": "MVP, Minik ve Büyük; çimen yuvası. Seviye 1. Kelime flower ve çiçek; tulip ve lale değil. Ölçüm: 0,33 boya kadar 1, 0,40'tan sonra 2 bölge; kaba sahnede 280 px'te çanak %2,1, kalınlığı yaklaşık 81 px. Yedek: Blossom (1f33c, papatya, seviye 1); kelimesi yine flower ve aynı klibi kullanır."
+   },
+   {
+    "piece": "Bulut · 2601",
+    "tr": "bulut",
+    "en": "cloud",
+    "fluent": "Cloud",
+    "note": "MVP, yalnız Büyük; gökyüzü yuvası. Seviye 1. Ölçüm: 0,42 boya kadar 1 bölge; kaba sahnede 260 px'te %2,7. Minik'e ikinci sahnede girer."
+   },
+   {
+    "piece": "Kuş · 1f426",
+    "tr": "kuş",
+    "en": "bird",
+    "fluent": "Bird",
+    "note": "MVP, yalnız Büyük; gökyüzü yuvası. Seviye 1. Ölçüm: her boyda 1 bölge (gövde); kaba sahnede 240 px'te %2,6; göz ve gaga sayılmaz."
+   },
+   {
+    "piece": "Gökyüzü · zemin",
+    "tr": "gökyüzü",
+    "en": "sky",
+    "fluent": "yok (elle çizilir)",
+    "note": "MVP; zemin bölgesi. Kaba sahnede boşken %43, Minik parçalarıyla %35."
+   },
+   {
+    "piece": "Çimen · zemin",
+    "tr": "çimen",
+    "en": "grass",
+    "fluent": "yok (elle çizilir)",
+    "note": "MVP; zemin bölgesi. Nehir çimeni ikiye bölüyor (kaba sahnede %30 ve %16); iki bölge de grass der, kelime sahnede bir kez çalar."
+   },
+   {
+    "piece": "Nehir · zemin",
+    "tr": "nehir",
+    "en": "river",
+    "fluent": "yok (Unicode'da nehir emojisi yok; Water wave 1f30a deniz dalgasıdır)",
+    "note": "MVP; sahibin örneği. Zeminde kıvrımlı bir bant; kaba sahnede %11. Çizim göle benzerse kelime water olur (Apple uzmanının notu)."
+   },
+   {
+    "piece": "Balık · 1f41f",
+    "tr": "balık",
+    "en": "fish",
+    "fluent": "Fish",
+    "note": "Sonraki sahne (nehir ya da deniz). Seviye 1; ölçümde her boyda 1 bölge."
+   },
+   {
+    "piece": "Ördek · 1f986",
+    "tr": "ördek",
+    "en": "duck",
+    "fluent": "Duck",
+    "note": "Sonraki sahne. Seviye 2. Ölçüm: 0,30 boy ve altında 0, 0,33'te 1, 0,40'ta 3 bölge; yalnız büyük yuvada kullanılır."
+   },
+   {
+    "piece": "Tekne · 26f5",
+    "tr": "tekne",
+    "en": "boat",
+    "fluent": "Sailboat",
+    "note": "Sonraki sahne (deniz). Seviye 2. Kelime boat ve tekne; sailboat ve yelkenli tekne değil. Önceki ölçümde 260 px'te 1, 380 px'te 2 bölge."
+   },
+   {
+    "piece": "Tavşan · 1f407",
+    "tr": "tavşan",
+    "en": "rabbit",
+    "fluent": "Rabbit",
+    "note": "Sonraki sahne (çiftlik ya da bahçe). Seviye 1; ölçümde 0,33 boydan büyükte 2 bölge."
+   },
+   {
+    "piece": "Kedi · 1f408",
+    "tr": "kedi",
+    "en": "cat",
+    "fluent": "Cat",
+    "note": "Sonraki sahne. Seviye 2; ölçümde her boyda 1 bölge (gövde)."
+   },
+   {
+    "piece": "Köpek · 1f415",
+    "tr": "köpek",
+    "en": "dog",
+    "fluent": "Dog",
+    "note": "Sonraki sahne. Seviye 2; ölçümde her boyda 1 bölge (gövde)."
+   },
+   {
+    "piece": "Ay · 1f319",
+    "tr": "ay",
+    "en": "moon",
+    "fluent": "Crescent moon",
+    "note": "Gece sahnesi. Seviye 1; 1 bölge. Kelime moon ve ay; crescent moon ve hilal değil (çıkartma listesi de ay / moon diyor)."
+   },
+   {
+    "piece": "Yıldız · 2b50",
+    "tr": "yıldız",
+    "en": "star",
+    "fluent": "Star",
+    "note": "Gece sahnesi. Seviye 1; 1 bölge. Kelebek (1f98b, seviye 3) kataloğa girmez: önceki ölçümde 340 px'te parmak boyu bölge kalmıyor."
+   }
+  ],
+  "voice_plan": "Bütün kelimeler pakette duran insan sesi kayıtlarıdır. Cihazın konuşma motoru, mikrofon, konuşma tanıma ve ağ kullanılmaz (önceki kurul kararı; 1.3 ve 5.1.4).\n\nKayıt listesi: tool/voice/README.md'ye “Manzara kelimeleri” tablosu eklenir; klasörler assets/voice/tr/ ve assets/voice/en/.\n- scene: Manzara! / Scene!\n- word_sun: güneş / sun\n- word_house: ev / house\n- word_tree: ağaç / tree\n- word_flower: çiçek / flower\n- word_cloud: bulut / cloud\n- word_bird: kuş / bird\n- word_sky: gökyüzü / sky\n- word_grass: çimen / grass\n- word_river: nehir / river\nToplam 20 klip (9 kelime × 2 dil, kart adı × 2). Anahtar İngilizce kelimedir; aynı kelimeyi kullanan iki parça (ileride lale ve papatya, ikisi de flower) aynı klibi paylaşır.\n\nBiçim: README kuralı geçerlidir: MP3, mono, 44,1 kHz, 96 kbps, 0,5–1,5 sn, başta ve sonda 50 ms sessizlik, −16 LUFS. Tek kelime okunur, artikelsiz, çocuğa seslenerek (“Sun!”).\n\nSesler: Türkçe kelimeleri ve İngilizce kart adını README'deki seslendirmen okur. İngilizce kelimeleri (word_*) anadili İngilizce ya da o düzeyde konuşan bir ses, ABD İngilizcesiyle okur. Bu, README'deki “aynı seslendirmen iki dili okur” kuralına tek istisnadır; Türkçe seslendirmen bu düzeydeyse istisna gerekmez. Telaffuzu bir İngilizce öğretmeni ya da anadili İngilizce biri dinler. Seslendirmenlerden yazılı hak devri alınır.\n\nÇalma:\n- Türkçe uygulama: kelime çifti; Türkçe klip biter, yaklaşık 0,5 sn ara, İngilizce klip. İngilizce uygulama: tek İngilizce klip. Taslak diller: tek İngilizce klip. Ebeveyn bunu Manzara kelimeleri seçimiyle değiştirir.\n- Anlar: parça yerleşince, parça bitince, her zemin kelimesi sahnede ilk boyandığında. Başka zaman kelime çalmaz.\n- VoiceService'e çift çalma eklenir ve birinci klibin bitişini bekler; bugün yeni klip öncekini kesiyor (voice_service.dart:51). Yeni çift eskisini keser. Renk ve araç adı klibi çalan çifti kesmez, atlanır. Kuyruk yoktur.\n- Sesli adlar kapalıysa hepsi susar. Ses oturumu ambient kalır ve Sessiz anahtara uyar; Ebeveynler'de bunu söyleyen bir cümle var. VoiceOver açıkken klip çalmaz; etiketler iki kelimeyi okur, bitiş duyurulur.\n\nKayıtlar gelmeden kullanıcıya hiçbir şey çıkmaz. Kod ana dala COBI_SCENE bayrağının arkasında birleşebilir; bayraksız yayın paketinde kart yoktur. Bayrak açık olsa bile kart yalnız 20 klibin hepsi paketteyken görünür; bir test bunu denetler. Böylece klipsiz bir “sessiz sahne oyunu” hiçbir sürümde çıkmaz ve mağaza bir şey vaat etmez. Tur 1 gözleminde kelimeyi gözlemci ya da ebeveyn sesli söyler. Sahibin sesiyle yapılan geçici kayıt yalnız gözlem cihazında kalır, pakete girmez. Tur 2 gerçek kliplerle yapılır.\n\nÖneri: README'deki mevcut 39 satır (kategori, renk, araç, kapı) aynı seansta kaydedilirse Türkçe uygulamada renk ve kategori adları da duyulur. Bu P7'nin şartı değil, sahibin kararı.",
+  "store_claims": "Mağaza yalnız davranışı söyler, sonuç vaat etmez (2.3.1, 2.3.7). Metin yalnız 20 klibin pakette olduğu sürümle değişir. O sürümden önce mod mağazada, Yenilikler'de, ekran görüntüsünde ve Notes for Review'da anılmaz.\n\nİzinli cümle:\n- TR: “Manzara: Güneşi, evi, ağacı resmine koyar ve boyar; her parçanın adını Türkçe ve İngilizce, gerçek bir insan sesinden duyar.”\n- EN (en-US): “Scene: place the sun, a house and a tree, color them, and hear each one's name in a real human voice.” İngilizce vitrin İngilizce öğrenmeden söz etmez; orada çocuk kendi dilinde ad duyar.\n- Kelime sayısı yazılacaksa paketteki sayı yazılır: “9 kelime”.\n\nYasak: “İngilizce öğretir”, “İngilizce öğrenir”, “iki dilli”, “kelime dağarcığını geliştirir”, “dil gelişimini destekler”, “kanıtlanmış”, “eğitimciler hazırladı”, paketteki kliplerden fazla kelime sayısı, rakip adları. Gözlemdeki “Hangisi sun?” oyunu ve bir hafta sonraki hatırlama sorusu “öğrenir” fiiline dayanak olmaz: 5 çocuk var, kontrol grubu yok.\n\nDeğişmeyenler: altyazı (“Küçük eller için boyama kitabı” / “Coloring book for little hands”), Kids Category ve Ages 5 and under, 4+, birincil kategori Education, Data Not Collected etiketi ve PrivacyInfo.xcprivacy.\n\nKliplerle çıkan sürümde:\n- Açıklamaya ve promosyon metnine yukarıdaki tek madde eklenir. TR anahtar kelimelere “ingilizce” eklenir (arama hacmini doğrulamadım).\n- Yenilikler (2.3.12): “Yeni Manzara kartı: güneşi, evi, ağacı resmine koy ve boya; her parçanın adını Türkçe ve İngilizce duy.”\n- Notes for Review: kartın yeri (ana ekranın en sonu), dokunarak ve sürükleyerek yerleştirme, kelimelerin pakette duran insan sesi kayıtları olduğu, mikrofon, ağ, analitik ve veri toplama olmadığı.\n- Ekran görüntüsü gerçek arayüzden çekilir: boyanmış bir bahçe sahnesi. v1'de ekranda yazı olmadığı için kelime balonu gösterilmez; görüntü başlığı “Boya, adını duy” / “Color it, hear its name” olabilir.\n\nYan not: EN anahtar kelimelerdeki “learning” (store_listing.md:171) bugün kaydı olmayan sesli adlara dayanıyor (ürün yöneticisinin notu). Kayıt seansı bu açığı da kapatır.",
+  "effort": "L. Flutter mühendisinin dökümü: 11–13 iş günü (motor 3, ekran ve tepsi 2, içerik hattı ve zemin çizimi 2–3, ses ve Ebeveynler 1, kayıt ve Eserlerim 1, testler ve eski iPad ölçümü 2). Birleşik tasarımın ekledikleri, benim tahminim: kaba prototip 1–2 gün; kelime çifti çalma ve kalınlık kuralı yaklaşık 1 gün. Kod dışı işler: seslendirmen bulma, bir kayıt seansı (20 klip) ve iki gözlem turu. Takvimin uzun kalemi kayıt ve gözlem; ikisi de sahibe bağlı.",
+  "order": [
+   "Karar kaydı: P7 kararı ve birleşik şartlar .claude/skills/cobi-toddler-ux/SKILL.md'ye ve plan/ klasörüne yazılır; sahibin cevapları (seslendirmen, house, varsayılan dil, sıra) alınır.",
+   "2.2.0 (PR #10 içeriği) yayına girer. P7 2.2.0'a girmez; master'dan açılan ayrı bir dalda başlar. Ürün yöneticisinin şartı gereği Tam Sürüm (COBI_IAP) kararı da netleşir; MVP ücretsiz olduğu için teknik bağımlılık yok.",
+   "Kaba prototip (1–2 gün, COBI_SCENE arkasında): zemin resmi, 4 parça resmi, tepsi, dokun/sürükle, en yakın boş yuva, geri al; boyama yok. Bölge isabeti için kaba sahnenin parçalı hâli bugünkü boyama ekranında sıradan bir sayfa olarak açılır. Tur 1 gözlem yapılır; eşiklere göre yuva sayısı, sürükleme ve kelime anları kesinleşir. Çocukların çoğu dokunarak da yerleştiremiyorsa motor işi başlamaz.",
+   "Ses kaydı, motor işine paralel: README'ye Manzara kelimeleri tablosu eklenir; seslendirmenler seçilir; tek seans yapılır (20 klip, isteğe bağlı mevcut 39 satır); telaffuz kontrolü ve yazılı hak devri.",
+   "Motor: sabit etiket aralıkları, yerleştirme komutu (geri al, ileri al), birleşik çizgi resmi, sahnede zemin istisnası yok, sayılan bölge kuralı (alan ve kalınlık), restore'da çizginin clipLabel'ı, scene anahtarı. Birim testleri: etiket bileşimi ve geri dönüşü, JSON gidiş-dönüşü, bitiş kuralı, en yakın boş yuva.",
+   "İçerik hattı: tool/scenes/scenes.json, her yuva boyunda parça üretimi (11 px çizgi, dışı saydam), elle çizilmiş zemin, parça kontrolü, lib/data/builtin_scenes.dart; katalog-paket, yuva çakışması ve klip testleri; her parçaya telefonda göz kontrolü.",
+   "Ses ve Ebeveynler: VoiceService'e kelime çifti ve öncelik; Sesli adlar görünürlük düzeltmesi; Manzara kelimeleri seçimi, sessiz mod cümlesi, kelime listesi, parentsHint; ARB anahtarları TR ve EN, 10 taslak dile anahtar.",
+   "Sahne ekranı: tepsi satırı ve yatay sütun, dokun/sürükle, 220 ms uçuş ve Reduce Motion, ışık halkası, titreşim, IdleHint, VoiceOver etiketleri ve duyuru. Widget testleri: dokunarak ve sürükleyerek koyma, kendi hücresinde bırakma, tuval dışına bırakma, soluk hücre; meetsGuideline.",
+   "Ana ekran kartı (bayrak ve klip denetimi, en yeni bitmemiş sahne kuralı), Eserlerim yönlendirmesi, kapı arkasında “Bu sahneyi baştan kur” ve “Boş sayfayı yazdır”; seviye sayacı dışında.",
+   "Doğrulama: flutter analyze ve flutter test; 320, 375, 393, 430 pt, yatay telefon, iPad iki yön, Split View ve Stage Manager, VoiceOver, Reduce Motion, Sessiz anahtar, en büyük metin; CobiPaint_Pixel ön kontrol; en eski iPad'de (A8) yerleştirme süresi ve bellek ölçümü.",
+   "TestFlight (bayrak açık, gerçek klipler) ve Tur 2 gözlem; eşiklere göre son ayar. Çocuklar kelimeye hiç tepki vermiyorsa yayın durur, kurul yeniden bakar.",
+   "Yayın: bayrak açık sürüm çıkar. Mağaza cümlesi, Yenilikler, Notes for Review, ekran görüntüsü ve TR anahtar kelime “ingilizce” yalnız bu sürümde değişir."
+  ],
+  "child_test": "Plan iki turdur. İki turda da 3–5 yaşında 3–5 çocuk (en az ikisi 3 yaşında), Minik mod, bir iPad ve 375 pt genişliğinde bir telefon kullanılır. Mümkünse telefon 667 pt boyunda bir iPhone SE olur, çünkü tepsiyle tuval yaklaşık 290 pt'ye iniyor (hesap). Ses açık, Sessiz anahtar kapalıdır.\n- Tur 1, motor işinden önce: kaba prototipte yerleştirme (tepsi, dokun/sürükle, yuvaya oturma, geri al). Kelimeyi gözlemci söyler. Bölge isabeti için kaba sahnenin parçalı hâli bugünkü boyama ekranında sıradan bir sayfa olarak açılır; motor işi gerekmez.\n- Tur 2, yayından önce: TestFlight, bayrak açık, gerçek klipler; kelime anları, ses yükü, bitiş ve kutlama.\n\nKurallar: Ebeveyn izni alınır. Yüz videosu çekilmez, yalnız not tutulur; video yalnız yazılı onayla çekilir ve paylaşılmaz. Uygulama veri toplamaz; gözlemci sayım kâğıdı tutar. Çocuğa tek cümle söylenir: “Burada bir resim yapabilirsin.” Yetişkin göstermez; çocuk 30 sn takılırsa önce not alır, sonra yardım eder. Her çocuk 10–15 dk oynar ve istediği an bırakır.\n\nİzlenecekler:\n1. Manzara kartını kendisi buluyor mu (telefonda kaydırma gerekir)?\n2. İlk parça: dokunuyor mu, sürüklüyor mu? Yardımsız kaç saniyede koyuyor? Sürüklemede parmak yolda kaç kez kalkıyor?\n3. En yakın yuvaya oturmaya itiraz ediyor mu (“oraya koymuştum”)?\n4. Yerleşen parçayı taşımaya, tepsideki parçayı boyamaya çalışıyor mu? Soluk hücreyi “bozuldu” diye okuyor mu? Ev parçasını ararken ev düğmesine basıp sahneden çıkıyor mu?\n5. Hangi parçada kaç dokunuş komşu bölgeye kaçıyor? İlk parça kaç dakikada bitiyor? Bitmeden bırakılan, kelimesi hiç duyulmayan parça kalıyor mu?\n6. Kelime (Tur 2): parçaya bakıyor, gülüyor, kendiliğinden tekrar ediyor mu? “Ne dedi?” diyor mu? Yerleştirmedeki mi bitişteki mi kelime daha çok tepki alıyor? Kelimeyi yeniden duymak için parçaya dokunuyor mu? Renk adı kelimeyle karışıyor mu?\n7. Geri al ile parçanın hücresine dönmesini anlıyor mu?\n8. Hayal kırıklığı işaretleri (“olmuyor”, iç çekme, yetişkine bakma, bırakıp gitme): kaç kez, hangi anda?\n9. Sahnede kaç dakika kalıyor, sonra nereye gidiyor? Kartı yeniden açınca kendi sahnesini buluyor mu? Kutlamayı gören var mı?\n10. Oturum sonunda, uygulamanın dışında, oyun gibi iki soru sorulur: “Hangisi sun?”, “Hangisi house?”. Yanlışta düzeltme yapılmaz; sonuç yalnız kâğıda yazılır, 3 ve 5 yaş ayrı yazılır. Bu tek oturumluk bir işarettir, öğrenme kanıtı değildir.\n11. Ebeveyne 2 dk: Ses fazla mıydı? Modu okumadan anladınız mı? “house” mu “home” mu bekliyordunuz? Evde telefon sessizde mi duruyor? Kelime listesini kullanır mısınız? Mağaza cümlesi beklentinizi karşılıyor mu?\nİsteğe bağlı: bir hafta sonra ebeveyn parça resimlerini gösterip sorar. Bu yalnız ekip içi bir işarettir, mağaza iddiasına dayanak olmaz.\n\nKarar eşikleri:\n- Hedef: 5 çocuğun en az 4'ü ilk 60 sn içinde yardımsız bir parça koyar. Hedef tutmazsa ya da 3 yaşındakilerin yarısından çoğu sürüklemeyi bitiremezse ipucu dokunmayı gösterir ve Minik'te sürükleme dokunmaya eşlenir (bırakışta parça kendi yuvasına uçar).\n- Tur 1'de çocukların çoğu dokunarak da yerleştiremiyorsa motor işi başlamaz.\n- 2 ya da daha çok çocuk yuvaya oturmaya itiraz ederse yuvalar çoğalır ya da büyür.\n- Kelime 2 ya da daha çok çocukta boyamayı bölüyorsa ya da ebeveynler sesi fazla buluyorsa yerleştirme anındaki kelime kalkar, yalnız bitiş kalır.\n- İlk parçanın bitmesi 3 dakikayı geçiyorsa ya da ıskalama sıksa parçalar büyür, parça sayısı azalır ya da kalınlık eşiği yükselir.\n- 2 ya da daha çok çocuk ev düğmesiyle çıkarsa çözüm ayrı oya gelir.\n- Bitmiş parçaya tekrar dokunma sık görülürse “dokununca yeniden söyle”, yerleşen parçayı taşıma isteği sık görülürse Büyük'te taşıma ayrı oya gelir.\n- Tur 2'de çocuklar kelimeye hiç tepki vermiyorsa yayın durur, kurul yeniden bakar.",
+  "why": "Beş üye de şartlı onay verdi, veto yok; öneri 5/5 ile şartlı geçti. Üyelerin ortak zemini tasarımın omurgası oldu: ana ekranın sonunda ayrı bir kart, dokunarak yerleştirmenin her zaman çalışması, sınav ve puanın olmaması, insan sesi kaydı, “house”, kayıtlar gelmeden modun görünmemesi, mağazada yalnız davranış, ücretsiz ilk sahne.\n\nÜyelerin ayrıştığı yerlerde seçimim ve gerekçesi:\n- Sabit yuva, serbest yerleştirme değil (erken çocukluk, Flutter, ebeveyn). Flutter mühendisi bugünkü belgenin her bırakmada yeniden kurulan bir etiket haritasını taşıyamadığını kodla gösterdi: harita sabit, çizgi bölgesini numarayla tutuyor. Apple uzmanı ve ürün yöneticisinin asıl şartı olan “her bırakış geçerli” en yakın boş yuva kuralıyla korunuyor.\n- Ayrı tepsi satırı, iki hâlli palet değil (erken çocukluk, Flutter, ebeveyn). Araç çubuğu değişmiyor ve gizli bir “taşı/boya” kipi doğmuyor; Apple uzmanı ve ürün yöneticisi iki hâlli paleti kendi risk listelerinde en büyük risk diye yazmıştı. Bedeli: 667 pt boyundaki telefonlarda tuval yaklaşık 351 pt'den 290 pt'ye iniyor (hesap, ölçmedim).\n- Kart en yeni bitmemiş sahneyi, bittiyse yeni sahneyi açar (ebeveyn üyenin biçimi). Her dokunuşta yeni sahne “resmim gitti” riski taşıyor. Yeni sahneyi yalnız kapı arkasından açmak, dört yuva dolunca modu çocuk için çıkmaz sokağa çeviriyor. Bitmiş sahne silinmiyor ve üstüne yazılmıyor; P1'in gerekçesi korunuyor.\n- Türkçe uygulamada kelime çifti (erken çocukluk uzmanı; Flutter mühendisi Türkçe adı ona bıraktı; Apple uzmanı da Türkçe adı ve İngilizce kelimeyi birlikte kullandı). Ürün yöneticisi ve ebeveyn üyenin istediği yalnız İngilizce, Ebeveynler'de bir seçenek. Uzmanın gerekçesi: tek dilli 3 yaş ikinci adı başka dilden geldiğini fark edince daha kolay kabul eder (Au ve Glusman 1990; kaynağı doğrulamadım).\n- Yazılı kelime v1'de yok. Minik'te dört üye zaten yazı istemedi. Büyük'te Apple, Flutter ve ürün yöneticisi yazı istedi; erken çocukluk uzmanı ve ebeveyn üye, Türkçe okumayı söken çocuğun “house”u Türkçe kuralla okuyacağını yazdı. Çocuk ölçütü önce geldiği için yazı ayrı oya kaldı.\n- Yeniden boyamada kelime tekrarlanmaz (dört üye); Flutter mühendisinin 1,5 sn beklemeli tekrarı alınmadı.\n- Parça bitişinde kelime, titreşim ve hareketsiz ışık halkası gelir. Bu, Apple uzmanının “bilgi tek kanaldan gelmesin” şartı ile uzmanın “parça başına yeni animasyon yok” şartının ortak noktası.\n- Ebeveynler'de tek yeni seçim var (üç üye yeni ayar istedi, iki üye istemedi); Sesli adlar ana anahtar olarak kalıyor.\n- Fırça ve çıkartma sahnede de var (üç üye); ürün yöneticisinin gerekçesi (taşınan parça boyasını taşısın) taşıma olmadığı için düştü.\n\nKurulun görmediği bir riski ölçtüm. Toplantıda kurulan kaba bahçe sahnesini (1024 px; güneş 340, ev 400, ağaç 380, lale 280 px; parçalar yuva boyunda ve 11 px çizgiyle) RegionBuilder ile saydım: 21 bölgenin 11'i %1 alan kuralını geçiyor. Bunların ikisi evin ince şeritleri. Taban şeridi 369×37 px; çatı bandı, alan ve uzunluk hesabıyla, yaklaşık 30 px kalınlıkta. İkisi 351 pt tuvalde 10–13 pt eder. Bugünkü kural yalnız alana baktığı için bu şeritler bitişe sayılırdı. Çocuk onları tutturamazsa ev bitmez, kelime ve kutlama gelmez; bu gizli bir başarısızlık durumudur. Kalınlık şartı (kenarın %6'sı) şeritleri dışarıda bırakıyor; kapı (yaklaşık 83 px) ve lale çanağı (yaklaşık 81 px) içeride kalıyor. Aynı sahnede Büyük'ün bulutu (260 px) %2,7, kuşu (240 px) %2,6 ile birer sayılan bölge tutuyor. Zemin dört bölgeden oluşuyor: gökyüzü %43, iki çimen %30 ve %16, nehir %11. Parçaları sahne kenarının 0,25–0,50'si boyunda da saydım: güneş, ağaç, kuş, balık, kedi, köpek, ay ve yıldız her boyda en az bir bölge tutuyor; ördek 0,30 ve altında hiç tutmuyor. Kaba sahne resmi: /private/tmp/claude-501/-Users-muazcobanos-Work-Workspace-Cobi-Paint-Mobile/ed955974-f6d6-4880-9d51-962c5cb4a230/scratchpad/chair2/out/scene_minik4.png\n\nBirebir karşılanmayan şartlar; tasarım her birinin amacını başka yoldan karşılıyor:\n- Apple uzmanı: parmağın kalktığı yere iniş yerine en yakın boş yuva; Parçalar düğmesi yerine ayrı tepsi; taşıma olmadığı için beş VoiceOver özel eylemi yok; Büyük'te yazı sonraki oya kaldı; 10/12 parça yerine 4/6.\n- Ürün yöneticisi: sepet düğmesi ve iki hâlli palet yerine ayrı tepsi; yalnız İngilizce yerine varsayılan çift; kelime balonu yok; taşıma, çoğaltma ve üst üste binme yok; yalnız kova yerine bütün araçlar; “yeni ayar yok” yerine tek seçim.\n- Flutter mühendisi: bitmiş parçada her dolguda kelime yok; Büyük'te yazı sonraki oya kaldı; Minik'te parçanın tek yeri yerine en yakın boş yuva (her parça her yuva boyunda denetlenir).\n- Erken çocukluk uzmanı: bitmiş sahneden sonra kart yeni sahneyi kapısız açar; parça bitişinde hareketsiz bir ışık halkası var.\n- Ebeveyn üye: yuvalar aynı boyda değil (her parça her yuva boyunda denetlenir); sahne dolunca tepsi gizlenmez ve yeni parça gelmez; yalnız İngilizce bir seçenek; 8 ücretsiz parçanın kalanı sonraki sahnelere kaldı.",
+  "open_questions_for_owner": [
+   "Seslendirmen: Türkçe kelimeleri tool/voice/README.md'deki Türkçe seslendirmen mi okuyacak? İngilizce kelimeler için anadili İngilizce ya da o düzeyde (ABD İngilizcesi) bir ses bulabilir misiniz? Bütçe ve yazılı hak devri sizde. 20 klip pakette olmadan mod yayına girmez.",
+   "“home” yerine “house”: Eşinizin örneğinde “home” geçiyor; beş üye de resim bir bina olduğu için “house” dedi. Onaylıyor musunuz?",
+   "Varsayılan dil: Türkçe uygulamada varsayılan “Çiçek… flower!” (önce Türkçe, sonra İngilizce). Ürün yöneticisi ve ebeveyn üye varsayılan olarak yalnız İngilizceyi istedi. Hangisi varsayılan olsun? İkisi de Ebeveynler'de seçilebilir.",
+   "Yazı: Eşinizin “İngilizcesini çıkarsın” fikri ekranda yazıyı da kapsıyor muydu? Kurul v1'de yazıyı kaldırdı ve Büyük için ayrı oy önerdi. Bu sizin için yeterli mi?",
+   "Kartın adı: “Manzara” / “Scene” uygun mu?",
+   "Sonraki sahneler (nehir ya da deniz, çiftlik, gece) ücretsiz mi olsun, Tam Sürüm'e mi girsin? İlk sahne her durumda ücretsiz.",
+   "Zemin çizimi: Fluent UI Emoji'de nehir, çimen ve gökyüzü yok. Bahçe zeminini kim çizecek: siz, eşiniz ya da betik? Kaba örnek: /private/tmp/claude-501/-Users-muazcobanos-Work-Workspace-Cobi-Paint-Mobile/ed955974-f6d6-4880-9d51-962c5cb4a230/scratchpad/chair2/out/scene_empty.png",
+   "Gözlem: İki tur için 3–5 yaşında 3–5 çocuk (en az ikisi 3 yaşında) ve mümkünse 667 pt boyunda bir iPhone SE bulabilir misiniz? Uygulamada analitik olmadığı için başka veri kaynağı yok.",
+   "Sıra: P7, 2.2.0'dan sonra İş listesinde nereye girsin? Ürün yöneticisi Tam Sürüm (COBI_IAP) kararından sonra başlamayı şart koştu; MVP ücretsiz olduğu için teknik bağımlılık yok.",
+   "Ön deneme: Mevcut 72 ücretsiz sayfanın bitişinde sayfanın temel düzey adını iki dilde söyleme denemesini (S, yeni ekran yok) P7'den önce ayrı oya getirmek ister misiniz? Üç üye bunu önerdi.",
+   "Kayıt seansı: README'deki mevcut 39 satırı (kategori, renk, araç, kapı) aynı seansta kaydettirmek ister misiniz? EN anahtar kelimedeki “learning” bugün kaydı olmayan sesli adlara dayanıyor (ürün yöneticisinin notu)."
+  ]
+ }
+}
