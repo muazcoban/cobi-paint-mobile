@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cobi_paint_mobile/data/builtin_images.dart';
 import 'package:cobi_paint_mobile/main.dart';
 import 'package:cobi_paint_mobile/providers/app_provider.dart';
 import 'package:cobi_paint_mobile/screens/coloring_screen.dart';
@@ -136,12 +137,14 @@ void main() {
     await goHome(tester); // back home
     await settle(tester, () => find.text('Food').evaluate().isNotEmpty, reason: 'home again');
 
-    // The category card opens the newest copy.
+    // The category card opens the newest copy. The card reads the page name
+    // in the app's language; the artwork keeps the name it was saved with.
+    final page = builtInImages.firstWhere((p) => p.id == first.originalImageId);
     await tester.ensureVisible(find.text('Food'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Food'));
     await tester.pumpAndSettle();
-    await tester.tap(find.bySemanticsLabel(first.name).hitTestable().first);
+    await tester.tap(find.bySemanticsLabel(page.localizedName('en')).hitTestable().first);
     await settle(tester, () => find.byType(PaintCanvas).evaluate().isNotEmpty, reason: 'the page loaded');
     await tester.pumpAndSettle();
     expect(tester.widget<ColoringScreen>(find.byType(ColoringScreen)).existingArtwork?.id, newest.id);
