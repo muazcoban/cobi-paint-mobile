@@ -36,6 +36,13 @@ void main() {
     }
   });
 
+  test('English page names have no Turkish-only letters (VoiceOver reads them)', () {
+    final turkishOnly = RegExp('[İıŞşĞğ]'); // dotted and dotless i, s and g with cedilla/breve
+    for (final page in builtInImages) {
+      expect(page.nameEn, isNot(contains(turkishOnly)), reason: page.id);
+    }
+  });
+
   test('every built-in page folder is bundled through pubspec.yaml', () {
     final pubspec = File('pubspec.yaml').readAsStringSync();
     for (final page in builtInImages) {

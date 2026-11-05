@@ -72,9 +72,10 @@ def fetch(url, path):
     return True
 
 
-def title(name):
-    first = {"i": "İ", "ı": "I"}.get(name[:1], name[:1].upper())
-    return first + name[1:]
+def title(name, turkish=True):
+    """Capital first letter; only Turkish names use the dotted capital I."""
+    first = {"i": "İ", "ı": "I"}.get(name[:1]) if turkish else None
+    return (first or name[:1].upper()) + name[1:]
 
 
 def main():
@@ -162,7 +163,7 @@ def main():
     ]
     for p in kept:
         name_tr = title(p["nameTr"].replace(" yüzü", "")).replace("'", r"\'")
-        name_en = title(p["nameEn"].replace(" face", "")).replace("'", r"\'")
+        name_en = title(p["nameEn"].replace(" face", ""), turkish=False).replace("'", r"\'")
         lines.append(
             f"  ColoringImage(id: '{p['category']}_{p['code']}', name: '{name_tr}', nameEn: '{name_en}', "
             f"category: '{p['category']}', imagePath: 'assets/pages/{p['category']}/{p['code']}.png', level: {p['level']}"
