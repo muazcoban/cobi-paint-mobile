@@ -146,7 +146,7 @@ class _GalleryCard extends StatelessWidget {
         decoration: BoxDecoration(
           // The one card that takes the parents' theme; the tool buttons keep
           // their fixed colours because a three-year-old learns them.
-          gradient: LinearGradient(colors: [palette.primaryLight, palette.secondaryLight]),
+          gradient: LinearGradient(colors: palette.cardGradient),
           borderRadius: BorderRadius.circular(24),
           boxShadow: [
             BoxShadow(color: Colors.black.withValues(alpha: 0.1), blurRadius: 10, offset: const Offset(0, 4)),
@@ -162,7 +162,7 @@ class _GalleryCard extends StatelessWidget {
               clipBehavior: Clip.antiAlias,
               child: thumb != null && thumb.existsSync()
                   ? Image.file(thumb, fit: BoxFit.cover)
-                  : Icon(Icons.collections_rounded, size: 56, color: palette.primaryDark),
+                  : Icon(Icons.collections_rounded, size: 56, color: palette.primary),
             ),
             const SizedBox(width: 16),
             Expanded(

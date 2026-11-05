@@ -5,8 +5,9 @@ Input: a folder of raw frames (build/store_screenshots/<set>/NN_name.png, the
 exact App Store Connect pixel sizes). Output: the same sizes with a caption
 band on top, the frame scaled below it with rounded corners, and a thin
 "no ads / no internet / no accounts" strip at the bottom, in the order the
-marketing review asks for (fill, lines, drawing, home, artworks, gate). The
-first three frames are the ones a search result shows.
+marketing review asks for (fill, lines, celebration, drawing, home, artworks,
+gate). The first three frames are the ones a search result shows; a set
+without a raw frame for one of them simply skips it.
 
     python3 tool/store/caption_screenshots.py build/store_screenshots/iphone61_tr tr
     python3 tool/store/caption_screenshots.py build/store_screenshots/iphone61_en en
@@ -28,6 +29,7 @@ STRIP = (255, 213, 79)  # the home button yellow, 0xFFFFD54F
 FRAMES = [
     ("02", "Dokun, hemen boyansın", "Tap and it fills"),
     ("03", "Boya çizgiden taşmaz", "Paint stays in the lines"),
+    ("07", "Biten resim kutlanır", "Finish a page, get confetti"),
     ("05", "Fırçalar, çıkartmalar, ayna", "Brushes, stickers, mirror"),
     ("01", "6 kategori, 201 sayfa", "201 pages, 6 categories"),
     ("04", "Kendiliğinden kaydedilir", "Saves itself, nothing lost"),
