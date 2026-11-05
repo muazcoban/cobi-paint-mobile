@@ -101,6 +101,34 @@ void main() {
       expect(AutoComplete.evaluate(map, [rows(background)], inside), isNull);
     });
 
+    test('the paint of another brush counts as far as it reaches', () {
+      // Marker rows everywhere but a 40 px window in the middle; in the
+      // window a short spray line and one marker pass over its core. The
+      // spray's outer dots stay visible in two small white strips, so the
+      // region must not get a flat fill under them.
+      Stroke marker(List<double> xy) => Stroke(
+            kind: BrushKind.marker,
+            argb: blue,
+            size: 22,
+            clipLabel: inside,
+            points: Float32List.fromList([xy[0], xy[1], 0.5, xy[2], xy[3], 0.5]),
+          );
+      final marks = <Stroke>[
+        for (var y = 28.0; y <= 172; y += 14)
+          if (y > 80 && y < 120) ...[marker([28, y, 78, y]), marker([122, y, 172, y])] else marker([28, y, 172, y]),
+      ];
+      final pass = marker([95, 100, 105, 100]);
+      final spray = Stroke(
+        kind: BrushKind.spray,
+        argb: red,
+        size: 22,
+        clipLabel: inside,
+        points: Float32List.fromList([95, 100, 0.5, 105, 100, 0.5]),
+      );
+      expect(AutoComplete.evaluate(map, [...marks, pass], inside), isNotNull, reason: 'the strips alone are small');
+      expect(AutoComplete.evaluate(map, [...marks, spray, pass], inside), isNull, reason: 'spray dots show in the strips');
+    });
+
     test('an Apple Pencil stroke counts with the width it was drawn with', () {
       expect(AutoComplete.evaluate(map, [rows(inside, pressure: 0.0)], inside), isNull,
           reason: 'the lightest touch leaves white bands between the rows');
@@ -135,6 +163,19 @@ void main() {
       doc.addStroke(stroke, completion: doc.completionFor(stroke));
       doc.undo();
       expect(doc.completionFor(rows(inside)), isNull);
+    });
+
+    test('a completion that came back with redo may come again later', () {
+      final doc = ColoringDocument(map);
+      final stroke = rows(inside);
+      doc.addStroke(stroke, completion: doc.completionFor(stroke));
+      doc.undo();
+      doc.redo();
+      expect(doc.fillOf(inside), blue);
+      // The eraser takes the fill away; colouring the region again finishes it again.
+      doc.erase(Stroke(kind: BrushKind.eraser, argb: 0, size: 10, points: Float32List.fromList([100, 100, 0.5])), {inside});
+      expect(doc.fillOf(inside), 0);
+      expect(doc.completionFor(rows(inside)), isNotNull);
     });
 
     test('a filled region, the background and non-marker strokes never ask', () {

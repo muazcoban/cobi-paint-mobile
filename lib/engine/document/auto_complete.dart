@@ -146,10 +146,22 @@ class AutoComplete {
     return (argb: colours[winner], x: seedX, y: seedY);
   }
 
-  /// Sets every grid cell within the brush radius of the stroke's path; an
-  /// Apple Pencil stroke counts with the width it was drawn with.
+  /// How far from its path a brush leaves paint, in brush sizes. The marker
+  /// covers half its size each side; the pastel's grain, the glitter's stars
+  /// (both scattered across a square of the size) and the spray's dots reach
+  /// further, and the neon's glow is three sizes wide.
+  static double _reach(BrushKind kind) => switch (kind) {
+        BrushKind.crayon => 0.82,
+        BrushKind.glitter => 1.0,
+        BrushKind.spray => 1.1,
+        BrushKind.neon => 1.5,
+        _ => 0.5,
+      };
+
+  /// Sets every grid cell within the reach of the stroke's paint; an Apple
+  /// Pencil stroke counts with the width it was drawn with.
   static void _stamp(Stroke stroke, RegionInfo region, int gw, int gh, Int32List owner, int value) {
-    final base = stroke.size / 2;
+    final base = stroke.size * _reach(stroke.kind);
     final factors = stroke.hasPressure ? pressureFactors(stroke) : null;
     final pts = stroke.points;
 

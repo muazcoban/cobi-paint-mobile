@@ -320,7 +320,11 @@ class _StrokeCommand implements _Command {
     doc._strokes.add(stroke);
     doc._strokeRevision++;
     final done = completion;
-    if (done != null) doc._setFill(stroke.clipLabel, done);
+    if (done != null) {
+      doc._setFill(stroke.clipLabel, done);
+      // Brought back with redo: the region may be completed again later.
+      doc._completionUndone.remove(stroke.clipLabel);
+    }
     for (final label in clearedFills.keys) {
       doc._setFill(label, null);
     }
