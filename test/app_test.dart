@@ -127,6 +127,37 @@ void main() {
     expect(find.bySemanticsLabel('Mirror off'), findsNothing, reason: 'the mirror is only on the blank page');
   });
 
+  testWidgets('on a 375 pt phone the new categories are a scroll away, keep the card size and open their pages',
+      (tester) async {
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    tester.view.devicePixelRatio = 2.0;
+    tester.view.physicalSize = const Size(750, 1624); // 375 x 812 pt
+
+    final app = provider();
+    await openHome(tester, app);
+    Finder card(String name) => find.ancestor(of: find.text(name), matching: find.byType(PressableCard));
+    final size = tester.getSize(card('Animals'));
+    // Two columns: (375 - 2 x 16 padding - 16 spacing) / 2 wide; the grid is the same for every card.
+    expect(size.width, closeTo(163.5, 0.01));
+
+    for (final (name, id) in [('Space', 'space'), ('Music', 'music'), ('Clothes', 'clothes')]) {
+      await tester.scrollUntilVisible(find.text(name), 120, scrollable: find.byType(Scrollable).first);
+      await tester.pumpAndSettle();
+      expect(tester.getSize(card(name)), size, reason: '$name has the same tap target as the first card');
+
+      await tester.tap(find.text(name));
+      await tester.pumpAndSettle();
+      expect(find.descendant(of: find.byType(CategoryScreen), matching: find.text(name)), findsOneWidget);
+      expect(app.getImagesForCategory(id).length, greaterThanOrEqualTo(12), reason: name);
+      expect(find.byType(PressableCard).hitTestable(), findsWidgets, reason: '$name shows its pages');
+
+      await tester.tap(find.bySemanticsLabel('Home'));
+      await tester.pumpAndSettle();
+      expect(find.byType(CategoryScreen), findsNothing);
+    }
+  });
+
   testWidgets('the brush button cycles to stickers and a tap on the page sticks one', (tester) async {
     final app = provider();
     await openHome(tester, app);

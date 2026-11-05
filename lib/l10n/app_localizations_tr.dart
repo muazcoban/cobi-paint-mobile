@@ -39,6 +39,15 @@ class AppLocalizationsTr extends AppLocalizations {
   String get things => 'Eşyalar';
 
   @override
+  String get space => 'Uzay';
+
+  @override
+  String get music => 'Müzik';
+
+  @override
+  String get clothes => 'Giysiler';
+
+  @override
   String get pageLevel => 'Sayfa zorluğu';
 
   @override
@@ -64,8 +73,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get fullVersionShort => 'Bütün sayfaları aç';
 
   @override
-  String get fullVersionDesc =>
-      'Ücretsiz sürümde her kategoriden 8 sayfa var. Tam Sürüm, 201 sayfanın hepsini bir kez ödemeyle sonsuza kadar açar. Abonelik yoktur. Çocuğunuzun boyadığı resimler her durumda Resimlerim\'de kalır.';
+  String fullVersionDesc(int count) {
+    return 'Ücretsiz sürümde her kategoriden 8 sayfa var. Tam Sürüm, $count sayfanın hepsini bir kez ödemeyle sonsuza kadar açar. Abonelik yoktur. Çocuğunuzun boyadığı resimler her durumda Resimlerim\'de kalır.';
+  }
 
   @override
   String get buy => 'Satın al';

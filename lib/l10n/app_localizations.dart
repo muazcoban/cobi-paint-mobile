@@ -158,6 +158,24 @@ abstract class AppLocalizations {
   /// **'Eşyalar'**
   String get things;
 
+  /// Space category: planets, moons, stars, a flying saucer
+  ///
+  /// In tr, this message translates to:
+  /// **'Uzay'**
+  String get space;
+
+  /// Music category: instruments, notes, a microphone
+  ///
+  /// In tr, this message translates to:
+  /// **'Müzik'**
+  String get music;
+
+  /// Clothes category: things a child wears, hats, shoes and bags included
+  ///
+  /// In tr, this message translates to:
+  /// **'Giysiler'**
+  String get clothes;
+
   /// No description provided for @pageLevel.
   ///
   /// In tr, this message translates to:
@@ -206,11 +224,11 @@ abstract class AppLocalizations {
   /// **'Bütün sayfaları aç'**
   String get fullVersionShort;
 
-  /// No description provided for @fullVersionDesc.
+  /// Full Version screen; count is the number of bundled coloring pages, read from the app
   ///
   /// In tr, this message translates to:
-  /// **'Ücretsiz sürümde her kategoriden 8 sayfa var. Tam Sürüm, 201 sayfanın hepsini bir kez ödemeyle sonsuza kadar açar. Abonelik yoktur. Çocuğunuzun boyadığı resimler her durumda Resimlerim\'de kalır.'**
-  String get fullVersionDesc;
+  /// **'Ücretsiz sürümde her kategoriden 8 sayfa var. Tam Sürüm, {count} sayfanın hepsini bir kez ödemeyle sonsuza kadar açar. Abonelik yoktur. Çocuğunuzun boyadığı resimler her durumda Resimlerim\'de kalır.'**
+  String fullVersionDesc(int count);
 
   /// No description provided for @buy.
   ///

@@ -7,7 +7,7 @@
   "licenseFile": "assets/licenses/fluentui-emoji.txt",
   "style": "Flat"
  },
- "notes": "Subjects chosen for 2-5 year olds: everyday animals, plants, food, vehicles, weather, toys. No people, faces, flags, brands, weapons, alcohol or religious symbols. Pages marked free:true are the fixed free subset (8 per category, 3/3/2 by level); once free, a page stays free.",
+ "notes": "Subjects chosen for 2-5 year olds: everyday animals, plants, food, vehicles, weather, toys, space, music and clothes. No people, faces, flags, brands, weapons, alcohol, religious symbols or frightening subjects. Pages marked free:true are the fixed free subset (8 per category, spread over the levels; mostly level 1 in space, music and clothes); once free, a page stays free. A page id is <category>_<code> and saved artworks keep it, so a page that has shipped never changes category. A page with \"skip\" is not built; the value says why.",
  "pages": [
   {
    "code": "1f401",
@@ -499,7 +499,7 @@
   },
   {
    "code": "1f996",
-   "name": "T-Rex",
+   "name": "T-rex",
    "nameTr": "T-Rex",
    "nameEn": "T-Rex",
    "category": "animals",
@@ -663,7 +663,8 @@
    "nameTr": "kral kelebeği",
    "nameEn": "monarch butterfly",
    "category": "animals",
-   "subgroup": "animal-bug"
+   "subgroup": "animal-bug",
+   "skip": "not in Fluent UI Emoji at the pinned commit"
   },
   {
    "code": "1facd",
@@ -671,7 +672,8 @@
    "nameTr": "orka",
    "nameEn": "orca",
    "category": "animals",
-   "subgroup": "animal-marine"
+   "subgroup": "animal-marine",
+   "skip": "not in Fluent UI Emoji at the pinned commit"
   },
   {
    "code": "1face",
@@ -776,6 +778,30 @@
    "free": true
   },
   {
+   "code": "1f33c",
+   "name": "blossom",
+   "nameTr": "papatya",
+   "nameEn": "daisy",
+   "category": "plants",
+   "subgroup": "plant-flower"
+  },
+  {
+   "code": "1f33e",
+   "name": "sheaf of rice",
+   "nameTr": "başak",
+   "nameEn": "sheaf of rice",
+   "category": "plants",
+   "subgroup": "plant-other"
+  },
+  {
+   "code": "1f33f",
+   "name": "herb",
+   "nameTr": "yapraklı dal",
+   "nameEn": "herb",
+   "category": "plants",
+   "subgroup": "plant-other"
+  },
+  {
    "code": "1f340",
    "name": "four leaf clover",
    "nameTr": "dört yapraklı yonca",
@@ -792,6 +818,14 @@
    "subgroup": "plant-other"
   },
   {
+   "code": "1f342",
+   "name": "fallen leaf",
+   "nameTr": "sonbahar yaprakları",
+   "nameEn": "fallen leaves",
+   "category": "plants",
+   "subgroup": "plant-other"
+  },
+  {
    "code": "1f344",
    "name": "mushroom",
    "nameTr": "mantar",
@@ -799,6 +833,14 @@
    "category": "plants",
    "subgroup": "plant-other",
    "free": true
+  },
+  {
+   "code": "1f3f5",
+   "name": "rosette",
+   "nameTr": "rozet",
+   "nameEn": "rosette",
+   "category": "plants",
+   "subgroup": "plant-flower"
   },
   {
    "code": "1f490",
@@ -1253,6 +1295,22 @@
    "subgroup": "transport-air"
   },
   {
+   "code": "1f682",
+   "name": "locomotive",
+   "nameTr": "lokomotif",
+   "nameEn": "locomotive",
+   "category": "vehicles",
+   "subgroup": "transport-ground"
+  },
+  {
+   "code": "1f685",
+   "name": "bullet train",
+   "nameTr": "hızlı tren",
+   "nameEn": "bullet train",
+   "category": "vehicles",
+   "subgroup": "transport-ground"
+  },
+  {
    "code": "1f686",
    "name": "train",
    "nameTr": "tren",
@@ -1279,10 +1337,42 @@
    "subgroup": "transport-ground"
   },
   {
+   "code": "1f68e",
+   "name": "trolleybus",
+   "nameTr": "troleybüs",
+   "nameEn": "trolleybus",
+   "category": "vehicles",
+   "subgroup": "transport-ground"
+  },
+  {
+   "code": "1f690",
+   "name": "minibus",
+   "nameTr": "minibüs",
+   "nameEn": "minibus",
+   "category": "vehicles",
+   "subgroup": "transport-ground"
+  },
+  {
+   "code": "1f691",
+   "name": "ambulance",
+   "nameTr": "ambulans",
+   "nameEn": "ambulance",
+   "category": "vehicles",
+   "subgroup": "transport-ground"
+  },
+  {
    "code": "1f692",
    "name": "fire engine",
    "nameTr": "itfaiye arabası",
    "nameEn": "fire engine",
+   "category": "vehicles",
+   "subgroup": "transport-ground"
+  },
+  {
+   "code": "1f693",
+   "name": "police car",
+   "nameTr": "polis arabası",
+   "nameEn": "police car",
    "category": "vehicles",
    "subgroup": "transport-ground"
   },
@@ -1321,12 +1411,28 @@
    "free": true
   },
   {
+   "code": "1f69b",
+   "name": "articulated lorry",
+   "nameTr": "tır",
+   "nameEn": "articulated lorry",
+   "category": "vehicles",
+   "subgroup": "transport-ground"
+  },
+  {
    "code": "1f69c",
    "name": "tractor",
    "nameTr": "traktör",
    "nameEn": "tractor",
    "category": "vehicles",
    "subgroup": "transport-ground"
+  },
+  {
+   "code": "1f6a1",
+   "name": "aerial tramway",
+   "nameTr": "teleferik",
+   "nameEn": "cable car",
+   "category": "vehicles",
+   "subgroup": "transport-air"
   },
   {
    "code": "1f6a2",
@@ -1358,7 +1464,32 @@
    "nameTr": "deniz feneri",
    "nameEn": "lighthouse",
    "category": "vehicles",
-   "subgroup": "transport-water"
+   "subgroup": "transport-water",
+   "skip": "not in Fluent UI Emoji at the pinned commit"
+  },
+  {
+   "code": "1f6e9",
+   "name": "small airplane",
+   "nameTr": "küçük uçak",
+   "nameEn": "small airplane",
+   "category": "vehicles",
+   "subgroup": "transport-air"
+  },
+  {
+   "code": "1f6f4",
+   "name": "kick scooter",
+   "nameTr": "scooter",
+   "nameEn": "kick scooter",
+   "category": "vehicles",
+   "subgroup": "transport-ground"
+  },
+  {
+   "code": "1f6f5",
+   "name": "motor scooter",
+   "nameTr": "mobilet",
+   "nameEn": "motor scooter",
+   "category": "vehicles",
+   "subgroup": "transport-ground"
   },
   {
    "code": "1f6f6",
@@ -1367,6 +1498,14 @@
    "nameEn": "canoe",
    "category": "vehicles",
    "subgroup": "transport-water"
+  },
+  {
+   "code": "1f6fb",
+   "name": "pickup truck",
+   "nameTr": "kamyonet",
+   "nameEn": "pickup truck",
+   "category": "vehicles",
+   "subgroup": "transport-ground"
   },
   {
    "code": "26f4",
@@ -1392,6 +1531,22 @@
    "category": "vehicles",
    "subgroup": "transport-air",
    "free": true
+  },
+  {
+   "code": "1f304",
+   "name": "sunrise over mountains",
+   "nameTr": "dağda gün doğumu",
+   "nameEn": "sunrise over mountains",
+   "category": "nature",
+   "subgroup": "place-other"
+  },
+  {
+   "code": "1f305",
+   "name": "sunrise",
+   "nameTr": "gün doğumu",
+   "nameEn": "sunrise",
+   "category": "nature",
+   "subgroup": "place-other"
   },
   {
    "code": "1f308",
@@ -1421,6 +1576,22 @@
    "free": true
   },
   {
+   "code": "1f324",
+   "name": "sun behind small cloud",
+   "nameTr": "güneş ve bulut",
+   "nameEn": "sun and cloud",
+   "category": "nature",
+   "subgroup": "sky & weather"
+  },
+  {
+   "code": "1f326",
+   "name": "sun behind rain cloud",
+   "nameTr": "güneş ve yağmur",
+   "nameEn": "sun and rain",
+   "category": "nature",
+   "subgroup": "sky & weather"
+  },
+  {
    "code": "1f327",
    "name": "cloud with rain",
    "nameTr": "yağmur bulutu",
@@ -1439,6 +1610,22 @@
    "free": true
   },
   {
+   "code": "1f329",
+   "name": "cloud with lightning",
+   "nameTr": "şimşekli bulut",
+   "nameEn": "cloud with lightning",
+   "category": "nature",
+   "subgroup": "sky & weather"
+  },
+  {
+   "code": "1f3d5",
+   "name": "camping",
+   "nameTr": "kamp",
+   "nameEn": "camping",
+   "category": "nature",
+   "subgroup": "place-geographic"
+  },
+  {
    "code": "1f3d6",
    "name": "beach with umbrella",
    "nameTr": "plaj ve şemsiye",
@@ -1446,6 +1633,70 @@
    "category": "nature",
    "subgroup": "place-geographic",
    "free": true
+  },
+  {
+   "code": "1f3dd",
+   "name": "desert island",
+   "nameTr": "ada",
+   "nameEn": "island",
+   "category": "nature",
+   "subgroup": "place-geographic"
+  },
+  {
+   "code": "1f41a",
+   "name": "spiral shell",
+   "nameTr": "deniz kabuğu",
+   "nameEn": "seashell",
+   "category": "nature",
+   "subgroup": "animal-marine"
+  },
+  {
+   "code": "1f4a7",
+   "name": "droplet",
+   "nameTr": "su damlası",
+   "nameEn": "water drop",
+   "category": "nature",
+   "subgroup": "sky & weather"
+  },
+  {
+   "code": "1f9ca",
+   "name": "ice",
+   "nameTr": "buz küpü",
+   "nameEn": "ice cube",
+   "category": "nature",
+   "subgroup": "drink"
+  },
+  {
+   "code": "1faa8",
+   "name": "rock",
+   "nameTr": "taş",
+   "nameEn": "rock",
+   "category": "nature",
+   "subgroup": "place-building"
+  },
+  {
+   "code": "1fab5",
+   "name": "wood",
+   "nameTr": "kütük",
+   "nameEn": "log",
+   "category": "nature",
+   "subgroup": "place-building"
+  },
+  {
+   "code": "1fab6",
+   "name": "feather",
+   "nameTr": "tüy",
+   "nameEn": "feather",
+   "category": "nature",
+   "subgroup": "animal-bird"
+  },
+  {
+   "code": "1fab8",
+   "name": "coral",
+   "nameTr": "mercan",
+   "nameEn": "coral",
+   "category": "nature",
+   "subgroup": "animal-marine"
   },
   {
    "code": "2600",
@@ -1551,6 +1802,46 @@
    "free": true
   },
   {
+   "code": "1f3a0",
+   "name": "carousel horse",
+   "nameTr": "atlıkarınca",
+   "nameEn": "carousel horse",
+   "category": "things",
+   "subgroup": "place-other"
+  },
+  {
+   "code": "1f3a8",
+   "name": "artist palette",
+   "nameTr": "boya paleti",
+   "nameEn": "artist palette",
+   "category": "things",
+   "subgroup": "arts & crafts"
+  },
+  {
+   "code": "1f3aa",
+   "name": "circus tent",
+   "nameTr": "sirk çadırı",
+   "nameEn": "circus tent",
+   "category": "things",
+   "subgroup": "place-other"
+  },
+  {
+   "code": "1f3b2",
+   "name": "game die",
+   "nameTr": "zar",
+   "nameEn": "dice",
+   "category": "things",
+   "subgroup": "game"
+  },
+  {
+   "code": "1f3b3",
+   "name": "bowling",
+   "nameTr": "bovling",
+   "nameEn": "bowling",
+   "category": "things",
+   "subgroup": "sport"
+  },
+  {
    "code": "1f3be",
    "name": "tennis",
    "nameTr": "tenis",
@@ -1564,6 +1855,46 @@
    "name": "basketball",
    "nameTr": "basketbol",
    "nameEn": "basketball",
+   "category": "things",
+   "subgroup": "sport"
+  },
+  {
+   "code": "1f3c5",
+   "name": "sports medal",
+   "nameTr": "madalya",
+   "nameEn": "medal",
+   "category": "things",
+   "subgroup": "award-medal"
+  },
+  {
+   "code": "1f3c6",
+   "name": "trophy",
+   "nameTr": "kupa",
+   "nameEn": "trophy",
+   "category": "things",
+   "subgroup": "award-medal"
+  },
+  {
+   "code": "1f3c9",
+   "name": "rugby football",
+   "nameTr": "ragbi topu",
+   "nameEn": "rugby ball",
+   "category": "things",
+   "subgroup": "sport"
+  },
+  {
+   "code": "1f3d0",
+   "name": "volleyball",
+   "nameTr": "voleybol topu",
+   "nameEn": "volleyball",
+   "category": "things",
+   "subgroup": "sport"
+  },
+  {
+   "code": "1f3d3",
+   "name": "ping pong",
+   "nameTr": "masa tenisi",
+   "nameEn": "ping pong",
    "category": "things",
    "subgroup": "sport"
   },
@@ -1602,20 +1933,20 @@
    "free": true
   },
   {
-   "code": "1f455",
-   "name": "t-shirt",
-   "nameTr": "tişört",
-   "nameEn": "t-shirt",
-   "category": "things",
-   "subgroup": "clothing"
-  },
-  {
    "code": "1f45f",
    "name": "running shoe",
    "nameTr": "koşu ayakkabısı",
    "nameEn": "running shoe",
    "category": "things",
    "subgroup": "clothing"
+  },
+  {
+   "code": "1f58d",
+   "name": "crayon",
+   "nameTr": "pastel boya",
+   "nameEn": "crayon",
+   "category": "things",
+   "subgroup": "writing"
   },
   {
    "code": "1f6dd",
@@ -1626,12 +1957,60 @@
    "subgroup": "place-other"
   },
   {
+   "code": "1f6f7",
+   "name": "sled",
+   "nameTr": "kızak",
+   "nameEn": "sled",
+   "category": "things",
+   "subgroup": "sport"
+  },
+  {
+   "code": "1f6f9",
+   "name": "skateboard",
+   "nameTr": "kaykay",
+   "nameEn": "skateboard",
+   "category": "things",
+   "subgroup": "transport-ground"
+  },
+  {
+   "code": "1f6fc",
+   "name": "roller skate",
+   "nameTr": "paten",
+   "nameEn": "roller skate",
+   "category": "things",
+   "subgroup": "transport-ground"
+  },
+  {
    "code": "1f941",
    "name": "drum",
    "nameTr": "davul",
    "nameEn": "drum",
    "category": "things",
    "subgroup": "musical-instrument"
+  },
+  {
+   "code": "1f945",
+   "name": "goal net",
+   "nameTr": "futbol kalesi",
+   "nameEn": "goal",
+   "category": "things",
+   "subgroup": "sport"
+  },
+  {
+   "code": "1f94f",
+   "name": "flying disc",
+   "nameTr": "frizbi",
+   "nameEn": "flying disc",
+   "category": "things",
+   "subgroup": "sport"
+  },
+  {
+   "code": "1f9e9",
+   "name": "puzzle piece",
+   "nameTr": "yapboz",
+   "nameEn": "puzzle piece",
+   "category": "things",
+   "subgroup": "game"
   },
   {
    "code": "1f9f8",
@@ -1682,6 +2061,14 @@
    "subgroup": "game"
   },
   {
+   "code": "1fa86",
+   "name": "nesting dolls",
+   "nameTr": "matruşka",
+   "nameEn": "nesting dolls",
+   "category": "things",
+   "subgroup": "game"
+  },
+  {
    "code": "1fa88",
    "name": "flute",
    "nameTr": "flüt",
@@ -1714,12 +2101,468 @@
    "subgroup": "sport"
   },
   {
+   "code": "26f8",
+   "name": "ice skate",
+   "nameTr": "buz pateni",
+   "nameEn": "ice skate",
+   "category": "things",
+   "subgroup": "sport"
+  },
+  {
    "code": "26fa",
    "name": "tent",
    "nameTr": "çadır",
    "nameEn": "tent",
    "category": "things",
    "subgroup": "place-other"
+  },
+  {
+   "code": "1f30d",
+   "name": "globe showing europe-africa",
+   "nameTr": "Dünya",
+   "nameEn": "Earth",
+   "category": "space",
+   "subgroup": "place-map",
+   "free": true
+  },
+  {
+   "code": "1f30e",
+   "name": "globe showing americas",
+   "nameTr": "yerküre",
+   "nameEn": "globe",
+   "category": "space",
+   "subgroup": "place-map"
+  },
+  {
+   "code": "1f313",
+   "name": "first quarter moon",
+   "nameTr": "yarım ay",
+   "nameEn": "half moon",
+   "category": "space",
+   "subgroup": "sky & weather"
+  },
+  {
+   "code": "1f319",
+   "name": "crescent moon",
+   "nameTr": "hilal",
+   "nameEn": "crescent moon",
+   "category": "space",
+   "subgroup": "sky & weather",
+   "free": true
+  },
+  {
+   "code": "1f31f",
+   "name": "glowing star",
+   "nameTr": "parlayan yıldız",
+   "nameEn": "glowing star",
+   "category": "space",
+   "subgroup": "sky & weather"
+  },
+  {
+   "code": "1f320",
+   "name": "shooting star",
+   "nameTr": "kayan yıldız",
+   "nameEn": "shooting star",
+   "category": "space",
+   "subgroup": "sky & weather",
+   "free": true
+  },
+  {
+   "code": "1f4e1",
+   "name": "satellite antenna",
+   "nameTr": "çanak anten",
+   "nameEn": "satellite dish",
+   "category": "space",
+   "subgroup": "science"
+  },
+  {
+   "code": "1f52d",
+   "name": "telescope",
+   "nameTr": "teleskop",
+   "nameEn": "telescope",
+   "category": "space",
+   "subgroup": "science"
+  },
+  {
+   "code": "1f6f0",
+   "name": "satellite",
+   "nameTr": "uydu",
+   "nameEn": "satellite",
+   "category": "space",
+   "subgroup": "transport-air",
+   "free": true
+  },
+  {
+   "code": "1f6f8",
+   "name": "flying saucer",
+   "nameTr": "uçan daire",
+   "nameEn": "flying saucer",
+   "category": "space",
+   "subgroup": "transport-air",
+   "free": true
+  },
+  {
+   "code": "1fa90",
+   "name": "ringed planet",
+   "nameTr": "gezegen",
+   "nameEn": "planet",
+   "category": "space",
+   "subgroup": "sky & weather",
+   "free": true
+  },
+  {
+   "code": "2604",
+   "name": "comet",
+   "nameTr": "kuyruklu yıldız",
+   "nameEn": "comet",
+   "category": "space",
+   "subgroup": "sky & weather",
+   "free": true
+  },
+  {
+   "code": "2728",
+   "name": "sparkles",
+   "nameTr": "parıltı",
+   "nameEn": "sparkles",
+   "category": "space",
+   "subgroup": "event",
+   "free": true
+  },
+  {
+   "code": "1f399",
+   "name": "studio microphone",
+   "nameTr": "stüdyo mikrofonu",
+   "nameEn": "studio microphone",
+   "category": "music",
+   "subgroup": "music"
+  },
+  {
+   "code": "1f3a4",
+   "name": "microphone",
+   "nameTr": "mikrofon",
+   "nameEn": "microphone",
+   "category": "music",
+   "subgroup": "music",
+   "free": true
+  },
+  {
+   "code": "1f3a7",
+   "name": "headphone",
+   "nameTr": "kulaklık",
+   "nameEn": "headphones",
+   "category": "music",
+   "subgroup": "music"
+  },
+  {
+   "code": "1f3b5",
+   "name": "musical note",
+   "nameTr": "nota",
+   "nameEn": "musical note",
+   "category": "music",
+   "subgroup": "music",
+   "free": true
+  },
+  {
+   "code": "1f3b6",
+   "name": "musical notes",
+   "nameTr": "notalar",
+   "nameEn": "musical notes",
+   "category": "music",
+   "subgroup": "music",
+   "free": true
+  },
+  {
+   "code": "1f3b7",
+   "name": "saxophone",
+   "nameTr": "saksafon",
+   "nameEn": "saxophone",
+   "category": "music",
+   "subgroup": "musical-instrument",
+   "free": true
+  },
+  {
+   "code": "1f3b8",
+   "name": "guitar",
+   "nameTr": "gitar",
+   "nameEn": "guitar",
+   "category": "music",
+   "subgroup": "musical-instrument",
+   "free": true
+  },
+  {
+   "code": "1f3b9",
+   "name": "musical keyboard",
+   "nameTr": "piyano",
+   "nameEn": "piano",
+   "category": "music",
+   "subgroup": "musical-instrument",
+   "free": true
+  },
+  {
+   "code": "1f3ba",
+   "name": "trumpet",
+   "nameTr": "trompet",
+   "nameEn": "trumpet",
+   "category": "music",
+   "subgroup": "musical-instrument"
+  },
+  {
+   "code": "1f3bb",
+   "name": "violin",
+   "nameTr": "keman",
+   "nameEn": "violin",
+   "category": "music",
+   "subgroup": "musical-instrument"
+  },
+  {
+   "code": "1f4fb",
+   "name": "radio",
+   "nameTr": "radyo",
+   "nameEn": "radio",
+   "category": "music",
+   "subgroup": "music"
+  },
+  {
+   "code": "1f514",
+   "name": "bell",
+   "nameTr": "zil",
+   "nameEn": "bell",
+   "category": "music",
+   "subgroup": "sound",
+   "free": true
+  },
+  {
+   "code": "1fa87",
+   "name": "maracas",
+   "nameTr": "marakas",
+   "nameEn": "maracas",
+   "category": "music",
+   "subgroup": "musical-instrument"
+  },
+  {
+   "code": "1fa95",
+   "name": "banjo",
+   "nameTr": "banjo",
+   "nameEn": "banjo",
+   "category": "music",
+   "subgroup": "musical-instrument"
+  },
+  {
+   "code": "1fa97",
+   "name": "accordion",
+   "nameTr": "akordeon",
+   "nameEn": "accordion",
+   "category": "music",
+   "subgroup": "musical-instrument"
+  },
+  {
+   "code": "1fa98",
+   "name": "long drum",
+   "nameTr": "uzun davul",
+   "nameEn": "long drum",
+   "category": "music",
+   "subgroup": "musical-instrument",
+   "free": true
+  },
+  {
+   "code": "1f392",
+   "name": "backpack",
+   "nameTr": "sırt çantası",
+   "nameEn": "backpack",
+   "category": "clothes",
+   "subgroup": "clothing"
+  },
+  {
+   "code": "1f3a9",
+   "name": "top hat",
+   "nameTr": "silindir şapka",
+   "nameEn": "top hat",
+   "category": "clothes",
+   "subgroup": "clothing"
+  },
+  {
+   "code": "1f451",
+   "name": "crown",
+   "nameTr": "taç",
+   "nameEn": "crown",
+   "category": "clothes",
+   "subgroup": "clothing",
+   "free": true
+  },
+  {
+   "code": "1f452",
+   "name": "womans hat",
+   "nameTr": "kurdeleli şapka",
+   "nameEn": "hat with a bow",
+   "category": "clothes",
+   "subgroup": "clothing"
+  },
+  {
+   "code": "1f455",
+   "name": "t-shirt",
+   "nameTr": "tişört",
+   "nameEn": "T-shirt",
+   "category": "clothes",
+   "subgroup": "clothing",
+   "free": true
+  },
+  {
+   "code": "1f456",
+   "name": "jeans",
+   "nameTr": "pantolon",
+   "nameEn": "jeans",
+   "category": "clothes",
+   "subgroup": "clothing"
+  },
+  {
+   "code": "1f457",
+   "name": "dress",
+   "nameTr": "elbise",
+   "nameEn": "dress",
+   "category": "clothes",
+   "subgroup": "clothing",
+   "free": true
+  },
+  {
+   "code": "1f45a",
+   "name": "womans clothes",
+   "nameTr": "bluz",
+   "nameEn": "blouse",
+   "category": "clothes",
+   "subgroup": "clothing"
+  },
+  {
+   "code": "1f45b",
+   "name": "purse",
+   "nameTr": "cüzdan",
+   "nameEn": "purse",
+   "category": "clothes",
+   "subgroup": "clothing"
+  },
+  {
+   "code": "1f45c",
+   "name": "handbag",
+   "nameTr": "el çantası",
+   "nameEn": "handbag",
+   "category": "clothes",
+   "subgroup": "clothing"
+  },
+  {
+   "code": "1f45e",
+   "name": "mans shoe",
+   "nameTr": "ayakkabı",
+   "nameEn": "shoe",
+   "category": "clothes",
+   "subgroup": "clothing",
+   "free": true
+  },
+  {
+   "code": "1f460",
+   "name": "high-heeled shoe",
+   "nameTr": "topuklu ayakkabı",
+   "nameEn": "high-heeled shoe",
+   "category": "clothes",
+   "subgroup": "clothing"
+  },
+  {
+   "code": "1f462",
+   "name": "womans boot",
+   "nameTr": "çizme",
+   "nameEn": "boot",
+   "category": "clothes",
+   "subgroup": "clothing"
+  },
+  {
+   "code": "1f48d",
+   "name": "ring",
+   "nameTr": "yüzük",
+   "nameEn": "ring",
+   "category": "clothes",
+   "subgroup": "clothing"
+  },
+  {
+   "code": "1f576",
+   "name": "sunglasses",
+   "nameTr": "güneş gözlüğü",
+   "nameEn": "sunglasses",
+   "category": "clothes",
+   "subgroup": "clothing",
+   "free": true
+  },
+  {
+   "code": "1f97e",
+   "name": "hiking boot",
+   "nameTr": "bot",
+   "nameEn": "hiking boot",
+   "category": "clothes",
+   "subgroup": "clothing"
+  },
+  {
+   "code": "1f9e2",
+   "name": "billed cap",
+   "nameTr": "kep",
+   "nameEn": "cap",
+   "category": "clothes",
+   "subgroup": "clothing",
+   "free": true
+  },
+  {
+   "code": "1f9e3",
+   "name": "scarf",
+   "nameTr": "atkı",
+   "nameEn": "scarf",
+   "category": "clothes",
+   "subgroup": "clothing"
+  },
+  {
+   "code": "1f9e4",
+   "name": "gloves",
+   "nameTr": "eldiven",
+   "nameEn": "gloves",
+   "category": "clothes",
+   "subgroup": "clothing",
+   "free": true
+  },
+  {
+   "code": "1f9e5",
+   "name": "coat",
+   "nameTr": "mont",
+   "nameEn": "coat",
+   "category": "clothes",
+   "subgroup": "clothing"
+  },
+  {
+   "code": "1f9e6",
+   "name": "socks",
+   "nameTr": "çorap",
+   "nameEn": "socks",
+   "category": "clothes",
+   "subgroup": "clothing",
+   "free": true
+  },
+  {
+   "code": "1fa71",
+   "name": "one-piece swimsuit",
+   "nameTr": "mayo",
+   "nameEn": "swimsuit",
+   "category": "clothes",
+   "subgroup": "clothing"
+  },
+  {
+   "code": "1fa73",
+   "name": "shorts",
+   "nameTr": "şort",
+   "nameEn": "shorts",
+   "category": "clothes",
+   "subgroup": "clothing"
+  },
+  {
+   "code": "1fa74",
+   "name": "thong sandal",
+   "nameTr": "terlik",
+   "nameEn": "flip-flop",
+   "category": "clothes",
+   "subgroup": "clothing"
   }
  ]
 }

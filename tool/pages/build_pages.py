@@ -19,6 +19,7 @@ import re
 import shutil
 import subprocess
 import sys
+import urllib.parse
 import urllib.request
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -41,10 +42,22 @@ def level_for(regions, finger):
 
 
 def fluent_urls(source, name):
+    """Raw URLs to try for a subject's flat SVG.
+
+    The folder is the name with a capital first letter; the file is the
+    folder name in lower case with spaces as underscores, hyphens and
+    accented letters kept (Yo-yo/yo-yo_flat.svg; the pinata file keeps its
+    accented n). The old rule, every other character an underscore, is
+    tried first.
+    """
+    seen = set()
     for variant in (name, name.replace("-", " ")):
-        folder = (variant[0].upper() + variant[1:]).replace(" ", "%20")
-        file = re.sub(r"[^a-z0-9]+", "_", variant.lower()).strip("_")
-        yield f"https://raw.githubusercontent.com/{source['repo']}/{source['commit']}/assets/{folder}/Flat/{file}_flat.svg"
+        folder = variant[0].upper() + variant[1:]
+        for file in (re.sub(r"[^a-z0-9]+", "_", variant.lower()).strip("_"), variant.lower().replace(" ", "_")):
+            path = f"assets/{folder}/Flat/{file}_flat.svg"
+            if path not in seen:
+                seen.add(path)
+                yield f"https://raw.githubusercontent.com/{source['repo']}/{source['commit']}/{urllib.parse.quote(path)}"
 
 
 def fetch(url, path):
@@ -59,9 +72,10 @@ def fetch(url, path):
     return True
 
 
-def title(name):
-    first = {"i": "İ", "ı": "I"}.get(name[:1], name[:1].upper())
-    return first + name[1:]
+def title(name, turkish=True):
+    """Capital first letter; only Turkish names use the dotted capital I."""
+    first = {"i": "İ", "ı": "I"}.get(name[:1]) if turkish else None
+    return (first or name[:1].upper()) + name[1:]
 
 
 def main():
@@ -149,7 +163,7 @@ def main():
     ]
     for p in kept:
         name_tr = title(p["nameTr"].replace(" yüzü", "")).replace("'", r"\'")
-        name_en = title(p["nameEn"].replace(" face", "")).replace("'", r"\'")
+        name_en = title(p["nameEn"].replace(" face", ""), turkish=False).replace("'", r"\'")
         lines.append(
             f"  ColoringImage(id: '{p['category']}_{p['code']}', name: '{name_tr}', nameEn: '{name_en}', "
             f"category: '{p['category']}', imagePath: 'assets/pages/{p['category']}/{p['code']}.png', level: {p['level']}"

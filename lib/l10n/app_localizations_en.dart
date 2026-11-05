@@ -39,6 +39,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get things => 'Things';
 
   @override
+  String get space => 'Space';
+
+  @override
+  String get music => 'Music';
+
+  @override
+  String get clothes => 'Clothes';
+
+  @override
   String get pageLevel => 'Page difficulty';
 
   @override
@@ -64,8 +73,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get fullVersionShort => 'Unlock all pages';
 
   @override
-  String get fullVersionDesc =>
-      'The free version has 8 pages in each category. The Full Version opens all 201 pages forever with one payment. There is no subscription. Your child\'s pictures stay in My Artworks either way.';
+  String fullVersionDesc(int count) {
+    return 'The free version has 8 pages in each category. The Full Version opens all $count pages forever with one payment. There is no subscription. Your child\'s pictures stay in My Artworks either way.';
+  }
 
   @override
   String get buy => 'Buy';

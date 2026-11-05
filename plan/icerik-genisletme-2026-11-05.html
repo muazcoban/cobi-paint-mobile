@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cobi Paint İçerik Genişletme</title>
+<style>
+:root {
+  --bg: #fbfaf7; --surface: #ffffff; --surface-2: #f3f1ec; --text: #1f2328; --muted: #5d6470;
+  --border: #e2ded6; --accent: #d9480f; --accent-soft: #fff1e8; --link: #0b62c4;
+  --p1: #b35c00; --p1-soft: #fff3e0; --p2: #2f6f3e; --p2-soft: #e8f5ec;
+  --info: #1864ab; --info-soft: #e7f1fb; --code-bg: #f1efe9;
+  --l1: #4dabf7; --l2: #f59f00; --l3: #e8590c;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #15171a; --surface: #1d2024; --surface-2: #24282d; --text: #e8e6e3; --muted: #a3a9b3;
+    --border: #343a41; --accent: #ff8a4c; --accent-soft: #3a2418; --link: #6cb4ff;
+    --p1: #ffb84d; --p1-soft: #3a2c16; --p2: #8ce99a; --p2-soft: #1d3324;
+    --info: #74c0fc; --info-soft: #182a3b; --code-bg: #26292e;
+    --l1: #74c0fc; --l2: #ffc078; --l3: #ff8a4c;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #15171a; --surface: #1d2024; --surface-2: #24282d; --text: #e8e6e3; --muted: #a3a9b3;
+  --border: #343a41; --accent: #ff8a4c; --accent-soft: #3a2418; --link: #6cb4ff;
+  --p1: #ffb84d; --p1-soft: #3a2c16; --p2: #8ce99a; --p2-soft: #1d3324;
+  --info: #74c0fc; --info-soft: #182a3b; --code-bg: #26292e;
+  --l1: #74c0fc; --l2: #ffc078; --l3: #ff8a4c;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+.wrap { max-width: 1080px; margin: 0 auto; padding: 32px 16px 80px; }
+header.top { border-bottom: 1px solid var(--border); padding-bottom: 20px; margin-bottom: 28px; }
+header.top h1 { font-size: 2rem; line-height: 1.2; margin: 0 0 8px; }
+.meta { color: var(--muted); font-size: .92rem; }
+nav.toc { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; margin: 0 0 32px; }
+nav.toc ol { margin: 0; padding-left: 20px; columns: 2; column-gap: 32px; }
+nav.toc li { break-inside: avoid; margin: 2px 0; }
+a { color: var(--link); }
+h2 { font-size: 1.5rem; margin: 48px 0 12px; padding-top: 8px; border-top: 1px solid var(--border); }
+h3 { font-size: 1.15rem; margin: 28px 0 8px; }
+p { margin: 8px 0 12px; }
+.callout { background: var(--accent-soft); border-left: 4px solid var(--accent); border-radius: 8px; padding: 14px 18px; margin: 16px 0; }
+.callout.info { background: var(--info-soft); border-left-color: var(--info); }
+.callout p:first-child { margin-top: 0; }
+.callout p:last-child { margin-bottom: 0; }
+.table-wrap { overflow-x: auto; margin: 12px 0 20px; border: 1px solid var(--border); border-radius: 10px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: .93rem; }
+th, td { text-align: left; vertical-align: top; padding: 9px 12px; border-bottom: 1px solid var(--border); }
+th { background: var(--surface-2); font-weight: 600; white-space: nowrap; }
+tr:last-child td { border-bottom: 0; }
+tr.sum td { font-weight: 700; background: var(--surface-2); }
+td:first-child { white-space: nowrap; }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+code { background: var(--code-bg); padding: 1px 5px; border-radius: 4px; font: .86em/1.4 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; word-break: break-word; }
+.badge { display: inline-block; font-size: .75rem; font-weight: 700; padding: 2px 8px; border-radius: 999px; white-space: nowrap; }
+.b-p1 { background: var(--p1-soft); color: var(--p1); }
+.b-p2 { background: var(--p2-soft); color: var(--p2); }
+figure { margin: 12px 0 20px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 10px; }
+figure img { width: 100%; height: auto; display: block; border-radius: 6px; background: #fff; }
+figcaption { font-size: .86rem; color: var(--muted); margin-top: 8px; }
+details { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 10px 14px; margin: 12px 0; }
+details summary { cursor: pointer; font-weight: 600; }
+details .table-wrap { margin-bottom: 6px; }
+.small { font-size: .88rem; color: var(--muted); }
+ul.tight li { margin: 3px 0; }
+td.barcell { width: 40%; min-width: 160px; }
+.bar { display: flex; height: 14px; border-radius: 7px; overflow: hidden; background: var(--surface-2); margin-top: 4px; }
+.bar .seg { display: block; height: 100%; }
+.l1 { background: var(--l1); } .l2 { background: var(--l2); } .l3 { background: var(--l3); }
+.key { display: inline-block; width: 12px; height: 12px; border-radius: 3px; vertical-align: -1px; margin: 0 4px 0 12px; }
+.key:first-child { margin-left: 0; }
+@media (max-width: 760px) {
+  nav.toc ol { columns: 1; }
+  header.top h1 { font-size: 1.6rem; }
+}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top"><h1>Cobi Paint İçerik Genişletme</h1>
+<div class="meta">5 Kasım 2026 · branch <code>worktree-agent-af113649ecdfbcac4</code> · sonraki içerik sürümü için; App Review'daki 2.1.0'a ve TestFlight'taki 2.1.1'e girmez</div></header>
+
+<div class="callout">
+<p><strong>Sayfa sayısını 201'den 307'ye çıkardım.</strong> Üç yeni kategori ekledim: Uzay (13 sayfa), Müzik (16) ve Giysiler (24). Doğa 13'ten 27'ye, Bitkiler 19'dan 24'e çıktı.</p>
+<p>Eşyalar'a 21 oyuncak ve spor sayfası, Araçlar'a 12, Hayvanlar'a 1 sayfa ekledim. Her kategoride tam 8 ücretsiz sayfa var; yeni kategorilerde bunların 5'i 1. seviye.</p>
+<p>Sayfa dosyaları uygulamayı 0,77 MB büyüttü. <code>flutter analyze</code> temiz, <code>flutter test</code> 157 testin hepsini geçti. Mağaza metnine ve App Store Connect'e dokunmadım; sayı geçen yerlere <code>store_listing.md</code>'de not düştüm.</p>
+</div>
+
+<nav class="toc"><ol>
+<li><a href="#kategoriler">Kategoriler ve sayfa sayıları</a></li>
+<li><a href="#yeni">Yeni kategoriler</a></li>
+<li><a href="#mevcut">Mevcut kategorilere eklenenler</a></li>
+<li><a href="#oyuncak">Neden ayrı "Oyuncak ve spor" yok</a></li>
+<li><a href="#elenen">Elenen konular ve nedenleri</a></li>
+<li><a href="#seviye">Seviye dağılımı</a></li>
+<li><a href="#boyut">Uygulama boyutu</a></li>
+<li><a href="#hat">Üretim hattında bulunan hatalar</a></li>
+<li><a href="#kod">Uygulamadaki değişiklikler</a></li>
+<li><a href="#hig">3 yaş ölçütü ve HIG denetimi</a></li>
+<li><a href="#dogrulama">Doğrulama</a></li>
+<li><a href="#eksik">Bilinen eksikler ve sonraki adımlar</a></li>
+</ol></nav>
+
+<h2 id="kategoriler">1. Kategoriler ve sayfa sayıları</h2>
+<p>"Önce" sütunu 2.1.0 ve 2.1.1'deki sayfa sayısıdır (<code>ad4855c</code>). Ücretsiz sayfalar, Tam Sürüm satın alınmadan görünen sabit alt kümedir; bir kez ücretsiz olan sayfa hep ücretsiz kalır. Satın alma bugün kapalı (<code>COBI_IAP</code> bayrağı), bu yüzden çocuk şu an bütün sayfaları görüyor.</p>
+<div class="table-wrap"><table><thead><tr><th>Kategori</th><th class="num">Önce</th><th class="num">Sonra</th><th class="num">Fark</th><th class="num">Ücretsiz</th><th class="num">Ücretsiz, seviyeye göre (1 / 2 / 3)</th></tr></thead><tbody>
+<tr><td>🐾 Hayvanlar</td><td class="num">81</td><td class="num">82</td><td class="num">+1</td><td class="num">8</td><td class="num">3 / 3 / 2</td></tr>
+<tr><td>🌸 Bitkiler</td><td class="num">19</td><td class="num">24</td><td class="num">+5</td><td class="num">8</td><td class="num">3 / 3 / 2</td></tr>
+<tr><td>🚗 Araçlar</td><td class="num">20</td><td class="num">32</td><td class="num">+12</td><td class="num">8</td><td class="num">1 / 5 / 2</td></tr>
+<tr><td>🌈 Doğa</td><td class="num">13</td><td class="num">27</td><td class="num">+14</td><td class="num">8</td><td class="num">3 / 3 / 2</td></tr>
+<tr><td>🍎 Yiyecekler</td><td class="num">45</td><td class="num">45</td><td class="num">0</td><td class="num">8</td><td class="num">3 / 3 / 2</td></tr>
+<tr><td>🧸 Eşyalar</td><td class="num">23</td><td class="num">44</td><td class="num">+21</td><td class="num">8</td><td class="num">3 / 3 / 2</td></tr>
+<tr><td>🪐 Uzay <span class="badge b-p2">yeni</span></td><td class="num">0</td><td class="num">13</td><td class="num">+13</td><td class="num">8</td><td class="num">5 / 2 / 1</td></tr>
+<tr><td>🎸 Müzik <span class="badge b-p2">yeni</span></td><td class="num">0</td><td class="num">16</td><td class="num">+16</td><td class="num">8</td><td class="num">5 / 2 / 1</td></tr>
+<tr><td>👕 Giysiler <span class="badge b-p2">yeni</span></td><td class="num">0</td><td class="num">24</td><td class="num">+24</td><td class="num">8</td><td class="num">5 / 3 / 0</td></tr>
+<tr class="sum"><td>Toplam</td><td class="num">201</td><td class="num">307</td><td class="num">+106</td><td class="num">72</td><td class="num"></td></tr>
+</tbody></table></div>
+<p>Yeni kategoriler ana ekranda Eşyalar'dan sonra geliyor. 3 yaşındaki çocuk kartı yerinden tanır; eski altı kartın yeri bu yüzden değişmedi.</p>
+
+<h2 id="yeni">2. Yeni kategoriler</h2>
+<figure><img src="img/icerik-genisletme-sayfalar.png" alt="Eklenen 106 sayfa ve elenen 21 aday, kategoriye göre"><figcaption>Eklenen 106 sayfa kategoriye göre, en altta denetimden geçip gözle elenen 21 aday. Ad altında seviye ve ücretsiz bilgisi var.</figcaption></figure>
+
+<h3>🪐 Uzay: 13 sayfa</h3>
+<p>Gezegen, hilal, Dünya, kayan yıldız, kuyruklu yıldız, parıltı, uçan daire ve uydu ücretsiz. Roket Araçlar'da, güneş ve yıldız Doğa'da yayımlandığı için burada yok (bölüm 4).</p>
+<div class="table-wrap"><table><thead><tr><th>Kod</th><th>Türkçe ad</th><th>İngilizce ad</th><th class="num">Seviye</th><th>Ücretsiz</th></tr></thead><tbody>
+<tr><td><code>1f30d</code></td><td>Dünya</td><td>Earth</td><td class="num">1</td><td><span class="badge b-p2">ücretsiz</span></td></tr>
+<tr><td><code>1f30e</code></td><td>Yerküre</td><td>Globe</td><td class="num">1</td><td></td></tr>
+<tr><td><code>1f313</code></td><td>Yarım ay</td><td>Half moon</td><td class="num">1</td><td></td></tr>
+<tr><td><code>1f319</code></td><td>Hilal</td><td>Crescent moon</td><td class="num">1</td><td><span class="badge b-p2">ücretsiz</span></td></tr>
+<tr><td><code>1f31f</code></td><td>Parlayan yıldız</td><td>Glowing star</td><td class="num">2</td><td></td></tr>
+<tr><td><code>1f320</code></td><td>Kayan yıldız</td><td>Shooting star</td><td class="num">1</td><td><span class="badge b-p2">ücretsiz</span></td></tr>
+<tr><td><code>1f4e1</code></td><td>Çanak anten</td><td>Satellite dish</td><td class="num">2</td><td></td></tr>
+<tr><td><code>1f52d</code></td><td>Teleskop</td><td>Telescope</td><td class="num">2</td><td></td></tr>
+<tr><td><code>1f6f0</code></td><td>Uydu</td><td>Satellite</td><td class="num">3</td><td><span class="badge b-p2">ücretsiz</span></td></tr>
+<tr><td><code>1f6f8</code></td><td>Uçan daire</td><td>Flying saucer</td><td class="num">2</td><td><span class="badge b-p2">ücretsiz</span></td></tr>
+<tr><td><code>1fa90</code></td><td>Gezegen</td><td>Planet</td><td class="num">2</td><td><span class="badge b-p2">ücretsiz</span></td></tr>
+<tr><td><code>2604</code></td><td>Kuyruklu yıldız</td><td>Comet</td><td class="num">1</td><td><span class="badge b-p2">ücretsiz</span></td></tr>
+<tr><td><code>2728</code></td><td>Parıltı</td><td>Sparkles</td><td class="num">1</td><td><span class="badge b-p2">ücretsiz</span></td></tr>
+</tbody></table></div>
+
+<h3>🎸 Müzik: 16 sayfa</h3>
+<p>Gitar, piyano, uzun davul, saksafon, zil, mikrofon ve iki nota sayfası ücretsiz. Davul ve flüt Eşyalar'da kaldı.</p>
+<div class="table-wrap"><table><thead><tr><th>Kod</th><th>Türkçe ad</th><th>İngilizce ad</th><th class="num">Seviye</th><th>Ücretsiz</th></tr></thead><tbody>
+<tr><td><code>1f399</code></td><td>Stüdyo mikrofonu</td><td>Studio microphone</td><td class="num">2</td><td></td></tr>
+<tr><td><code>1f3a4</code></td><td>Mikrofon</td><td>Microphone</td><td class="num">1</td><td><span class="badge b-p2">ücretsiz</span></td></tr>
+<tr><td><code>1f3a7</code></td><td>Kulaklık</td><td>Headphones</td><td class="num">2</td><td></td></tr>
+<tr><td><code>1f3b5</code></td><td>Nota</td><td>Musical note</td><td class="num">1</td><td><span class="badge b-p2">ücretsiz</span></td></tr>
+<tr><td><code>1f3b6</code></td><td>Notalar</td><td>Musical notes</td><td class="num">1</td><td><span class="badge b-p2">ücretsiz</span></td></tr>
+<tr><td><code>1f3b7</code></td><td>Saksafon</td><td>Saxophone</td><td class="num">1</td><td><span class="badge b-p2">ücretsiz</span></td></tr>
+<tr><td><code>1f3b8</code></td><td>Gitar</td><td>Guitar</td><td class="num">2</td><td><span class="badge b-p2">ücretsiz</span></td></tr>
+<tr><td><code>1f3b9</code></td><td>Piyano</td><td>Piano</td><td class="num">3</td><td><span class="badge b-p2">ücretsiz</span></td></tr>
+<tr><td><code>1f3ba</code></td><td>Trompet</td><td>Trumpet</td><td class="num">3</td><td></td></tr>
+<tr><td><code>1f3bb</code></td><td>Keman</td><td>Violin</td><td class="num">3</td><td></td></tr>
+<tr><td><code>1f4fb</code></td><td>Radyo</td><td>Radio</td><td class="num">3</td><td></td></tr>
+<tr><td><code>1f514</code></td><td>Zil</td><td>Bell</td><td class="num">1</td><td><span class="badge b-p2">ücretsiz</span></td></tr>
+<tr><td><code>1fa87</code></td><td>Marakas</td><td>Maracas</td><td class="num">3</td><td></td></tr>
+<tr><td><code>1fa95</code></td><td>Banjo</td><td>Banjo</td><td class="num">3</td><td></td></tr>
+<tr><td><code>1fa97</code></td><td>Akordeon</td><td>Accordion</td><td class="num">3</td><td></td></tr>
+<tr><td><code>1fa98</code></td><td>Uzun davul</td><td>Long drum</td><td class="num">2</td><td><span class="badge b-p2">ücretsiz</span></td></tr>
+</tbody></table></div>
+
+<h3>👕 Giysiler: 24 sayfa</h3>
+<p>Ücretsiz sekiz sayfa önerilen listenin aynısı: tişört, elbise, çorap, şapka (kep), eldiven, ayakkabı, taç ve güneş gözlüğü. Tişört Eşyalar'daydı ama hiç yayımlanmamıştı (bölüm 8), bu yüzden kategorisini güvenle değiştirdim.</p>
+<div class="table-wrap"><table><thead><tr><th>Kod</th><th>Türkçe ad</th><th>İngilizce ad</th><th class="num">Seviye</th><th>Ücretsiz</th></tr></thead><tbody>
+<tr><td><code>1f392</code></td><td>Sırt çantası</td><td>Backpack</td><td class="num">1</td><td></td></tr>
+<tr><td><code>1f3a9</code></td><td>Silindir şapka</td><td>Top hat</td><td class="num">1</td><td></td></tr>
+<tr><td><code>1f451</code></td><td>Taç</td><td>Crown</td><td class="num">1</td><td><span class="badge b-p2">ücretsiz</span></td></tr>
+<tr><td><code>1f452</code></td><td>Kurdeleli şapka</td><td>Hat with a bow</td><td class="num">2</td><td></td></tr>
+<tr><td><code>1f455</code></td><td>Tişört</td><td>T-shirt</td><td class="num">2</td><td><span class="badge b-p2">ücretsiz</span></td></tr>
+<tr><td><code>1f456</code></td><td>Pantolon</td><td>Jeans</td><td class="num">2</td><td></td></tr>
+<tr><td><code>1f457</code></td><td>Elbise</td><td>Dress</td><td class="num">1</td><td><span class="badge b-p2">ücretsiz</span></td></tr>
+<tr><td><code>1f45a</code></td><td>Bluz</td><td>Blouse</td><td class="num">1</td><td></td></tr>
+<tr><td><code>1f45b</code></td><td>Cüzdan</td><td>Purse</td><td class="num">1</td><td></td></tr>
+<tr><td><code>1f45c</code></td><td>El çantası</td><td>Handbag</td><td class="num">1</td><td></td></tr>
+<tr><td><code>1f45e</code></td><td>Ayakkabı</td><td>Shoe</td><td class="num">1</td><td><span class="badge b-p2">ücretsiz</span></td></tr>
+<tr><td><code>1f460</code></td><td>Topuklu ayakkabı</td><td>High-heeled shoe</td><td class="num">1</td><td></td></tr>
+<tr><td><code>1f462</code></td><td>Çizme</td><td>Boot</td><td class="num">1</td><td></td></tr>
+<tr><td><code>1f48d</code></td><td>Yüzük</td><td>Ring</td><td class="num">1</td><td></td></tr>
+<tr><td><code>1f576</code></td><td>Güneş gözlüğü</td><td>Sunglasses</td><td class="num">1</td><td><span class="badge b-p2">ücretsiz</span></td></tr>
+<tr><td><code>1f97e</code></td><td>Bot</td><td>Hiking boot</td><td class="num">1</td><td></td></tr>
+<tr><td><code>1f9e2</code></td><td>Kep</td><td>Cap</td><td class="num">1</td><td><span class="badge b-p2">ücretsiz</span></td></tr>
+<tr><td><code>1f9e3</code></td><td>Atkı</td><td>Scarf</td><td class="num">1</td><td></td></tr>
+<tr><td><code>1f9e4</code></td><td>Eldiven</td><td>Gloves</td><td class="num">2</td><td><span class="badge b-p2">ücretsiz</span></td></tr>
+<tr><td><code>1f9e5</code></td><td>Mont</td><td>Coat</td><td class="num">2</td><td></td></tr>
+<tr><td><code>1f9e6</code></td><td>Çorap</td><td>Socks</td><td class="num">2</td><td><span class="badge b-p2">ücretsiz</span></td></tr>
+<tr><td><code>1fa71</code></td><td>Mayo</td><td>Swimsuit</td><td class="num">2</td><td></td></tr>
+<tr><td><code>1fa73</code></td><td>Şort</td><td>Shorts</td><td class="num">1</td><td></td></tr>
+<tr><td><code>1fa74</code></td><td>Terlik</td><td>Flip-flop</td><td class="num">1</td><td></td></tr>
+</tbody></table></div>
+
+<h2 id="mevcut">3. Mevcut kategorilere eklenenler</h2>
+<p>Bu sayfaların hiçbiri ücretsiz değil; mevcut kategorilerin ücretsiz sekizlisi aynı kaldı.</p>
+<details open><summary>Doğa: 14 sayfa (13 → 27)</summary><div class="table-wrap"><table><thead><tr><th>Kod</th><th>Türkçe ad</th><th>İngilizce ad</th><th class="num">Seviye</th><th>Ücretsiz</th></tr></thead><tbody>
+<tr><td><code>1f304</code></td><td>Dağda gün doğumu</td><td>Sunrise over mountains</td><td class="num">2</td><td></td></tr>
+<tr><td><code>1f305</code></td><td>Gün doğumu</td><td>Sunrise</td><td class="num">2</td><td></td></tr>
+<tr><td><code>1f324</code></td><td>Güneş ve bulut</td><td>Sun and cloud</td><td class="num">1</td><td></td></tr>
+<tr><td><code>1f326</code></td><td>Güneş ve yağmur</td><td>Sun and rain</td><td class="num">2</td><td></td></tr>
+<tr><td><code>1f329</code></td><td>Şimşekli bulut</td><td>Cloud with lightning</td><td class="num">1</td><td></td></tr>
+<tr><td><code>1f3d5</code></td><td>Kamp</td><td>Camping</td><td class="num">3</td><td></td></tr>
+<tr><td><code>1f3dd</code></td><td>Ada</td><td>Island</td><td class="num">3</td><td></td></tr>
+<tr><td><code>1f41a</code></td><td>Deniz kabuğu</td><td>Seashell</td><td class="num">2</td><td></td></tr>
+<tr><td><code>1f4a7</code></td><td>Su damlası</td><td>Water drop</td><td class="num">1</td><td></td></tr>
+<tr><td><code>1f9ca</code></td><td>Buz küpü</td><td>Ice cube</td><td class="num">2</td><td></td></tr>
+<tr><td><code>1faa8</code></td><td>Taş</td><td>Rock</td><td class="num">2</td><td></td></tr>
+<tr><td><code>1fab5</code></td><td>Kütük</td><td>Log</td><td class="num">2</td><td></td></tr>
+<tr><td><code>1fab6</code></td><td>Tüy</td><td>Feather</td><td class="num">2</td><td></td></tr>
+<tr><td><code>1fab8</code></td><td>Mercan</td><td>Coral</td><td class="num">1</td><td></td></tr>
+</tbody></table></div></details>
+<details><summary>Bitkiler: 5 sayfa (19 → 24)</summary><div class="table-wrap"><table><thead><tr><th>Kod</th><th>Türkçe ad</th><th>İngilizce ad</th><th class="num">Seviye</th><th>Ücretsiz</th></tr></thead><tbody>
+<tr><td><code>1f33c</code></td><td>Papatya</td><td>Daisy</td><td class="num">1</td><td></td></tr>
+<tr><td><code>1f33e</code></td><td>Başak</td><td>Sheaf of rice</td><td class="num">1</td><td></td></tr>
+<tr><td><code>1f33f</code></td><td>Yapraklı dal</td><td>Herb</td><td class="num">2</td><td></td></tr>
+<tr><td><code>1f342</code></td><td>Sonbahar yaprakları</td><td>Fallen leaves</td><td class="num">1</td><td></td></tr>
+<tr><td><code>1f3f5</code></td><td>Rozet</td><td>Rosette</td><td class="num">1</td><td></td></tr>
+</tbody></table></div></details>
+<details><summary>Eşyalar: 21 sayfa (23 → 44), oyuncak ve spor</summary><div class="table-wrap"><table><thead><tr><th>Kod</th><th>Türkçe ad</th><th>İngilizce ad</th><th class="num">Seviye</th><th>Ücretsiz</th></tr></thead><tbody>
+<tr><td><code>1f3a0</code></td><td>Atlıkarınca</td><td>Carousel horse</td><td class="num">3</td><td></td></tr>
+<tr><td><code>1f3a8</code></td><td>Boya paleti</td><td>Artist palette</td><td class="num">2</td><td></td></tr>
+<tr><td><code>1f3aa</code></td><td>Sirk çadırı</td><td>Circus tent</td><td class="num">3</td><td></td></tr>
+<tr><td><code>1f3b2</code></td><td>Zar</td><td>Dice</td><td class="num">1</td><td></td></tr>
+<tr><td><code>1f3b3</code></td><td>Bovling</td><td>Bowling</td><td class="num">3</td><td></td></tr>
+<tr><td><code>1f3c5</code></td><td>Madalya</td><td>Medal</td><td class="num">3</td><td></td></tr>
+<tr><td><code>1f3c6</code></td><td>Kupa</td><td>Trophy</td><td class="num">2</td><td></td></tr>
+<tr><td><code>1f3c9</code></td><td>Ragbi topu</td><td>Rugby ball</td><td class="num">1</td><td></td></tr>
+<tr><td><code>1f3d0</code></td><td>Voleybol topu</td><td>Volleyball</td><td class="num">3</td><td></td></tr>
+<tr><td><code>1f3d3</code></td><td>Masa tenisi</td><td>Ping pong</td><td class="num">1</td><td></td></tr>
+<tr><td><code>1f58d</code></td><td>Pastel boya</td><td>Crayon</td><td class="num">1</td><td></td></tr>
+<tr><td><code>1f6f7</code></td><td>Kızak</td><td>Sled</td><td class="num">2</td><td></td></tr>
+<tr><td><code>1f6f9</code></td><td>Kaykay</td><td>Skateboard</td><td class="num">1</td><td></td></tr>
+<tr><td><code>1f6fc</code></td><td>Paten</td><td>Roller skate</td><td class="num">2</td><td></td></tr>
+<tr><td><code>1f945</code></td><td>Futbol kalesi</td><td>Goal</td><td class="num">3</td><td></td></tr>
+<tr><td><code>1f94f</code></td><td>Frizbi</td><td>Flying disc</td><td class="num">1</td><td></td></tr>
+<tr><td><code>1f9e9</code></td><td>Yapboz</td><td>Puzzle piece</td><td class="num">1</td><td></td></tr>
+<tr><td><code>1fa80</code></td><td>Yoyo</td><td>Yo-yo</td><td class="num">2</td><td></td></tr>
+<tr><td><code>1fa85</code></td><td>Pinyata</td><td>Piñata</td><td class="num">3</td><td></td></tr>
+<tr><td><code>1fa86</code></td><td>Matruşka</td><td>Nesting dolls</td><td class="num">2</td><td></td></tr>
+<tr><td><code>26f8</code></td><td>Buz pateni</td><td>Ice skate</td><td class="num">1</td><td></td></tr>
+</tbody></table></div></details>
+<details><summary>Araçlar: 12 sayfa (20 → 32)</summary><div class="table-wrap"><table><thead><tr><th>Kod</th><th>Türkçe ad</th><th>İngilizce ad</th><th class="num">Seviye</th><th>Ücretsiz</th></tr></thead><tbody>
+<tr><td><code>1f682</code></td><td>Lokomotif</td><td>Locomotive</td><td class="num">3</td><td></td></tr>
+<tr><td><code>1f685</code></td><td>Hızlı tren</td><td>Bullet train</td><td class="num">2</td><td></td></tr>
+<tr><td><code>1f68e</code></td><td>Troleybüs</td><td>Trolleybus</td><td class="num">3</td><td></td></tr>
+<tr><td><code>1f690</code></td><td>Minibüs</td><td>Minibus</td><td class="num">3</td><td></td></tr>
+<tr><td><code>1f691</code></td><td>Ambulans</td><td>Ambulance</td><td class="num">2</td><td></td></tr>
+<tr><td><code>1f693</code></td><td>Polis arabası</td><td>Police car</td><td class="num">3</td><td></td></tr>
+<tr><td><code>1f69b</code></td><td>Tır</td><td>Articulated lorry</td><td class="num">3</td><td></td></tr>
+<tr><td><code>1f6a1</code></td><td>Teleferik</td><td>Cable car</td><td class="num">2</td><td></td></tr>
+<tr><td><code>1f6e9</code></td><td>Küçük uçak</td><td>Small airplane</td><td class="num">2</td><td></td></tr>
+<tr><td><code>1f6f4</code></td><td>Scooter</td><td>Kick scooter</td><td class="num">1</td><td></td></tr>
+<tr><td><code>1f6f5</code></td><td>Mobilet</td><td>Motor scooter</td><td class="num">2</td><td></td></tr>
+<tr><td><code>1f6fb</code></td><td>Kamyonet</td><td>Pickup truck</td><td class="num">2</td><td></td></tr>
+</tbody></table></div></details>
+<details><summary>Hayvanlar: 1 sayfa (81 → 82)</summary><div class="table-wrap"><table><thead><tr><th>Kod</th><th>Türkçe ad</th><th>İngilizce ad</th><th class="num">Seviye</th><th>Ücretsiz</th></tr></thead><tbody>
+<tr><td><code>1f996</code></td><td>T-Rex</td><td>T-Rex</td><td class="num">1</td><td></td></tr>
+</tbody></table></div></details>
+
+<h2 id="oyuncak">4. Neden ayrı "Oyuncak ve spor" kategorisi yok</h2>
+<p><strong>Oyuncak ve spor sayfalarını yeni kategori yerine Eşyalar'a ekledim.</strong> Eşyalar zaten oyuncak ve spor kategorisi gibi çalışıyor: balon, uçurtma, oyuncak ayı, yoyo, futbol, basketbol, tenis ve beyzbol orada.</p>
+<p>Ayrı bir kategori bu sayfaları iki yere bölerdi. Taşımak da mümkün değil: kayıtlı resim sayfanın kimliğini (<code>things_1f388</code>) ve dosya yolunu (<code>assets/pages/things/1f388.png</code>) saklıyor. Sayfa taşınırsa 2.1.0'dan sonra boyanan resimler açılmaz.</p>
+<p>Aynı kural Uzay'da roketi, Müzik'te davulu, Giysiler'de gözlüğü dışarıda bıraktı. Sayfaları ileride bir kimlik eşleme tablosuyla taşımak mümkün; bu iş için gerekli görmedim.</p>
+
+<h2 id="elenen">5. Elenen konular ve nedenleri</h2>
+<h3>5.1 Denetimden geçip gözle elenenler: 21</h3>
+<p>Sayfa denetimi yalnız ölçer: parmak boyu alan, taşma, mürekkep payı. 127 adayın hepsi denetimden geçti: 123 yeni konu ve hattaki hata yüzünden sayfası hiç üretilmemiş 4 eski konu. Her sayfaya tek tek baktım ve 3 yaşındaki çocuğun tanımayacağı ya da uygulamada zaten olan çizimleri eledim. Bu adaylar katalogda yok.</p>
+<div class="table-wrap"><table><thead><tr><th>Konu</th><th>Kategori</th><th>Neden</th></tr></thead><tbody>
+<tr><td>Samanyolu</td><td>Uzay</td><td>Çerçeveli, soyut bir gökyüzü karosu; içinde çok sayıda küçük yıldız ve nokta var. 3 yaşındaki çocuk bunu Samanyolu olarak tanımaz.</td></tr>
+<tr><td>Dolunay</td><td>Uzay</td><td>Dönüştürücü kraterlerin açık gri tonunu çizgiye çevirmedi. Sayfa düz bir daire olarak kaldı ve ay olarak tanınmıyor.</td></tr>
+<tr><td>Kravat</td><td>Giysiler</td><td>Kare çerçeve içinde çizgili gömlek ve kravat, 3. seviye ve 17 bölge. Küçük çocuğun giydiği bir şey değil.</td></tr>
+<tr><td>Kimono</td><td>Giysiler</td><td>Kültüre özgü giysi, 22 bölge. Türk ve ABD&#x27;li küçük çocuk tanımaz.</td></tr>
+<tr><td>Sandalet</td><td>Giysiler</td><td>Topuklu sandaletin çizimi belirsiz. Ayakkabı, topuklu ayakkabı, çizme, bot ve terlik zaten var.</td></tr>
+<tr><td>Deniz gözlüğü</td><td>Giysiler</td><td>Kayak gözlüğüne benziyor, ne olduğu anlaşılmıyor. Güneş gözlüğü var.</td></tr>
+<tr><td>Babet</td><td>Giysiler</td><td>Sayfanın %87&#x27;si boş, çizim ince ve küçük; terlikle karışıyor.</td></tr>
+<tr><td>Çok bulutlu</td><td>Doğa</td><td>Eklenen &quot;Güneş ve bulut&quot; sayfasının neredeyse aynısı.</td></tr>
+<tr><td>Bulutlu güneş</td><td>Doğa</td><td>Aynı tekrar. Bulutun çift çizgisi parmakla boyanamayacak kadar dar bir şerit de bırakıyor.</td></tr>
+<tr><td>Yağmurda şemsiye</td><td>Doğa</td><td>Mevcut &quot;Şemsiye&quot; sayfasının aynısı, yalnız damlalar eklenmiş.</td></tr>
+<tr><td>Plaj şemsiyesi</td><td>Doğa</td><td>Fluent bu konu için mevcut &quot;Plaj ve şemsiye&quot; sayfasındaki çizimi kullanıyor.</td></tr>
+<tr><td>Karlı dağ</td><td>Doğa</td><td>Mevcut &quot;Dağ&quot; sayfasıyla aynı çizim.</td></tr>
+<tr><td>Çöl</td><td>Doğa</td><td>Kalabalık, çerçeveli bir sahne ve 26 bölge. Kaktüs zaten Bitkiler&#x27;de.</td></tr>
+<tr><td>Milli park</td><td>Doğa</td><td>Çerçeveli, soyut bir manzara; küçük çocuk için ne olduğu belli değil.</td></tr>
+<tr><td>Uçuşan yapraklar</td><td>Bitkiler</td><td>Eklenen &quot;Sonbahar yaprakları&quot; sayfasının rüzgâr çizgili hâli.</td></tr>
+<tr><td>Beyaz çiçek</td><td>Bitkiler</td><td>Çiçeğin içinde Japonca &quot;aferin&quot; yazısı var. Yazı küçük bölgeler bırakıyor ve çocuk için anlamsız.</td></tr>
+<tr><td>Boş yuva</td><td>Bitkiler</td><td>Yukarıdan bakılan yuva tanınmıyor. Yumurtalı yuva zaten var.</td></tr>
+<tr><td>Dönme dolap</td><td>Eşyalar</td><td>65 bölge, sayfanın %19&#x27;u mürekkep: parmakla boyanamayacak kadar ince.</td></tr>
+<tr><td>Hız treni</td><td>Eşyalar</td><td>İnce dikmeler dar bölgeler bırakıyor (29 bölge).</td></tr>
+<tr><td>Badminton</td><td>Eşyalar</td><td>Raket ağı küçük karelerden oluşuyor ve sayfa mevcut &quot;Tenis&quot; sayfasına çok benziyor.</td></tr>
+<tr><td>Paraşüt</td><td>Araçlar</td><td>Paraşütün altında küçük bir insan figürü var. Katalog kuralı insan çizimini dışarıda tutuyor.</td></tr>
+</tbody></table></div>
+<h3>5.2 Hiç denenmeyenler</h3>
+<div class="table-wrap"><table><thead><tr><th>Konular</th><th>Neden</th></tr></thead><tbody>
+<tr><td>Astronot, uzaylı, yüzlü güneş, rüzgâr yüzü</td><td>Katalog kuralı insan ve yüz çizimini dışarıda tutuyor. Uzaylı bazı çocukları korkutabilir.</td></tr>
+<tr><td>Roket, güneş, yıldız, davul, flüt, gözlük, koşu ayakkabısı, bale ayakkabıları</td><td>Bu sayfalar Araçlar, Doğa ve Eşyalar&#x27;da yayımlandı. Kayıtlı resimler sayfanın kimliğini ve dosya yolunu sakladığı için yayımlanmış sayfa başka kategoriye taşınamaz.</td></tr>
+<tr><td>Hortum, kasırga, ateş, yüksek gerilim işareti, yağmurlu fırtına bulutu</td><td>Korku ya da tehlike öğesi. Doğa&#x27;da tek bir şimşekli bulut yeterli.</td></tr>
+<tr><td>Boks eldiveni, dövüş sanatları kıyafeti, bumerang, askerî miğfer</td><td>Şiddet ve silah çağrışımı.</td></tr>
+<tr><td>Bikini, külot, ruj</td><td>Küçük çocuk uygulamasına uygun değil.</td></tr>
+<tr><td>Tespih, çam süsü, Tanabata ağacı, sari</td><td>Dinî ya da kültüre özgü öğe.</td></tr>
+<tr><td>Kurtarma görevlisi miğferi</td><td>Üzerinde kızıl haç amblemi var; amblemin kullanımı korunuyor.</td></tr>
+<tr><td>Oyun kolu, joystick, bilardo topu, kristal küre, disko topu</td><td>Ekran, kumar, fal ya da gece hayatı çağrışımı.</td></tr>
+<tr><td>Diğer ay evreleri, meridyenli küre, nota kâğıdı, posta borusu, megafon, hoparlör</td><td>Tekrar ya da küçük çocuğun tanımadığı nesne; nota kâğıdının ince porte çizgileri boyanamaz.</td></tr>
+<tr><td>Amerikan futbolu, softbol, olta, Fuji Dağı, sis</td><td>Ragbi topu, beyzbol ve dağ sayfalarının tekrarı; oltanın kancası var; sis yalnız çizgiden oluşuyor.</td></tr>
+<tr><td>Laboratuvar önlüğü, güvenlik yeleği, mezuniyet kepi, değerli taş, alışveriş poşetleri</td><td>Küçük çocuğun giydiği ya da tanıdığı bir şey değil; alışveriş poşeti ticari bir öğe.</td></tr>
+<tr><td>Monoray, dağ treni, asma demiryolu, ikinci teleferik, yolcu gemisi, üç tekerlekli taksi</td><td>Mevcut sayfaların tekrarı ya da yöresel araç.</td></tr>
+<tr><td>Arp, yapraksız ağaç, kök sebze, okul otobüsü, çöp kamyonu, tek parmaklı eldiven</td><td>Fluent UI Emoji&#x27;nin sabit commit&#x27;inde yok.</td></tr>
+</tbody></table></div>
+<h3>5.3 Katalogda kalan ama derlenmeyenler: 3</h3>
+<p>Kral kelebeği (<code>1facc</code>), orka (<code>1facd</code>) ve deniz feneri (<code>1f6d9</code>) Fluent UI Emoji'nin sabit commit'inde yok. Katalogda <code>"skip": "not in Fluent UI Emoji at the pinned commit"</code> ile duruyorlar. Fluent bu çizimleri eklerse commit güncellenince denenebilir.</p>
+
+<h2 id="seviye">6. Seviye dağılımı</h2>
+<p>Seviyeyi sayfa denetimi hesaplar. 1. seviye en çok 4 parmak boyu alan ve 10 bölgedir. 3. seviye 8 ya da daha çok parmak boyu alan ya da 16 ya da daha çok bölgedir. Arası 2. seviyedir. Hiçbir sayfa kilitli değil; seviye yalnız sırayı belirler.</p>
+<div class="table-wrap"><table class="levels"><thead><tr><th>Kategori</th><th class="num">Önce (1 / 2 / 3)</th><th class="num">Sonra (1 / 2 / 3)</th><th>Sonra</th></tr></thead><tbody>
+<tr><td>🐾 Hayvanlar</td><td class="num">36 / 33 / 12</td><td class="num">37 / 33 / 12</td><td class="barcell"><div class="bar"><span class="seg l1" style="width:45.1%" title="1. seviye: 37"></span><span class="seg l2" style="width:40.2%" title="2. seviye: 33"></span><span class="seg l3" style="width:14.6%" title="3. seviye: 12"></span></div></td></tr>
+<tr><td>🌸 Bitkiler</td><td class="num">10 / 3 / 6</td><td class="num">14 / 4 / 6</td><td class="barcell"><div class="bar"><span class="seg l1" style="width:58.3%" title="1. seviye: 14"></span><span class="seg l2" style="width:16.7%" title="2. seviye: 4"></span><span class="seg l3" style="width:25.0%" title="3. seviye: 6"></span></div></td></tr>
+<tr><td>🚗 Araçlar</td><td class="num">1 / 9 / 10</td><td class="num">2 / 15 / 15</td><td class="barcell"><div class="bar"><span class="seg l1" style="width:6.2%" title="1. seviye: 2"></span><span class="seg l2" style="width:46.9%" title="2. seviye: 15"></span><span class="seg l3" style="width:46.9%" title="3. seviye: 15"></span></div></td></tr>
+<tr><td>🌈 Doğa</td><td class="num">8 / 3 / 2</td><td class="num">12 / 11 / 4</td><td class="barcell"><div class="bar"><span class="seg l1" style="width:44.4%" title="1. seviye: 12"></span><span class="seg l2" style="width:40.7%" title="2. seviye: 11"></span><span class="seg l3" style="width:14.8%" title="3. seviye: 4"></span></div></td></tr>
+<tr><td>🍎 Yiyecekler</td><td class="num">24 / 15 / 6</td><td class="num">24 / 15 / 6</td><td class="barcell"><div class="bar"><span class="seg l1" style="width:53.3%" title="1. seviye: 24"></span><span class="seg l2" style="width:33.3%" title="2. seviye: 15"></span><span class="seg l3" style="width:13.3%" title="3. seviye: 6"></span></div></td></tr>
+<tr><td>🧸 Eşyalar</td><td class="num">4 / 10 / 9</td><td class="num">12 / 16 / 16</td><td class="barcell"><div class="bar"><span class="seg l1" style="width:27.3%" title="1. seviye: 12"></span><span class="seg l2" style="width:36.4%" title="2. seviye: 16"></span><span class="seg l3" style="width:36.4%" title="3. seviye: 16"></span></div></td></tr>
+<tr><td>🪐 Uzay</td><td class="num">yok</td><td class="num">7 / 5 / 1</td><td class="barcell"><div class="bar"><span class="seg l1" style="width:53.8%" title="1. seviye: 7"></span><span class="seg l2" style="width:38.5%" title="2. seviye: 5"></span><span class="seg l3" style="width:7.7%" title="3. seviye: 1"></span></div></td></tr>
+<tr><td>🎸 Müzik</td><td class="num">yok</td><td class="num">5 / 4 / 7</td><td class="barcell"><div class="bar"><span class="seg l1" style="width:31.2%" title="1. seviye: 5"></span><span class="seg l2" style="width:25.0%" title="2. seviye: 4"></span><span class="seg l3" style="width:43.8%" title="3. seviye: 7"></span></div></td></tr>
+<tr><td>👕 Giysiler</td><td class="num">yok</td><td class="num">17 / 7 / 0</td><td class="barcell"><div class="bar"><span class="seg l1" style="width:70.8%" title="1. seviye: 17"></span><span class="seg l2" style="width:29.2%" title="2. seviye: 7"></span></div></td></tr>
+<tr class="sum"><td>Toplam</td><td class="num">83 / 73 / 45</td><td class="num">130 / 110 / 67</td><td class="barcell"><div class="bar"><span class="seg l1" style="width:42.3%" title="1. seviye: 130"></span><span class="seg l2" style="width:35.8%" title="2. seviye: 110"></span><span class="seg l3" style="width:21.8%" title="3. seviye: 67"></span></div></td></tr>
+</tbody></table></div>
+<p class="small"><span class="key l1"></span> 1. seviye <span class="key l2"></span> 2. seviye <span class="key l3"></span> 3. seviye</p>
+<p>Eklenen 106 sayfanın 47'si 1., 37'si 2., 22'si 3. seviye. Beş yeni sayfada yalnız bir parmak boyu alan var ve denetim bunları "zayıf" diye işaretliyor: hilal, nota, zil, su damlası ve yapboz. Bunlar tek büyük şekil; en küçük çocuk için bilerek tuttum.</p>
+
+<h2 id="boyut">7. Uygulama boyutu</h2>
+<div class="table-wrap"><table><thead><tr><th>Ölçüm</th><th class="num">Önce</th><th class="num">Sonra</th><th class="num">Fark</th></tr></thead><tbody>
+<tr><td>Sayfa dosyaları (<code>assets/pages</code>)</td><td class="num">202 dosya, 1.568.648 bayt</td><td class="num">308 dosya, 2.333.680 bayt</td><td class="num">+765.032 bayt (+0,77 MB)</td></tr>
+<tr><td>Yeni 106 PNG, zip ile sıkıştırılmış (IPA bir zip dosyasıdır; indirme boyutu için yaklaşık değer)</td><td class="num"></td><td class="num"></td><td class="num">+650.058 bayt (≈ +0,65 MB)</td></tr>
+<tr><td>Sayfa listesi kaynağı (<code>lib/data/builtin_images.dart</code>)</td><td class="num">30.953 bayt</td><td class="num">47.234 bayt</td><td class="num">+16.281 bayt</td></tr>
+</tbody></table></div>
+<p>Sayfa dosyalarını ölçtüm. Derlenmiş Dart koduna etkisini ölçmedim; liste 106 sabit nesne ekliyor. Yeni sayfa başına ortalama 7,2 KB düşüyor.</p>
+<div class="callout info"><p><strong>Boyutu düşürmek için bir fırsat:</strong> <code>assets/images/categories/</code> klasörü 1.0 sürümünün eski sayfalarını tutuyor: 76 dosya, 1.141.480 bayt. Uygulama kodu bu klasörü hiç kullanmıyor; yalnız testler <code>cat.png</code> dosyasına başvuruyor. <code>pubspec.yaml</code>'dan çıkarılırsa uygulama bu işteki büyümeden fazla, 1,14 MB küçülür. Görev tanımı bu klasörü kategori simgelerinin yeri sayıyordu, ama klasörde simge yok: simgeler emoji karakteri (<code>Category.getDefaultCategories()</code> içindeki <code>icon</code> alanı). Klasöre dokunmadım.</p></div>
+
+<h2 id="hat">8. Üretim hattında bulunan hatalar</h2>
+<p><strong>Üretim hattında iki hata buldum ve düzelttim. Birincisi: katalogdaki 208 konudan 7'si sessizce sayfasız kalıyordu.</strong> Betik indirme adresini kurarken a–z ve 0–9 dışındaki her harfi alt çizgiye çeviriyordu. Fluent dosya adlarında tireyi ve aksanlı harfi koruyor (<code>Yo-yo/yo-yo_flat.svg</code>). Yoyo, tişört ve pinyata bu yüzden hiç inmedi; T-Rex ise katalogda yanlış büyük harfle yazılmıştı (Fluent klasörü <code>T-rex</code>).</p>
+<p>Betik artık dosya adını Fluent'in yazdığı gibi de deniyor ve yolu yüzde kodlamasıyla gönderiyor. Eski yazım önce deneniyor, yani daha önce inen dosyalar aynı adresten iniyor. Mevcut 201 sayfanın PNG dosyaları bu işte değişmedi (git'te fark yok). Bu düzeltmeyle yoyo ve pinyata Eşyalar'a, T-Rex Hayvanlar'a, tişört Giysiler'e girdi.</p>
+<p>İkinci hata İngilizce adlardaydı. Betik her adı Türkçe kuralla büyük harfe çeviriyordu; "i" ile başlayan İngilizce adlar noktalı büyük İ aldı: <em>İce cream</em>, <em>İce cube</em>, <em>İce skate</em>, <em>İsland</em>. İlki 2.1.0'da da var, ama orada VoiceOver İngilizce adı hiç okumuyordu; hata, sayfa kartları uygulamanın dilini kullanmaya başlayınca görünür oldu. Artık yalnız Türkçe adlar noktalı İ alıyor (<code>dc2dfd9</code>). İngilizce ad kayıtlı resimlere yazılmıyor; düzeltme kayıtlı veriyi etkilemiyor.</p>
+<p>Yeni test kataloğu ve paketi karşılaştırıyor: derlenmeyen her konu katalogda yazılı bir <code>skip</code> nedeni taşımalı. Bundan sonra sayfa sessizce kaybolamaz.</p>
+
+<h2 id="kod">9. Uygulamadaki değişiklikler</h2>
+<ul class="tight">
+<li><code>lib/models/category.dart</code>: <code>space</code> 🪐, <code>music</code> 🎸, <code>clothes</code> 👕, sıra 8, 9 ve 10.</li>
+<li><code>lib/l10n/app_tr.arb</code>, <code>app_en.arb</code> ve <code>lib/l10n/drafts/</code> altındaki 10 taslak: Uzay, Müzik, Giysiler ve karşılıkları. Taslaklar yapay zekâ çevirisi; anadili konuşan biri henüz okumadı.</li>
+<li><code>fullVersionDesc</code> artık <code>{count}</code> alıyor ve sayıyı paketten okuyor; "201" sabiti kalktı. Lehçede isim sayıya göre değiştiği için taslakta ICU çoğul kalıbını (sayıya göre farklı metin seçen yazım) kullandım.</li>
+<li><code>lib/screens/home_screen.dart</code>: <code>categoryName</code> üç yeni adı tanıyor. <code>pubspec.yaml</code>: üç yeni sayfa klasörü.</li>
+<li><code>lib/screens/category_screen.dart</code>: sayfa kartı VoiceOver'a uygulamanın dilindeki adı veriyor.</li>
+<li><code>tool/pages/catalog.json</code>: 106 yeni konu, 3 <code>skip</code> nedeni, güncellenmiş notlar. <code>tool/pages/build_pages.py</code>: adres düzeltmesi ve İngilizce adların büyük harfi.</li>
+<li><code>tool/voice/README.md</code>: <code>category_space</code>, <code>category_music</code>, <code>category_clothes</code> kayıt satırları.</li>
+</ul>
+
+<h2 id="hig">10. 3 yaş ölçütü ve HIG denetimi</h2>
+<p>HIG'in Accessibility sayfasını ve App Review Guidelines'ı bugün yeniden okudum (Accessibility sayfasının son değişikliği 9 Haziran 2025). developer.apple.com/kids sayfası ebeveyn kapısı ve veri kurallarını tekrar ediyor; bu iş onlara dokunmuyor.</p>
+<div class="table-wrap"><table><thead><tr><th>Madde</th><th>Sonuç</th><th>Kanıt ve gerekçe</th></tr></thead><tbody>
+<tr><td>Ç1: okuma gerekmez</td><td><span class="badge b-p2">uyumlu</span></td><td>Her kategori kartında büyük bir simge var; kart yazı okunmadan seçilir. Kategori ekranında sayfalar resimle seçiliyor.</td></tr>
+<tr><td>Konu seçimi (3 yaş)</td><td><span class="badge b-p2">uyumlu</span></td><td>127 adayın her birine baktım. Tanınmayan, içinde yazı olan, tekrar eden ya da insan çizimi içeren 21 aday elendi (bölüm 5).</td></tr>
+<tr><td>Dokunma hedefi</td><td><span class="badge b-p2">uyumlu</span></td><td>HIG'in varsayılan kontrol boyutu 44×44 pt, alt sınırı 28×28 pt. 375 pt genişliğindeki telefonda her kategori kartı 163,5 pt genişlikte ve ilk kartla aynı boyutta; Minik'in 64 pt sınırının da çok üstünde. Kanıt: <code>test/app_test.dart</code>, "on a 375 pt phone the new categories...".</td></tr>
+<tr><td>Güvenli alanlar ve kenar boşlukları</td><td><span class="badge b-p2">uyumlu</span></td><td>Ana ekranın <code>SafeArea</code> ve 16 pt boşlukları değişmedi; yeni kartlar aynı ızgarada.</td></tr>
+<tr><td>Renk kontrastı ve Dynamic Type</td><td><span class="badge b-p2">uyumlu</span></td><td>Kart adları 18 pt kalın, beyaz zeminde mevcut koyu metin rengiyle yazılıyor. En uzun yeni ad "Giysiler" (8 harf) mevcut "Yiyecekler"den (10 harf) kısa. %200'e kadar yazı büyütmede ad tek satıra sığmazsa üç noktayla kısalır. Kontrast denetimi ana ekran testinde geçiyor.</td></tr>
+<tr><td>Reduce Motion</td><td><span class="badge b-p2">uyumlu</span></td><td>Yeni animasyon yok.</td></tr>
+<tr><td>VoiceOver etiketleri</td><td><span class="badge b-p2">uyumlu (düzeltildi)</span></td><td>Kategori kartı kategori adını okuyor. Sayfa kartları her dilde Türkçe adı okuyordu; artık uygulamanın dilindeki adı okuyor (<code>e708d42</code>, <code>test/category_screen_test.dart</code>). İngilizce adlardaki Türkçe büyük İ de düzeldi (<code>dc2dfd9</code>).</td></tr>
+<tr><td>Standart jestler</td><td><span class="badge b-p2">uyumlu</span></td><td>Yeni jest yok. Fazla kartlar dikey kaydırmayla geliyor; kaydırma tek parmakla çalışır.</td></tr>
+<tr><td>Haptik ve ses</td><td><span class="badge b-p1">gerekçeli sapma</span></td><td>Yeni kartlar diğerleri gibi tık sesi çalar ve sesli adı dener. Hiçbir kategorinin ses kaydı henüz yok; eksik klip sessizce atlanır. Kayıt listesine üç satır ekledim (<code>tool/voice/README.md</code>).</td></tr>
+<tr><td>iPad, yön ve çoklu pencere</td><td><span class="badge b-p2">uyumlu</span></td><td>Izgara genişliğe göre 2, 3 ya da 4 sütun; 320 pt Split View panelinde kart 136 pt genişlikte. Cihazda ya da simülatörde çalıştırmadım (bu işte yasaktı).</td></tr>
+<tr><td>Kids Category 1.3 ve 5.1.4</td><td><span class="badge b-p2">uyumlu</span></td><td>Bağlantı, reklam, analitik ya da satın alma eklemedim. İçerik insan, yüz, silah, şiddet, alkol, din ve korku öğesi içermiyor; paraşüt bu yüzden elendi.</td></tr>
+<tr><td>App Review 2.1 (çökme, iPad)</td><td><span class="badge b-p2">uyumlu, cihazda doğrulanmadı</span></td><td>Testler 307 sayfanın her birinin PNG olarak açıldığını, bölge haritasının kurulduğunu ve taşma denetiminden geçtiğini doğruluyor.</td></tr>
+<tr><td>App Review 2.3 (doğru meta veri)</td><td><span class="badge b-p1">sonraki sürümde yapılacak</span></td><td>Mağaza metni 2.1.0 için 201 sayfa diyor ve o sürüm için doğru. Bu içerikle çıkan sürümde açıklama, tanıtım metni ve "Notes for Review" yeni kategorileri anlatmalı. Hazır metin <code>store_listing.md</code>'de.</td></tr>
+<tr><td>Kategori simgesi glifi</td><td><span class="badge b-p1">gerekçeli sapma</span></td><td>Simgeler sistem emojisi. 🪐 iOS 13.2 ile geldi, uygulamanın alt sınırı iOS 15, sorun yok. Android 10'dan eski sistem emoji yazı tipinde 🪐, Android 9'dan eskisinde mevcut 🧸 yok ve kutu olarak görünebilir; denemedim. Google Play kaydı olmadığı için şimdilik etkisi yok.</td></tr>
+</tbody></table></div>
+
+<h2 id="dogrulama">11. Doğrulama</h2>
+<ul class="tight">
+<li><code>flutter analyze</code>: sorun yok.</li>
+<li><code>flutter test</code>: 157 test geçti; 12'si bu işte eklendi.</li>
+<li>Sayfa testi (<code>test/engine/region_builder_test.dart</code>) 307 sayfanın her biri için bölge haritasını kurar, taşma ve parmak boyu alan denetimini yapar ve kataloğun seviyesini hesaplanan seviyeyle karşılaştırır.</li>
+<li>Yeni testler: dokuz kategori ve sıraları, kategori başına 8 ücretsiz sayfa, yeni kategorilerde en az 12 sayfa ve ücretsizlerin çoğu 1. seviye, Doğa ve Bitkiler'de en az 20 sayfa, her kategoride tek glifli simge ve TR/EN ad, her taslak dilde kategori adı, kayıt listesinde sesli ad, İngilizce sayfa adlarında Türkçeye özgü harf olmaması, katalog ile paketin eşitliği, 375 pt telefonda yeni kartlara kaydırarak ulaşma ve kart boyutu, VoiceOver'ın sayfa adını uygulamanın dilinde okuması.</li>
+<li>Simülatör ya da emülatör açmadım; ekranları gerçek cihazda görmedim.</li>
+</ul>
+<h3>Commit'ler</h3>
+<div class="table-wrap"><table><thead><tr><th>Commit</th><th>Konu</th></tr></thead><tbody>
+<tr><td><code>c8a00a2</code></td><td>fix: Page builder downloads Fluent names with hyphens and accents</td></tr>
+<tr><td><code>ceffc57</code></td><td>feat: Space, Music and Clothes categories and 106 new coloring pages</td></tr>
+<tr><td><code>e708d42</code></td><td>fix: Page tiles are read out in the app&#x27;s language</td></tr>
+<tr><td><code>dc2dfd9</code></td><td>fix: English page names keep the English capital I</td></tr>
+<tr><td>son commit</td><td>docs: Content expansion report, store listing notes, README and skill</td></tr>
+</tbody></table></div>
+
+<h2 id="eksik">12. Bilinen eksikler ve sonraki adımlar</h2>
+<ul class="tight">
+<li><strong>Mağaza metni:</strong> Bu içerikle çıkan sürümde tanıtım metni, açıklama ve "Notes for Review" yeni sayılarla yazılmalı (App Review 2.3.1). Hazır metin <code>store_listing.md</code>'de.</li>
+<li><strong>Ekran görüntüsü:</strong> Ana ekran görüntüsü 6 kategori gösteriyor. Yeni kare çekilecekse yeni kategoriler görünsün.</li>
+<li><strong>Tam Sürüm adı:</strong> <code>plan/pazarlama-incelemesi-2026-11-03.html</code> içindeki satın alma görünen adı ve açıklaması "201 sayfa" diyor. COBI_IAP açılmadan önce yeni sayıyla güncellenmeli.</li>
+<li><strong>Ses kayıtları:</strong> Hiçbir kategorinin sesli adı kayıtlı değil; liste 9 kategoriye çıktı.</li>
+<li><strong>Resimlerim etiketi:</strong> Kayıtlı resim sayfanın Türkçe adını saklıyor, bu yüzden Resimlerim duvarında VoiceOver İngilizcede de Türkçe adı okuyor. Kayıtlı veriyi değiştirdiği için bu işe katmadım.</li>
+<li><strong>Taslak çeviriler:</strong> Yeni kategori adları yapay zekâ çevirisi; taslaklar yayına girmeden önce okunmalı.</li>
+<li><strong>Cihazda görme:</strong> Yeni kartları ve sayfaları telefonda ve iPad'de, VoiceOver ve büyük yazıyla bir kez görmek gerekiyor.</li>
+</ul>
+</div>
+</body>
+</html>
