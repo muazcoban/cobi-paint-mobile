@@ -158,6 +158,21 @@ void main() {
     expect(document.strokes.single.hasPressure, isFalse);
   });
 
+  testWidgets('a drawn stroke reopens exactly as drawn, scattered grain included', (tester) async {
+    await pumpCanvas(tester, tool: CanvasTool.marker, brush: BrushKind.spray);
+    // Off the tenth grid the saved file keeps: the page shows at 2x here.
+    final gesture = await tester.startGesture(at(tester, 20.37, 30.21));
+    await gesture.moveTo(at(tester, 60.53, 40.77));
+    await gesture.moveTo(at(tester, 80.11, 60.49));
+    await gesture.up();
+    await tester.pump();
+    final drawn = document.strokes.single;
+    final reopened = Stroke.fromJson(drawn.toJson())!;
+    // The scatter of spray, glitter and pastel grain is seeded by the first
+    // point, so the points must come back exactly.
+    expect(reopened.points, drawn.points);
+  });
+
   testWidgets('a marker that covers nearly all of a region completes it like a tap fill', (tester) async {
     final filled = <int>[];
     await pumpCanvas(tester, tool: CanvasTool.marker, autoComplete: true, onFilled: filled.add);

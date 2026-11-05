@@ -331,11 +331,12 @@ class _PaintCanvasState extends State<PaintCanvas> with SingleTickerProviderStat
       return;
     }
     _liveKind = widget.tool == CanvasTool.eraser ? BrushKind.eraser : widget.brush;
+    final x = _tenth(p.dx), y = _tenth(p.dy);
     _live
       ..clear()
-      ..addAll([p.dx, p.dy, _pointPressure()]);
+      ..addAll([x, y, _pointPressure()]);
     _liveClip = _liveKind != BrushKind.eraser && widget.stayInside
-        ? widget.document.map.labelAt(p.dx.floor(), p.dy.floor())
+        ? widget.document.map.labelAt(x.floor(), y.floor())
         : 0;
     if (_liveClip > 0) _layers.maskIfReady(_liveClip);
     _bump();
@@ -355,9 +356,14 @@ class _PaintCanvasState extends State<PaintCanvas> with SingleTickerProviderStat
     final p = _toPage(local);
     final n = _live.length;
     if ((Offset(_live[n - 3], _live[n - 2]) - p).distance < 0.75) return;
-    _live.addAll([p.dx, p.dy, _pointPressure()]);
+    _live.addAll([_tenth(p.dx), _tenth(p.dy), _pointPressure()]);
     _bump();
   }
+
+  /// A page coordinate on the tenth-of-a-pixel grid the saved file keeps,
+  /// so a reopened picture is exactly the one drawn: the scatter of the
+  /// pastel, the spray and the glitter is seeded by the first point.
+  static double _tenth(double v) => (v * 10).round() / 10;
 
   /// The pressure stored with the next point of the live stroke: the pen's
   /// for the brushes that follow it, the default for the rest.
