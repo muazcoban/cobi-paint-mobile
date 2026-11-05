@@ -487,7 +487,7 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
         child: Focus(
           autofocus: true,
           child: Scaffold(
-            backgroundColor: const Color(0xFFFFF4E6),
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
             body: SafeArea(
               child: LayoutBuilder(
                 builder: (context, constraints) {

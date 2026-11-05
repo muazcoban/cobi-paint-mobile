@@ -110,6 +110,9 @@ class AppProvider extends ChangeNotifier {
   // Settings management
   Future<void> updateSettings(UserSettings newSettings) async {
     _settings = newSettings;
+    // The theme is read statically by the screens; keep it in step here so
+    // every caller (not only the Parents chips) recolours the whole app.
+    AppTheme.setTheme(newSettings.selectedTheme);
     await _storageService.saveUserSettings(newSettings);
     notifyListeners();
   }
