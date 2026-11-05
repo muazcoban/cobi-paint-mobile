@@ -305,6 +305,12 @@ String categoryName(AppLocalizations l10n, Category category) {
       return l10n.food;
     case 'things':
       return l10n.things;
+    case 'space':
+      return l10n.space;
+    case 'music':
+      return l10n.music;
+    case 'clothes':
+      return l10n.clothes;
     case 'import':
       return l10n.importedPages;
     default:

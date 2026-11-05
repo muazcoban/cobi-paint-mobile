@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 
+import '../data/builtin_images.dart';
 import '../l10n/app_localizations.dart';
 import '../services/purchase_service.dart';
 import 'parents_screen.dart';
@@ -68,7 +69,8 @@ class _FullVersionScreenState extends State<FullVersionScreen> {
       body: ListView(
         padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),
         children: [
-          Text(l10n.fullVersionDesc, style: const TextStyle(fontSize: 16, height: 1.5)),
+          // The count comes from the bundle, so the text grows with the pages.
+          Text(l10n.fullVersionDesc(builtInImages.length), style: const TextStyle(fontSize: 16, height: 1.5)),
           const SizedBox(height: 20),
           ValueListenableBuilder<bool>(
             valueListenable: _purchases.isFull,

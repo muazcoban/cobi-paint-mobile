@@ -37,6 +37,18 @@
     "description": "Nature category"
   },
   "things": "Eşyalar",
+  "space": "Uzay",
+  "@space": {
+    "description": "Space category: planets, moons, stars, a flying saucer"
+  },
+  "music": "Müzik",
+  "@music": {
+    "description": "Music category: instruments, notes, a microphone"
+  },
+  "clothes": "Giysiler",
+  "@clothes": {
+    "description": "Clothes category: things a child wears, hats, shoes and bags included"
+  },
   "pageLevel": "Sayfa zorluğu",
   "pageLevelDesc": "Çocuk birkaç sayfa boyadıkça daha zor sayfalar öne gelir. Hiçbir sayfa kilitli değildir.",
   "levelAuto": "Otomatik",
@@ -45,7 +57,15 @@
   "level3": "İnce ayrıntı",
   "fullVersion": "Tam Sürüm",
   "fullVersionShort": "Bütün sayfaları aç",
-  "fullVersionDesc": "Ücretsiz sürümde her kategoriden 8 sayfa var. Tam Sürüm, 201 sayfanın hepsini bir kez ödemeyle sonsuza kadar açar. Abonelik yoktur. Çocuğunuzun boyadığı resimler her durumda Resimlerim'de kalır.",
+  "fullVersionDesc": "Ücretsiz sürümde her kategoriden 8 sayfa var. Tam Sürüm, {count} sayfanın hepsini bir kez ödemeyle sonsuza kadar açar. Abonelik yoktur. Çocuğunuzun boyadığı resimler her durumda Resimlerim'de kalır.",
+  "@fullVersionDesc": {
+    "description": "Full Version screen; count is the number of bundled coloring pages, read from the app",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "buy": "Satın al",
   "restorePurchases": "Satın alımları geri yükle",
   "familySharingNote": "Aile Paylaşımı ile en fazla 5 aile üyesiyle paylaşılır.",
