@@ -524,6 +524,15 @@ ul.tight li, ol.tight li { margin: 3px 0; }
 <p><strong>Mağaza metni.</strong> Bu özelliklerle çıkacak sürümün "Yenilikler" taslağı (TR ve EN) ve yeni sayılı tanıtım ve açıklama satırları <code>store_listing.md</code> dosyasında. App Store Connect'e dokunmadım; metin yalnız o sürümle girer.</p>
 <p><strong>Açık kalanlar:</strong> iPad'de Apple Pencil denemesi; P2 ve P3 için en eski iPad'de ve düşük donanımlı Android'de süre ölçümü; içerikle çıkan sürümde "Notes for Review" metni; on taslak dildeki yeni kategori adlarının yerli okuması.</p>
 <p><strong>Sonradan eklenen:</strong> Eserlerim'de VoiceOver eseri kayıtlı Türkçe adla okuyordu. Etiketi artık sayfanın kimliğinden, uygulamanın dilindeki adla üretiyorum; kayıtlı veri değişmedi. Uygulamadan kalkmış bir sayfanın eseri kayıtlı adıyla okunur. Ayrıca kendi üstüne geri dönen bir Pencil çizgisinde geniş neon katmanının sıfır uzunluklu parça üretebildiği bir uç durumu kapattım.</p>
+<p><strong>Bağımsız inceleme.</strong> Bir alt ajan faz9–11'in <code>lib/</code> farkını benim gerekçelerimi görmeden okudu. Çökme, geri al bozulması ya da kayıt hatası bulmadı. Dört düşük önemli bulgu getirdi. Her birini önce düşen bir testle doğruladım, sonra düzelttim:</p>
+<ul>
+<li><strong>Yeniden açılan resimde desen kayıyordu</strong> (<code>c9ee109</code>, master'da da vardı). Pastel tanesi, sprey ve simin dağılımı ilk noktadan tohumlanıyor; kayıt dosyası koordinatı onda bir piksele yuvarladığı için açılan resimde bütün noktalar yer değiştiriyordu. Noktalar artık çizilirken o ızgaraya yazılıyor.</li>
+<li><strong>Tamamlama, görünür kalan sprey noktalarının altına dolgu koyabiliyordu</strong> (<code>2477f28</code>). Başka fırçanın boyası yarım fırça boyuyla sayılıyordu; sprey, sim, pastel tanesi ve neon halesi daha uzağa ulaşıyor. Her fırça artık boyasının ulaştığı uzaklıkla sayılıyor.</li>
+<li><strong>İleri al, "bir daha tamamlama" işaretini kaldırmıyordu</strong> (<code>2477f28</code>). Silinip yeniden boyanan bölge sayfa açıkken bir daha tamamlanmıyordu.</li>
+<li><strong>Avuç kalemden önce değerse kalem çizmiyordu</strong> (<code>b57ad79</code>). Kalem artık önce değen avucu ya da parmağı devralıyor; kalem çizerken başka dokunuş yok sayılıyor, avuç ekranda dururken art arda çizgi çekilebiliyor. İki parmakla yakınlaştırma aynı. iPad'de denenmedi.</li>
+</ul>
+<p>Test sayısı 201, analiz temiz.</p>
+
 </div>
 
 </body>

@@ -62,9 +62,10 @@ Apple's Human Interface Guidelines (read the current pages; HIG changes every WW
   the automatic level counts different pages. A child's own "new paper" path needs its own vote.
 - Auto-complete (council, 5 Nov 2026, `lib/engine/document/auto_complete.dart`): only the marker on
   a coloring page; one colour over at least 85% of the region's measurable area (8 px clear of the
-  lines); no other brush paint and no second colour in the region; no white gap of a fingertip
+  lines); no other brush paint in the region, each brush counted as far as its paint reaches (spray, glitter,
+  pastel grain and neon glow go well past half the size), and no second colour; no white gap of a fingertip
   (1% of the page) left. Same reveal, sound and haptic as a tap fill; one undo step with its stroke;
-  an undone completion is not repeated while the page is open. Parents switch, on by default.
+  an undone completion is not repeated while the page is open (redo lifts that hold). Parents switch, on by default.
 - Apple Pencil pressure (council, 5 Nov 2026, `lib/engine/render/pressure_outline.dart`): only
   Büyük, only a stylus on iOS, only the marker, the pastel and the neon. The third value of every
   point is the force / 2 rounded to the tenth (0.5 = a finger, so an average touch is the finger
@@ -72,6 +73,10 @@ Apple's Human Interface Guidelines (read the current pages; HIG changes every WW
   pressure is one filled outline per layer, so the neon keeps its 14 draw calls. Minik, fingers and
   the other brushes store 0.5 and draw as before. No button, menu, slider or setting for it; a new
   brush only replaces a Büyük state as a concrete candidate with its own vote.
+- Pen versus palm (5 Nov 2026, `CanvasGestureMachine`): a pen takes over from a palm or finger that
+  landed first and drops what it started; while the pen draws every other touch is ignored; two
+  fingers still pinch. Stroke points go in on the tenth-pixel grid the saved file keeps, because the
+  scatter of the pastel, spray and glitter is seeded by the first point.
 - Rejected on 5 Nov 2026: partly coloured pages (3/5), step-by-step drawing (0/5, veto for Minik;
   a Büyük-only proposal may come back), advertising for users without the Full Version (0/5, five
   vetoes: Kids rule 1.3, the "no ads" promise, the network-free design).
