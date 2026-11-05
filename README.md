@@ -117,8 +117,10 @@ takıma aittir: uygulama MUAZ COBAN takımında olduğu için o takımın kotas�
    "TestFlight Internal Testing" ekle. Edit Workflow'da sonraki derleme numarasını 6 yap: Xcode Cloud
    arşivin derleme numarasını kendi sayacından verir, pubspec'teki numara kullanılmaz. Complete; ilk
    derleme 25-35 dakika sürer, sonuç App Store Connect > Xcode Cloud ve TestFlight sekmelerinde görünür.
-5. Sonraki yüklemeler: `master`'a her push derlenir; sürüm adı (2.1.0) `pubspec.yaml`'dan gelir, derleme
-   numarasını Xcode Cloud artırır.
+5. Sonraki yüklemeler: iş akışı (Xcode 26.6) yalnız etiket değişikliğinde derler, `master`'a push
+   derleme başlatmaz. Sürüm çıkarken `pubspec.yaml`'daki sürüm adını artır, PR'ı merge et, sonra
+   `git tag v2.2.0 && git push origin v2.2.0`. Sürüm adı `pubspec.yaml`'dan gelir, derleme numarasını
+   Xcode Cloud artırır (2.1.1 derleme 8 ile çıktı). Derleme bitince TestFlight'taki "Tester" grubuna düşer.
 
 ### Yerel Xcode 26 ile (yedek yol)
 
