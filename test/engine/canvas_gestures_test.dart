@@ -118,6 +118,75 @@ void main() {
     });
   });
 
+  group('a pen (Apple Pencil)', () {
+    test('wins over a palm that landed first, and the palm\'s line goes away', () {
+      for (final zoom in [false, true]) {
+        final log = _Log();
+        final machine = CanvasGestureMachine(callbacks: log.callbacks, tool: CanvasTool.marker, allowTransform: zoom);
+
+        machine.pointerDown(1, const Offset(300, 400), ms(0)); // the palm
+        machine.pointerMove(1, const Offset(305, 402), ms(100));
+        machine.pointerDown(2, const Offset(50, 50), ms(400), stylus: true);
+        machine.pointerMove(2, const Offset(90, 60), ms(420));
+        machine.pointerCancel(1); // iPadOS recognises the palm late
+        machine.pointerMove(2, const Offset(130, 70), ms(440));
+        machine.pointerUp(2, const Offset(140, 70), ms(460));
+        machine.pointerUp(1, const Offset(305, 402), ms(480));
+
+        expect(log.events.where((e) => e == 'strokeStart'), hasLength(2), reason: 'zoom $zoom');
+        expect(log.events.indexOf('strokeCancel'), lessThan(log.events.lastIndexOf('strokeStart')), reason: 'zoom $zoom');
+        expect(log.events.last, 'strokeEnd', reason: 'the pen\'s line is committed (zoom $zoom)');
+        expect(log.events, isNot(contains('transformStart')));
+        expect(machine.isIdle, isTrue);
+      }
+    });
+
+    test('a palm landing right after the pen neither pinches nor stops it', () {
+      final log = _Log();
+      final machine = CanvasGestureMachine(callbacks: log.callbacks, tool: CanvasTool.marker, allowTransform: true);
+
+      machine.pointerDown(1, const Offset(50, 50), ms(0), stylus: true);
+      machine.pointerDown(2, const Offset(300, 400), ms(30)); // inside the pinch window
+      machine.pointerMove(1, const Offset(90, 60), ms(60));
+      machine.pointerMove(2, const Offset(320, 420), ms(70));
+      machine.pointerUp(1, const Offset(100, 60), ms(90));
+
+      expect(log.events, isNot(contains('strokeCancel')));
+      expect(log.events, isNot(contains('transformStart')));
+      expect(log.events.last, 'strokeEnd');
+    });
+
+    test('draws line after line while the palm stays on the screen', () {
+      final log = _Log();
+      final machine = CanvasGestureMachine(callbacks: log.callbacks, tool: CanvasTool.marker, allowTransform: true);
+
+      machine.pointerDown(1, const Offset(300, 400), ms(0)); // the palm
+      for (var k = 0; k < 3; k++) {
+        final pen = 10 + k;
+        final t0 = 300 + k * 200;
+        machine.pointerDown(pen, Offset(50, 50.0 + k * 20), ms(t0), stylus: true);
+        machine.pointerMove(pen, Offset(120, 50.0 + k * 20), ms(t0 + 40));
+        machine.pointerUp(pen, Offset(130, 50.0 + k * 20), ms(t0 + 80));
+      }
+
+      expect(log.events.where((e) => e == 'strokeEnd'), hasLength(3));
+    });
+
+    test('does not break into a two-finger pinch', () {
+      final log = _Log();
+      final machine = CanvasGestureMachine(callbacks: log.callbacks, allowTransform: true);
+
+      machine.pointerDown(1, const Offset(100, 100), ms(0));
+      machine.pointerDown(2, const Offset(200, 200), ms(50));
+      machine.pointerDown(3, const Offset(150, 300), ms(120), stylus: true);
+      machine.pointerMove(2, const Offset(240, 240), ms(150));
+
+      expect(log.events.first, 'transformStart');
+      expect(log.events, isNot(contains('fill')));
+      expect(log.events, isNot(contains('strokeStart')));
+    });
+  });
+
   test('a cancelled pointer never commits a stroke', () {
     final log = _Log();
     final machine = CanvasGestureMachine(callbacks: log.callbacks, tool: CanvasTool.eraser);

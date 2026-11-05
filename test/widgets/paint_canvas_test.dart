@@ -152,6 +152,17 @@ void main() {
     expect(document.strokes.single.hasPressure, isFalse, reason: 'the rainbow brush');
   }, variant: TargetPlatformVariant.only(TargetPlatform.iOS));
 
+  testWidgets('a pen wins over a palm that landed first', (tester) async {
+    await pumpCanvas(tester, tool: CanvasTool.marker, allowZoom: true);
+    await tester.sendEventToBinding(PointerDownEvent(pointer: 3, position: at(tester, 150, 50)));
+    await tester.sendEventToBinding(PointerMoveEvent(pointer: 3, position: at(tester, 160, 55), timeStamp: const Duration(milliseconds: 100)));
+    await drawWith(tester, pencilPath);
+    await tester.sendEventToBinding(PointerCancelEvent(pointer: 3));
+    await tester.pump();
+    final stroke = document.strokes.single;
+    expect(stroke.clipLabel, left(), reason: 'the pen\'s line, not the palm\'s');
+  });
+
   testWidgets('a stylus on Android keeps the brush width', (tester) async {
     await pumpCanvas(tester, tool: CanvasTool.marker, penPressure: true);
     await drawWith(tester, pencilPath);

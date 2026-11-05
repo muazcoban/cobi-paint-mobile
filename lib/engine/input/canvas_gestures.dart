@@ -41,6 +41,9 @@ enum _State { idle, fillPending, strokePending, stroking, transforming, ignoring
 ///   of movement or [strokeDelay]; a second finger inside
 ///   [secondFingerWindow] turns it into a pinch instead (zoom modes only).
 /// * A cancelled pointer (system gesture, palm rejection) never commits.
+/// * A pen (Apple Pencil) wins over a palm or finger that landed first, and
+///   while it draws every other touch is ignored, so a hand resting on the
+///   screen neither steals nor pinches the pen's line.
 ///
 /// Listener-based on purpose: it stays out of Flutter's gesture arena, so
 /// there is no pan slop that swallows the start of a stroke.
@@ -66,6 +69,7 @@ class CanvasGestureMachine {
   _State _state = _State.idle;
   final Map<int, Offset> _pointers = {};
   int? _primary;
+  bool _primaryIsStylus = false;
   Offset _downPosition = Offset.zero;
   Duration _downTime = Duration.zero;
 
@@ -76,30 +80,25 @@ class CanvasGestureMachine {
 
   bool get isIdle => _state == _State.idle;
 
-  void pointerDown(int pointer, Offset position, Duration time) {
+  /// [stylus] marks a pen; see the class comment for how it outranks touch.
+  void pointerDown(int pointer, Offset position, Duration time, {bool stylus = false}) {
     final isFirst = _pointers.isEmpty;
+    final penDrawing = _primaryIsStylus && _primary != null && _pointers.containsKey(_primary);
     _pointers[pointer] = position;
 
     if (isFirst) {
-      _primary = pointer;
-      _downPosition = position;
-      _downTime = time;
-      switch (tool) {
-        case CanvasTool.fill:
-          if (allowTransform) {
-            _state = _State.fillPending;
-          } else {
-            callbacks.onFill(position);
-            _state = _State.ignoring;
-          }
-        case CanvasTool.marker:
-        case CanvasTool.eraser:
-        case CanvasTool.sticker:
-          callbacks.onStrokeStart(position);
-          _state = _State.strokePending;
-      }
+      _begin(pointer, position, time, stylus);
       return;
     }
+
+    if (stylus && !penDrawing && _state != _State.transforming) {
+      // The pen takes over from a palm or finger that landed first: what that
+      // touch started is dropped and the pen starts afresh.
+      if (_state == _State.strokePending || _state == _State.stroking) callbacks.onStrokeCancel();
+      _begin(pointer, position, time, true);
+      return;
+    }
+    if (penDrawing) return; // A palm or finger next to the pen does nothing.
 
     if (!allowTransform) return; // Minik mode: extra fingers and palms do nothing.
     final early = time - _downTime <= secondFingerWindow;
@@ -111,6 +110,28 @@ class CanvasGestureMachine {
         _startTransform(_primary!, pointer);
       default:
         break; // A finger or palm landing mid-stroke is ignored.
+    }
+  }
+
+  /// Makes [pointer] the one that paints, fills or pans.
+  void _begin(int pointer, Offset position, Duration time, bool stylus) {
+    _primary = pointer;
+    _primaryIsStylus = stylus;
+    _downPosition = position;
+    _downTime = time;
+    switch (tool) {
+      case CanvasTool.fill:
+        if (allowTransform) {
+          _state = _State.fillPending;
+        } else {
+          callbacks.onFill(position);
+          _state = _State.ignoring;
+        }
+      case CanvasTool.marker:
+      case CanvasTool.eraser:
+      case CanvasTool.sticker:
+        callbacks.onStrokeStart(position);
+        _state = _State.strokePending;
     }
   }
 
@@ -187,6 +208,7 @@ class CanvasGestureMachine {
     if (_pointers.isEmpty) {
       _state = _State.idle;
       _primary = null;
+      _primaryIsStylus = false;
       _first = null;
       _second = null;
     }

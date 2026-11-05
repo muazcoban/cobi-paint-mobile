@@ -492,7 +492,8 @@ class _PaintCanvasState extends State<PaintCanvas> with SingleTickerProviderStat
 
   void _onPointerDown(PointerDownEvent e) {
     _eventPressure = _lastPressure[e.pointer] = _pressureOf(e);
-    _gestures.pointerDown(e.pointer, e.localPosition, e.timeStamp);
+    final pen = e.kind == ui.PointerDeviceKind.stylus || e.kind == ui.PointerDeviceKind.invertedStylus;
+    _gestures.pointerDown(e.pointer, e.localPosition, e.timeStamp, stylus: pen);
   }
 
   void _onPointerMove(PointerMoveEvent e) {
