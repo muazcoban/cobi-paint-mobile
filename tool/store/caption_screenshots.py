@@ -31,7 +31,7 @@ FRAMES = [
     ("03", "Boya çizgiden taşmaz", "Paint stays in the lines"),
     ("07", "Biten resim kutlanır", "Finish a page, get confetti"),
     ("05", "Fırçalar, çıkartmalar, ayna", "Brushes, stickers, mirror"),
-    ("01", "9 kategori, 310 sayfa", "310 pages, 9 categories"),
+    ("01", "9 kategori, 323 sayfa", "323 pages, 9 categories"),
     ("04", "Kendiliğinden kaydedilir", "Saves itself, nothing lost"),
     ("06", "Ayarlar ebeveyn kapısının ardında", "Settings behind a parent gate"),
 ]

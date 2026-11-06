@@ -900,6 +900,14 @@
    "subgroup": "food-vegetable"
   },
   {
+   "code": "1f343",
+   "name": "leaf fluttering in wind",
+   "nameTr": "rüzgârda yapraklar",
+   "nameEn": "leaves in the wind",
+   "category": "plants",
+   "subgroup": "plant-other"
+  },
+  {
    "code": "1f32d",
    "name": "hot dog",
    "nameTr": "sosisli sandviç",
@@ -1773,6 +1781,38 @@
    "subgroup": "sky & weather"
   },
   {
+   "code": "2614",
+   "name": "umbrella with rain drops",
+   "nameTr": "yağmurda şemsiye",
+   "nameEn": "umbrella in the rain",
+   "category": "nature",
+   "subgroup": "sky & weather"
+  },
+  {
+   "code": "1f3d4",
+   "name": "snow-capped mountain",
+   "nameTr": "karlı dağ",
+   "nameEn": "snowy mountain",
+   "category": "nature",
+   "subgroup": "place-geographic"
+  },
+  {
+   "code": "1f3dc",
+   "name": "desert",
+   "nameTr": "çöl",
+   "nameEn": "desert",
+   "category": "nature",
+   "subgroup": "place-geographic"
+  },
+  {
+   "code": "1f3de",
+   "name": "national park",
+   "nameTr": "dağ ve göl",
+   "nameEn": "mountain lake",
+   "category": "nature",
+   "subgroup": "place-geographic"
+  },
+  {
    "code": "1f380",
    "name": "ribbon",
    "nameTr": "kurdele",
@@ -2141,6 +2181,38 @@
    "subgroup": "writing"
   },
   {
+   "code": "1f3a1",
+   "name": "ferris wheel",
+   "nameTr": "dönme dolap",
+   "nameEn": "Ferris wheel",
+   "category": "things",
+   "subgroup": "place-other"
+  },
+  {
+   "code": "1f3a2",
+   "name": "roller coaster",
+   "nameTr": "hız treni",
+   "nameEn": "roller coaster",
+   "category": "things",
+   "subgroup": "place-other"
+  },
+  {
+   "code": "1f579",
+   "name": "joystick",
+   "nameTr": "oyun kolu",
+   "nameEn": "joystick",
+   "category": "things",
+   "subgroup": "game"
+  },
+  {
+   "code": "1f3ae",
+   "name": "video game",
+   "nameTr": "oyun kumandası",
+   "nameEn": "game controller",
+   "category": "things",
+   "subgroup": "game"
+  },
+  {
    "code": "1f30d",
    "name": "globe showing europe-africa",
    "nameTr": "Dünya",
@@ -2251,6 +2323,14 @@
    "category": "space",
    "subgroup": "event",
    "free": true
+  },
+  {
+   "code": "1f30c",
+   "name": "milky way",
+   "nameTr": "Samanyolu",
+   "nameEn": "Milky Way",
+   "category": "space",
+   "subgroup": "sky & weather"
   },
   {
    "code": "1f399",
@@ -2387,6 +2467,14 @@
    "category": "music",
    "subgroup": "musical-instrument",
    "free": true
+  },
+  {
+   "code": "1f4ef",
+   "name": "postal horn",
+   "nameTr": "boru",
+   "nameEn": "horn",
+   "category": "music",
+   "subgroup": "sound"
   },
   {
    "code": "1f392",
@@ -2585,6 +2673,22 @@
    "name": "thong sandal",
    "nameTr": "terlik",
    "nameEn": "flip-flop",
+   "category": "clothes",
+   "subgroup": "clothing"
+  },
+  {
+   "code": "1f454",
+   "name": "necktie",
+   "nameTr": "kravat",
+   "nameEn": "necktie",
+   "category": "clothes",
+   "subgroup": "clothing"
+  },
+  {
+   "code": "1f97c",
+   "name": "lab coat",
+   "nameTr": "önlük",
+   "nameEn": "lab coat",
    "category": "clothes",
    "subgroup": "clothing"
   }

@@ -96,7 +96,7 @@ ul.tight li, ol.tight li { margin: 3px 0; }
 <div class="wrap">
 <header class="top">
   <h1>Kaydırma ve Dokunuş Düzeltmesi</h1>
-  <div class="meta">5 Kasım 2026 · branch <code>claude/faz10-kaydirma-dokunus</code> (master <code>deaa77f</code> üstüne) · Push yok, PR yok</div>
+  <div class="meta">5–6 Kasım 2026 · kaydırma düzeltmesi ve 3 sayfa: <code>claude/faz10-kaydirma-dokunus</code> (master <code>deaa77f</code> üstüne, 2.2.0'a birleşti) · 13 sayfa: <code>claude/faz10-ek-sayfalar</code> (<code>release/2.2.0</code> <code>da898e9</code> üstüne, push yok)</div>
 </header>
 
 <nav class="toc">
@@ -107,7 +107,7 @@ ul.tight li, ol.tight li { margin: 3px 0; }
     <li><a href="#duzeltme">Düzeltme ve testler</a></li>
     <li><a href="#ekran">Simülatör</a></li>
     <li><a href="#hig">3 yaş ve HIG denetimi</a></li>
-    <li><a href="#aday">Master'da olmayan 18 aday konu</a></li>
+    <li><a href="#aday">Master'da olmayan 18 aday konu ve eklenen 16 sayfa</a></li>
     <li><a href="#acik">Açık kalan işler</a></li>
   </ol>
 </nav>
@@ -118,7 +118,7 @@ ul.tight li, ol.tight li { margin: 3px 0; }
   <ul>
     <li><b>Görevin şartları master'da karşılanıyor:</b> Uzay 13, Müzik 16, Giysiler 24 sayfa; doğa 27, bitkiler 24; her kategoride 8 ücretsiz sayfa; URL hatası düzeltilmiş; Tam Sürüm metni sayıyı paketten okuyor; rapor <code>plan/icerik-genisletme-2026-11-05.html</code>.</li>
     <li><b>Karşılanmayan tek şart</b> "kaydırmayla erişilebilir kalsın" idi. 9 kategori telefonda tek ekrana sığmıyor ve kaydırma, parmağın altındaki kartı açıyordu. Bu dal bunu düzeltiyor.</li>
-    <li><b>Ek içerik (6 Kasım):</b> 3 sayfa eklendi (kestane, kapalı şemsiye, fırça); toplam 310. PR #10'un elediği 13 aday eklenmedi (bölüm 7).</li>
+    <li><b>Ek içerik (6 Kasım):</b> önce 3 sayfa eklendi (kestane, kapalı şemsiye, fırça; toplam 310). Kullanıcı PR #10'un elediği 13 adayı da istedi; onlar da eklendi ve toplam 323 oldu (bölüm 7). Bu 13 sayfa <code>release/2.2.0</code> üstünden açılan <code>claude/faz10-ek-sayfalar</code> dalında.</li>
     <li><b>Kalite:</b> <code>flutter analyze</code> temiz; <code>flutter test</code> 206 testin hepsi geçti. Yeni 3 test düzeltme olmadan düşüyor, düzeltmeyle geçiyor.</li>
     <li><b>Simülatör:</b> CobiPaint iPhone'da master ve düzeltmeyle denedim. Ana ekranda ve Uzay ızgarasında kart üstünden kaydırma kartı açmadı; dokunuş Uzay'ı ve parıltı sayfasını açtı.</li>
   </ul>
@@ -180,28 +180,42 @@ ul.tight li, ol.tight li { margin: 3px 0; }
 <tr><td>iPad, Android</td><td><span class="badge b-p1">Doğrulanmadı</span></td><td>CobiPaint iPad başka oturumda; CobiPaint_Pixel bu oturumda açılmadı. Değişiklik platformdan bağımsız Flutter kodu.</td></tr>
 </tbody></table></div>
 
-<h2 id="aday">7. Master'da olmayan 18 aday konu</h2>
-<p>Kullanıcı 6 Kasım'da "ekle" dedi. Eklemeden önce PR #10'un raporuna (<code>plan/icerik-genisletme-2026-11-05.html</code>, bölüm 5) baktım. 18 adaydan 13'ünü o oturum gerekçe yazarak elemiş. Bu 13 konuyu eklemedim. PR #10'un ölçütlerine uyan 3 konuyu ekledim ve sayfa sayısı 307'den 310'a çıktı. Bütün adaylar sayfa denetimini geçiyor; eleme gerekçeleri çocuğun sayfayı tanıması ve boyayabilmesiyle ilgili.</p>
+<h2 id="aday">7. Master'da olmayan 18 aday konu ve eklenen 16 sayfa</h2>
+<p>Kullanıcı 6 Kasım'da "ekle" dedi. Önce PR #10'un raporuna (<code>plan/icerik-genisletme-2026-11-05.html</code>, bölüm 5) baktım: 18 adaydan 13'ünü o oturum gerekçe yazarak elemişti. İlk turda yalnız PR #10'un ölçütlerine uyan 3 konuyu ekledim (307 → 310). Kullanıcı gerekçeleri okuduktan sonra "yine de ekle" dedi; elenen 13 konuyu da ekledim (310 → 323). Masa zili ve yıldızlı gece bu 13'ün içinde değil, eklenmedi. Bütün sayfalar sayfa denetimini geçiyor (13 sayfa, 0 sorun); eleme gerekçeleri çocuğun sayfayı tanıması ve boyayabilmesiyle ilgiliydi.</p>
 <div class="table-wrap"><table>
-<thead><tr><th>Konu (seviye)</th><th>Karar</th><th>Gerekçe</th></tr></thead>
+<thead><tr><th>Konu</th><th>Seviye</th><th>Kategori</th><th>Bölge</th><th>Karar</th><th>Gerekçe ya da PR #10'un eleme nedeni</th></tr></thead>
 <tbody>
-<tr><td>Kestane (1)</td><td><span class="badge b-p2">Eklendi</span>, Bitkiler</td><td>PR #10'da yok; tek parça, büyük alanlı.</td></tr>
-<tr><td>Kapalı şemsiye (1)</td><td><span class="badge b-p2">Eklendi</span>, Doğa</td><td>Mevcut açık şemsiyeden farklı bir çizim.</td></tr>
-<tr><td>Fırça (1)</td><td><span class="badge b-p2">Eklendi</span>, Eşyalar</td><td>Eşyalar'daki boya paleti ve pastel boyanın yanına.</td></tr>
-<tr><td>Masa zili (1)</td><td><span class="badge b-p1">Eklenmedi</span></td><td>Müzik'te zaten "Zil" sayfası var.</td></tr>
-<tr><td>Yıldızlı gece (3)</td><td><span class="badge b-p1">Eklenmedi</span></td><td>Çerçeveli, 25 bölgeli kalabalık sahne. PR #10, Çöl ve Milli park'ı bu gerekçeyle eledi.</td></tr>
-<tr><td>Samanyolu (2), dağ ve göl (2), çöl (3)</td><td><span class="badge b-p0">PR #10 eledi</span></td><td>Çerçeveli, soyut ya da kalabalık sahne; küçük çocuk tanımaz.</td></tr>
-<tr><td>Karlı dağ (1), yağmurda şemsiye (2), rüzgârda yapraklar (2)</td><td><span class="badge b-p0">PR #10 eledi</span></td><td>Mevcut Dağ, Şemsiye ve Sonbahar yaprakları sayfalarının tekrarı.</td></tr>
-<tr><td>Dönme dolap (3), hız treni (3)</td><td><span class="badge b-p0">PR #10 eledi</span></td><td>65 ve 29 bölge; ince çizgiler parmakla boyanamayacak kadar dar alan bırakıyor.</td></tr>
-<tr><td>Oyun kolu (1), oyun kumandası (2)</td><td><span class="badge b-p0">PR #10 eledi</span></td><td>Ekran çağrışımı.</td></tr>
-<tr><td>Kravat (3), önlük (2), boru (1)</td><td><span class="badge b-p0">PR #10 eledi</span></td><td>Küçük çocuğun giydiği ya da tanıdığı bir şey değil.</td></tr>
+<tr><td>Kestane</td><td class="num">1</td><td>Bitkiler</td><td class="num"></td><td><span class="badge b-p2">Eklendi</span></td><td>PR #10'da yok; tek parça, büyük alanlı.</td></tr>
+<tr><td>Kapalı şemsiye</td><td class="num">1</td><td>Doğa</td><td class="num"></td><td><span class="badge b-p2">Eklendi</span></td><td>Mevcut açık şemsiyeden farklı bir çizim.</td></tr>
+<tr><td>Fırça</td><td class="num">1</td><td>Eşyalar</td><td class="num"></td><td><span class="badge b-p2">Eklendi</span></td><td>Eşyalar'daki boya paleti ve pastel boyanın yanına.</td></tr>
+<tr><td>Samanyolu</td><td class="num">2</td><td>Uzay</td><td class="num">11</td><td><span class="badge b-p1">Kullanıcı kararıyla eklendi</span></td><td>PR #10: çerçeveli, soyut gökyüzü karosu.</td></tr>
+<tr><td>Dağ ve göl</td><td class="num">2</td><td>Doğa</td><td class="num">8</td><td><span class="badge b-p1">Kullanıcı kararıyla eklendi</span></td><td>PR #10: çerçeveli, soyut manzara.</td></tr>
+<tr><td>Çöl</td><td class="num">3</td><td>Doğa</td><td class="num">26</td><td><span class="badge b-p1">Kullanıcı kararıyla eklendi</span></td><td>PR #10: kalabalık, çerçeveli sahne; kaktüs Bitkiler'de var.</td></tr>
+<tr><td>Karlı dağ</td><td class="num">1</td><td>Doğa</td><td class="num">4</td><td><span class="badge b-p1">Kullanıcı kararıyla eklendi</span></td><td>PR #10: Dağ'la aynı çizim. Ölçtüm: piksellerin %6'sı farklı, yalnız kar çizgisi değişiyor.</td></tr>
+<tr><td>Yağmurda şemsiye</td><td class="num">2</td><td>Doğa</td><td class="num">9</td><td><span class="badge b-p1">Kullanıcı kararıyla eklendi</span></td><td>PR #10: Şemsiye'nin damlalı hâli.</td></tr>
+<tr><td>Rüzgârda yapraklar</td><td class="num">2</td><td>Bitkiler</td><td class="num">8</td><td><span class="badge b-p1">Kullanıcı kararıyla eklendi</span></td><td>PR #10: Sonbahar yaprakları'nın rüzgâr çizgili hâli.</td></tr>
+<tr><td>Dönme dolap</td><td class="num">3</td><td>Eşyalar</td><td class="num">65</td><td><span class="badge b-p1">Kullanıcı kararıyla eklendi</span></td><td>PR #10: sayfanın %19'u mürekkep, alanlar dar.</td></tr>
+<tr><td>Hız treni</td><td class="num">3</td><td>Eşyalar</td><td class="num">29</td><td><span class="badge b-p1">Kullanıcı kararıyla eklendi</span></td><td>PR #10: ince dikmeler dar alanlar bırakıyor.</td></tr>
+<tr><td>Oyun kolu</td><td class="num">1</td><td>Eşyalar</td><td class="num">7</td><td><span class="badge b-p1">Kullanıcı kararıyla eklendi</span></td><td>PR #10: ekran çağrışımı.</td></tr>
+<tr><td>Oyun kumandası</td><td class="num">2</td><td>Eşyalar</td><td class="num">11</td><td><span class="badge b-p1">Kullanıcı kararıyla eklendi</span></td><td>PR #10: ekran çağrışımı.</td></tr>
+<tr><td>Kravat</td><td class="num">3</td><td>Giysiler</td><td class="num">17</td><td><span class="badge b-p1">Kullanıcı kararıyla eklendi</span></td><td>PR #10: çerçeveli gömlek ve kravat; küçük çocuğun giydiği bir şey değil.</td></tr>
+<tr><td>Önlük</td><td class="num">2</td><td>Giysiler</td><td class="num">10</td><td><span class="badge b-p1">Kullanıcı kararıyla eklendi</span></td><td>PR #10: laboratuvar önlüğü, küçük çocuğun tanıdığı bir şey değil.</td></tr>
+<tr><td>Boru</td><td class="num">1</td><td>Müzik</td><td class="num">7</td><td><span class="badge b-p1">Kullanıcı kararıyla eklendi</span></td><td>PR #10: posta borusu, küçük çocuğun tanıdığı bir şey değil.</td></tr>
+<tr><td>Masa zili</td><td class="num">1</td><td></td><td class="num"></td><td><span class="badge b-p0">Eklenmedi</span></td><td>Müzik'te zaten "Zil" sayfası var. 13'ün içinde değil.</td></tr>
+<tr><td>Yıldızlı gece</td><td class="num">3</td><td></td><td class="num"></td><td><span class="badge b-p0">Eklenmedi</span></td><td>Çerçeveli, 25 bölgeli kalabalık sahne. 13'ün içinde değil.</td></tr>
 </tbody></table></div>
 <figure style="max-width:360px;margin:12px 0"><img src="img/kaydirma-5-kestane.jpg" alt="Bitkiler kategorisinde Kestane"><figcaption>Bitkiler: Kestane, 1. seviye grubunun sonunda (sol alt). Ekran bir kartın üstünden kaydırıldı, kart açılmadı.</figcaption></figure>
-<p>Yeni üç sayfa ücretli tarafta: her kategoride tam 8 ücretsiz sayfa kuralı ve "bir kez ücretsiz olan ücretsiz kalır" kuralı değişmedi. Sayfalar kategorilerinin sonuna eklendi, mevcut sayfalar yerinde kaldı.</p>
+<figure style="max-width:640px;margin:12px 0"><img src="img/ek-13-sayfa.jpg" alt="Eklenen 13 sayfa ve benzedikleri üç mevcut sayfa"><figcaption>Eklenen 13 sayfa. "(var)" yazanlar uygulamada zaten olan ve PR #10'un tekrar saydığı sayfalar: Sonbahar yaprakları, Şemsiye, Dağ.</figcaption></figure>
+<p>Simülatörde (CobiPaint iPhone, <code>release/2.2.0</code> ve 13 sayfa, İngilizce, Minik) Eşyalar'ı açtım. Oyun kumandası 2. seviye grubunun sonunda, Dönme dolap ve Hız treni listenin en sonunda. Dönme dolap'ta göbek ve üst kabin tek dokunuşla doldu. Göbeğin altına yaptığım dokunuş teller arasındaki ince bir şeridi boyadı: sayfa çalışıyor, ama bu bölgelerde çocuğun boyadığı alan zor görünür. PR #10'un eleme nedeni buydu. Boyamaları geri aldım.</p>
+<div style="display:flex;gap:12px;flex-wrap:wrap;margin:12px 0"><figure style="max-width:240px;margin:0"><img src="img/ek-sayfa-esyalar-son.jpg" alt="Eşyalar listesinin sonu"><figcaption>Eşyalar'ın sonu: Dönme dolap ve Hız treni.</figcaption></figure><figure style="max-width:240px;margin:0"><img src="img/ek-sayfa-donme-dolap.jpg" alt="Dönme dolapta üç dokunuş"><figcaption>Göbek kırmızı, üst kabin mavi; göbeğin altında teller arasındaki ince mavi şerit.</figcaption></figure></div>
+<p>Yeni 16 sayfanın hepsi ücretli tarafta: her kategoride tam 8 ücretsiz sayfa kuralı ve "bir kez ücretsiz olan ücretsiz kalır" kuralı değişmedi. Sayfalar kategorilerinin sonuna eklendi, mevcut sayfalar ve PNG dosyaları değişmedi. Seviye dağılımı 1: 136, 2: 116, 3: 71. Kategoriler: Hayvanlar 82, Yiyecekler 45, Araçlar 32, Doğa 32, Bitkiler 26, Eşyalar 49, Uzay 14, Müzik 17, Giysiler 26. Dönme dolap, Çöl, Hız treni ve Kravat 3. seviyede. Minik modda kendiliğinden ulaşılan en yüksek düzey 2 olduğu için bu dört sayfa küçük çocuğun kategori listesinde en sonda durur (<code>lib/data/page_order.dart</code>).</p>
 
 <h2 id="acik">8. Açık kalan işler</h2>
 <ul class="tight">
-  <li><b>Karar:</b> PR #10'un elediği 13 konu yine de eklensin mi? Önerim hayır; gerekçeler bölüm 7'de.</li>
+  <li><b>2.2.0'a girmesi:</b> Kullanıcı 6 Kasım sabahı "PR #11'e ekle" dedi. <a href="https://github.com/muazcoban/cobi-paint-mobile/pull/11">muazcoban/cobi-paint-mobile#11</a> o sırada, 07:08'de merge edilmişti (master <code>4bcb9e9</code>); <code>v2.2.0</code> etiketi henüz yok. Kullanıcı ardından "PR aç" dedi: sayfalar <code>claude/faz10-ek-sayfalar</code> → master ayrı bir PR ile gidiyor; dal bugünkü master'la çakışmasız birleşiyor. <code>v2.2.0</code> etiketi bu PR merge edildikten sonra atılmalı; önce atılırsa 2.2.0 bu sayfalar olmadan derlenir. Merge'den sonra dört mağaza setinin ana ekran karesi (<code>05_home.png</code>) 323 başlığıyla değiştirilir ve <code>surum-220-gorseller.zip</code> yenilenir. <code>store_listing.md</code>'deki 2.2.0 metinleri 323 sayfaya göre güncellendi; tanıtım metinlerinin uzunluğu aynı (163 ve 166).</li>
+  <li><b>Mağaza görselleri:</b> 2.2.0 setlerinin ana ekran karesinin başlığında "9 kategori, 310 sayfa" yazıyor. <code>tool/store/caption_screenshots.py</code>'deki başlığı 323 yaptım; <code>build/store_screenshots/*_220_secili_captioned</code> setleri bu betikle yeniden üretilmeli. O klasörler ana checkout'ta ve repoda değil; onlara dokunmadım.</li>
+  <li><b>2.2.0 belgeleri:</b> <code>plan/cobi-paint-yeniden-dogus-plani.html</code> (satır 196) ve gece raporu bölüm 22 hâlâ 310 diyor. O belgeler 2.2.0'ı hazırlayan oturumun; değiştirmedim.</li>
+  <li><b>Sonraki sürüme kalırsa:</b> <code>store_listing.md</code>'deki "2.2.0'da" notları ve sayılar o sürüme göre yeniden yazılmalı.</li>
   <li><b>Eski dal:</b> <code>claude/faz10-icerik-kategoriler-48e4bf</code> birleştirilmemeli; istenirse silinebilir.</li>
   <li><b>Doğrulanmayanlar:</b> iPad, Android, yatay telefon ve 320 pt Split View.</li>
 </ul>
