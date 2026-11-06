@@ -7,6 +7,7 @@ import 'package:in_app_purchase/in_app_purchase.dart';
 import '../data/builtin_images.dart';
 import '../l10n/app_localizations.dart';
 import '../services/purchase_service.dart';
+import '../widgets/one_line_label.dart';
 import 'parents_screen.dart';
 
 /// The only place a price is ever shown: one screen behind the parental
@@ -65,7 +66,7 @@ class _FullVersionScreenState extends State<FullVersionScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.fullVersion)),
+      appBar: AppBar(title: OneLineLabel(l10n.fullVersion)),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),
         children: [

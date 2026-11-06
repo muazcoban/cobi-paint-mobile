@@ -12,6 +12,7 @@ import '../services/export_service.dart';
 import '../services/share_service.dart';
 import '../services/sound_service.dart';
 import '../widgets/kid_button.dart';
+import '../widgets/one_line_label.dart';
 import '../widgets/parental_gate.dart';
 import 'coloring_screen.dart';
 import 'home_screen.dart' show gridColumns;
@@ -42,7 +43,7 @@ class MyArtworksScreen extends StatelessWidget {
                   ),
                   const SizedBox(width: 16),
                   Expanded(
-                    child: Text(
+                    child: OneLineLabel(
                       l10n.myArtworks,
                       style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w800, color: Color(0xFF2D3142)),
                     ),
