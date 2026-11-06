@@ -329,4 +329,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get canvasLabel => 'Coloring page';
+
+  @override
+  String get scene => 'Scene';
+
+  @override
+  String get sceneLabel => 'Scene: put the pieces in the picture';
 }

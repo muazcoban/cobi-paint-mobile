@@ -715,6 +715,18 @@ abstract class AppLocalizations {
   /// In tr, this message translates to:
   /// **'Boyama sayfası'**
   String get canvasLabel;
+
+  /// Home card of the scene mode: put pieces (sun, house, tree) in a garden and colour them. Only in builds with COBI_SCENE.
+  ///
+  /// In tr, this message translates to:
+  /// **'Manzara'**
+  String get scene;
+
+  /// Screen reader label of the scene canvas
+  ///
+  /// In tr, this message translates to:
+  /// **'Manzara: parçaları resme koy'**
+  String get sceneLabel;
 }
 
 class _AppLocalizationsDelegate

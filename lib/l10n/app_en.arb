@@ -102,5 +102,7 @@
   "guidedAccessTitle": "Keep your child in the app",
   "guidedAccessText": "On iPhone and iPad use Guided Access: turn on Settings > Accessibility > Guided Access, then triple-click the side button (or the Home button on devices that have one) while the app is open. On Android use Settings > Security > App pinning.",
   "colorNames": "red,orange,yellow,green,blue,purple,pink,brown,black,light blue,light green,peach,light yellow,navy,dark green,grey",
-  "canvasLabel": "Coloring page"
+  "canvasLabel": "Coloring page",
+  "scene": "Scene",
+  "sceneLabel": "Scene: put the pieces in the picture"
 }

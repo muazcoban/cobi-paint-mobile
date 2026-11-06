@@ -3,7 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../l10n/app_localizations.dart';
+import '../data/builtin_scenes.dart';
 import '../data/free_pages.dart';
+import '../data/scene_gate.dart';
 import '../models/category.dart';
 import '../models/saved_artwork.dart';
 import '../providers/app_provider.dart';
@@ -16,6 +18,7 @@ import 'category_screen.dart';
 import 'coloring_screen.dart';
 import 'my_artworks_screen.dart';
 import 'parents_screen.dart';
+import 'scene_screen.dart';
 
 /// Columns for picture grids: big tiles on phones, more on tablets.
 int gridColumns(double width) => width >= 900 ? 4 : (width >= 560 ? 3 : 2);
@@ -66,8 +69,12 @@ class HomeScreen extends StatelessWidget {
                           delegate: SliverChildBuilderDelegate(
                             (context, index) => index == 0
                                 ? const _DrawCard()
-                                : _CategoryCard(category: provider.categories[index - 1]),
-                            childCount: provider.categories.length + 1,
+                                : index <= provider.categories.length
+                                    ? _CategoryCard(category: provider.categories[index - 1])
+                                    : const _SceneCard(),
+                            // The scene card comes last, after Clothes, and
+                            // only in builds with COBI_SCENE.
+                            childCount: provider.categories.length + 1 + (sceneModeBuilt ? 1 : 0),
                           ),
                         ),
                       ),
@@ -226,6 +233,71 @@ class _DrawCard extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+/// The scene mode's card (council P7): a white card like the categories,
+/// last on the grid. Whether it shows is up to scene_gate.dart: never in an
+/// App Store build until every word clip is bundled.
+class _SceneCard extends StatefulWidget {
+  const _SceneCard();
+
+  @override
+  State<_SceneCard> createState() => _SceneCardState();
+}
+
+class _SceneCardState extends State<_SceneCard> {
+  late final Future<bool> _visible = sceneCardVisible();
+
+  @override
+  Widget build(BuildContext context) {
+    final label = AppLocalizations.of(context)!.scene;
+    return FutureBuilder<bool>(
+      future: _visible,
+      builder: (context, snapshot) {
+        if (snapshot.data != true) return const SizedBox.shrink();
+        return PressableCard(
+          semanticLabel: label,
+          onTap: () {
+            SoundService().playClickSound();
+            sayName(context, 'scene');
+            Navigator.push(context, MaterialPageRoute(builder: (_) => const SceneScreen(scene: gardenScene)));
+          },
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(24),
+              boxShadow: [
+                BoxShadow(color: Colors.black.withValues(alpha: 0.08), blurRadius: 10, offset: const Offset(0, 4)),
+              ],
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Expanded(
+                  child: FittedBox(
+                    child: Padding(
+                      padding: EdgeInsets.all(12),
+                      child: Text('🏞️', style: TextStyle(fontSize: 72)),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(8, 0, 8, 14),
+                  child: Text(
+                    label,
+                    textAlign: TextAlign.center,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppTheme.textPrimary),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }
