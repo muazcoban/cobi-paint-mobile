@@ -81,6 +81,15 @@ Apple's Human Interface Guidelines (read the current pages; HIG changes every WW
   first coloured: "Çiçek… flower!" in Turkish, "Flower!" in English. No written word, no quiz, no
   score, no microphone in any version. Recorded human voice only (20 clips); behind `COBI_SCENE`, the
   card shows only when the clips are bundled. The store says what happens, never "teaches English".
+- Scene prototype (6 Nov 2026, branch `faz12/manzara-prototip`, `lib/screens/scene_screen.dart`):
+  placement only, for the first observation round. `COBI_SCENE` empty = no card (every App Store
+  build); `true` = card only with all 20 clips (`lib/data/scene_gate.dart`); `observation` = card
+  without clips, never for the App Store. Slots and pieces come from `tool/scenes/scenes.json` via
+  `tool/scenes/build_scenes.py` (pieces re-outlined at slot size with the pages' line width, white
+  inside, transparent outside); never edit `lib/data/builtin_scenes.dart` or the scene PNGs by hand.
+  When every slot is full, the scene is composed into one page (the child's arrangement) and today's
+  coloring screen opens it from the app's `scenes` folder; a stale iOS container path is resolved by
+  file name. No words are played in the prototype: a grown-up says them.
 - Pen versus palm (5 Nov 2026, `CanvasGestureMachine`): a pen takes over from a palm or finger that
   landed first and drops what it started; while the pen draws every other touch is ignored; two
   fingers still pinch. Stroke points go in on the tenth-pixel grid the saved file keeps, because the
