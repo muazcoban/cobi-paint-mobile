@@ -32,7 +32,15 @@ Apple's Human Interface Guidelines (read the current pages; HIG changes every WW
 - Reduce Motion: use `reduceMotion(context)` from `lib/widgets/motion.dart` (iOS reports it only
   through `PlatformDispatcher.accessibilityFeatures.reduceMotion`). Skip confetti, reveals, shakes.
 - Sound: effects use the ambient audio session (they follow the Silent switch and mix with music).
-- Text: scaling is clamped at 200% app-wide; layouts must survive it.
+- Text: scaling is clamped at 200% app-wide (`lib/main.dart`); layouts must survive it. A short
+  label that must stay whole (a card's name, a screen's title) uses `OneLineLabel`: one line, no
+  ellipsis, no break inside a word; it shrinks only when it no longer fits, so the parent's text
+  setting never moves or resizes the child's cards. Running text wraps. Fixed-size keys may cap
+  their own digits (the gate's keypad: 1.5x); a dialog that can outgrow a small phone scrolls.
+  `test/large_text_test.dart` walks every screen at the cap and fails on overflow or cut-off text.
+- System edges: a screen where the child draws or drags defers the iOS edge gestures with
+  `SystemGestures.deferEdgeGestures(true)` in initState and `false` in dispose. The calls are
+  counted, so a screen that replaces another keeps the deferral.
 - Layout adapts to the space it gets, not to the device type: check 320, 375, 393 and 430 pt
   wide, landscape phone and iPad split view. `KidPalette` sizes cells from its constraints;
   drawing and hit-testing use the same grid.
@@ -175,7 +183,8 @@ checks every catalog level against the page check.
 - `showParentalGate`: `lib/widgets/parental_gate.dart` (four number words, growing lockout,
   20 s idle close unless assistive navigation is on)
 - `showCelebration`: `lib/widgets/celebration.dart`
-- Control sizes: `_Metrics` in `lib/screens/coloring_screen.dart`
+- Control sizes: `KidMetrics` in `lib/widgets/kid_metrics.dart` (coloring and scene screens)
+- Short labels that stay whole: `OneLineLabel` in `lib/widgets/one_line_label.dart`
 - Page quality: `PageCheck` in `lib/engine/region/page_check.dart`
 
 ## Before calling a UI change done

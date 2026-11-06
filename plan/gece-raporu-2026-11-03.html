@@ -124,6 +124,7 @@ ul.tight li, ol.tight li { margin: 3px 0; }
     <li><a href="#kalem-ve-icerik">Faz 11: Apple Pencil basıncı ve yeni içerik</a></li>
     <li><a href="#surum-220">6 Kasım gecesi: 2.2.0 sürüm hazırlığı ve Manzara kurulu</a></li>
     <li><a href="#manzara-prototip">Faz 12: Manzara kaba prototipi</a></li>
+    <li><a href="#hig-metin-boyu">7 Kasım: HIG denetimi ve en büyük metin boyu</a></li>
   </ol>
 </nav>
 
@@ -566,7 +567,7 @@ ul.tight li, ol.tight li { margin: 3px 0; }
 <li>Manzara kurulunun sorularını yanıtla (plandaki iş listesi).</li>
 </ol>
 <h2 id="manzara-prototip">23. Faz 12: Manzara kaba prototipi</h2>
-<p>Manzara modunun kaba prototipi hazır: dal <code>faz12/manzara-prototip</code>, master <code>8272ea8</code> üstünde, push edilmedi. Kurulun sırasındaki bir sonraki adım buydu: motor işinden önce çocuğun parçayı kendi başına yerine koyup koyamadığını görmek. Ayrıntılar planın "Manzara: kaba prototip" bölümünde.</p>
+<p>Manzara modunun kaba prototipi hazır ve master'da: dal <code>faz12/manzara-prototip</code>, PR #13 ile 6 Kasım gecesi merge edildi (master <code>d61fcd5</code>). iPhone SE simülatöründe ve Android emülatöründe baştan sona denendi. Kurulun sırasındaki bir sonraki adım buydu: motor işinden önce çocuğun parçayı kendi başına yerine koyup koyamadığını görmek. Ayrıntılar planın "Manzara: kaba prototip" bölümünde.</p>
 <ul>
 <li><strong>Sürümle ilgisi.</strong> Yok. Mod <code>COBI_SCENE</code> bayrağının arkasında; bayraksız derlemede ana ekran, sayfalar ve Eserlerim aynı kalır. <code>v2.2.0</code> etiketi ve Xcode Cloud derlemesi bu daldan etkilenmez.</li>
 <li><strong>Ne yapıyor.</strong> Ana ekranın sonundaki 🏞️ Manzara kartı boş bir bahçe açar. Çocuk tepsiden parçaya dokunur ya da parçayı sürükler; parça sahnedeki yuvaya oturur. Bütün yuvalar dolunca sahne tek bir sayfaya birleşir ve bilinen boyama ekranında açılır.</li>
@@ -580,10 +581,17 @@ ul.tight li, ol.tight li { margin: 3px 0; }
 <p><strong>Senden beklenenler:</strong></p>
 <ol>
 <li>App Store Connect'e giriş yapıp 2.2.0 (9) derlemesinin TestFlight'ta olduğuna ve 2.1.0'ın durumuna bak.</li>
-<li>Prototip için PR açmamı isteyip istemediğine karar ver. Bayraksız derlemede bir şey değiştirmediği için master'a girebilir; istersen gözlem bitene kadar dalda bekler.</li>
 <li>Tur 1 gözlemi için 3–5 yaşında 3–5 çocuk ve mümkünse bir iPhone SE ya da küçük bir telefon bul. Gözlem derlemesini cihazı Mac'e bağlayınca ben kurarım.</li>
 <li>Manzara kurulunun sorularını yanıtla: seslendirmen, "house", varsayılan dil, zemin çizimini kimin yapacağı.</li>
 </ol>
+<h2 id="hig-metin-boyu">24. 7 Kasım: HIG denetimi ve en büyük metin boyu</h2>
+<p>Bu turda yayını doğrudan güçlendiren, kimseyi beklemeyen iki işi yaptım: Manzara ekranını Apple HIG'e göre denetledim ve bütün ekranları en büyük Dynamic Type boyunda denedim. Dal <code>faz13/gelistirmeler</code>, master <code>d61fcd5</code> üstünde. Ayrıntılı rapor: <code>plan/hig-ve-metin-boyu-2026-11-07.html</code>.</p>
+<ul>
+<li><strong>Manzara ekranı.</strong> İki düzeltilecek eksik buldum. Ekran sistem kenar jestlerini ertelemiyordu; artık boyama ekranı gibi erteliyor. Erteleme sayaçlı hâle geldi, Manzara'dan boyama sayfasına geçişte kaybolmuyor. VoiceOver etiketindeki İngilizce kelime artık İngilizce dil özniteliği taşıyor (kurul şartı 18). Beş madde gerekçeli sapma (20 pt sürükleme eşiği, opak parça, tek parmak, kapalı geri kaydırma, motor işine kalan bitiş duyurusu); geri kalanı uyumlu.</li>
+<li><strong>En büyük metin boyu.</strong> Uygulama metni yüzde 200'de sınırlıyor, ama bu sınır hiç denenmemişti. iPhone SE boyunda ve yüzde 200 metinde ebeveyn kapısının penceresi 408 piksel taşıyordu; artık kayıyor. Tuşlardaki rakamlar tuşa sığacak kadar büyüyor. Kart adları üç noktayla kesiliyor ("Hayv…"), bazı başlıklar kelimenin ortasından bölünüyordu ("Eserle / rim"). Artık tek satırda kalıp sığacak kadar küçülüyorlar; normal boyda hiçbir şey değişmedi.</li>
+<li><strong>Testler.</strong> 6 yeni test, toplam 236, analiz temiz. En büyük metin testi hem taşmayı hem de kesilen yazıyı yakalıyor; eski ana ekranda "Animals is cut off" diye düşüyor. Mağaza yürüyüşü en büyük metinde iPhone SE simülatöründe geçti.</li>
+</ul>
+<figure><img src="img/metin-boyu-once-sonra.jpg" alt="En büyük metin boyunda önce ve sonra"><figcaption>iPhone SE simülatörü, en büyük erişilebilirlik metni (uygulama yüzde 200'de keser): ana ekran ve Eserlerim önce ve sonra, düzeltilmiş ebeveyn kapısı.</figcaption></figure>
 </div>
 
 </body>
