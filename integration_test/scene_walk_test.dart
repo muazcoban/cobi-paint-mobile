@@ -14,8 +14,10 @@ import 'package:integration_test/integration_test.dart';
 /// each moment (the same `SHOT:name` handshake as store_shots_test.dart).
 /// Needs an observation build:
 ///
-///   python3 tool/store/take_screenshots.py <udid> build/scene_shots/se \
-///       --test integration_test/scene_walk_test.dart --define COBI_SCENE=observation
+/// ```sh
+/// python3 tool/store/take_screenshots.py UDID build/scene_shots/se \
+///     --test integration_test/scene_walk_test.dart --define COBI_SCENE=observation
+/// ```
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
   binding.framePolicy = LiveTestWidgetsFlutterBindingFramePolicy.fullyLive;
