@@ -122,6 +122,7 @@ ul.tight li, ol.tight li { margin: 3px 0; }
     <li><a href="#vitrin">Faz 9: vitrin dönüşümü ve tema düzeltmesi</a></li>
     <li><a href="#kurul-5-kasim">Faz 10: 5 Kasım kurulu, baştan boya ve otomatik tamamlama</a></li>
     <li><a href="#kalem-ve-icerik">Faz 11: Apple Pencil basıncı ve yeni içerik</a></li>
+    <li><a href="#surum-220">6 Kasım gecesi: 2.2.0 sürüm hazırlığı ve Manzara kurulu</a></li>
   </ol>
 </nav>
 
@@ -533,6 +534,36 @@ ul.tight li, ol.tight li { margin: 3px 0; }
 </ul>
 <p>Test sayısı 201, analiz temiz.</p>
 
+
+<h2 id="surum-220">22. 6 Kasım gecesi: 2.2.0 sürüm hazırlığı ve Manzara kurulu</h2>
+<p>2.2.0 yerelde hazır: branch <code>release/2.2.0</code>, merge edilmiş master'ın (<code>deaa77f</code>) üstünde, push edilmedi. Sürümde PR #10'un özellikleri, içerik oturumunun kaydırma düzeltmesi ve üç yeni sayfa var (toplam 310). Mağaza metinleri ve dört yeni ekran görüntüsü seti hazır. 206 test geçiyor; ekran görüntüsü testi iPhone ve iPad'de, Türkçe ve İngilizce baştan sona geçti.</p>
+<ul>
+<li><strong>Sürüm numarası.</strong> 2.2.0+9. 2.1.2 ile 2.2.0 arasındaki seçim sendeydi; yeni kategoriler ve özellikler olduğu için 2.2.0'ı seçtim. Değiştirmek için <code>pubspec.yaml</code> yeter. README'deki yükleme adımı artık bugünkü akışı anlatıyor: Xcode Cloud yalnız etikette derliyor.</li>
+<li><strong>İçerik oturumunun işi.</strong> O oturum, karttan başlayan bir kaydırmanın kartı açtığı hatayı düzeltmiş ve kestane, kapalı şemsiye, fırça sayfalarını eklemiş. Kodu satır satır okuyup sürüm dalına birleştirdim; mağaza metnindeki sayıları 310'a çektim. Ayrıntı <code>plan/kaydirma-dokunus-2026-11-05.html</code> dosyasında.</li>
+<li><strong>Mağaza metni.</strong> <code>store_listing.md</code> dosyasında 2.2.0 için "What's New" ve "Notes for Review" taslakları (TR, EN) var. Hakem notundaki kapı bilgisini koddan doğruladım.</li>
+<li><strong>Ekran görüntüleri.</strong> Simülatör aracı yeni bir cihaz için senin iznini istiyor; sen uyurken veremezdin. Bu yüzden uygulamayı içeriden süren bir integration test yazdım (<code>integration_test/store_shots_test.dart</code>, <code>tool/store/take_screenshots.py</code>). Betik her anda ekran görüntüsünü alıp testi bir dosyayla ilerletiyor, kutlama karesini konfetiye göre seçiyor. Bütün karelerde saat 9.41 ve tam çubuk var; eski iPhone karelerinde saat 17.55–18.16 arasıydı.</li>
+<li><strong>Android'de pil hatası.</strong> Aynı uygulama yolunu Android emülatöründe ekran görüntüsü almadan çalıştırdım; yol geçti ama test kapanırken ses eklentisinin kare geri çağrıları hâlâ duruyordu. Sebep: eklenti her seste çalma konumunu güncellemek için her karede yeni kare istiyor ve Android'in düşük gecikmeli oyuncusu "ses bitti" demiyor. İlk tık sesinden sonra uygulama hiç boşta kalmıyor, sürekli kare çiziyordu. Uygulama çalma konumunu hiç kullanmadığı için güncelleyiciyi kapattım (<code>c9cc6b8</code>); Android yürüyüşü artık temiz geçiyor. iOS'ta etkisi yalnız sesin çaldığı yarım saniyeydi.</li>
+<li><strong>Cihaz denemeleri.</strong> Uygulama yolu (ana ekran, kapı, keçeli kalem, dolgu, kutlama, aynalı serbest çizim, Eserlerim) iPhone 16 Pro ve 13" iPad'de Türkçe ve İngilizce, desteklenen en küçük telefon iPhone SE'de ve Android emülatöründe baştan sona geçti.</li>
+<li><strong>Manzara kurulu.</strong> Eşinin önerisi 5/5 şartlı geçti; 2.2.0'a girmiyor. Tasarım ve senden beklenen cevaplar plandaki iş listesinde.</li>
+<li><strong>App Store Connect.</strong> Oturum düşmüştü; 2.1.0'ın inceleme durumunu okuyamadım.</li>
+</ul>
+<div class="table-wrap"><table>
+<thead><tr><th>Set</th><th>Boyut</th><th>Klasör</th></tr></thead>
+<tbody>
+<tr><td>iPhone 6,3" Türkçe</td><td>1206×2622</td><td><code>build/store_screenshots/iphone63_tr_220_secili_captioned/</code></td></tr>
+<tr><td>iPhone 6,3" İngilizce</td><td>1206×2622</td><td><code>build/store_screenshots/iphone63_en_220_secili_captioned/</code></td></tr>
+<tr><td>iPad 13" Türkçe</td><td>2064×2752</td><td><code>build/store_screenshots/ipad13_tr_220_secili_captioned/</code></td></tr>
+<tr><td>iPad 13" İngilizce</td><td>2064×2752</td><td><code>build/store_screenshots/ipad13_en_220_secili_captioned/</code></td></tr>
+</tbody></table></div>
+<figure><img src="img/surum-220-iphone-tr.jpg" alt="2.2.0 iPhone Türkçe mağaza seti"><figcaption>iPhone Türkçe set, mağazadaki sırayla: dolgu, çizgiden taşmama, kutlama, serbest çizim, ana ekran (9 kategori, 310 sayfa), Eserlerim, ebeveyn kapısı. İlk üçü arama sonucunda görünür.</figcaption></figure>
+<p><strong>Senden beklenenler:</strong></p>
+<ol>
+<li>App Store Connect'e giriş yapıp 2.1.0'ın durumuna bak.</li>
+<li>Sürüm PR'ını açmamı onayla. Merge sonrası <code>v2.2.0</code> etiketi Xcode Cloud derlemesini başlatır; derleme TestFlight'taki "Tester" grubuna düşer.</li>
+<li>2.2.0'ı TestFlight'ta iPhone 12'de ve varsa iPad'de Apple Pencil ile dene.</li>
+<li>2.1.0 yayına girince 2.2.0'ı gönder. 2.1.1'i ayrıca göndermeye gerek yok, 2.2.0 onun bütün düzeltmelerini içeriyor. "What's New", "Notes for Review" ve dört seti kullan.</li>
+<li>Manzara kurulunun sorularını yanıtla (plandaki iş listesi).</li>
+</ol>
 </div>
 
 </body>

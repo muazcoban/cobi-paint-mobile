@@ -12,6 +12,12 @@ const double forgivingSlop = 12;
 /// within [forgivingSlop] of it, however far it wandered in between.
 /// Flutter's own tap recognizer gives up after 18 lp of movement, which a
 /// three-year-old's tap often exceeds.
+///
+/// A finger that scrolled the list the child sits in is a scroll, not a
+/// tap: if any scrollable around the child moved more than [forgivingSlop]
+/// between down and up, nothing fires. Pointer events keep the position the
+/// child had at pointer down, so without this a short swipe on a card
+/// opened it.
 class ForgivingTap extends StatefulWidget {
   const ForgivingTap({super.key, required this.child, required this.onTap, this.onPressedChanged, this.maxHold});
 
@@ -30,11 +36,24 @@ class ForgivingTap extends StatefulWidget {
 class _ForgivingTapState extends State<ForgivingTap> {
   int? _pointer;
   Duration _downAt = Duration.zero;
+  List<(ScrollPosition, double)> _downScroll = const [];
+
+  /// Every scrollable around the child with its offset now.
+  List<(ScrollPosition, double)> _scrollOffsets() {
+    final offsets = <(ScrollPosition, double)>[];
+    var scrollable = context.findAncestorStateOfType<ScrollableState>();
+    while (scrollable != null) {
+      offsets.add((scrollable.position, scrollable.position.pixels));
+      scrollable = scrollable.context.findAncestorStateOfType<ScrollableState>();
+    }
+    return offsets;
+  }
 
   void _down(PointerDownEvent e) {
     if (_pointer != null || widget.onTap == null) return;
     _pointer = e.pointer;
     _downAt = e.timeStamp;
+    _downScroll = _scrollOffsets();
     widget.onPressedChanged?.call(true);
   }
 
@@ -44,6 +63,7 @@ class _ForgivingTapState extends State<ForgivingTap> {
     widget.onPressedChanged?.call(false);
     final box = context.findRenderObject() as RenderBox?;
     if (box == null) return;
+    if (_downScroll.any((s) => (s.$1.pixels - s.$2).abs() > forgivingSlop)) return;
     final area = (Offset.zero & box.size).inflate(forgivingSlop);
     final maxHold = widget.maxHold;
     if (maxHold != null && e.timeStamp - _downAt > maxHold) return;

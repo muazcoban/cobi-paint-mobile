@@ -62,5 +62,5 @@ Renk sırası `lib/screens/coloring_screen.dart` içindeki `littlePalette` ve `b
 `color_9`–`color_15` yalnız Büyük modda duyulur. Renk adları `lib/l10n/app_*.arb` dosyasındaki
 `colorNames` listesiyle aynı olmalıdır.
 
-Sayfa adları (307 sayfa × 2 dil) ikinci aşamadır: anahtar `page_<kod>` (ör. `page_1f34e`),
+Sayfa adları (310 sayfa × 2 dil) ikinci aşamadır: anahtar `page_<kod>` (ör. `page_1f34e`),
 metin `tool/pages/catalog.json` içindeki `nameTr` ve `nameEn`.

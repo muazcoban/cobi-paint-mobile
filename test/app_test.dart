@@ -159,6 +159,28 @@ void main() {
     }
   });
 
+  testWidgets('a swipe that starts on a card scrolls the home screen and opens nothing', (tester) async {
+    final app = provider();
+    await openHome(tester, app);
+    final scroll = tester.state<ScrollableState>(find.byType(Scrollable).first).position;
+
+    // Shorter than the card, so the finger lifts where the card was.
+    for (final dy in [-40.0, -120.0]) {
+      await tester.dragFrom(tester.getCenter(find.text('Animals')), Offset(0, dy));
+      await tester.pumpAndSettle();
+      expect(find.byType(CategoryScreen), findsNothing, reason: 'a ${-dy} lp swipe scrolls, it does not open Animals');
+      scroll.jumpTo(0);
+      await tester.pumpAndSettle();
+    }
+    await tester.dragFrom(tester.getCenter(find.text('Animals')), const Offset(0, -120));
+    await tester.pumpAndSettle();
+    expect(scroll.pixels, greaterThan(100));
+
+    await tester.tap(find.text('Animals'));
+    await tester.pumpAndSettle();
+    expect(find.byType(CategoryScreen), findsOneWidget, reason: 'a tap still opens the card');
+  });
+
   testWidgets('the brush button cycles to stickers and a tap on the page sticks one', (tester) async {
     final app = provider();
     await openHome(tester, app);

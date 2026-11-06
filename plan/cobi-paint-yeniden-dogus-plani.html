@@ -139,7 +139,7 @@ ul.tight li, ol.tight li { margin: 3px 0; }
 
 <section id="is-listesi">
 <h2>İş listesi: 5 Kasım 2026 önerileri</h2>
-<p class="lead">5 Kasım akşamı önerdiğin yedi işi listeye aldım. Altısı beş üyeli kurula gitti (kural: 4/5 onay ve veto yok); kararların tamamı <code>plan/kurul-2026-11-05.json</code> dosyasında, özeti <a href="gece-raporu-2026-11-03.html#kurul-5-kasim">gece raporunun 20. bölümünde</a>. Kategori ve içerik artırma kurula gitmedi, çünkü mevcut sayfa üretim hattının genişlemesi.</p>
+<p class="lead">5 Kasım akşamı önerdiğin yedi işi listeye aldım; sekizinci öneri (eşinin manzara fikri) aynı gece kurula gitti, kararı aşağıda. Altısı beş üyeli kurula gitti (kural: 4/5 onay ve veto yok); kararların tamamı <code>plan/kurul-2026-11-05.json</code> dosyasında, özeti <a href="gece-raporu-2026-11-03.html#kurul-5-kasim">gece raporunun 20. bölümünde</a>. Kategori ve içerik artırma kurula gitmedi, çünkü mevcut sayfa üretim hattının genişlemesi.</p>
 <div class="table-wrap"><table>
 <thead><tr><th>Öneri</th><th>Kurul</th><th>Durum</th><th>Sonraki adım</th></tr></thead>
 <tbody>
@@ -149,13 +149,51 @@ ul.tight li, ol.tight li { margin: 3px 0; }
 <tr><td>Kategori ve içerik zenginleştirme</td><td>Kurula gitmedi</td><td><span class="badge b-p2">Yapıldı</span> <code>f970012</code>. Uzay, Müzik ve Giysiler kategorileri; 201'den 307 sayfaya. Simülatörde denendi.</td><td>İçerikle çıkan sürümde mağaza metni ve "Notes for Review" (taslak <code>store_listing.md</code> dosyasında).</td></tr>
 <tr><td>Bir kısmı boyalı resim, devamını çocuk boyar</td><td>3/5, reddedildi</td><td><span class="badge b-p0">Kapalı</span> Büyük alanların önceden boyanması 3 Kasım'da reddedilen "renkli örnek" önerisinin aynısı sayıldı.</td><td>Yeniden oylanabilecek biçim: yalnız parmağın ulaşamadığı küçük ayrıntılar (göz bebeği, burun deliği) hazır gelir.</td></tr>
 <tr><td>Adım adım çizim (Connect and paint benzeri)</td><td>0/5, 1 veto</td><td><span class="badge b-p0">Kapalı</span> Şekil kopyalama becerisi 3 yaş için erken; Minik'e veto.</td><td>Yalnız Büyük modda, en çok 6 elle hazırlanmış sayfayla yeniden başvurulabilir.</td></tr>
+<tr><td>Manzara: parçayı koy, boya, adını Türkçe ve İngilizce duy (eşinin önerisi)</td><td>5/5 şartlı geçti</td><td><span class="badge b-p1">Sırada</span> 2.2.0'dan sonra, ayrı dalda. Kelime kayıtları gelmeden hiçbir sürümde görünmez.</td><td>Önce kaba prototip ve 3–5 çocukla gözlem; 20 klip insan sesi kaydı; aşağıdaki soruların cevapları.</td></tr>
 <tr><td>Tam Sürüm almayanlara reklam</td><td>0/5, 5 veto</td><td><span class="badge b-p0">Kapalı</span> Kids Category kuralı 1.3 ve 5.1.4, "reklam yok" sözü, ağsız mimari ve "Data Not Collected" etiketi.</td><td>Reklamsız gelir yolları: kapı arkasındaki Tam Sürüm kilidi (<code>COBI_IAP</code>), mağaza sayfasında Promoted IAP, değerin açık anlatımı.</td></tr>
 </tbody></table></div>
+<h3>Manzara modu (kurul, 5–6 Kasım gecesi)</h3>
+<p>Öneri beş üyeli kuruldan 5/5 şartlı onayla geçti, veto yok. Kararın tamamı <code>plan/kurul-2026-11-05-manzara.json</code> dosyasında. Kurulun birleştirdiği tasarım:</p>
+<ul>
+<li><strong>Yer.</strong> Ana ekranda Giysiler'den sonra tek bir "Manzara" kartı (EN Scene), Minik'te ve Büyük'te, kapı arkasında değil. Eski kartların yeri değişmez.</li>
+<li><strong>Yerleştirme.</strong> Tuvalle palet arasında tek sıra bir tepsi. Parçaya dokunmak yeter: parça sahnedeki sabit yerine (yuva) uçar. Sürükleme de çalışır, en yakın boş yuvaya oturur. Yerleşen parça taşınmaz; geri al parçayı tepsiye döndürür. Araç çubuğuna düğme eklenmez.</li>
+<li><strong>Boyama.</strong> Sayfadakinin aynısı: kova, fırça döngüsü, silgi, otomatik tamamlama. Silgi parçayı sökmez.</li>
+<li><strong>Kelime.</strong> Parça yerleşince, parça bitince ve gökyüzü, çimen ya da nehir ilk boyanınca birer kez duyulur. Türkçe uygulamada "Çiçek… flower!", İngilizce uygulamada "Flower!". Ekranda yazı yok; sınav, puan, "Hangisi flower?" sorusu ve mikrofon hiçbir sürümde yok.</li>
+<li><strong>Ses.</strong> Kelimeler insan sesiyle kaydedilir (20 klip: 9 kelime × 2 dil ve kart adı). Kod <code>COBI_SCENE</code> bayrağının arkasında birleşir; klipler pakette değilse kart görünmez.</li>
+<li><strong>Kayıt.</strong> Sahne Eserlerim'de sıradan bir eser olur; kapı arkasında "Bu sahneyi baştan kur" satırı gelir.</li>
+<li><strong>Ücret.</strong> İlk sahne herkese ve hep ücretsiz.</li>
+<li><strong>Mağaza.</strong> Yalnız kliplerle çıkan sürümde ve yalnız davranışı anlatan cümleyle: "Manzara: Güneşi, evi, ağacı resmine koyar ve boyar; her parçanın adını Türkçe ve İngilizce, gerçek bir insan sesinden duyar." "İngilizce öğretir", "iki dilli", "kelime dağarcığını geliştirir" yazılmaz.</li>
+</ul>
+<figure><img src="img/manzara-kaba-ornek.jpg" alt="Manzara modunun kaba örneği"><figcaption>Kurul üyesinin kaba örneği: boş zemin (gökyüzü, tepe, nehir), Minik'in dört parçası, Büyük'ün altı parçası.</figcaption></figure>
+<div class="table-wrap"><table>
+<thead><tr><th>Parça</th><th>Türkçe</th><th>English</th><th>Mod</th></tr></thead>
+<tbody>
+<tr><td>☀️</td><td>güneş</td><td>sun</td><td>Minik ve Büyük</td></tr>
+<tr><td>🏠</td><td>ev</td><td>house</td><td>Minik ve Büyük</td></tr>
+<tr><td>🌳</td><td>ağaç</td><td>tree</td><td>Minik ve Büyük</td></tr>
+<tr><td>🌷</td><td>çiçek</td><td>flower</td><td>Minik ve Büyük</td></tr>
+<tr><td>☁️</td><td>bulut</td><td>cloud</td><td>Büyük</td></tr>
+<tr><td>🐦</td><td>kuş</td><td>bird</td><td>Büyük</td></tr>
+<tr><td>zemin</td><td>gökyüzü, çimen, nehir</td><td>sky, grass, river</td><td>Minik ve Büyük</td></tr>
+</tbody></table></div>
+<p><strong>Sıra.</strong> 2.2.0'a girmez. 2.2.0 yayına girince ayrı dalda kaba prototip (1–2 gün, boyamasız) ve 3–5 çocukla ilk gözlem; sonra motor, içerik hattı, ses, sahne ekranı ve testler. Kurulun tahmini 11–13 iş günü. Yayından önce gerçek kliplerle ikinci gözlem; çocuklar kelimeye tepki vermiyorsa yayın durur.</p>
+<p><strong>Senden beklenen cevaplar:</strong></p>
+<ul>
+<li><strong>Seslendirmen.</strong> Türkçe kelimeleri mevcut seslendirmen mi okuyacak? İngilizce kelimeler için anadili düzeyinde bir ses bulunabilir mi?</li>
+<li><strong>"home" ya da "house".</strong> Beş üye de resim bir bina olduğu için "house" dedi. Onaylıyor musun?</li>
+<li><strong>Varsayılan dil.</strong> Türkçe uygulamada varsayılan "Çiçek… flower!" mı, yalnız İngilizce mi? İkisi de Ebeveynler'de seçilebilecek.</li>
+<li><strong>Yazı.</strong> "İngilizcesini çıkarsın" ekranda yazıyı da kapsıyor muydu? Kurul ilk sürümde yazıyı kaldırdı, Büyük için ayrı oy önerdi.</li>
+<li><strong>Kartın adı.</strong> "Manzara" / "Scene" uygun mu?</li>
+<li><strong>Zemin çizimi.</strong> Fluent UI Emoji'de nehir, çimen ve gökyüzü yok. Bahçe zeminini kim çizecek?</li>
+<li><strong>Gözlem.</strong> İki tur için 3–5 yaşında 3–5 çocuk ve mümkünse küçük ekranlı bir iPhone bulunabilir mi?</li>
+<li><strong>Sonraki sahneler.</strong> Nehir, çiftlik ve gece sahneleri ücretsiz mi olsun, Tam Sürüm'e mi girsin?</li>
+<li><strong>Ön deneme.</strong> Üç üye, bitmiş bir boyama sayfasında sayfanın adını iki dilde söylemeyi (yeni ekran yok) P7'den önce ayrıca oylamayı önerdi. İster misin?</li>
+</ul>
 <h3>Yayın sırası</h3>
 <ol>
 <li>2.1.0 (build 3) App Review'da. Onay gelince App Store Connect'te "Release this version" düğmesine sen basarsın.</li>
 <li>2.1.1 (build 8) TestFlight'ta hazır. 2.1.0 yayına girince incelemeye gönderilir.</li>
-<li>Baştan boya, otomatik tamamlama, Apple Pencil basıncı ve yeni içerik 2.1.1'den sonraki sürüme girer. Sürüm numarası (2.1.2 ya da 2.2.0) senin kararın; "Yenilikler" taslağı <code>store_listing.md</code> dosyasında.</li>
+<li>2.2.0 hazır (branch <code>release/2.2.0</code>, push edilmedi): baştan boya, otomatik tamamlama, Apple Pencil basıncı, kaydırma düzeltmesi ve 310 sayfa. "What's New", "Notes for Review" ve dört ekran görüntüsü seti hazır. 2.1.0 yayına girince 2.1.1 yerine 2.2.0 gönderilir.</li>
 </ol>
 <h3>Senden beklenen yanıtlar</h3>
 <ul>

@@ -85,7 +85,11 @@ class SoundService {
     return _loading.putIfAbsent(name, () async {
       try {
         await _configureSession();
-        final player = AudioPlayer();
+        // Effects never need the playback position. The plugin's default
+        // updater asks for a new frame on every vsync while a sound plays,
+        // and Android's low-latency players never report the end of a
+        // sound, so after the first tap the app would draw frames forever.
+        final player = AudioPlayer()..positionUpdater = null;
         await player.setReleaseMode(ReleaseMode.stop);
         await player.setPlayerMode(PlayerMode.lowLatency);
         await player.setSource(AssetSource('sounds/$name.mp3'));

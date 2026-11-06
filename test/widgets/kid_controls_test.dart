@@ -43,6 +43,47 @@ void main() {
 
       expect(taps, 0);
     });
+
+    Widget cards(List<int> taps) => _app(SizedBox(
+          height: 500,
+          child: ListView(
+            children: [
+              for (var i = 0; i < 6; i++)
+                SizedBox(
+                  height: 200,
+                  child: PressableCard(onTap: () => taps.add(i), child: Text('card $i')),
+                ),
+            ],
+          ),
+        ));
+
+    for (final dy in [-30.0, -120.0]) {
+      testWidgets('a ${-dy} lp swipe that scrolls a list of cards opens none of them', (tester) async {
+        final taps = <int>[];
+        await tester.pumpWidget(cards(taps));
+
+        // From near the bottom edge, so the finger lifts where the card was.
+        final card = tester.getRect(find.byType(PressableCard).first);
+        await tester.dragFrom(card.bottomCenter - const Offset(0, 20), Offset(0, dy));
+        await tester.pumpAndSettle();
+
+        expect(tester.state<ScrollableState>(find.byType(Scrollable)).position.pixels, greaterThan(0));
+        expect(taps, isEmpty, reason: 'the finger lifted inside the card, but the list moved under it');
+      });
+    }
+
+    testWidgets('a card in a list still forgives a finger that wanders sideways', (tester) async {
+      final taps = <int>[];
+      await tester.pumpWidget(cards(taps));
+      final center = tester.getCenter(find.text('card 1'));
+
+      final gesture = await tester.startGesture(center);
+      await gesture.moveBy(const Offset(60, 0)); // sideways: the vertical list does not scroll
+      await gesture.moveTo(center + const Offset(20, 8));
+      await gesture.up();
+
+      expect(taps, [1]);
+    });
   });
 
   testWidgets('the palette picks the dot under the lifted finger', (tester) async {
