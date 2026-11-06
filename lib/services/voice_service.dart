@@ -45,6 +45,12 @@ class VoiceService {
     return _assets!.any((a) => a.startsWith('assets/voice/$languageCode/'));
   }
 
+  /// Whether every one of [paths] is bundled.
+  Future<bool> hasAll(Iterable<String> paths) async {
+    _assets ?? await _loadManifest();
+    return paths.every(_assets!.contains);
+  }
+
   /// Plays `<key>` in [languageCode] if the clip exists; [screenReader]
   /// (VoiceOver/TalkBack) keeps the app quiet so the two voices never overlap.
   Future<void> say(String key, {required String languageCode, bool screenReader = false}) async {

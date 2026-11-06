@@ -147,6 +147,25 @@ class StorageService {
     return File('${_artworksDir.path}/$name');
   }
 
+  /// Writes a composed scene page (the scene prototype). A saved artwork
+  /// points at it, so it stays as long as the app does.
+  Future<File> writeScenePage(String name, List<int> bytes) async {
+    final dir = Directory('${_appDir.path}/scenes');
+    await dir.create(recursive: true);
+    final file = File('${dir.path}/$name.png');
+    await _writeAtomically(file, bytes);
+    return file;
+  }
+
+  /// Finds a composed scene page. An app update moves the documents folder
+  /// on iOS, so a stale absolute path is looked up by file name in today's
+  /// scenes folder.
+  File resolveScenePage(String storedPath) {
+    final file = File(storedPath);
+    if (file.existsSync()) return file;
+    return File('${_appDir.path}/scenes/${storedPath.split('/').last}');
+  }
+
   Future<void> _writeAtomically(File target, List<int> bytes) async {
     final temp = File('${target.path}.tmp');
     await temp.writeAsBytes(bytes, flush: true);

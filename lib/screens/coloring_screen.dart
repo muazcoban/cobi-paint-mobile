@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math' as math;
 import 'dart:io';
 import 'dart:ui' as ui;
 
@@ -25,6 +24,7 @@ import '../services/voice_service.dart';
 import '../widgets/celebration.dart';
 import '../widgets/idle_hint.dart';
 import '../widgets/kid_button.dart';
+import '../widgets/kid_metrics.dart';
 import '../widgets/kid_palette.dart';
 import '../widgets/paint_canvas.dart';
 import 'coloring/artwork_autosaver.dart';
@@ -66,29 +66,6 @@ const _bigOnlyBrushes = {BrushKind.crayon, BrushKind.neon};
 const _stickerSteps = [0.12, 0.18, 0.26];
 
 final _stickerCodes = [for (final s in stickers) s.code];
-
-/// Control sizes from the toddler research: about 2 cm on a phone where it
-/// fits, larger on tablets; Büyük mode trades size for more controls.
-class _Metrics {
-  _Metrics(Size size, bool big) {
-    final tablet = size.shortestSide >= 600;
-    gap = tablet ? 16 : 12;
-    cell = big ? (tablet ? 88 : 52) : (tablet ? 112 : 70);
-    final double wanted = big ? (tablet ? 96 : 64) : (tablet ? 116 : 82);
-    // The controls share one row (tall layout) or one column (wide layout)
-    // between 12 pt paddings. In a narrow Split View pane they shrink
-    // together instead of overflowing, never below the 44 pt minimum.
-    final wide = size.width > size.height * 1.1;
-    final along = (wide ? size.height : size.width) - 24;
-    final count = big ? 5 : 4;
-    final fit = (along - (count - 1) * gap) / count;
-    primary = math.max(44.0, math.min(wanted, fit));
-  }
-
-  late final double primary;
-  late final double cell;
-  late final double gap;
-}
 
 class ColoringScreen extends StatefulWidget {
   final ColoringImage image;
@@ -496,7 +473,7 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
             body: SafeArea(
               child: LayoutBuilder(
                 builder: (context, constraints) {
-                  final metrics = _Metrics(constraints.biggest, big);
+                  final metrics = KidMetrics(constraints.biggest, big);
                   final wide = constraints.maxWidth > constraints.maxHeight * 1.1;
                   return wide ? _wideLayout(metrics, big) : _tallLayout(metrics, big);
                 },
@@ -510,7 +487,7 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
 
   List<Color> _colors(bool big) => big ? bigPalette : littlePalette;
 
-  Widget _tallLayout(_Metrics m, bool big) {
+  Widget _tallLayout(KidMetrics m, bool big) {
     return Column(
       children: [
         Padding(
@@ -528,7 +505,7 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
     );
   }
 
-  Widget _wideLayout(_Metrics m, bool big) {
+  Widget _wideLayout(KidMetrics m, bool big) {
     return Row(
       children: [
         Padding(
@@ -549,7 +526,7 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
   /// Home, fill, brush and undo (plus redo in Büyük mode). The free drawing
   /// page has the mirror where the fill is: a fifth button does not fit a
   /// 375 pt phone, and a bucket on a blank page only recolours the paper.
-  List<Widget> _controls(_Metrics m, bool big) {
+  List<Widget> _controls(KidMetrics m, bool big) {
     final l10n = AppLocalizations.of(context)!;
     final brush = _brushFor(big);
     final document = _document;
@@ -707,7 +684,7 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
     );
   }
 
-  Widget _palette(_Metrics m, bool big, {required int columns}) {
+  Widget _palette(KidMetrics m, bool big, {required int columns}) {
     final l10n = AppLocalizations.of(context)!;
     final names = l10n.colorNames.split(',');
     final colors = _colors(big);

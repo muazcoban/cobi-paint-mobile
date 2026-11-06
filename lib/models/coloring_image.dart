@@ -1,3 +1,11 @@
+/// A scene composed into one page by the scene prototype, kept in the app's
+/// scenes folder (not the bundled scene drawings under assets/).
+bool isScenePage(String path) => !path.startsWith('assets/') && path.contains('/scenes/');
+
+/// Whether a page is read from the app's files instead of the bundle: photos
+/// imported before the freeze and composed scenes.
+bool isFilePage(String path) => path.contains('/imported/') || isScenePage(path);
+
 class ColoringImage {
   final String id;
 

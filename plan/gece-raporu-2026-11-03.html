@@ -123,6 +123,7 @@ ul.tight li, ol.tight li { margin: 3px 0; }
     <li><a href="#kurul-5-kasim">Faz 10: 5 Kasım kurulu, baştan boya ve otomatik tamamlama</a></li>
     <li><a href="#kalem-ve-icerik">Faz 11: Apple Pencil basıncı ve yeni içerik</a></li>
     <li><a href="#surum-220">6 Kasım gecesi: 2.2.0 sürüm hazırlığı ve Manzara kurulu</a></li>
+    <li><a href="#manzara-prototip">Faz 12: Manzara kaba prototipi</a></li>
   </ol>
 </nav>
 
@@ -563,6 +564,25 @@ ul.tight li, ol.tight li { margin: 3px 0; }
 <li>2.2.0'ı TestFlight'ta iPhone 12'de ve varsa iPad'de Apple Pencil ile dene.</li>
 <li>2.1.0 yayına girince 2.2.0'ı gönder. 2.1.1'i ayrıca göndermeye gerek yok, 2.2.0 onun bütün düzeltmelerini içeriyor. "What's New", "Notes for Review" ve dört seti kullan.</li>
 <li>Manzara kurulunun sorularını yanıtla (plandaki iş listesi).</li>
+</ol>
+<h2 id="manzara-prototip">23. Faz 12: Manzara kaba prototipi</h2>
+<p>Manzara modunun kaba prototipi hazır: dal <code>faz12/manzara-prototip</code>, master <code>8272ea8</code> üstünde, push edilmedi. Kurulun sırasındaki bir sonraki adım buydu: motor işinden önce çocuğun parçayı kendi başına yerine koyup koyamadığını görmek. Ayrıntılar planın "Manzara: kaba prototip" bölümünde.</p>
+<ul>
+<li><strong>Sürümle ilgisi.</strong> Yok. Mod <code>COBI_SCENE</code> bayrağının arkasında; bayraksız derlemede ana ekran, sayfalar ve Eserlerim aynı kalır. <code>v2.2.0</code> etiketi ve Xcode Cloud derlemesi bu daldan etkilenmez.</li>
+<li><strong>Ne yapıyor.</strong> Ana ekranın sonundaki 🏞️ Manzara kartı boş bir bahçe açar. Çocuk tepsiden parçaya dokunur ya da parçayı sürükler; parça sahnedeki yuvaya oturur. Bütün yuvalar dolunca sahne tek bir sayfaya birleşir ve bilinen boyama ekranında açılır.</li>
+<li><strong>Kurul şartlarından uyulanlar.</strong> Yeni düğme ya da menü yok; dokunmak tek başına yeter; her bırakış geçerli, "yanlış yer" sesi yok; yerleşen parça taşınmaz, geri al onu tepsiye döndürür; ekranda yazı, soru ve puan yok; ikinci parmak parça almaz; Reduce Motion'da uçuş yerine solma; kelimeler insan sesiyle gelecek, mağaza derlemesinde kart klipler olmadan görünmez.</li>
+<li><strong>Bilerek eksik bırakılanlar.</strong> Kelime klipleri, sahne ekranında boyama, parça bitişi ve kelime anları, "Bu sahneyi baştan kur", yarım sahneye dönüş. Tur 1 bunları istemiyor; motor işinde gelecekler.</li>
+<li><strong>Testler.</strong> 24 yeni test: yerleştirme kuralları, sahne verisinin JSON ile eşitliği, yuvaların çakışmaması, parça boyları, kart kuralı, birleşik sayfanın bölgeleri, ekranda dokunma, sürükleme, geri dönüş, geri al ve ileri al, ikinci parmak, kayıt ve güncelleme sonrası yeniden açılış, erişilebilirlik denetimi, iPad ve dar pencere. Toplam 230 test geçiyor, analiz temiz.</li>
+<li><strong>App Store Connect.</strong> Oturum yine kapalıydı; 2.2.0 derlemesinin TestFlight'a düştüğünü doğrulayamadım.</li>
+</ul>
+<figure><img src="img/manzara-prototip.png" alt="Manzara prototipinin zemini, Minik ve Büyük sahnesi"><figcaption>Prototipin sahnesi: boş zemin, Minik'in dört parçası, Büyük'ün altı parçası.</figcaption></figure>
+<figure><img src="img/manzara-prototip-iphone-se.jpg" alt="Manzara prototipi iPhone SE simülatöründe"><figcaption>iPhone SE simülatöründe (375×667 pt, Türkçe, Minik): boş sahnede maskot güneşi gösteriyor; ev sürüklenirken boş yuvalar görünüyor ve en yakını parlıyor; dört parça yerinde; sahne bilinen boyama ekranında boyanmış.</figcaption></figure>
+<p><strong>Senden beklenenler:</strong></p>
+<ol>
+<li>App Store Connect'e giriş yapıp 2.2.0 (9) derlemesinin TestFlight'ta olduğuna ve 2.1.0'ın durumuna bak.</li>
+<li>Prototip için PR açmamı isteyip istemediğine karar ver. Bayraksız derlemede bir şey değiştirmediği için master'a girebilir; istersen gözlem bitene kadar dalda bekler.</li>
+<li>Tur 1 gözlemi için 3–5 yaşında 3–5 çocuk ve mümkünse bir iPhone SE ya da küçük bir telefon bul. Gözlem derlemesini cihazı Mac'e bağlayınca ben kurarım.</li>
+<li>Manzara kurulunun sorularını yanıtla: seslendirmen, "house", varsayılan dil, zemin çizimini kimin yapacağı.</li>
 </ol>
 </div>
 

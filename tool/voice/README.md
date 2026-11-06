@@ -64,3 +64,32 @@ Renk sırası `lib/screens/coloring_screen.dart` içindeki `littlePalette` ve `b
 
 Sayfa adları (323 sayfa × 2 dil) ikinci aşamadır: anahtar `page_<kod>` (ör. `page_1f34e`),
 metin `tool/pages/catalog.json` içindeki `nameTr` ve `nameEn`.
+
+## Manzara kelimeleri (kurul P7, yalnız Manzara modu)
+
+Manzara modu, bu 20 klibin hepsi paketteyken görünür (`lib/data/scene_gate.dart`); bir test
+listenin tamamını `gardenScene.clipPaths()` ile denetler. Anahtar İngilizce kelimedir: ileride
+aynı kelimeyi kullanan iki parça (lale ve papatya, ikisi de flower) aynı klibi paylaşır.
+
+- Türkçe uygulama çift çalar: Türkçe kelime, yaklaşık 0,5 sn ara, İngilizce kelime ("Çiçek…
+  flower!"). İngilizce uygulama yalnız İngilizce kelimeyi çalar.
+- İngilizce kelimeleri anadili İngilizce ya da o düzeyde konuşan bir ses, ABD İngilizcesiyle okur.
+  Yukarıdaki "aynı seslendirmen iki dili okur" kuralının tek istisnası budur; Türkçe seslendirmen bu
+  düzeydeyse istisna gerekmez. Telaffuzu bir İngilizce öğretmeni ya da anadili İngilizce biri dinler.
+- Tek kelime, artikelsiz, çocuğa seslenerek okunur ("Sun!"). Seslendirmenlerden yazılı hak devri
+  alınır.
+- Kaba prototipte (gözlem turu 1) klip yoktur; kelimeyi gözlemci ya da ebeveyn söyler. Sahibin
+  sesiyle yapılan geçici kayıt yalnız gözlem cihazında kalır, pakete girmez.
+
+| Anahtar | Türkçe | English |
+|---|---|---|
+| scene | Manzara! | Scene! |
+| word_sun | Güneş | sun |
+| word_house | Ev | house |
+| word_tree | Ağaç | tree |
+| word_flower | Çiçek | flower |
+| word_cloud | Bulut | cloud |
+| word_bird | Kuş | bird |
+| word_sky | Gökyüzü | sky |
+| word_grass | Çimen | grass |
+| word_river | Nehir | river |

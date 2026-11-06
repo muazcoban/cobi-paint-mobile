@@ -251,5 +251,13 @@
   "guidedAccessTitle": "Çocuk uygulamada kalsın",
   "guidedAccessText": "iPhone ve iPad'de Rehberli Erişim'i kullanabilirsiniz: Ayarlar > Erişilebilirlik > Rehberli Erişim'i açın, sonra uygulama açıkken yan düğmeye (Ana Ekran düğmeli cihazlarda Ana Ekran düğmesine) üç kez basın. Android'de Ayarlar > Güvenlik > Uygulama sabitleme'yi kullanın.",
   "colorNames": "kırmızı,turuncu,sarı,yeşil,mavi,mor,pembe,kahverengi,siyah,açık mavi,açık yeşil,şeftali,açık sarı,lacivert,koyu yeşil,gri",
-  "canvasLabel": "Boyama sayfası"
+  "canvasLabel": "Boyama sayfası",
+  "scene": "Manzara",
+  "@scene": {
+    "description": "Home card of the scene mode: put pieces (sun, house, tree) in a garden and colour them. Only in builds with COBI_SCENE."
+  },
+  "sceneLabel": "Manzara: parçaları resme koy",
+  "@sceneLabel": {
+    "description": "Screen reader label of the scene canvas"
+  }
 }

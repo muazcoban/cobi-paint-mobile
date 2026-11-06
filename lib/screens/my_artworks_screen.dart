@@ -257,11 +257,7 @@ class _ArtworkCard extends StatelessWidget {
         }
       case 'printBlank':
         try {
-          final data = await rootBundle.load(artwork.originalImagePath);
-          await ExportService().printPicture(
-            data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes),
-            name: artwork.name,
-          );
+          await ExportService().printPicture(await _pageBytes(app, artwork.originalImagePath), name: artwork.name);
         } catch (e) {
           debugPrint('Blank page print failed: $e');
           if (context.mounted) {
@@ -271,9 +267,9 @@ class _ArtworkCard extends StatelessWidget {
       case 'blank':
         // The empty page as a file: the system sheet offers Print and Save.
         try {
-          final data = await rootBundle.load(artwork.originalImagePath);
+          final bytes = await _pageBytes(app, artwork.originalImagePath);
           final file = File('${(await getTemporaryDirectory()).path}/blank_page.png');
-          await file.writeAsBytes(data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes));
+          await file.writeAsBytes(bytes);
           if (!context.mounted) return;
           await ShareService().shareArtwork(file.path, text: l10n.shareText, subject: artwork.name, origin: origin);
         } catch (e) {
@@ -303,6 +299,14 @@ class _ArtworkCard extends StatelessWidget {
   }
 }
 
+/// A page's line art for printing: from the bundle, or from the app's files
+/// for a composed scene.
+Future<Uint8List> _pageBytes(AppProvider app, String path) async {
+  if (isScenePage(path)) return app.storageService.resolveScenePage(path).readAsBytes();
+  final data = await rootBundle.load(path);
+  return data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+}
+
 /// The file name a saved picture gets in the gallery: the app's name and a
 /// time stamp, so two saves never collide and the album sorts by date.
 String _exportName(DateTime at) {
@@ -314,13 +318,14 @@ String _exportName(DateTime at) {
 /// imported before the freeze and pages that no longer exist in the app.
 void openArtwork(BuildContext context, SavedArtwork artwork) {
   final app = context.read<AppProvider>();
+  final path = artwork.originalImagePath;
   final page = app.pagesById[artwork.originalImageId] ??
       ColoringImage(
         id: artwork.originalImageId,
         name: artwork.name,
         category: '',
-        imagePath: artwork.originalImagePath,
-        isImported: artwork.originalImagePath.contains('/imported/'),
+        imagePath: isScenePage(path) ? app.storageService.resolveScenePage(path).path : path,
+        isImported: isFilePage(path),
       );
   Navigator.push(
     context,

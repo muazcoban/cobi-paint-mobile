@@ -330,4 +330,10 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get canvasLabel => 'Boyama sayfası';
+
+  @override
+  String get scene => 'Manzara';
+
+  @override
+  String get sceneLabel => 'Manzara: parçaları resme koy';
 }

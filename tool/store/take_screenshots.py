@@ -15,7 +15,14 @@ The app speaks the simulator's language; set it before running:
 
 Then caption the frames with tool/store/caption_screenshots.py. Needs
 Pillow. The status bar is set to 9:41, full battery and full bars.
+
+--test runs another walk with the same handshake, --define passes a
+--dart-define to the app; the scene prototype, for example:
+
+    python3 tool/store/take_screenshots.py <udid> build/scene_shots/se \
+        --test integration_test/scene_walk_test.dart --define COBI_SCENE=observation
 """
+import argparse
 import glob
 import os
 import signal
@@ -106,9 +113,13 @@ def burst(udid, out, name):
 
 
 def main():
-    if len(sys.argv) != 3:
-        raise SystemExit(__doc__)
-    udid, out = sys.argv[1], sys.argv[2]
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument("udid")
+    parser.add_argument("out")
+    parser.add_argument("--test", default="integration_test/store_shots_test.dart")
+    parser.add_argument("--define", action="append", default=[], help="NAME=VALUE for --dart-define")
+    args = parser.parse_args()
+    udid, out = args.udid, args.out
     os.makedirs(out, exist_ok=True)
     subprocess.run(
         ["xcrun", "simctl", "status_bar", udid, "override", "--time", "9:41", "--batteryState", "charged",
@@ -116,7 +127,7 @@ def main():
         check=True,
     )
     test = subprocess.Popen(
-        [FLUTTER, "test", "integration_test/store_shots_test.dart", "-d", udid, "--no-pub"],
+        [FLUTTER, "test", args.test, "-d", udid, "--no-pub"] + [f"--dart-define={d}" for d in args.define],
         stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, bufsize=1,
     )
     for line in test.stdout:
