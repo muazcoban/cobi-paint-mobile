@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>İsim Araştırması</title>
+<style>
+:root {
+  --bg: #fbfaf7; --surface: #ffffff; --surface-2: #f3f1ec; --text: #1f2328; --muted: #5d6470;
+  --border: #e2ded6; --accent: #d9480f; --accent-soft: #fff1e8; --link: #0b62c4;
+  --p0: #c92a2a; --p0-soft: #ffe9e9; --p1: #b35c00; --p1-soft: #fff3e0; --p2: #2f6f3e; --p2-soft: #e8f5ec;
+  --info: #1864ab; --info-soft: #e7f1fb; --code-bg: #f1efe9;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #15171a; --surface: #1d2024; --surface-2: #24282d; --text: #e8e6e3; --muted: #a3a9b3;
+    --border: #343a41; --accent: #ff8a4c; --accent-soft: #3a2418; --link: #6cb4ff;
+    --p0: #ff8787; --p0-soft: #3b1f1f; --p1: #ffb84d; --p1-soft: #3a2c16; --p2: #8ce99a; --p2-soft: #1d3324;
+    --info: #74c0fc; --info-soft: #182a3b; --code-bg: #26292e;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #15171a; --surface: #1d2024; --surface-2: #24282d; --text: #e8e6e3; --muted: #a3a9b3;
+  --border: #343a41; --accent: #ff8a4c; --accent-soft: #3a2418; --link: #6cb4ff;
+  --p0: #ff8787; --p0-soft: #3b1f1f; --p1: #ffb84d; --p1-soft: #3a2c16; --p2: #8ce99a; --p2-soft: #1d3324;
+  --info: #74c0fc; --info-soft: #182a3b; --code-bg: #26292e;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+.wrap { max-width: 1080px; margin: 0 auto; padding: 32px 16px 80px; }
+header.top { border-bottom: 1px solid var(--border); padding-bottom: 20px; margin-bottom: 28px; }
+header.top h1 { font-size: 2rem; line-height: 1.2; margin: 0 0 8px; }
+.meta { color: var(--muted); font-size: .92rem; }
+a { color: var(--link); }
+h2 { font-size: 1.5rem; margin: 48px 0 12px; padding-top: 8px; border-top: 1px solid var(--border); }
+p { margin: 8px 0 12px; }
+.callout { background: var(--accent-soft); border-left: 4px solid var(--accent); border-radius: 8px; padding: 14px 18px; margin: 16px 0; }
+.callout ul { margin: 6px 0; padding-left: 20px; }
+.table-wrap { overflow-x: auto; margin: 12px 0 20px; border: 1px solid var(--border); border-radius: 10px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: .93rem; }
+th, td { text-align: left; vertical-align: top; padding: 9px 12px; border-bottom: 1px solid var(--border); }
+th { background: var(--surface-2); font-weight: 600; white-space: nowrap; }
+tr:last-child td { border-bottom: 0; }
+code { background: var(--code-bg); padding: 1px 5px; border-radius: 4px; font: .86em/1.4 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; word-break: break-word; }
+.badge { display: inline-block; font-size: .75rem; font-weight: 700; padding: 2px 8px; border-radius: 999px; white-space: nowrap; }
+.b-p0 { background: var(--p0-soft); color: var(--p0); }
+.b-p1 { background: var(--p1-soft); color: var(--p1); }
+.b-p2 { background: var(--p2-soft); color: var(--p2); }
+figure { margin: 12px 0 20px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 10px; }
+figure img { width: 100%; height: auto; display: block; border-radius: 6px; background: #fff; }
+figcaption { font-size: .86rem; color: var(--muted); margin-top: 8px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+<h1>Daha kolay bulunan bir ad</h1>
+<p class="meta">7 Kasım 2026 · App Store arama sırası ve arama önerileri, Türkiye ve ABD · ölçüm: <code>tool/aso/rank_check.py</code></p>
+</header>
+
+<div class="callout">
+<p><strong>Sonuç.</strong> Bugünkü adla uygulama aramada neredeyse görünmüyor. Türkiye'de "boyama", "boyama oyunu" ve "boyama kitabı" aramalarında ilk 170 sonucun içinde yok; "çocuk boyama"da 89. sırada. Bizi yalnız adını bilen buluyor. Önerim <strong>"Cobi: Çocuk Boyama Oyunları"</strong> adı ve <strong>"İnternetsiz, reklamsız 3-5 yaş"</strong> alt başlığı. Ad, Türkiye'de en çok aranan kalıbı ("boyama oyunları", "çocuk boyama oyunları") birebir taşıyor. Alt başlık, insanların sık yazdığı ve uygulamada gerçekten var olan üç özelliği ekliyor. Kısa marka "Cobi" önde kalıyor; bu nişte başarılı uygulamaların çoğu bu kalıbı kullanıyor.</p>
+</div>
+
+<h2>1. Bugünkü durum</h2>
+<p>Yayındaki 2.1.0'ın adı "Cobi Paint: Çocuk Boyama", alt başlığı "Küçük eller için boyama kitabı". Apple'ın herkese açık iTunes Search API'siyle her aramanın ilk 200 sonucunda uygulamanın sırasını ölçtüm. API'nin sırası mağazadaki aramaya yakın ama birebir aynı değil.</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Arama (Türkiye)</th><th>Cobi Paint</th><th>Arama (ABD)</th><th>Cobi Paint</th></tr></thead>
+<tbody>
+<tr><td>boyama</td><td>ilk 167'de yok</td><td>coloring</td><td>ilk 192'de yok</td></tr>
+<tr><td>boyama oyunu / boyama oyunları</td><td>ilk 164'te yok</td><td>coloring games</td><td>ilk 185'te yok</td></tr>
+<tr><td>boyama kitabı</td><td>ilk 178'de yok</td><td>coloring book</td><td>ilk 178'de yok</td></tr>
+<tr><td>çocuk boyama</td><td>89</td><td>kids coloring</td><td>ilk 182'de yok</td></tr>
+<tr><td>çocuk boyama oyunu</td><td>106</td><td>coloring for kids</td><td>ilk 175'te yok</td></tr>
+<tr><td>3 yaş boyama</td><td>119</td><td>toddler coloring</td><td>ilk 169'da yok</td></tr>
+<tr><td>okul öncesi boyama</td><td>170</td><td>drawing for kids</td><td>ilk 179'da yok</td></tr>
+<tr><td>boyama oyunu internetsiz</td><td>ilk 64'te yok</td><td></td><td></td></tr>
+<tr><td>cobi</td><td>11</td><td></td><td></td></tr>
+<tr><td>cobi paint</td><td>1</td><td>cobi paint</td><td>1</td></tr>
+</tbody></table></div>
+
+<h2>2. İnsanlar ne yazıyor</h2>
+<p>App Store, arama kutusuna yazılan harflere göre öneri gösteriyor ve en çok aranandan başlıyor. Türkiye ve ABD mağazasından toplandı; sayı (hacim) vermiyor, yalnız sıra veriyor.</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Yazılan</th><th>App Store'un önerileri, sırasıyla</th></tr></thead>
+<tbody>
+<tr><td>boyama</td><td>boyama oyunları · boyama oyunları ücretsiz · boyama oyunu · boyama oyunu çocuk ücretsiz · boyama · boyama oyunu internetsiz · boyama oyunları yetişkin · boyama oyunu çocuk · boyama kitabı</td></tr>
+<tr><td>çocuk boyama</td><td>çocuk boyama oyunları ücretsiz · çocuk boyama oyunları · çocuk boyama · çocuk boyama oyunları internetsiz · çocuk boyamaları · çocuk boyama ve çizim kitabı</td></tr>
+<tr><td>çocuklar için</td><td>… · çocuklar için boyama oyunu · çocuklar için ücretsiz boyama oyunları</td></tr>
+<tr><td>3 yaş</td><td>3 yaş oyunları ücretsiz · 3 yaş eğitici oyunlar · … · 3 yaş boyama ücretsiz</td></tr>
+<tr><td>okul öncesi</td><td>okul öncesi eğitici oyunlar · … · okul öncesi boyama</td></tr>
+<tr><td>reklamsız</td><td>reklamsız oyunlar · … · reklamsız çocuk oyunları · reklamsız ücretsiz çocuk oyunları</td></tr>
+<tr><td>coloring g (ABD)</td><td>coloring games · coloring games for kids · coloring games for adults · coloring games for kids 2~6 · … · coloring games for toddlers · coloring game for kids age 3-5 · coloring games offline</td></tr>
+<tr><td>kids col (ABD)</td><td>kids coloring free · kids coloring game · free kids coloring book · … · kids coloring no ads</td></tr>
+</tbody></table></div>
+<p>İki şey öne çıkıyor. Türkçe aramanın baskın kalıbı "oyunları" ve bugünkü adda bu kelime yok. "İnternetsiz", "reklamsız", "3 yaş" ve "okul öncesi" sık eklenen sözcükler; dördü de uygulamada gerçekten var. "Ücretsiz" de çok aranıyor, ama fiyat bilgisini ada ya da anahtar kelimeye koymak App Review 2.3.7'ye aykırı ve ileride Tam Sürüm gelecek; bu yüzden kullanmadım.</p>
+
+<h2>3. Ad eşleşmesi az puanla da işe yarıyor</h2>
+<p>Üst sıralar çoğunlukla on binlerce puanlı uygulamaların. Ama adı aramaya birebir uyan yeni uygulamalar, dar aramalarda puansız da ilk sayfaya çıkıyor:</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Uygulama</th><th>Puan sayısı</th><th>Arama</th><th>Sıra</th></tr></thead>
+<tbody>
+<tr><td>Çocuk boyama ve çizim oyunları</td><td>18</td><td>çocuk boyama oyunu · okul öncesi boyama</td><td>2 · 2</td></tr>
+<tr><td>Araba Boyama Oyunu Için Bebek Ve Okul Öncesi</td><td>1</td><td>okul öncesi boyama</td><td>3</td></tr>
+<tr><td>Prenses mermaid - ben ve çocuklar için boyama</td><td>0</td><td>çocuk boyama</td><td>4</td></tr>
+<tr><td>Minik Palet: Çocuk Boyama</td><td>2</td><td>boyama oyunu internetsiz</td><td>9</td></tr>
+<tr><td>Toddler Coloring Book &amp; Sounds (ABD)</td><td>0</td><td>toddler coloring</td><td>3</td></tr>
+</tbody></table></div>
+<p>Büyükler de aynı kalıpta: "Çocuklar için boyama kitapları" (71.095 puan), "Çocuklar İçin Boyama Oyunu ~" (19.543), "Pinksy: Çocuk boyama oyunları" (7.105), "Todli: Çocuk Boyama Oyunları" (1.738). Arama önerilerinde "Boyaboo: Çocuk Boyama Oyunu" ve "Kalemo: Çocuk Boyama Oyunları" da çıkıyor: kısa bir marka ve ardından aranan kalıp. Bu markalar zamanla kendi başlarına aranır olmuş.</p>
+
+<h2>4. İki seçenek</h2>
+<p>Ad ve alt başlık 30, anahtar kelimeler 100 karakter. Anahtar kelimelerde ad ve alt başlıktaki sözcükler tekrar edilmedi; Apple üç alanı birleştirerek eşleştiriyor. Hiçbir ad başka bir uygulamada birebir kullanılmıyor (Search API ile denetlendi).</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Alan</th><th>A: Cobi önde (önerim)</th><th>B: markasız</th></tr></thead>
+<tbody>
+<tr><td>Ad, TR</td><td><strong>Cobi: Çocuk Boyama Oyunları</strong> (27)</td><td>Çocuk Boyama Oyunları 3-5 Yaş (29)</td></tr>
+<tr><td>Alt başlık, TR</td><td>İnternetsiz, reklamsız 3-5 yaş (30)</td><td>İnternetsiz ve reklamsız çizim (30)</td></tr>
+<tr><td>Anahtar kelimeler, TR</td><td><code>oyunu,oyun,oyunlar,çocuklar,için,kitabı,okul öncesi,bebek,resim,çizim,eğitici,anaokulu,kız,erkek</code> (96)</td><td><code>cobi,oyunu,oyun,oyunlar,çocuklar,için,kitabı,okul öncesi,bebek,resim,eğitici,anaokulu,kız,erkek,boya</code> (100)</td></tr>
+<tr><td>Ad, EN</td><td><strong>Cobi: Coloring Games for Kids</strong> (29)</td><td>Coloring Games for Toddlers (27)</td></tr>
+<tr><td>Alt başlık, EN</td><td>Toddler drawing book, no ads (28)</td><td>Kids drawing book, no ads (25)</td></tr>
+<tr><td>Anahtar kelimeler, EN</td><td><code>preschool,offline,painting,baby,learning,toddlers,girls,boys,art,pages,kindergarten,stickers,draw</code> (97)</td><td><code>cobi,preschool,offline,painting,baby,learning,girls,boys,art,pages,kindergarten,stickers,age 3</code> (94)</td></tr>
+</tbody></table></div>
+<p><strong>İkisinin de karşıladığı aramalar (TR).</strong> boyama oyunları, çocuk boyama oyunları, çocuk boyama, boyama oyunu, çocuk boyama oyunları internetsiz, boyama oyunu internetsiz, reklamsız çocuk oyunları, 3 yaş boyama, okul öncesi boyama, çocuklar için boyama oyunu, boyama kitabı. ABD'de coloring games, coloring games for kids, kids coloring, kids coloring no ads, toddler coloring, coloring book.</p>
+<p><strong>Neden A.</strong> Aranan kalıp ("Çocuk Boyama Oyunları") iki seçenekte de adın içinde, yani markayı atmak sıralamaya çok az şey katar: 6 karakter. Buna karşılık marka, uygulamanın ikonu ve ana ekrandaki "Cobi Paint" adıyla tutarlı kalıyor ve uygulamayı rakiplerin genel adlarından ayırıyor. Kulaktan kulağa yayılan da marka olur ("Cobi'yi indir"). B'deki "3-5 Yaş" alt başlığa taşınmış hâliyle A'da da var.</p>
+<p><strong>B ne zaman daha iyi.</strong> Markayı hiç önemsemiyorsan ve adı tamamen arama terimine vermek istiyorsan. Uygulama 4 Kasım'dan beri yayında ve neredeyse hiç kullanıcısı yok; markayı bırakmanın en ucuz zamanı şimdi. "cobi" anahtar kelimelerde kalınca adını bilen yine bulur.</p>
+
+<h2>5. Kurallar ve süreç</h2>
+<ul>
+<li>"Çocuk" ve "Kids" yalnız Kids kategorisindeki uygulamalara izinli (2.3.8); uygulama Kids kategorisinde.</li>
+<li>Adlarda fiyat ("ücretsiz"), rakip adı ya da doğrulanamayan iddia yok (2.3.7). "İnternetsiz" ve "reklamsız" uygulamada doğru: ağ isteği ve reklam yok.</li>
+<li>"3-5 yaş" Kids bandıyla ("5 ve altı") uyumlu.</li>
+<li>Ad ve alt başlık App Information'da, anahtar kelimeler sürüm sayfasında. 2.2.0 incelemeye gitmeden değiştirilirse bu sürümle yayına girer ve Apple onları da inceler.</li>
+<li>Telefonun ana ekranındaki ad "Cobi Paint" kalır; mağaza adının daha uzun olması olağan.</li>
+</ul>
+
+<h2>6. Beklenti</h2>
+<p>Ad tek başına uygulamayı "boyama oyunları" gibi büyük aramaların ilk sayfasına taşımaz; orada on binlerce puanlı uygulamalar var. Gerçekçi hedef dar aramalar: "çocuk boyama oyunları internetsiz", "okul öncesi boyama", "3 yaş boyama", "reklamsız boyama". 3. bölümdeki örnekler, adı uyan uygulamaların bu aramalarda az puanla ilk sayfaya çıktığını gösteriyor. Ondan sonraki asıl kaldıraç puan: uygulamanın henüz puanı yok. Ebeveyn alanında, kapının arkasında puan isteme ayrı bir iş olarak değerlendirilebilir.</p>
+<p>Arama hacmini bilmiyorum; öneri, App Store'un öneri sırasına ve üst sıralardaki adlara dayanıyor. Hacim istersen Apple Ads hesabında anahtar kelimelerin popülerliğine ücretsiz bakılabiliyor. Ad değiştikten iki hafta sonra <code>python3 tool/aso/rank_check.py ranks</code> aynı tabloyu yeniden çıkarır.</p>
+
+<h2>7. Yöntem</h2>
+<p>7 Kasım 2026. Sıra: iTunes Search API (<code>itunes.apple.com/search</code>, country=tr ve us, ilk 200 sonuç). Öneriler: App Store'un arama önerisi servisi, Türkiye (143480) ve ABD (143441) mağazası. Rakip adları ve puan sayıları aynı API'den. İki kaynak da Apple'ın; hacim vermiyorlar.</p>
+</div>
+</body>
+</html>
