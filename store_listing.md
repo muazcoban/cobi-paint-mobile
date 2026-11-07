@@ -4,6 +4,13 @@ Bu metin uygulamanın 3 Kasım 2026'daki hâlini anlatır. App Store Connect'te 
 metinle dolduruldu (3 Kasım akşamı; Türkçe birincil, İngilizce (ABD) eklendi); canlı 1.0 metni hâlâ eski
 ("60+ resim", galeriden yükleme) ve 2.1.0 yayına girince değişir. Google Play kaydı yok.
 
+> **Durum (7 Kasım 2026):** 2.1.0, 4 Kasım 20:07'den beri App Store'da. 2.2.0 sürümü App Store Connect'te
+> açıldı ve bu dosyadaki 2.2.0 metinleriyle dolduruldu: build 9, tanıtım metni ve açıklamadaki iki satır (TR,
+> EN), What's New (TR, EN), Notes for Review ve dört ekran görüntüsü seti (iPhone ve 13" iPad, TR ve EN,
+> yedişer kare, `build/store_screenshots/*_220_secili_captioned`). Yayın elle. "Add for Review" ve
+> "Submit for Review" sahibin işi. Notes for Review'a 2.1.0 notunun giriş paragrafı ve Tam Sürüm cümlesi de
+> girdi; mağazadaki tam metin aşağıdaki maddelerden biraz uzun.
+
 > **2.2.0 (5 Kasım 2026'da hazırlandı):** Repoda 9 kategoride 323 sayfa var. Yeni kategoriler Uzay (14),
 > Müzik (17) ve Giysiler (26); Doğa 32, Bitkiler 26, Eşyalar 49, Araçlar 32 sayfaya çıktı. 2.1.0 (App
 > Review) ve 2.1.1 (TestFlight) bu sayfaları içermez, bu yüzden aşağıdaki 201 / 6 kategori / "200'den fazla"
@@ -130,7 +137,7 @@ saving let your child color without asking for help.
 ### Turkish
 - 3 yeni kategori: Uzay, Müzik ve Giysiler. Toplam 323 boyama sayfası.
 - Bir resmi baştan boyamak için Eserlerim'de resmi basılı tutun, ebeveyn sorusunu yanıtlayın ve "Bu sayfayı baştan boya"ya dokunun. Eski resim yerinde kalır.
-- Keçeli kalemle bir alanın neredeyse tamamı boyanınca kalan küçük beyaz köşeler kendiliğinden dolar. Ebeveynler alanından kapatabilirsiniz.
+- Keçeli kalemle bir alanın neredeyse tamamı boyanınca kalan küçük beyaz köşeler kendiliğinden dolar. Ebeveyn alanından kapatabilirsiniz.
 - Büyük modda iPad'de Apple Pencil ile bastırdıkça keçeli kalem, pastel ve neon çizgisi kalınlaşır.
 
 ### English
