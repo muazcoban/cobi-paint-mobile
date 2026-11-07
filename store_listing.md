@@ -4,6 +4,13 @@ Bu metin uygulamanın 3 Kasım 2026'daki hâlini anlatır. App Store Connect'te 
 metinle dolduruldu (3 Kasım akşamı; Türkçe birincil, İngilizce (ABD) eklendi); canlı 1.0 metni hâlâ eski
 ("60+ resim", galeriden yükleme) ve 2.1.0 yayına girince değişir. Google Play kaydı yok.
 
+> **Durum (7 Kasım 2026):** 2.1.0, 4 Kasım 20:07'den beri App Store'da. 2.2.0 sürümü App Store Connect'te
+> açıldı ve bu dosyadaki 2.2.0 metinleriyle dolduruldu: build 9, tanıtım metni ve açıklamadaki iki satır (TR,
+> EN), What's New (TR, EN), Notes for Review ve dört ekran görüntüsü seti (iPhone ve 13" iPad, TR ve EN,
+> yedişer kare, `build/store_screenshots/*_220_secili_captioned`). Yayın elle. "Add for Review" ve
+> "Submit for Review" sahibin işi. Notes for Review'a 2.1.0 notunun giriş paragrafı ve Tam Sürüm cümlesi de
+> girdi; mağazadaki tam metin aşağıdaki maddelerden biraz uzun.
+
 > **2.2.0 (5 Kasım 2026'da hazırlandı):** Repoda 9 kategoride 323 sayfa var. Yeni kategoriler Uzay (14),
 > Müzik (17) ve Giysiler (26); Doğa 32, Bitkiler 26, Eşyalar 49, Araçlar 32 sayfaya çıktı. 2.1.0 (App
 > Review) ve 2.1.1 (TestFlight) bu sayfaları içermez, bu yüzden aşağıdaki 201 / 6 kategori / "200'den fazla"
@@ -13,12 +20,22 @@ metinle dolduruldu (3 Kasım akşamı; Türkçe birincil, İngilizce (ABD) eklen
 > sayfayı anlatmalı (App Review 2.3.1). Ayrıntı: `plan/icerik-genisletme-2026-11-05.html`.
 
 ## App Name (30 karakter)
-- TR: **Cobi Paint: Çocuk Boyama** (24)
-- EN: **Cobi Paint: Kids Coloring** (25)
+
+2.2.0'dan itibaren (7 Kasım 2026'da App Store Connect'e yazıldı; gerekçe ve ölçüm
+`plan/isim-arastirmasi-2026-11-07.html`):
+- TR: **Cobi: Çocuk Boyama Oyunları** (27)
+- EN: **Cobi: Coloring Games for Kids** (29)
+
+2.1.0'da: "Cobi Paint: Çocuk Boyama" (24) ve "Cobi Paint: Kids Coloring" (25). Telefonun ana ekranındaki ad
+"Cobi Paint" kalıyor.
 
 ## Subtitle (30 karakter)
-- TR: Küçük eller için boyama kitabı (30)
-- EN: Coloring book for little hands (30)
+
+2.2.0'dan itibaren:
+- TR: İnternetsiz, reklamsız 3-5 yaş (30)
+- EN: Toddler drawing book, no ads (28)
+
+2.1.0'da: "Küçük eller için boyama kitabı" (30) ve "Coloring book for little hands" (30).
 
 ## Promotional Text (170 karakter)
 - TR: Yepyeni Cobi Paint: 6 kategoride 201 boyama sayfası, taşmayan tek dokunuş dolgu, 6 fırça, 16 çıkartma ve aynalı serbest çizim. Reklam yok, internet yok, hesap yok. (163)
@@ -130,7 +147,7 @@ saving let your child color without asking for help.
 ### Turkish
 - 3 yeni kategori: Uzay, Müzik ve Giysiler. Toplam 323 boyama sayfası.
 - Bir resmi baştan boyamak için Eserlerim'de resmi basılı tutun, ebeveyn sorusunu yanıtlayın ve "Bu sayfayı baştan boya"ya dokunun. Eski resim yerinde kalır.
-- Keçeli kalemle bir alanın neredeyse tamamı boyanınca kalan küçük beyaz köşeler kendiliğinden dolar. Ebeveynler alanından kapatabilirsiniz.
+- Keçeli kalemle bir alanın neredeyse tamamı boyanınca kalan küçük beyaz köşeler kendiliğinden dolar. Ebeveyn alanından kapatabilirsiniz.
 - Büyük modda iPad'de Apple Pencil ile bastırdıkça keçeli kalem, pastel ve neon çizgisi kalınlaşır.
 
 ### English
@@ -164,11 +181,15 @@ App Review bu alanı İngilizce okur. Kapı bilgisi `lib/widgets/parental_gate.d
 App Store anahtar kelime alanı 100 karakter, virgülle, boşluksuz; ad ve altyazıdaki kelimeler tekrar
 edilmez (pazarlama incelemesi, 3 Kasım 2026).
 
-### Turkish (100)
-okul öncesi,bebek,oyunu,oyunları,oyunlar,çizim,3 yaş,eğitici,reklamsız,anaokulu,hayvan,çıkartma,renk
+### Turkish (96, 2.2.0'dan itibaren)
+oyunu,oyun,oyunlar,çocuklar,için,kitabı,okul öncesi,bebek,resim,çizim,eğitici,anaokulu,kız,erkek
 
-### English (U.S.) (97)
-toddler,preschool,drawing,games,baby,animals,stickers,no ads,learning,kindergarten,offline,colors
+2.1.0'da (100): okul öncesi,bebek,oyunu,oyunları,oyunlar,çizim,3 yaş,eğitici,reklamsız,anaokulu,hayvan,çıkartma,renk
+
+### English (U.S.) (97, 2.2.0'dan itibaren)
+preschool,offline,painting,baby,learning,toddlers,girls,boys,art,pages,kindergarten,stickers,draw
+
+2.1.0'da (97): toddler,preschool,drawing,games,baby,animals,stickers,no ads,learning,kindergarten,offline,colors
 
 ### English (U.K.) (99, ileride üçüncü yerelleştirme)
 toddler,preschool,coloring,book,drawing,games,baby,animals,stickers,no ads,learning,nursery,offline
