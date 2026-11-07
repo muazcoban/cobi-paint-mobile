@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HIG ve Metin Boyu</title>
+<style>
+:root {
+  --bg: #fbfaf7; --surface: #ffffff; --surface-2: #f3f1ec; --text: #1f2328; --muted: #5d6470;
+  --border: #e2ded6; --accent: #d9480f; --accent-soft: #fff1e8; --link: #0b62c4;
+  --p0: #c92a2a; --p0-soft: #ffe9e9; --p1: #b35c00; --p1-soft: #fff3e0; --p2: #2f6f3e; --p2-soft: #e8f5ec;
+  --info: #1864ab; --info-soft: #e7f1fb; --code-bg: #f1efe9;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #15171a; --surface: #1d2024; --surface-2: #24282d; --text: #e8e6e3; --muted: #a3a9b3;
+    --border: #343a41; --accent: #ff8a4c; --accent-soft: #3a2418; --link: #6cb4ff;
+    --p0: #ff8787; --p0-soft: #3b1f1f; --p1: #ffb84d; --p1-soft: #3a2c16; --p2: #8ce99a; --p2-soft: #1d3324;
+    --info: #74c0fc; --info-soft: #182a3b; --code-bg: #26292e;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #15171a; --surface: #1d2024; --surface-2: #24282d; --text: #e8e6e3; --muted: #a3a9b3;
+  --border: #343a41; --accent: #ff8a4c; --accent-soft: #3a2418; --link: #6cb4ff;
+  --p0: #ff8787; --p0-soft: #3b1f1f; --p1: #ffb84d; --p1-soft: #3a2c16; --p2: #8ce99a; --p2-soft: #1d3324;
+  --info: #74c0fc; --info-soft: #182a3b; --code-bg: #26292e;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+.wrap { max-width: 1080px; margin: 0 auto; padding: 32px 16px 80px; }
+header.top { border-bottom: 1px solid var(--border); padding-bottom: 20px; margin-bottom: 28px; }
+header.top h1 { font-size: 2rem; line-height: 1.2; margin: 0 0 8px; }
+.meta { color: var(--muted); font-size: .92rem; }
+a { color: var(--link); }
+h2 { font-size: 1.5rem; margin: 48px 0 12px; padding-top: 8px; border-top: 1px solid var(--border); }
+p { margin: 8px 0 12px; }
+.callout { background: var(--accent-soft); border-left: 4px solid var(--accent); border-radius: 8px; padding: 14px 18px; margin: 16px 0; }
+.callout ul { margin: 6px 0; padding-left: 20px; }
+.table-wrap { overflow-x: auto; margin: 12px 0 20px; border: 1px solid var(--border); border-radius: 10px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: .93rem; }
+th, td { text-align: left; vertical-align: top; padding: 9px 12px; border-bottom: 1px solid var(--border); }
+th { background: var(--surface-2); font-weight: 600; white-space: nowrap; }
+tr:last-child td { border-bottom: 0; }
+code { background: var(--code-bg); padding: 1px 5px; border-radius: 4px; font: .86em/1.4 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; word-break: break-word; }
+.badge { display: inline-block; font-size: .75rem; font-weight: 700; padding: 2px 8px; border-radius: 999px; white-space: nowrap; }
+.b-p0 { background: var(--p0-soft); color: var(--p0); }
+.b-p1 { background: var(--p1-soft); color: var(--p1); }
+.b-p2 { background: var(--p2-soft); color: var(--p2); }
+figure { margin: 12px 0 20px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 10px; }
+figure img { width: 100%; height: auto; display: block; border-radius: 6px; background: #fff; }
+figcaption { font-size: .86rem; color: var(--muted); margin-top: 8px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+<h1>HIG ve metin boyu denetimi</h1>
+<p class="meta">7 Kasım 2026 · Manzara ekranı Apple Human Interface Guidelines'a göre; bütün ekranlar en büyük Dynamic Type boyunda · dal <code>faz13/gelistirmeler</code></p>
+</header>
+
+<div class="callout">
+<p><strong>Sonuç.</strong> Manzara ekranında iki düzeltilecek eksik buldum, ikisini de düzelttim. Beş madde gerekçeli sapma, geri kalanı uyumlu. En büyük metin boyunda üç sorun çıktı: ebeveyn kapısının penceresi taşıyordu, kısa etiketler üç noktayla kesiliyordu, bazı başlıklar kelimenin ortasından bölünüyordu. Üçünü de düzelttim ve testlerle korudum. Test sayısı 230'dan 236'ya çıktı, analiz temiz.</p>
+</div>
+
+<h2>1. Okunan HIG sayfaları</h2>
+<p>HIG her yıl değişiyor; hafızaya güvenmeden güncel sayfaları okudum. Sayfanın son değişiklik tarihi parantez içinde.</p>
+<ul>
+<li>Drag and drop (24 Ekim 2023)</li>
+<li>Gestures (28 Ekim 2026; iOS kısmı değişmemiş, eklenen macOS)</li>
+<li>Motion (9 Eylül 2025, Liquid Glass)</li>
+<li>Typography (16 Aralık 2025)</li>
+<li>Accessibility (9 Haziran 2025)</li>
+</ul>
+
+<h2>2. Manzara ekranı</h2>
+<p>Ekran: <code>lib/screens/scene_screen.dart</code>. "Gerekçeli sapma" satırları kurul kararından ya da 3 yaş ölçütünden geliyor; gerekçe satırda.</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Konu</th><th>Durum</th><th>Ayrıntı</th></tr></thead>
+<tbody>
+<tr><td>Sistem kenar jestleri</td><td><span class="badge b-p0">Eksikti, düzeltildi</span></td><td>HIG: sistem arayüzünü açan jestlerle çakışma. Boyama ekranı üst ve alt kenar jestlerini erteliyordu, Manzara ekranı ertelemiyordu. Tepsiden sürükleyen çocuk, ana ekran tuşlu telefonda alttan Denetim Merkezi'ni açabilirdi. Artık iki ekran da erteliyor (<code>scene_screen.dart:126</code>). Erteleme çağrılarını sayan bir yapıya çevirdim (<code>lib/services/system_gestures.dart</code>). Böylece Manzara boyama sayfasına geçerken eski ekranın geç gelen kapanışı ertelemeyi bozmuyor.</td></tr>
+<tr><td>VoiceOver'da İngilizce kelime</td><td><span class="badge b-p0">Eksikti, düzeltildi</span></td><td>Kurul şartı 18: "Güneş, sun" etiketinde İngilizce kısım İngilizce okunmalı. Etikete İngilizce dil özniteliği ekledim (<code>scene_screen.dart:33</code>). Türkçe ses "Güneş"i, İngilizce ses "sun"u okuyor. Hücreler düğme, yerleşen parçalar resim olarak okunuyor.</td></tr>
+<tr><td>Dokunma hedefi</td><td><span class="badge b-p2">Uyumlu</span></td><td>HIG en az 44×44 pt istiyor. Minik'te hücre 70 pt, isabet alanı 375 pt telefonda yaklaşık 88 pt. Büyük'te hücreler 44 pt'nin altına inmiyor. Bunu test kontrol ediyor (<code>test/scene_screen_test.dart</code>, <code>iOSTapTargetGuideline</code>).</td></tr>
+<tr><td>Sürüklemeye alternatif</td><td><span class="badge b-p2">Uyumlu</span></td><td>HIG: sürükle-bırakın başka bir yolu olsun. Dokunmak tek başına parçayı yerleştiriyor. VoiceOver'da hücreyi etkinleştirmek de aynı işi yapıyor.</td></tr>
+<tr><td>Hedef gösterimi</td><td><span class="badge b-p2">Uyumlu</span></td><td>HIG: geçerli hedefi vurgula, aynı anda tek aday göster. Parmak sahnedeyken yalnız en yakın boş yuva parlıyor. Diğer boş yuvalar soluk çerçeveyle görünüyor; bunu kurul istedi.</td></tr>
+<tr><td>Geçersiz bırakış</td><td><span class="badge b-p2">Uyumlu</span></td><td>HIG: öğeyi kaynağına geri götür. Tepside ya da sahne dışında bırakılan parça hücresine uçuyor.</td></tr>
+<tr><td>Geri alma</td><td><span class="badge b-p2">Uyumlu</span></td><td>Her yerleştirme bir geri al adımı. Büyük'te ileri al var.</td></tr>
+<tr><td>Hareket ve Reduce Motion</td><td><span class="badge b-p2">Uyumlu</span></td><td>HIG: hareket isteğe bağlı olsun; Reduce Motion'da kayma yerine solma kullan. Uçuş 220 ms; Reduce Motion açıkken parça yerinde beliriyor (<code>scene_screen.dart:334</code>). Model hemen güncelleniyor, yani uçuş sırasındaki dokunuş kaybolmuyor ("Let people cancel motion").</td></tr>
+<tr><td>Haptik ve ses</td><td><span class="badge b-p2">Uyumlu</span></td><td>Yerleştirmede hafif titreşim ve dolgu sesi. Titreşim Ebeveynler'deki ayara bağlı, ses oturumu Sessiz anahtara uyuyor.</td></tr>
+<tr><td>Güvenli alan, kenar boşluğu</td><td><span class="badge b-p2">Uyumlu</span></td><td>Ekran <code>SafeArea</code> içinde, kenar boşluğu 12 pt.</td></tr>
+<tr><td>iPad, yön, çoklu pencere</td><td><span class="badge b-p2">Uyumlu</span></td><td>Yatay pencerede tepsi sütuna dönüyor. Test 13" iPad'i, yatay telefonu ve 320 pt Split View'ı deniyor. Sürükleme sırasında pencere boyu değişirse sürükleme iptal oluyor.</td></tr>
+<tr><td>Kids Category (1.3, 5.1.4)</td><td><span class="badge b-p2">Uyumlu</span></td><td>Dış bağlantı, reklam ve veri toplama yok. Gözlem derlemesi App Store'a gitmiyor; mağaza derlemesinde kart yok.</td></tr>
+<tr><td>Sürükleme eşiği</td><td><span class="badge b-p1">Gerekçeli sapma</span></td><td>HIG sürükleme görüntüsünü yaklaşık 3 pt'de başlatıyor. Biz 20 pt'de başlatıyoruz: 3 yaşındaki çocuğun dokunurken kayan parmağı dokunuş sayılmalı (Ç4, kurul).</td></tr>
+<tr><td>Yarı saydam sürükleme görüntüsü</td><td><span class="badge b-p1">Gerekçeli sapma</span></td><td>HIG yarı saydam görüntü öneriyor. Parça opak kalıyor; yarı saydam olursa çizgi resmi zeminin çizgileriyle karışır ve çocuk parçayı net göremez.</td></tr>
+<tr><td>Aynı anda birden çok sürükleme</td><td><span class="badge b-p1">Gerekçeli sapma</span></td><td>HIG iPadOS'ta birden çok sürüklemeye izin vermeyi öneriyor. İkinci parmak yok sayılıyor; avuç ve fazladan parmak işlem başlatmamalı (Ç5, kurul).</td></tr>
+<tr><td>Geri kaydırma jesti</td><td><span class="badge b-p1">Gerekçeli sapma</span></td><td>Kenardan geri kaydırma kapalı, geri dönüş ev düğmesiyle yapılıyor. Gerekçe boyama ekranıyla aynı: çocuk kenardan kazara kaydırır.</td></tr>
+<tr><td>Kelime ve bitiş duyurusu</td><td><span class="badge b-p1">Gerekçeli sapma</span></td><td>Biten parçanın "boyandı" değeri ve bitiş duyurusu henüz yok, çünkü prototipte parça bitişi yok. Bunlar motor işinde gelecek.</td></tr>
+</tbody></table></div>
+
+<h2>3. En büyük metin boyu</h2>
+<p>HIG metnin en az yüzde 200 büyütülebilmesini istiyor ve düzenin her boyuta uymasını bekliyor. Uygulama bunu karşılıyor: metin bütün ekranlarda en çok yüzde 200 büyüyor (<code>lib/main.dart:96</code>). Ama düzen bu sınırda hiç denenmemişti. Desteklenen en küçük telefonda (iPhone SE, 375×667 pt) iOS'un en büyük erişilebilirlik boyunu seçtim; uygulama bunu yüzde 200'de kesiyor. Hem widget testleri hem simülatör yürüyüşü kullandım. Tam Sürüm ekranını ayrıca sınırsız, 3,1 katta denedim.</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Bulgu</th><th>Durum</th><th>Ne yaptım</th></tr></thead>
+<tbody>
+<tr><td>Ebeveyn kapısının penceresi 408 piksel taşıyordu</td><td><span class="badge b-p0">Düzeltildi</span></td><td>Pencere artık kayıyor (<code>parental_gate.dart:153</code>). Tuşların boyu sabit 64 pt olduğundan tuşlardaki rakamlar en çok 1,5 kat büyüyor. Bu 39 pt eder; yüzde 200 büyütülmüş gövde metninden (34 pt) büyük. Başlık, yönerge ve işlem satırı uygulamanın yüzde 200 sınırına kadar büyüyor.</td></tr>
+<tr><td>Kart adları üç noktayla kesiliyordu ("Hayv…", "Yiyec…")</td><td><span class="badge b-p0">Düzeltildi</span></td><td>Kısa etiketler için <code>OneLineLabel</code> widget'ı (<code>lib/widgets/one_line_label.dart</code>). Etiket tek satırda kalıyor; sığmadığında sığacak kadar küçülüyor. Normal boyda hiçbir şey değişmiyor.</td></tr>
+<tr><td>Başlıklar kelimenin ortasından bölünüyordu ("Eserle / rim")</td><td><span class="badge b-p0">Düzeltildi</span></td><td>Aynı widget ana ekran başlığında, Eserlerim kartında ve başlığında, kategori başlığında ve üç uygulama çubuğu başlığında kullanılıyor.</td></tr>
+<tr><td>Kart adları için yöntem</td><td><span class="badge b-p1">Gerekçeli sapma</span></td><td>HIG etiketin gerektiği kadar satıra yayılmasını ya da sütun sayısının azalmasını öneriyor. Kartlarda ikisini de seçmedim. Ebeveynin metin ayarı çocuğun ekranındaki kartların yerini ve boyunu değiştirmemeli. Tek kelimelik ad satıra yayılınca ortasından bölünüyor. Çocuk zaten adı değil, resmi ve sesi tanıyor. Ebeveynler alanındaki metinler yüzde 200'e kadar büyüyor ve satıra yayılıyor.</td></tr>
+</tbody></table></div>
+<p><strong>Testler.</strong> <code>test/large_text_test.dart</code> çocuğun ekranlarını (ana ekran, kategori, sayfa, Çiz, Manzara), ebeveynin ekranlarını (kapı, Ebeveynler, Eserlerim, seçenek sayfası, silme penceresi) ve Tam Sürüm ekranını en büyük boyda dolaşıyor. Hem taşma hem de üç noktayla kesilen yazı testi düşürüyor. Bu denetim eski ana ekranda "Animals is cut off" diye düşüyor, düzeltilmiş ekranda geçiyor. <code>test/services/system_gestures_test.dart</code> ekran değişiminde ertelemenin korunduğunu deniyor.</p>
+<figure><img src="img/metin-boyu-once-sonra.jpg" alt="En büyük metin boyunda ana ekran ve Eserlerim, önce ve sonra; ebeveyn kapısı"><figcaption>iPhone SE simülatörü, en büyük erişilebilirlik metni (uygulama yüzde 200'de keser). Soldan: ana ekran önce ("Eserle / rim", "Hayv…") ve sonra; Eserlerim önce ("Eserleri / m") ve sonra; düzeltilmiş ebeveyn kapısı (pencere kayıyor, rakamlar tuşlara sığıyor).</figcaption></figure>
+
+<h2>4. Açık kalanlar</h2>
+<ul>
+<li>Cihazda VoiceOver turu (UX raporundaki H-08). Simülatörde VoiceOver yok; senin ya da bir test cihazının işi.</li>
+<li>Uygulamanın yüzde 200 sınırı HIG'in alt sınırına eşit. Daha büyük metni desteklemek düzen işi ister; bugün gerek görmedim.</li>
+<li>Increase Contrast ayarı denenmedi. HIG bu ayar açıkken daha yüksek kontrast istiyor; uygulamanın renkleri bugün zaten 4,5:1 denetiminden geçiyor.</li>
+<li>Kelime anları ve bitiş duyurusu Manzara'nın motor işinde gelecek.</li>
+</ul>
+</div>
+</body>
+</html>

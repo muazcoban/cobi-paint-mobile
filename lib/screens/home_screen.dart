@@ -13,6 +13,7 @@ import '../services/sound_service.dart';
 import '../services/voice_service.dart';
 import '../theme/app_theme.dart';
 import '../widgets/kid_button.dart';
+import '../widgets/one_line_label.dart';
 import '../widgets/parental_gate.dart';
 import 'category_screen.dart';
 import 'coloring_screen.dart';
@@ -110,7 +111,7 @@ class _Header extends StatelessWidget {
           ClipOval(child: Image.asset('assets/images/app_icon.png', width: 64, height: 64)),
           const SizedBox(width: 12),
           const Expanded(
-            child: Text(
+            child: OneLineLabel(
               'Cobi Paint',
               style: TextStyle(fontSize: 28, fontWeight: FontWeight.w800, color: AppTheme.textPrimary),
             ),
@@ -173,7 +174,7 @@ class _GalleryCard extends StatelessWidget {
             ),
             const SizedBox(width: 16),
             Expanded(
-              child: Text(
+              child: OneLineLabel(
                 label,
                 // Dark text: white on the yellow-orange gradient was below 2.4:1.
                 style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w800, color: Color(0xFF2D3142)),
@@ -222,13 +223,9 @@ class _DrawCard extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(8, 0, 8, 14),
-              child: Text(
+              child: OneLineLabel(
                 label,
-                textAlign: TextAlign.center,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppTheme.textPrimary),
-              ),
+                center: true,                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppTheme.textPrimary),              ),
             ),
           ],
         ),
@@ -285,13 +282,9 @@ class _SceneCardState extends State<_SceneCard> {
                 ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(8, 0, 8, 14),
-                  child: Text(
+                  child: OneLineLabel(
                     label,
-                    textAlign: TextAlign.center,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppTheme.textPrimary),
-                  ),
+                    center: true,                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppTheme.textPrimary),                  ),
                 ),
               ],
             ),
@@ -338,13 +331,9 @@ class _CategoryCard extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(8, 0, 8, 14),
-              child: Text(
+              child: OneLineLabel(
                 name,
-                textAlign: TextAlign.center,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppTheme.textPrimary),
-              ),
+                center: true,                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppTheme.textPrimary),              ),
             ),
           ],
         ),

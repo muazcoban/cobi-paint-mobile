@@ -144,7 +144,13 @@ class _ParentalGateState extends State<ParentalGate> with SingleTickerProviderSt
     final theme = Theme.of(context);
     final locked = _secondsLocked;
 
+    // The keypad keeps its size; its digits grow with the text size only as
+    // far as they fit their 64 pt keys. The rest follows the text size up
+    // to the app's 200% cap, and the dialog scrolls when that no longer fits
+    // a small phone.
+    final textScaler = MediaQuery.textScalerOf(context);
     return AlertDialog(
+      scrollable: true,
       titlePadding: const EdgeInsets.fromLTRB(24, 16, 8, 0),
       title: Row(
         children: [
@@ -218,7 +224,11 @@ class _ParentalGateState extends State<ParentalGate> with SingleTickerProviderSt
                                     side: const BorderSide(color: Color(0x662D3142)),
                                   ),
                                     onPressed: locked > 0 ? null : () => _press(d),
-                                    child: Text('$d', style: const TextStyle(fontSize: 26)),
+                                    child: Text(
+                                      '$d',
+                                      textScaler: textScaler.clamp(maxScaleFactor: 1.5),
+                                      style: const TextStyle(fontSize: 26),
+                                    ),
                                   ),
                                 ),
                               ),

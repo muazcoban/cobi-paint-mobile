@@ -149,7 +149,7 @@ ul.tight li, ol.tight li { margin: 3px 0; }
 <tr><td>Kategori ve içerik zenginleştirme</td><td>Kurula gitmedi</td><td><span class="badge b-p2">Yapıldı</span> <code>f970012</code>. Uzay, Müzik ve Giysiler kategorileri; 201'den 307 sayfaya. Simülatörde denendi.</td><td>İçerikle çıkan sürümde mağaza metni ve "Notes for Review" (taslak <code>store_listing.md</code> dosyasında).</td></tr>
 <tr><td>Bir kısmı boyalı resim, devamını çocuk boyar</td><td>3/5, reddedildi</td><td><span class="badge b-p0">Kapalı</span> Büyük alanların önceden boyanması 3 Kasım'da reddedilen "renkli örnek" önerisinin aynısı sayıldı.</td><td>Yeniden oylanabilecek biçim: yalnız parmağın ulaşamadığı küçük ayrıntılar (göz bebeği, burun deliği) hazır gelir.</td></tr>
 <tr><td>Adım adım çizim (Connect and paint benzeri)</td><td>0/5, 1 veto</td><td><span class="badge b-p0">Kapalı</span> Şekil kopyalama becerisi 3 yaş için erken; Minik'e veto.</td><td>Yalnız Büyük modda, en çok 6 elle hazırlanmış sayfayla yeniden başvurulabilir.</td></tr>
-<tr><td>Manzara: parçayı koy, boya, adını Türkçe ve İngilizce duy (eşinin önerisi)</td><td>5/5 şartlı geçti</td><td><span class="badge b-p1">Prototip</span> Kaba prototip hazır: dal <code>faz12/manzara-prototip</code>, aşağıda "Kaba prototip". Bayraksız derlemede hiçbir şey değişmez; kelime kayıtları gelmeden hiçbir sürümde görünmez.</td><td>Tur 1 gözlem: gözlem derlemesiyle 3–5 çocuk. Sonra 20 klip insan sesi kaydı ve aşağıdaki soruların cevapları.</td></tr>
+<tr><td>Manzara: parçayı koy, boya, adını Türkçe ve İngilizce duy (eşinin önerisi)</td><td>5/5 şartlı geçti</td><td><span class="badge b-p1">Prototip</span> Kaba prototip master'da (PR #13), aşağıda "Kaba prototip". Bayraksız derlemede hiçbir şey değişmez; kelime kayıtları gelmeden hiçbir sürümde görünmez.</td><td>Tur 1 gözlem: gözlem derlemesiyle 3–5 çocuk. Sonra 20 klip insan sesi kaydı ve aşağıdaki soruların cevapları.</td></tr>
 <tr><td>Tam Sürüm almayanlara reklam</td><td>0/5, 5 veto</td><td><span class="badge b-p0">Kapalı</span> Kids Category kuralı 1.3 ve 5.1.4, "reklam yok" sözü, ağsız mimari ve "Data Not Collected" etiketi.</td><td>Reklamsız gelir yolları: kapı arkasındaki Tam Sürüm kilidi (<code>COBI_IAP</code>), mağaza sayfasında Promoted IAP, değerin açık anlatımı.</td></tr>
 </tbody></table></div>
 <h3>Manzara modu (kurul, 5–6 Kasım gecesi)</h3>
@@ -178,7 +178,7 @@ ul.tight li, ol.tight li { margin: 3px 0; }
 </tbody></table></div>
 <p><strong>Sıra.</strong> 2.2.0'a girmez. 2.2.0 yayına girince ayrı dalda kaba prototip (1–2 gün, boyamasız) ve 3–5 çocukla ilk gözlem; sonra motor, içerik hattı, ses, sahne ekranı ve testler. Kurulun tahmini 11–13 iş günü. Yayından önce gerçek kliplerle ikinci gözlem; çocuklar kelimeye tepki vermiyorsa yayın durur.</p>
 <h3 id="manzara-prototip">Manzara: kaba prototip (6 Kasım)</h3>
-<p>Kurulun sıradaki adımı olan kaba prototipi yaptım: dal <code>faz12/manzara-prototip</code>, master <code>8272ea8</code> üstünde. Mod <code>COBI_SCENE</code> bayrağının arkasında; bayraksız derlemede kart görünmez ve mağaza derlemesi değişmez. Amacı Tur 1 gözlemi: çocuk parçayı kendi başına yerine koyabiliyor mu, sahneyi boyarken komşu bölgeye kaçıyor mu.</p>
+<p>Kurulun sıradaki adımı olan kaba prototipi yaptım; PR #13 ile master'a girdi (<code>d61fcd5</code>). iPhone SE simülatöründe ve Android emülatöründe denendi. Mod <code>COBI_SCENE</code> bayrağının arkasında; bayraksız derlemede kart görünmez ve mağaza derlemesi değişmez. Amacı Tur 1 gözlemi: çocuk parçayı kendi başına yerine koyabiliyor mu, sahneyi boyarken komşu bölgeye kaçıyor mu.</p>
 <ul>
 <li><strong>Giriş.</strong> Ana ekranın en sonunda, Giysiler'den sonra 🏞️ Manzara kartı. Kart her açılışta boş sahne açar.</li>
 <li><strong>Sahne.</strong> Elle çizilmiş bahçe: ufuk ve ufuktan aşağı akan bir nehir. Minik'te 4 parça (güneş, ev, ağaç, çiçek), Büyük'te 6 (bulut ve kuş eklenir). Parça resimleri uygulamadaki sayfalardan, yuva boyunda ve sayfalarla aynı çizgi kalınlığında yeniden üretildi; içleri beyaz, dışları saydam. Kaynak <code>tool/scenes/scenes.json</code>, üretici <code>tool/scenes/build_scenes.py</code>.</li>
@@ -211,7 +211,7 @@ ul.tight li, ol.tight li { margin: 3px 0; }
 <li>2.1.0 (build 3) App Review'da. Onay gelince App Store Connect'te "Release this version" düğmesine sen basarsın.</li>
 <li>2.1.1 (build 8) TestFlight'ta hazır. 2.1.0 yayına girince incelemeye gönderilir.</li>
 <li>2.2.0 (build 9): PR #11 ve #12 merge edildi; <code>v2.2.0</code> etiketi 6 Kasım 09:31'de master <code>8272ea8</code>'e push edildi ve Xcode Cloud etikette derler. İçinde baştan boya, otomatik tamamlama, Apple Pencil basıncı, kaydırma düzeltmesi ve 323 sayfa var. "What's New", "Notes for Review" ve dört ekran görüntüsü seti hazır. Derlemenin TestFlight'a düştüğünü buradan doğrulayamadım; App Store Connect oturumu kapalıydı. 2.1.0 yayına girince 2.1.1 yerine 2.2.0 gönderilir.</li>
-<li>Manzara kaba prototipi (dal <code>faz12/manzara-prototip</code>) hiçbir sürüme girmez; gözlem derlemesiyle Tur 1 yapılır.</li>
+<li>Manzara kaba prototipi master'da ama bayrak kapalı olduğu için hiçbir sürümde görünmez; gözlem derlemesiyle Tur 1 yapılır.</li>
 </ol>
 <h3>Senden beklenen yanıtlar</h3>
 <ul>

@@ -10,6 +10,7 @@ import '../models/saved_artwork.dart';
 import '../services/sound_service.dart';
 import '../theme/app_theme.dart';
 import '../widgets/kid_button.dart';
+import '../widgets/one_line_label.dart';
 import 'coloring_screen.dart';
 import 'home_screen.dart' show categoryName, gridColumns;
 import 'my_artworks_screen.dart' show openArtwork;
@@ -43,10 +44,8 @@ class CategoryScreen extends StatelessWidget {
                   Text(category.icon, style: const TextStyle(fontSize: 44)),
                   const SizedBox(width: 8),
                   Expanded(
-                    child: Text(
+                    child: OneLineLabel(
                       categoryName(l10n, category),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
                       style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w800, color: AppTheme.textPrimary),
                     ),
                   ),

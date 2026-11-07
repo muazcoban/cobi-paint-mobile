@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:provider/provider.dart';
 
 import '../engine/scene/scene_placement.dart';
@@ -11,6 +12,7 @@ import '../models/user_settings.dart';
 import '../providers/app_provider.dart';
 import '../services/haptics.dart';
 import '../services/sound_service.dart';
+import '../services/system_gestures.dart';
 import '../widgets/idle_hint.dart';
 import '../widgets/kid_button.dart';
 import '../widgets/kid_metrics.dart';
@@ -24,6 +26,17 @@ const double _dragSlop = 20;
 
 /// A piece's flight between its tray cell and its slot.
 const Duration _flightTime = Duration(milliseconds: 220);
+
+/// A word's screen reader label with the English word marked as English, so
+/// VoiceOver reads "Güneş, sun" with a Turkish and then an English voice
+/// (council condition 18).
+AttributedString _spoken(SceneWord word, String languageCode) {
+  final text = word.label(languageCode);
+  final start = languageCode.startsWith('tr') ? word.tr.length + 2 : 0;
+  return AttributedString(text, attributes: [
+    LocaleStringAttribute(range: TextRange(start: start, end: text.length), locale: const Locale('en')),
+  ]);
+}
 
 /// The scene mode's rough prototype (council P7): the empty garden and a
 /// tray of pieces, nothing else. A tap sends a piece to its own slot, or to
@@ -108,11 +121,15 @@ class _SceneScreenState extends State<SceneScreen> with TickerProviderStateMixin
   void initState() {
     super.initState();
     unawaited(_sound.preload());
+    // As on a coloring page: a swipe from the top or bottom edge while a
+    // piece is dragged must not open Control Center or leave the app.
+    unawaited(SystemGestures.deferEdgeGestures(true));
     WidgetsBinding.instance.addPostFrameCallback((_) => _scheduleHint());
   }
 
   @override
   void dispose() {
+    unawaited(SystemGestures.deferEdgeGestures(false));
     _glowTimer?.cancel();
     _hintTimer?.cancel();
     _finishTimer?.cancel();
@@ -533,7 +550,7 @@ class _SceneScreenState extends State<SceneScreen> with TickerProviderStateMixin
                             rect: scaled(step.slot.rect),
                             child: Semantics(
                               image: true,
-                              label: step.piece.label(lang),
+                              attributedLabel: _spoken(step.piece, lang),
                               child: Image.asset(
                                 step.piece.asset,
                                 fit: BoxFit.fill,
@@ -600,7 +617,7 @@ class _SceneScreenState extends State<SceneScreen> with TickerProviderStateMixin
     final radius = BorderRadius.circular(size * 0.22);
     return Semantics(
       button: true,
-      label: piece.label(lang),
+      attributedLabel: _spoken(piece, lang),
       onTap: () => _tapPiece(piece),
       child: SizedBox.square(
         dimension: size,

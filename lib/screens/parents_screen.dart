@@ -11,6 +11,7 @@ import '../services/purchase_service.dart';
 import '../services/sound_service.dart';
 import '../services/voice_service.dart';
 import '../theme/app_theme.dart';
+import '../widgets/one_line_label.dart';
 import 'full_version_screen.dart';
 
 /// Everything for grown-ups, reached only through the parental gate:
@@ -28,7 +29,7 @@ class ParentsScreen extends StatelessWidget {
     final localeProvider = context.watch<LocaleProvider>();
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.parentsArea)),
+      appBar: AppBar(title: OneLineLabel(l10n.parentsArea)),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),
         children: [
@@ -239,7 +240,7 @@ class PrivacyScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.privacyPolicy)),
+      appBar: AppBar(title: OneLineLabel(l10n.privacyPolicy)),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         // The purchase paragraph belongs to builds that sell the Full Version
