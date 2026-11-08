@@ -8,6 +8,7 @@ import 'package:flutter/painting.dart';
 import '../document/coloring_document.dart';
 import '../document/stroke.dart';
 import '../region/label_map.dart';
+import 'fill_patterns.dart';
 import 'pressure_outline.dart';
 import 'symmetry.dart';
 
@@ -314,12 +315,28 @@ void _drawWithPressure(Canvas canvas, Stroke stroke) {
 /// strokes and per-region masks for strokes that stay inside the lines.
 /// Images are rebuilt off the paint path and swapped in when ready.
 class PageLayers {
-  PageLayers({required this.document}) : _fillPixels = Uint8List(document.map.width * document.map.height * 4);
+  PageLayers({required this.document})
+      : _fillPixels = Uint8List(document.map.width * document.map.height * 4),
+        _dotStep = dotStep(math.min(document.map.width, document.map.height)),
+        _stripePeriod = stripePeriod(math.min(document.map.width, document.map.height)) {
+    _fillWords = Endian.host == Endian.little ? _fillPixels.buffer.asUint32List() : null;
+    _dots = dotsTile(_dotStep);
+  }
 
   final ColoringDocument document;
   LabelMap get map => document.map;
 
   final Uint8List _fillPixels;
+
+  /// The same pixels as 32-bit words on a little-endian host (every Flutter
+  /// target): one write per pixel instead of four.
+  Uint32List? _fillWords;
+
+  // The page's pattern geometry (council P9): one dot tile and one stripe
+  // period for the whole page, so neighbouring regions line up.
+  final int _dotStep;
+  final int _stripePeriod;
+  late final Uint8List _dots;
   ui.Image? fillImage;
   ui.Image? brushImage;
   final Map<int, ui.Image> _masks = {};
@@ -414,38 +431,122 @@ class PageLayers {
     return previous;
   }
 
+  /// What to paint for one filled region: the words for the child's colour,
+  /// the mark tone and their blend, and for a rainbow one word per row.
+  _FillPaint? _paintFor(int label) {
+    final fill = document.regionFill(label);
+    if (fill == null) return null;
+    final ground = _word(fill.argb);
+    switch (fill.pattern) {
+      case FillPattern.solid:
+        return _FillPaint(FillPattern.solid, ground, ground, ground, null, 0);
+      case FillPattern.dots:
+      case FillPattern.stripes:
+        final mark = _word(markTone(fill.argb));
+        return _FillPaint(fill.pattern, ground, mark, _word(blendTone(fill.argb, markTone(fill.argb))), null, 0);
+      case FillPattern.rainbow:
+        final r = map.region(label);
+        final rows = rainbowRows(r.bottom - r.top + 1);
+        for (var i = 0; i < rows.length; i++) {
+          rows[i] = _word(rows[i]);
+        }
+        return _FillPaint(FillPattern.rainbow, ground, ground, ground, rows, r.top);
+    }
+  }
+
+  /// The word of page pixel (x, y) in a region painted with [paint].
+  int _pixelWord(_FillPaint paint, int x, int y) {
+    switch (paint.pattern) {
+      case FillPattern.solid:
+        return paint.ground;
+      case FillPattern.dots:
+        final cell = _dots[(y % (2 * _dotStep)) * _dotStep + x % _dotStep];
+        return cell == 0 ? paint.ground : (cell == 1 ? paint.mark : paint.blend);
+      case FillPattern.stripes:
+        return stripeMarkAt(x, y, _stripePeriod) ? paint.mark : paint.ground;
+      case FillPattern.rainbow:
+        return paint.rows![y - paint.top];
+    }
+  }
+
   void _paintFills(Set<int>? labels) {
-    final px = _fillPixels;
+    final words = _fillWords;
+    if (words == null) {
+      _paintFillsBytes(labels);
+      return;
+    }
     final lab = map.labels;
+    final w = map.width;
     if (labels == null) {
-      for (var i = 0, p = 0; i < lab.length; i++, p += 4) {
-        _write(px, p, document.fillOf(lab[i]));
+      final paints = List<_FillPaint?>.generate(map.regionCount + 1, (l) => l == 0 ? null : _paintFor(l));
+      var i = 0;
+      for (var y = 0; y < map.height; y++) {
+        for (var x = 0; x < w; x++, i++) {
+          final paint = paints[lab[i]];
+          words[i] = paint == null ? 0 : (paint.pattern == FillPattern.solid ? paint.ground : _pixelWord(paint, x, y));
+        }
       }
       return;
     }
     for (final label in labels) {
       if (label <= 0 || label > map.regionCount) continue;
-      final argb = document.fillOf(label);
+      final paint = _paintFor(label);
       final r = map.region(label);
       for (var y = r.top; y <= r.bottom; y++) {
-        var i = y * map.width + r.left;
+        var i = y * w + r.left;
         for (var x = r.left; x <= r.right; x++, i++) {
-          if (lab[i] == label) _write(px, i * 4, argb);
+          if (lab[i] != label) continue;
+          words[i] = paint == null ? 0 : _pixelWord(paint, x, y);
         }
       }
     }
   }
 
-  static void _write(Uint8List px, int p, int argb) {
-    if (argb == 0) {
-      px[p] = px[p + 1] = px[p + 2] = px[p + 3] = 0;
-    } else {
-      px[p] = (argb >> 16) & 0xFF;
-      px[p + 1] = (argb >> 8) & 0xFF;
-      px[p + 2] = argb & 0xFF;
-      px[p + 3] = (argb >> 24) & 0xFF;
+  /// The byte-by-byte path for a big-endian host; no Flutter target is one.
+  void _paintFillsBytes(Set<int>? labels) {
+    final px = _fillPixels;
+    final lab = map.labels;
+    final w = map.width;
+    void put(int i, int x, int y, _FillPaint? paint) {
+      final p = i * 4;
+      if (paint == null) {
+        px[p] = px[p + 1] = px[p + 2] = px[p + 3] = 0;
+        return;
+      }
+      final word = _pixelWord(paint, x, y);
+      px[p] = word & 0xFF;
+      px[p + 1] = (word >> 8) & 0xFF;
+      px[p + 2] = (word >> 16) & 0xFF;
+      px[p + 3] = (word >> 24) & 0xFF;
+    }
+
+    if (labels == null) {
+      final paints = List<_FillPaint?>.generate(map.regionCount + 1, (l) => l == 0 ? null : _paintFor(l));
+      var i = 0;
+      for (var y = 0; y < map.height; y++) {
+        for (var x = 0; x < w; x++, i++) {
+          put(i, x, y, paints[lab[i]]);
+        }
+      }
+      return;
+    }
+    for (final label in labels) {
+      if (label <= 0 || label > map.regionCount) continue;
+      final paint = _paintFor(label);
+      final r = map.region(label);
+      for (var y = r.top; y <= r.bottom; y++) {
+        var i = y * w + r.left;
+        for (var x = r.left; x <= r.right; x++, i++) {
+          if (lab[i] == label) put(i, x, y, paint);
+        }
+      }
     }
   }
+
+  /// An ARGB colour as the RGBA word the pixel buffer holds on a
+  /// little-endian host: R in the lowest byte, A in the highest.
+  static int _word(int argb) =>
+      argb == 0 ? 0 : (((argb >> 24) & 0xFF) << 24) | ((argb & 0xFF) << 16) | (((argb >> 8) & 0xFF) << 8) | ((argb >> 16) & 0xFF);
 
   /// Rasterises committed strokes when they changed. Safe to call often.
   Future<void> syncBrush() {
@@ -566,4 +667,18 @@ class PageLayers {
     buffer.dispose();
     return frame.image;
   }
+}
+
+/// The words one filled region is painted with.
+class _FillPaint {
+  const _FillPaint(this.pattern, this.ground, this.mark, this.blend, this.rows, this.top);
+
+  final FillPattern pattern;
+  final int ground;
+  final int mark;
+  final int blend;
+
+  /// Rainbow only: one word per row of the region, from [top] down.
+  final Uint32List? rows;
+  final int top;
 }

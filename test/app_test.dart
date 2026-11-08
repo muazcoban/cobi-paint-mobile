@@ -142,7 +142,7 @@ void main() {
     // Two columns: (375 - 2 x 16 padding - 16 spacing) / 2 wide; the grid is the same for every card.
     expect(size.width, closeTo(163.5, 0.01));
 
-    for (final (name, id) in [('Space', 'space'), ('Music', 'music'), ('Clothes', 'clothes')]) {
+    for (final (name, id) in [('Space', 'space'), ('Music', 'music'), ('Clothes', 'clothes'), ('Celebrations', 'celebrations')]) {
       await tester.scrollUntilVisible(find.text(name), 120, scrollable: find.byType(Scrollable).first);
       await tester.pumpAndSettle();
       expect(tester.getSize(card(name)), size, reason: '$name has the same tap target as the first card');

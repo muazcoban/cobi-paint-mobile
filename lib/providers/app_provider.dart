@@ -11,6 +11,7 @@ import '../models/coloring_image.dart';
 import '../models/saved_artwork.dart';
 import '../services/haptics.dart';
 import '../services/purchase_service.dart';
+import '../services/rating_prompt.dart';
 import '../services/storage_service.dart';
 import '../services/voice_service.dart';
 import '../services/sound_service.dart';
@@ -18,15 +19,20 @@ import '../theme/app_theme.dart';
 
 class AppProvider extends ChangeNotifier {
   /// [storage] and [cacheDirectory] default to the device's own folders;
-  /// tests pass temporary ones.
-  AppProvider({StorageService? storage, Future<Directory> Function()? cacheDirectory})
+  /// tests pass temporary ones, and a fake [storeReview].
+  AppProvider({StorageService? storage, Future<Directory> Function()? cacheDirectory, StoreReview? storeReview})
       : _storageService = storage ?? StorageService(),
-        regionService = RegionService(cacheDirectory: cacheDirectory ?? getApplicationCacheDirectory);
+        regionService = RegionService(cacheDirectory: cacheDirectory ?? getApplicationCacheDirectory),
+        _storeReview = storeReview;
 
   final StorageService _storageService;
+  final StoreReview? _storeReview;
 
   /// Label maps are derived data, so the OS may clear them with the cache.
   final RegionService regionService;
+
+  /// Asks a grown-up for a rating, only when its policy allows.
+  late final RatingPrompt ratingPrompt = RatingPrompt(storage: _storageService, review: _storeReview);
 
   UserSettings _settings = UserSettings();
   List<Category> _categories = [];
@@ -61,6 +67,8 @@ class AppProvider extends ChangeNotifier {
     try {
       // Initialize services
       await _storageService.init();
+      // The rating request waits a few days from here.
+      await _storageService.recordFirstLaunch(DateTime.now());
 
       // Load settings
       _settings = await _storageService.getUserSettings();
@@ -102,7 +110,12 @@ class AppProvider extends ChangeNotifier {
   List<ColoringImage> getImagesForCategory(String categoryId) {
     // Imported pages only live in the import category
     if (categoryId == 'import') return _importedImages;
-    final pages = builtInImages.where((img) => img.category == categoryId);
+    // The category's own pages first, then the pages other categories lend
+    // it (ColoringImage.alsoIn); a page keeps one id wherever it shows.
+    final pages = [
+      ...builtInImages.where((img) => img.category == categoryId),
+      ...builtInImages.where((img) => img.category != categoryId && img.alsoIn.contains(categoryId)),
+    ];
     final locked = PurchaseService.enabled && !PurchaseService().isFull.value;
     return (locked ? pages.where((img) => img.free) : pages).toList();
   }

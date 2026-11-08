@@ -176,6 +176,12 @@ abstract class AppLocalizations {
   /// **'Giysiler'**
   String get clothes;
 
+  /// Home screen card: winter, new year and other celebration pages
+  ///
+  /// In tr, this message translates to:
+  /// **'Kutlamalar'**
+  String get celebrations;
+
   /// No description provided for @pageLevel.
   ///
   /// In tr, this message translates to:
@@ -386,6 +392,30 @@ abstract class AppLocalizations {
   /// **'Doldur'**
   String get fill;
 
+  /// VoiceOver name of the bucket in its dots state
+  ///
+  /// In tr, this message translates to:
+  /// **'Doldur: benekli'**
+  String get fillDots;
+
+  /// VoiceOver name of the bucket in its stripes state
+  ///
+  /// In tr, this message translates to:
+  /// **'Doldur: çizgili'**
+  String get fillStripes;
+
+  /// VoiceOver name of the bucket in its rainbow state
+  ///
+  /// In tr, this message translates to:
+  /// **'Doldur: gökkuşağı'**
+  String get fillRainbow;
+
+  /// VoiceOver announcement when every area of a page has paint; never drawn on screen
+  ///
+  /// In tr, this message translates to:
+  /// **'Resim bitti'**
+  String get pageFinished;
+
   /// Eraser tool
   ///
   /// In tr, this message translates to:
@@ -578,6 +608,18 @@ abstract class AppLocalizations {
   /// **'Bize Ulaşın'**
   String get contactUs;
 
+  /// Parents area row that opens the app's store page to leave a rating; behind the gate
+  ///
+  /// In tr, this message translates to:
+  /// **'Uygulamaya puan ver'**
+  String get rateApp;
+
+  /// Subtitle of the rate row: it leaves the app for the App Store or Google Play
+  ///
+  /// In tr, this message translates to:
+  /// **'Uygulama mağazasında açılır'**
+  String get rateAppHint;
+
   /// No description provided for @marker.
   ///
   /// In tr, this message translates to:
@@ -647,7 +689,7 @@ abstract class AppLocalizations {
   /// No description provided for @ageModeBigDesc.
   ///
   /// In tr, this message translates to:
-  /// **'16 renk, iki parmakla yakınlaştırma, fırça boyutları, ileri al.'**
+  /// **'18 renk, iki parmakla yakınlaştırma, fırça boyutları, ileri al.'**
   String get ageModeBigDesc;
 
   /// No description provided for @coloringSection.
@@ -707,7 +749,7 @@ abstract class AppLocalizations {
   /// No description provided for @colorNames.
   ///
   /// In tr, this message translates to:
-  /// **'kırmızı,turuncu,sarı,yeşil,mavi,mor,pembe,kahverengi,siyah,açık mavi,açık yeşil,şeftali,açık sarı,lacivert,koyu yeşil,gri'**
+  /// **'kırmızı,turuncu,sarı,yeşil,mavi,mor,pembe,kahverengi,siyah,açık mavi,açık yeşil,şeftali,açık sarı,lacivert,koyu yeşil,gri,karamel,kakao'**
   String get colorNames;
 
   /// No description provided for @canvasLabel.

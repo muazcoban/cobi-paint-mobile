@@ -48,6 +48,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get clothes => 'Giysiler';
 
   @override
+  String get celebrations => 'Kutlamalar';
+
+  @override
   String get pageLevel => 'Sayfa zorluğu';
 
   @override
@@ -158,6 +161,18 @@ class AppLocalizationsTr extends AppLocalizations {
   String get fill => 'Doldur';
 
   @override
+  String get fillDots => 'Doldur: benekli';
+
+  @override
+  String get fillStripes => 'Doldur: çizgili';
+
+  @override
+  String get fillRainbow => 'Doldur: gökkuşağı';
+
+  @override
+  String get pageFinished => 'Resim bitti';
+
+  @override
   String get eraser => 'Silgi';
 
   @override
@@ -255,6 +270,12 @@ class AppLocalizationsTr extends AppLocalizations {
   String get contactUs => 'Bize Ulaşın';
 
   @override
+  String get rateApp => 'Uygulamaya puan ver';
+
+  @override
+  String get rateAppHint => 'Uygulama mağazasında açılır';
+
+  @override
   String get marker => 'Keçeli kalem';
 
   @override
@@ -291,7 +312,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get ageModeBigDesc =>
-      '16 renk, iki parmakla yakınlaştırma, fırça boyutları, ileri al.';
+      '18 renk, iki parmakla yakınlaştırma, fırça boyutları, ileri al.';
 
   @override
   String get coloringSection => 'Boyama';
@@ -326,7 +347,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get colorNames =>
-      'kırmızı,turuncu,sarı,yeşil,mavi,mor,pembe,kahverengi,siyah,açık mavi,açık yeşil,şeftali,açık sarı,lacivert,koyu yeşil,gri';
+      'kırmızı,turuncu,sarı,yeşil,mavi,mor,pembe,kahverengi,siyah,açık mavi,açık yeşil,şeftali,açık sarı,lacivert,koyu yeşil,gri,karamel,kakao';
 
   @override
   String get canvasLabel => 'Boyama sayfası';

@@ -7,6 +7,8 @@ kararı: her cihazda aynı, sıcak ve lisansı temiz bir ses).
 ## Kurallar
 
 - Biçim: MP3, mono, 44,1 kHz, 96 kbps; her klip 0,5–1,5 sn; başında ve sonunda 50 ms sessizlik.
+- `gate` (cümle) ve `scene` klipleri için üst sınır 3 sn. `tool/voice/process_clips.py` sınır dışı
+  süreye uyarı verir, hata değil.
 - Ses seviyesi: tüm klipler aynı seviyeye normalize edilir (−16 LUFS hedef).
 - Aynı seslendirmen iki dili de okur; sakin, sıcak, biraz yavaş. Çocuğa seslenir ("Kırmızı!").
 - Dosya adı `<anahtar>.mp3`, klasör `assets/voice/tr/` ve `assets/voice/en/`.
@@ -30,6 +32,7 @@ kararı: her cihazda aynı, sıcak ve lisansı temiz bir ses).
 | category_space | Uzay | Space |
 | category_music | Müzik | Music |
 | category_clothes | Giysiler | Clothes |
+| category_celebrations | Kutlamalar | Celebrations |
 | color_0 | Kırmızı | Red |
 | color_1 | Turuncu | Orange |
 | color_2 | Sarı | Yellow |
@@ -46,8 +49,12 @@ kararı: her cihazda aynı, sıcak ve lisansı temiz bir ses).
 | color_13 | Lacivert | Navy |
 | color_14 | Koyu yeşil | Dark green |
 | color_15 | Gri | Grey |
+| color_16 | Karamel | Caramel |
+| color_17 | Kakao | Cocoa |
 | eraser | Silgi | Eraser |
 | fill | Boya | Paint |
+| fill_dots | Benekli | Dots |
+| fill_stripes | Çizgili | Stripes |
 | brush | Fırça | Brush |
 | mirror | Ayna | Mirror |
 | sticker | Çıkartma | Sticker |
@@ -59,7 +66,7 @@ kararı: her cihazda aynı, sıcak ve lisansı temiz bir ses).
 | undo | Geri al | Undo |
 
 Renk sırası `lib/screens/coloring_screen.dart` içindeki `littlePalette` ve `bigPalette` sırasıdır;
-`color_9`–`color_15` yalnız Büyük modda duyulur. Renk adları `lib/l10n/app_*.arb` dosyasındaki
+`color_9`–`color_17` yalnız Büyük modda duyulur. Renk adları `lib/l10n/app_*.arb` dosyasındaki
 `colorNames` listesiyle aynı olmalıdır.
 
 Sayfa adları (323 sayfa × 2 dil) ikinci aşamadır: anahtar `page_<kod>` (ör. `page_1f34e`),
@@ -93,3 +100,9 @@ aynı kelimeyi kullanan iki parça (lale ve papatya, ikisi de flower) aynı klib
 | word_sky | Gökyüzü | sky |
 | word_grass | Çimen | grass |
 | word_river | Nehir | river |
+
+## İşleme
+
+- Ham kayıtlar `tool/voice/raw/<dil>/<anahtar>.m4a` (wav, aiff, mp3, caf, flac da olur); `python3 tool/voice/process_clips.py` kenar sessizliğini kırpar, −16 LUFS'a getirir, `assets/voice/<dil>/<anahtar>.mp3` yazar.
+- `python3 tool/voice/process_clips.py --check` eksik ve fazla klipleri, biçimi (mono, 44,1 kHz, MP3) ve süreyi denetler.
+- `python3 tool/voice/process_clips.py --pubspec` dolu klasörler için `pubspec.yaml` satırlarını ekler. Kayıt tarzı ve sırası `tool/voice/kayit-rehberi.md` dosyasındadır.

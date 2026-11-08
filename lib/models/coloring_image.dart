@@ -26,6 +26,11 @@ class ColoringImage {
 
   /// Part of the fixed free subset shown before the Full Version is bought.
   final bool free;
+
+  /// Other categories that show this page too (the Celebrations category
+  /// gathers winter pages from Nature, Clothes and the rest). The page keeps
+  /// its id and its own [category], so saved artworks never move.
+  final List<String> alsoIn;
   final bool isImported;
   final DateTime? createdAt;
 
@@ -38,6 +43,7 @@ class ColoringImage {
     this.level = 2,
     this.freeDraw = false,
     this.free = false,
+    this.alsoIn = const [],
     this.isImported = false,
     this.createdAt,
   });
@@ -52,6 +58,7 @@ class ColoringImage {
       level: (json['level'] as num?)?.toInt() ?? 2,
       freeDraw: json['freeDraw'] ?? false,
       free: json['free'] ?? false,
+      alsoIn: [for (final c in (json['alsoIn'] as List?) ?? const []) c.toString()],
       isImported: json['isImported'] ?? false,
       createdAt: json['createdAt'] != null
           ? DateTime.parse(json['createdAt'])
@@ -69,6 +76,7 @@ class ColoringImage {
       'level': level,
       'freeDraw': freeDraw,
       'free': free,
+      if (alsoIn.isNotEmpty) 'alsoIn': alsoIn,
       'isImported': isImported,
       'createdAt': createdAt?.toIso8601String(),
     };
@@ -87,6 +95,7 @@ class ColoringImage {
     int? level,
     bool? freeDraw,
     bool? free,
+    List<String>? alsoIn,
     bool? isImported,
     DateTime? createdAt,
   }) {
@@ -99,6 +108,7 @@ class ColoringImage {
       level: level ?? this.level,
       freeDraw: freeDraw ?? this.freeDraw,
       free: free ?? this.free,
+      alsoIn: alsoIn ?? this.alsoIn,
       isImported: isImported ?? this.isImported,
       createdAt: createdAt ?? this.createdAt,
     );

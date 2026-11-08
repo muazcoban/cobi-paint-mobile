@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pazar Araştırması</title>
+<style>
+:root {
+  --bg: #fbfaf7; --surface: #ffffff; --surface-2: #f3f1ec; --text: #1f2328; --muted: #5d6470;
+  --border: #e2ded6; --accent: #d9480f; --accent-soft: #fff1e8; --link: #0b62c4;
+  --p0: #c92a2a; --p0-soft: #ffe9e9; --p1: #b35c00; --p1-soft: #fff3e0; --p2: #2f6f3e; --p2-soft: #e8f5ec;
+  --info: #1864ab; --info-soft: #e7f1fb; --code-bg: #f1efe9;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #15171a; --surface: #1d2024; --surface-2: #24282d; --text: #e8e6e3; --muted: #a3a9b3;
+    --border: #343a41; --accent: #ff8a4c; --accent-soft: #3a2418; --link: #6cb4ff;
+    --p0: #ff8787; --p0-soft: #3b1f1f; --p1: #ffb84d; --p1-soft: #3a2c16; --p2: #8ce99a; --p2-soft: #1d3324;
+    --info: #74c0fc; --info-soft: #182a3b; --code-bg: #26292e;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #15171a; --surface: #1d2024; --surface-2: #24282d; --text: #e8e6e3; --muted: #a3a9b3;
+  --border: #343a41; --accent: #ff8a4c; --accent-soft: #3a2418; --link: #6cb4ff;
+  --p0: #ff8787; --p0-soft: #3b1f1f; --p1: #ffb84d; --p1-soft: #3a2c16; --p2: #8ce99a; --p2-soft: #1d3324;
+  --info: #74c0fc; --info-soft: #182a3b; --code-bg: #26292e;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+.wrap { max-width: 1080px; margin: 0 auto; padding: 32px 16px 80px; }
+header.top { border-bottom: 1px solid var(--border); padding-bottom: 20px; margin-bottom: 28px; }
+header.top h1 { font-size: 2rem; line-height: 1.2; margin: 0 0 8px; }
+.meta { color: var(--muted); font-size: .92rem; }
+a { color: var(--link); }
+h2 { font-size: 1.5rem; margin: 48px 0 12px; padding-top: 8px; border-top: 1px solid var(--border); }
+p { margin: 8px 0 12px; }
+.callout { background: var(--accent-soft); border-left: 4px solid var(--accent); border-radius: 8px; padding: 14px 18px; margin: 16px 0; }
+.callout ul { margin: 6px 0; padding-left: 20px; }
+.table-wrap { overflow-x: auto; margin: 12px 0 20px; border: 1px solid var(--border); border-radius: 10px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: .93rem; }
+th, td { text-align: left; vertical-align: top; padding: 9px 12px; border-bottom: 1px solid var(--border); }
+th { background: var(--surface-2); font-weight: 600; white-space: nowrap; }
+tr:last-child td { border-bottom: 0; }
+code { background: var(--code-bg); padding: 1px 5px; border-radius: 4px; font: .86em/1.4 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; word-break: break-word; }
+.badge { display: inline-block; font-size: .75rem; font-weight: 700; padding: 2px 8px; border-radius: 999px; white-space: nowrap; }
+.b-p0 { background: var(--p0-soft); color: var(--p0); }
+.b-p1 { background: var(--p1-soft); color: var(--p1); }
+.b-p2 { background: var(--p2-soft); color: var(--p2); }
+figure { margin: 12px 0 20px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 10px; }
+figure img { width: 100%; height: auto; display: block; border-radius: 6px; background: #fff; }
+figcaption { font-size: .86rem; color: var(--muted); margin-top: 8px; }
+
+:root { --d-fill: #e7f1fb; --d-stroke: #1864ab; --d-fill-2: #fff1e8; --d-stroke-2: #d9480f; --d-line: #5d6470; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --d-fill: #182a3b; --d-stroke: #74c0fc; --d-fill-2: #3a2418; --d-stroke-2: #ff8a4c; --d-line: #a3a9b3; } }
+:root[data-theme="dark"] { --d-fill: #182a3b; --d-stroke: #74c0fc; --d-fill-2: #3a2418; --d-stroke-2: #ff8a4c; --d-line: #a3a9b3; }
+.diagram { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 12px; margin: 12px 0 20px; overflow-x: auto; }
+.diagram svg { display: block; width: 100%; min-width: 760px; height: auto; }
+.diagram svg text { fill: var(--text); font-family: inherit; }
+.diagram .box { fill: var(--d-fill); stroke: var(--d-stroke); stroke-width: 1.5; }
+.diagram .box2 { fill: var(--d-fill-2); stroke: var(--d-stroke-2); stroke-width: 1.5; }
+.diagram .edge { stroke: var(--d-line); stroke-width: 1.6; fill: none; }
+.diagram .t { font-size: 13px; font-weight: 600; }
+.diagram .s { font-size: 11.5px; }
+nav.toc { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; margin: 0 0 32px; }
+nav.toc ol { margin: 0; padding-left: 20px; columns: 2; column-gap: 32px; }
+nav.toc li { break-inside: avoid; margin: 2px 0; }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+<h1>Cobi'yi satılabilir hâle getirmek</h1>
+<p class="meta">8 Kasım 2026 · pazar araştırması, dört kol: rakipler, Türkiye ve Android, satın alma akışı, büyüme kanalları · ayrıntılar ve kaynaklar ekte</p>
+</header>
+
+<div class="callout">
+<p><strong>Sonuç.</strong> Uygulamanın satması için üç şey eksik ve sıraları önemli.</p>
+<ul>
+<li><strong>Gelir yolu kapalı.</strong> Tek gelir modeli olan Tam Sürüm kilidi hazır ama açılmadı; bugün her şey ücretsiz. Önce bu açılmalı.</li>
+<li><strong>Görünürlük yok.</strong> Puan sıfır ve aramada ilk sayfalarda değiliz. En ucuz kaldıraç, ebeveyn kapısının arkasında puan istemek.</li>
+<li><strong>Android yok.</strong> Türkiye'de mobil web trafiğinin %77'si Android'den geliyor. Google Play, kilit açık olarak yayına girerse Türkiye gelirini kabaca iki katına çıkarabilir.</li>
+</ul>
+<p>Model doğru: tek seferlik kilit. Rakiplerin düşük puanlı yorumları iki konuda toplanıyor: ücretsiz denemenin pahalı aboneliğe dönmesi ve ücretsiz içeriğin çok az olması. Cobi'nin 72 ücretsiz sayfası ve aboneliksiz modeli ikisine de cevap. Fiyatta Türkiye'deki tek seferlik kilitlerin ortancası yaklaşık ₺325. Planlanan ₺199,99 en alt grupta, dört gün önce çıkan yerli rakip Kalemo ile aynı. Önerim ₺249,99. Gelir, indirme sayısına bağlı: 1.000 indirme başına tahminen ₺2.500–5.000 net.</p>
+</div>
+
+<nav class="toc"><ol>
+<li><a href="#bugun">Bugünkü durum</a></li>
+<li><a href="#rakipler">Rakipler ve fiyatlar</a></li>
+<li><a href="#turkiye">Türkiye pazarı ve Android</a></li>
+<li><a href="#fiyat">Fiyat</a></li>
+<li><a href="#akis">Satın alma akışı</a></li>
+<li><a href="#gelir">Dönüşüm ve gelir beklentisi</a></li>
+<li><a href="#kanallar">Büyüme kanalları</a></li>
+<li><a href="#plan">13 haftalık plan</a></li>
+<li><a href="#kararlar">Senin kararların</a></li>
+<li><a href="#dogrulanamayan">Doğrulanamayanlar</a></li>
+<li><a href="#ekler">Ekler ve kaynaklar</a></li>
+</ol></nav>
+
+<h2 id="bugun">1. Bugünkü durum</h2>
+<div class="table-wrap"><table>
+<tbody>
+<tr><td>Sürüm</td><td>2.2.0, 8 Kasım 2026 07:49'dan beri yayında; 2.1.0 4 Kasım'dan beri</td></tr>
+<tr><td>Mağaza adı</td><td>"Cobi: Çocuk Boyama Oyunları" / "Cobi: Coloring Games for Kids"</td></tr>
+<tr><td>Fiyat</td><td>Ücretsiz; 323 sayfanın hepsi açık. Tam Sürüm kilidi kodda var, <code>COBI_IAP</code> bayrağıyla kapalı.</td></tr>
+<tr><td>Puan</td><td>0 (Türkiye ve ABD)</td></tr>
+<tr><td>Arama</td><td>Eski adla "boyama oyunları"nda ilk 164'te yok, "çocuk boyama"da 89. Yeni adın etkisi yaklaşık 22 Kasım'da ölçülecek.</td></tr>
+<tr><td>Trafik</td><td>İlk günlerde yaklaşık 1.000 gösterim, ürün sayfasında %1,7 dönüşüm (App Store Connect, 5 Kasım)</td></tr>
+<tr><td>Platform</td><td>Yalnız iOS. Android derlemesi hazır, Google Play kaydı yok.</td></tr>
+</tbody></table></div>
+
+<h2 id="rakipler">2. Rakipler ve fiyatlar</h2>
+<p>Türkiye ve ABD'de üst sıralardaki 15 çocuk boyama uygulamasına baktım. Fiyatlar ürün sayfalarından, KDV dâhil, 8 Kasım 2026.</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Uygulama</th><th>Model</th><th>Türkiye fiyatı</th><th>Ücretsiz içerik</th><th class="num">TR puan sayısı</th></tr></thead>
+<tbody>
+<tr><td>Çocuklar için boyama kitapları (Bimi Boo)</td><td>Tek seferlik kilit + paketler</td><td>Tam ₺499,99; paket ₺149,99</td><td>176 sayfanın 6'sı</td><td class="num">71.101</td></tr>
+<tr><td>Çocuklar İçin Boyama Oyunu (KidloLand)</td><td>Abonelik ağırlıklı, deneme</td><td>Yıllık ₺349,99; KidloLand+ ₺1.999,99</td><td>14 oyun</td><td class="num">19.559</td></tr>
+<tr><td>Pinksy · Todli (Bini Games)</td><td>Haftalık abonelik, deneme</td><td>Haftalık ₺14,99–54,99; yıllık ₺149,99–359,99</td><td>Bir kısmı</td><td class="num">7.105 · 1.738</td></tr>
+<tr><td>Boyama Oyunları: Renk ve Boya (RV AppStudios)</td><td>Tamamen ücretsiz, reklamsız</td><td>–</td><td>Hepsi</td><td class="num">923</td></tr>
+<tr><td>Drawing and coloring for kids (Kakadoo)</td><td>Tek seferlik kilit + paketler</td><td>₺399,99; paket ₺99,99</td><td>Yazmıyor</td><td class="num">192</td></tr>
+<tr><td>Kalemo: Çocuk Boyama Oyunları (yerli, 4 Kasım)</td><td>Tek seferlik kilit, abonelik yok</td><td>₺199,99; kitap ₺79,99</td><td>89 resmin 34'ü</td><td class="num">1</td></tr>
+<tr><td>Minik Palet (yerli)</td><td>Tek seferlik kilit</td><td>₺249,99</td><td>100 resmin 50'si</td><td class="num">2</td></tr>
+<tr><td><strong>Cobi (plan)</strong></td><td>Tek seferlik kilit, abonelik ve deneme yok</td><td>₺199,99 planlandı</td><td>323 sayfanın 72'si</td><td class="num">0</td></tr>
+</tbody></table></div>
+<ul>
+<li><strong>Modeller.</strong> 15 uygulamanın 10'u abonelik ağırlıklı; 5'i haftalık plan satıyor, en az 6'sında ücretsiz deneme var. 4'ü tek seferlik kilit, 1'i tamamen ücretsiz.</li>
+<li><strong>Tek seferlik tam kilit fiyatı.</strong> ABD'de 3,99–19,99 $, ortanca 6,49 $. Türkiye'de ₺199,99–599,99, ortanca yaklaşık ₺325.</li>
+<li><strong>Yerli rakipler aynı konumda.</strong> Kalemo, Minik Palet ve BoyaBoo (₺99,99) son günlerde yayında. Kalemo "çizginin dışına taşmaz" diyor ve 1 puanla "çocuk boyama"da 24. sırada. Cobi'nin farkı içerik hacmi: Kalemo'nun 3,6 katı sayfa.</li>
+</ul>
+<p><strong>Ebeveynler neden düşük puan veriyor.</strong> 2024 sonrası 473 düşük ve orta puanlı yorum elle etiketlendi:</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Uygulama</th><th>Model</th><th>Baskın şikâyet</th></tr></thead>
+<tbody>
+<tr><td>Tiny Minies (yerli)</td><td>Abonelik</td><td>126 yorumun 51'i: ücretsiz deneme ₺799–1.000'lik yıllık ücrete dönüyor; 34'ü "ödedim ama açılmıyor"</td></tr>
+<tr><td>KidloLand</td><td>Abonelik</td><td>96 yorumun 41'i "her şey paralı", 14'ü deneme tuzağı, 9'u zorla puan isteme ya da çıkılamayan ödeme ekranı</td></tr>
+<tr><td>Bimi Boo</td><td>Tek seferlik</td><td>69 yorumun 23'ü "ücretsiz içerik çok az" (176 sayfanın 6'sı); deneme şikâyeti yok</td></tr>
+<tr><td>RV AppStudios</td><td>Ücretsiz</td><td>Para şikâyeti yok; düşük puan oranı %17. Bimi Boo'da %29, abonelikli uygulamalarda %33–63.</td></tr>
+</tbody></table></div>
+
+<h2 id="turkiye">3. Türkiye pazarı ve Android</h2>
+<ul>
+<li><strong>Platform.</strong> Ekim 2026'da Türkiye'de mobil web trafiğinin %76,9'u Android, %23,1'i iOS (StatCounter; cihaz değil trafik ölçüyor). TRT'nin beş çocuk uygulamasının üçünde Google Play'deki puan sayısı App Store Türkiye'nin 9–16 katı. Türkiye'de harcamanın iki mağazaya bölünüşünü bulamadım.</li>
+<li><strong>Google Play Türkiye'de rakipler.</strong> "çocuk boyama" aramasının ilk 30 sonucunda 26 çocuk uygulaması var. 11'inde reklam, 21'inde satın alma var. 5'i tamamen ücretsiz ve reklamsız; RV AppStudios 100 milyon+ kurulumla 3. sırada. Tek fiyatlı ürünler ₺25,99–549,99. 23'ü öğretmen onayı rozeti taşıyor.</li>
+<li><strong>Ödeme.</strong> Play'de kart, TROY, operatör faturası (Türk Telekom, Turkcell, Vodafone) ve hediye kodu var. App Store'da kart, operatör faturası ve hediye kartı var. Bankalar kartları internet alışverişine kapalı veriyor (BDDK, 2017). Operatör faturası bu engeli aşıyor.</li>
+<li><strong>Aileler.</strong> 3–5 yaşta yaklaşık 3,1 milyon çocuk var (doğum sayılarından tahmin). Doğumlar 2020–2025 arasında %19,5 azaldı. Bir ebeveyn çalışmasına göre (Nisan 2026) aileler eğiticiliği önemsiyor, ama ekonomik nedenle reklamlı ücretsiz uygulamaları seçiyor. TRT Çocuk uygulamaları ücretsiz ve reklamsız; beklentiyi bunlar kuruyor.</li>
+<li><strong>Google Play şartları.</strong> Kayıt 25 $; kimlik ve gerçek Android cihaz doğrulaması gerekiyor. 13 Kasım 2023'ten sonra açılan kişisel hesapta, üretime çıkmadan önce 12 test kullanıcısıyla 14 günlük kapalı test şart. Uygulamanın Android tarafı hedef API 36 ve Billing Library 8 şartlarını zaten karşılıyor (Flutter varsayılanı ve <code>in_app_purchase_android</code> 0.5.0; kontrol edildi). Families politikası ve Data safety formu doldurulacak. Öğretmen onayı başvuru istemiyor, Türkçe destekleniyor.</li>
+<li><strong>Sıra.</strong> Play kilitsiz açılıp sonra kilitlenirse Android kullanıcısından sayfa geri alınır. Android'de kurulum tarihini güvenle okuyan bir sinyal de yok. Bu yüzden öneri şu: kilit önce iOS'ta açılsın, Play kilit açık olarak yayına girsin. Play hesabı ve kapalı test ise bugün başlasın, çünkü en az üç hafta sürüyor.</li>
+</ul>
+
+<h2 id="fiyat">4. Fiyat</h2>
+<p>Apple'ın Türkiye karşılıklarını, iki vitrinde aynı ücretli uygulamaların fiyatından okudum:</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Türkiye fiyatı</th><th>Apple'daki ABD karşılığı</th><th class="num">Satış başına net (TR)</th><th>Not</th></tr></thead>
+<tbody>
+<tr><td>₺199,99</td><td>3,99 $</td><td class="num">≈ ₺135</td><td>Plandaki fiyat; Kalemo ile aynı; en alt grup</td></tr>
+<tr><td><strong>₺249,99</strong></td><td>4,99 $</td><td class="num">≈ ₺169</td><td>Önerim: Kalemo'dan %25 yukarıda, 3,6 kat sayfa; ortancanın altında</td></tr>
+<tr><td>₺299,99</td><td>5,99 $</td><td class="num">≈ ₺202</td><td>Apple'ın 5,99 $ için otomatik karşılığı</td></tr>
+</tbody></table></div>
+<p>Net hesap: fiyat ÷ 1,20 (KDV) ÷ 1,05 (dijital hizmet vergisi) × 0,85 (Small Business Program komisyonu). Vergi kalemi 3 Kasım raporundaki gibi App Store Connect'te teyit edilmeli. ABD'de 5,99 $ satış başına yaklaşık 5,09 $ bırakır.</p>
+<ul>
+<li><strong>Neden ₺249,99.</strong> Şikâyetler fiyatta değil, ücretsiz içeriğin azlığında ve abonelik tuzağında toplanıyor. ₺249,99 hâlâ ortancanın (₺325) epey altında ve satış başına neti %25 artırıyor. İlk puanlar gelene kadar ₺299,99 risklidir. ₺199,99'un altı fiyat savaşı olur.</li>
+<li><strong>Enflasyon.</strong> Türkiye fiyatı elle girilirse Apple onu kur değişince güncellemez. Yıllık enflasyon %29,77; fiyat altı ayda bir gözden geçirilmeli. Play de fiyatı kendiliğinden güncellemiyor; orada da elle girilecek.</li>
+<li><strong>Test.</strong> iOS'ta satın alma fiyatını kullanıcılar arasında bölerek deneyen yerel bir araç yok. Google Play'in yerel fiyat deneyi var; fiyat testi Play'de yapılabilir.</li>
+</ul>
+
+<h2 id="akis">5. Satın alma akışı</h2>
+<p>Kurulun kuralı değişmiyor: çocuğun ekranında kilit simgesi, sayaç ya da "satın al" yok; çocuk yalnız ücretsiz sayfaları görür. Çocuk kilit görmeyince satışı belirleyen şey, ebeveynin teklifi ne zaman bulduğu. RevenueCat 2026 verisine göre satın almaların yaklaşık üçte biri kurulum günü oluyor. Freemium uygulamalarda alıcıların %23'ü ise 6. haftadan sonra geliyor. Teklif hem ilk gün hem sonraki ziyaretlerde bulunabilmeli.</p>
+<div class="diagram" style="color: var(--d-line)"><svg viewBox="0 0 900 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Önerilen satın alma akışı">
+<defs><marker id="ah" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 z" fill="currentColor" opacity="0.6"/></marker></defs>
+<rect class="box" x="10" y="20" width="152" height="86" rx="10"/>
+<text class="t" x="86.0" y="42" text-anchor="middle">Ürün sayfası</text>
+<text class="s" x="86.0" y="62" text-anchor="middle">"72 ücretsiz, 323 sayfa"</text>
+<text class="s" x="86.0" y="78" text-anchor="middle">öne çıkan satın alma</text>
+<rect class="box" x="190" y="20" width="152" height="86" rx="10"/>
+<text class="t" x="266.0" y="42" text-anchor="middle">İlk açılış</text>
+<text class="s" x="266.0" y="62" text-anchor="middle">çocuk hemen oynar</text>
+<text class="s" x="266.0" y="78" text-anchor="middle">ebeveyn satırı bir kez</text>
+<rect class="box2" x="370" y="20" width="152" height="86" rx="10"/>
+<text class="t" x="446.0" y="42" text-anchor="middle">Ebeveyn kapısı</text>
+<text class="s" x="446.0" y="62" text-anchor="middle">iki basamaklı çarpım</text>
+<text class="s" x="446.0" y="78" text-anchor="middle"></text>
+<rect class="box" x="550" y="20" width="152" height="86" rx="10"/>
+<text class="t" x="626.0" y="42" text-anchor="middle">Ebeveyn kurulumu</text>
+<text class="s" x="626.0" y="62" text-anchor="middle">yaş modu, ses, dil</text>
+<text class="s" x="626.0" y="78" text-anchor="middle">"Şimdi değil" her adımda</text>
+<rect class="box" x="730" y="20" width="152" height="86" rx="10"/>
+<text class="t" x="806.0" y="42" text-anchor="middle">Teklif ekranı</text>
+<text class="s" x="806.0" y="62" text-anchor="middle">fiyat mağazadan</text>
+<text class="s" x="806.0" y="78" text-anchor="middle">Geri yükle · Kod kullan</text>
+<rect class="box" x="190" y="150" width="152" height="86" rx="10"/>
+<text class="t" x="266.0" y="172" text-anchor="middle">Sonraki ziyaretler</text>
+<text class="s" x="266.0" y="192" text-anchor="middle">Ebeveyn Alanı'nda</text>
+<text class="s" x="266.0" y="208" text-anchor="middle">Tam Sürüm kartı</text>
+<line class="edge" x1="162" y1="63.0" x2="186" y2="63.0" marker-end="url(#ah)"/>
+<line class="edge" x1="342" y1="63.0" x2="366" y2="63.0" marker-end="url(#ah)"/>
+<line class="edge" x1="522" y1="63.0" x2="546" y2="63.0" marker-end="url(#ah)"/>
+<line class="edge" x1="702" y1="63.0" x2="726" y2="63.0" marker-end="url(#ah)"/>
+<path class="edge" d="M342 193.0 L446.0 193.0 L446.0 110" marker-end="url(#ah)"/>
+</svg></div>
+<ol>
+<li><strong>Ürün sayfası.</strong> Açıklamaya "Ücretsiz ve Tam Sürüm" bölümü eklenir: 72 sayfa ücretsiz, 323 sayfa Tam Sürüm'de. Satın alma bir kez yapılır; abonelik ve deneme yok, Aile Paylaşımı var. Bu, 2.3.2'nin şartı ve rakiplerin iki şikâyet grubuna da cevap. Fiyat yazılmaz (2.3.7).</li>
+<li><strong>İlk açılış.</strong> Çocuk büyük "Oyna" düğmesiyle hemen başlar. Altında bir kez küçük bir satır görünür: "Ebeveynler için 1 dakikalık kurulum". Satırda fiyat ve satın alma düğmesi yoktur. Bu satır kurulun kararına dokunuyor, onayın gerekiyor. Daha sıkı seçenekte satırda "Tam Sürüm" adı geçmez; teklif yalnız kurulumun son adımında görünür.</li>
+<li><strong>Kapılı kurulum.</strong> Yaş modu, ses, dil ve Rehberli Erişim ipucu sorulur. Son adım teklif ekranıdır; "Şimdi değil" her adımda görünür.</li>
+<li><strong>Teklif ekranı.</strong> Başlık "Cobi Tam Sürüm", alt başlık "323 boyama sayfasının tamamı, tek seferlik ödeme". Kategorilerin önizlemesi, fiyat (mağazadan), "Geri yükle" ve "Kod kullan" düğmeleri ve Aile Paylaşımı notu yer alır.</li>
+<li><strong>Sonraki ziyaretler.</strong> Ebeveyn Alanı'nın tepesinde önizlemeli bir Tam Sürüm kartı durur; "72 / 323" sayacı yalnız burada görünür.</li>
+</ol>
+<p><strong>Kodda düzeltilecekler (Tam Sürüm açılmadan önce).</strong></p>
+<div class="table-wrap"><table>
+<thead><tr><th>Eksik</th><th>Yer</th><th>Düzeltme</th></tr></thead>
+<tbody>
+<tr><td>Açılışta mağazadaki hak okunmuyor; Aile Paylaşımı ve başka cihazdaki satın alma ancak "Geri yükle" ile açılıyor</td><td><code>lib/services/purchase_service.dart:48</code></td><td>Açılışta istemsiz hak kontrolü (StoreKit 2)</td></tr>
+<tr><td>Ekran Süresi satın almayı kapatınca "Mağazaya ulaşılamıyor" yazıyor</td><td><code>lib/screens/full_version_screen.dart:92</code></td><td>Ayrı ve doğru metin</td></tr>
+<tr><td>Mevcut kullanıcılar 251 sayfa kaybeder</td><td>—</td><td>Kilitli sürümden önce kuranlara 323 sayfa açık kalır (<code>AppTransaction.originalAppVersion</code>; küçük Swift köprüsü)</td></tr>
+<tr><td>"Kod kullan" yok</td><td>—</td><td>Kapının arkasında kod kullanma sayfası (teklif kodları için)</td></tr>
+<tr><td>Öne çıkan satın alma (ürün sayfasından dokunma) çalışmaz</td><td><code>in_app_purchase_storekit</code> 0.4.13</td><td>İsteğe bağlı küçük Swift köprüsü</td></tr>
+</tbody></table></div>
+<p><strong>Apple araçları (doğrulandı).</strong> Teklif kodları artık tek seferlik satın almada da var. Kod üretmek için uygulama yayında, satın alma ürünü onaylı olmalı; tek kullanımlık kodlar en çok 6 ay geçerli. Kreş ve etkileyici kanalı için tek araç bu, çünkü uygulama içi satın alma için promosyon kodu 26 Mart 2026'dan beri üretilemiyor. Uygulamanın kendi promosyon kodları sürüyor.</p>
+
+<h2 id="gelir">6. Dönüşüm ve gelir beklentisi</h2>
+<p>Ölçütler (RevenueCat 2026, abonelikli uygulamalar ağırlıklı): indirmeden ödemeye 35 günde iOS'ta %2,6, Google Play'de %0,9. Education iOS medyanı %3,1, en iyileri %12–14. İade %3–4. Tek seferlik satışın Education gelirindeki payı 2023'te %6'ydı, 2025'te %17 oldu (Adapty). Çocuk uygulamasında tek seferlik kilit için yayımlanmış bir dönüşüm ölçütü bulunamadı. Aşağıdakiler tahmin; ilk iki aylık kohort App Store Connect'ten gelince değiştirilecek.</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Senaryo</th><th>35 günde indirmeden ödemeye</th></tr></thead>
+<tbody>
+<tr><td>Teklif yalnız Ebeveyn Alanı'nda</td><td>%0,5–1,5</td></tr>
+<tr><td>Önerilen akış</td><td>%1,5–3</td></tr>
+<tr><td>Önerilen akış + güçlü ürün sayfası, kampanya, teklif kodu</td><td>%3–5</td></tr>
+</tbody></table></div>
+<p>Asıl değişken indirme sayısı. Önerilen akış ve ₺249,99 ile Türkiye'de aylık kaba gelir (net ≈ ₺169 satış başına):</p>
+<div class="table-wrap"><table>
+<thead><tr><th class="num">Aylık indirme</th><th class="num">%1,5 dönüşüm</th><th class="num">%3 dönüşüm</th></tr></thead>
+<tbody>
+<tr><td class="num">500</td><td class="num">≈ ₺1.300</td><td class="num">≈ ₺2.500</td></tr>
+<tr><td class="num">2.000</td><td class="num">≈ ₺5.100</td><td class="num">≈ ₺10.100</td></tr>
+<tr><td class="num">10.000</td><td class="num">≈ ₺25.400</td><td class="num">≈ ₺50.700</td></tr>
+</tbody></table></div>
+<p>Bugünkü trafik ilk satıra bile yetmiyor. Bu yüzden plan önce görünürlüğü (puan, Android, kanallar), sonra fiyatı ve akışı ele alıyor.</p>
+
+<h2 id="kanallar">7. Büyüme kanalları</h2>
+<p>Bütçe neredeyse sıfır, zaman günde yaklaşık 1 saat. Her kanal App Store Connect'te ayrı ölçülecek: kampanya bağlantısı ve özel ürün sayfası. Her birinin bir bırakma ölçütü var.</p>
+<div class="table-wrap"><table>
+<thead><tr><th>#</th><th>Kanal</th><th>Ne</th><th class="num">Emek</th><th>Bırakma ölçütü</th></tr></thead>
+<tbody>
+<tr><td>0</td><td>Ölçüm altyapısı</td><td>4 kampanya bağlantısı, 3 özel ürün sayfası</td><td class="num">3 sa</td><td>—</td></tr>
+<tr><td>1</td><td>Puan isteme ve yorum yanıtı</td><td>Kapı arkasında sistem penceresi; Ebeveyn Alanı'nda "Puan ver"; yorumlara 48 saatte yanıt. Kids uygulamasında puan isteme yasak değil; kapı arkası, çocuğun rastgele yıldız basmasını önler.</td><td class="num">8 sa</td><td>60. günde Türkiye'de 10 puan yoksa tetiği gevşet</td></tr>
+<tr><td>2</td><td>Apple Ads 100 $ kredi testi</td><td>Türkiye'de Aralık 2024'ten beri var, asgari harcama yok. Hesap USD ya da EUR. Ortalama kurulum başına 1,02 $; kredi yaklaşık 55–100 kurulum eder.</td><td class="num">6 sa</td><td>14 günde 20 kurulum yoksa ya da kurulum başına 2 $'ı geçerse dur</td></tr>
+<tr><td>3</td><td>Öğretmenler ve özel kreşler</td><td>Atıflı PDF boyama seti ve bağlantı (Annenin Okulu "İçerik Gönder", öğretmen forumları, tanıdık özel kreşler). Devlet okulunda tanıtım yok; öğretmene ücret ya da ürün teklif edilmez.</td><td class="num">12 sa</td><td>45 günde 5 indirme yoksa kreş ziyaretini bırak</td></tr>
+<tr><td>4</td><td>App Store öne çıkarma</td><td>Kış adaylığı 24 Kasım'a kadar; 23 Nisan adaylığı 23 Ocak'a kadar. Uygulama içi etkinlik yalnız gerçek yeni içerikle.</td><td class="num">8 sa</td><td>Her büyük sürümde tekrar</td></tr>
+<tr><td>5</td><td>Mikro etkileyici ve podcast (ödemesiz)</td><td>10 kişisel mesaj, 3 podcast'e konu önerisi. 1 Ağustos 2026'dan beri paylaşımda "Reklam" ibaresi en önde olmalı; hediye ürün de reklam sayılıyor.</td><td class="num">8 sa</td><td>20 mesajda yanıt yoksa bırak</td></tr>
+<tr><td>6</td><td>Yazdırılabilir sayfa sitesi</td><td>Google'da "boyama sayfası" araması "boyama oyunu"nun yaklaşık 4 katı ve Aralık'ta zirve yapıyor. GitHub Pages'te 20 Türkçe sayfa ve kış seti; her PDF'te Microsoft'un MIT atfı. Sayfaları betik üretir.</td><td class="num">12 sa</td><td>8 haftada 5 indirme yoksa yeni sayfa ekleme</td></tr>
+<tr><td>7</td><td>Teknoloji basını</td><td>egirişim, ShiftDelete, Webtekno, Donanım Haber iletişim yolları</td><td class="num">4 sa</td><td>30 günde yanıt yoksa bir kez hatırlat</td></tr>
+<tr><td>8</td><td>Google Play kaydı</td><td>Bölüm 3; en büyük kaldıraç (Türkiye)</td><td class="num">10 sa</td><td>—</td></tr>
+</tbody></table></div>
+<p>Şimdilik yapılmayanlar: ürün sayfası testi (%30'luk farkı görmek için yaklaşık 18.000 gösterim gerekiyor), okul sürümü (Türkiye'de Apple School Manager yalnız uygulama satıyor, satın alma kilidini kapsamıyor), ücretli etkileyici.</p>
+
+<h2 id="plan">8. 13 haftalık plan</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>Dönem</th><th>Ben</th><th>Sen</th></tr></thead>
+<tbody>
+<tr><td>Hafta 1–2<br>9–22 Kasım</td><td>Sonraki sürüm: kapı arkasında puan isteme. Satın alma altyapısı bayrak arkasında hazırlanır: hak kontrolü, Ekran Süresi metni, "Kod kullan", mevcut kullanıcı koruması, teklif ekranı ve Ebeveyn Alanı kartı. Ölçüm bağlantıları ve özel ürün sayfaları. Kış öne çıkarma adaylığının metni. Yazdırılabilir kış seti.</td><td>Kararlar (bölüm 9). Paid Apps sözleşmesi, vergi ve banka. DSA trader beyanı. Google Play hesabı ve 12 test kullanıcısı. Kış adaylığını gönder (son gün 24 Kasım).</td></tr>
+<tr><td>Hafta 3–6<br>23 Kasım – 20 Aralık</td><td>Tam Sürüm'lü sürüm: ürün, açıklama ve "Ücretsiz ve Tam Sürüm" bölümü, inceleme notu, sandbox testi. Play derlemesi, Data safety, Families, mağaza metni; kapalı test. Apple Ads testinin kurulumu.</td><td>Satın alma ürününü App Store Connect'te onayla, sürümü incelemeye gönder. Apple Ads hesabı (kart). Kapalı testi 14 gün yürüt. Öğretmen ve kreş kanalı, basın e-postaları.</td></tr>
+<tr><td>Hafta 7–13<br>21 Aralık – 6 Şubat</td><td>Play yayını (kilit açık). Haftalık ölçüm okuması. Dönüşüm kohortlarına göre fiyat ve akış değerlendirmesi. 23 Nisan adaylığının metni.</td><td>23 Nisan adaylığı (son gün 23 Ocak). 60. gün kanal kararları. Fiyatı altı ayda bir gözden geçirme takvimi.</td></tr>
+</tbody></table></div>
+
+<h2 id="kararlar">9. Senin kararların</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>#</th><th>Karar</th><th>Önerim</th><th>Neden</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>Türkiye fiyatı</td><td><strong>₺249,99</strong> (ABD 5,99 $)</td><td>Ortancanın altında, Kalemo'dan biraz yukarıda, 3,6 kat içerik. Alternatifler: ₺199,99 (plan) ya da ₺299,99 (Apple'ın otomatik karşılığı).</td></tr>
+<tr><td>2</td><td>Bugünkü kullanıcılar</td><td><strong>Korunsun</strong>: kilitten önce kuranlara 323 sayfa açık kalsın</td><td>İlk yorumlar ürün sayfasını belirler; "eskiden ücretsizdi" yorumları rakiplere sert 1 yıldız getirmiş. Kurulun "ücretsiz olan ücretsiz kalır" ilkesi de bu yönde.</td></tr>
+<tr><td>3</td><td>İlk açılıştaki ebeveyn satırı</td><td><strong>Sıkı seçenek</strong>: satırda "Tam Sürüm" adı geçmesin, teklif kurulumun son adımında</td><td>Kurulun kararını en az zorlayan seçenek; istersen kurula götürürüm.</td></tr>
+<tr><td>4</td><td>Google Play</td><td><strong>Hesap ve kapalı test şimdi, yayın kilit açık olarak</strong></td><td>Android payı %77; kilitsiz açıp sonra kilitlemek kullanıcıdan sayfa geri almak olur.</td></tr>
+<tr><td>5</td><td>DSA trader beyanı ve vergi</td><td>Mali müşavire danış</td><td>Trader beyanında adres ve telefon mağazada görünür. Türkiye'de uygulama mağazası geliri için özel bir vergi düzeni var (GVK mükerrer 20/B); ayrıntısı araştırılmadı.</td></tr>
+<tr><td>6</td><td>Apple Ads 100 $ kredi testi</td><td>3. haftada, yalnız Türkiye, günlük 3 $</td><td>Kredi ücretsiz bir test; arama terimi verisi de getirir. Kart kaydı gerekiyor.</td></tr>
+</tbody></table></div>
+
+<h2 id="dogrulanamayan">10. Doğrulanamayanlar</h2>
+<ul>
+<li>Türkiye'de uygulama harcamasının App Store ve Google Play arasındaki bölünüşü.</li>
+<li>Çocuk uygulamasında tek seferlik kilit için dönüşüm ve iade ölçütü; tablodaki aralıklar tahmin.</li>
+<li>Dijital hizmet vergisinin Apple'ın Türkiye hasılatına yansıması (net hesaplarda var sayıldı).</li>
+<li>İlk açılıştaki fiyatsız ebeveyn satırını Apple metni açıkça düzenlemiyor; 1.3 kapının arkasındaki satın almaya izin veriyor.</li>
+<li>Kids uygulamasının Apple Ads'e fiilen kabulü ve kredinin KDV'si; çocuk hesabında puan penceresinin davranışı.</li>
+<li>Facebook öğretmen ve ebeveyn gruplarının adları, büyüklükleri ve kuralları (giriş yapmadan bakılamadı).</li>
+</ul>
+
+<h2 id="ekler">11. Ekler ve kaynaklar</h2>
+<p>Her kolun ayrıntılı notu, tabloları ve erişim tarihli kaynak listesi (8 Kasım 2026):</p>
+<ul>
+<li><a href="pazar-arastirmasi-2026-11-08/a-rakipler.md">A. Rakipler: 15 uygulamanın modeli ve fiyatları, 473 yorumun etiketleri</a></li>
+<li><a href="pazar-arastirmasi-2026-11-08/b-turkiye-android.md">B. Türkiye pazarı ve Google Play: platform payı, ödeme, Play'deki 26 rakip, Play şartları</a></li>
+<li><a href="pazar-arastirmasi-2026-11-08/c-satin-alma.md">C. Satın alma akışı: ölçütler, kurallar, StoreKit araçları, teklif ekranı metni</a></li>
+<li><a href="pazar-arastirmasi-2026-11-08/d-buyume.md">D. Büyüme kanalları: puan, Apple Ads, öne çıkarma, Türkiye kanalları, 90 günlük tablo</a></li>
+</ul>
+<p>Doğrulanan Apple kaynakları: App Review Guidelines (1.3, 2.3.2, 2.3.7, 2.3.14); Apple Developer haberi "Enhancements to help you submit and market your apps and games" (teklif kodları tüm satın alma türlerinde; uygulama içi satın alma için promosyon kodu 26 Mart 2026'dan beri yok); App Store Connect yardımı "Create offer codes for In-App Purchases". Önceki raporlar: <code>plan/gelir-ve-yayin-raporu.html</code>, <code>plan/pazarlama-incelemesi-2026-11-03.html</code>, <code>plan/isim-arastirmasi-2026-11-07.html</code>.</p>
+</div>
+</body>
+</html>

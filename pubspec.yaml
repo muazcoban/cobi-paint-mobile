@@ -23,6 +23,9 @@ dependencies:
   audioplayers: ^6.1.0
   in_app_purchase: ^3.3.1
   in_app_purchase_platform_interface: ^1.4.1
+  # The system's own rating sheet (App Review 5.6.1): asked only behind the
+  # parental gate, see lib/services/rating_prompt.dart.
+  in_app_review: ^2.0.12
 
 dev_dependencies:
   flutter_test:
@@ -68,6 +71,7 @@ flutter:
     - assets/pages/space/
     - assets/pages/music/
     - assets/pages/clothes/
+    - assets/pages/celebrations/
     - assets/pages/free/
     - assets/scenes/garden/
     - assets/licenses/

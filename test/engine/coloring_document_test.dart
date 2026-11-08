@@ -48,6 +48,59 @@ void main() {
     expect(doc.canUndo, isFalse);
   });
 
+  group('fill patterns (council, 8 Nov 2026)', () {
+    test('a pattern in the same colour is a new step; the same paint again is not', () {
+      expect(doc.fillAt(2, 5, red), left);
+      expect(doc.fillAt(3, 4, red, pattern: FillPattern.dots), left, reason: 'new pattern, same colour');
+      expect(doc.regionFill(left)!.pattern, FillPattern.dots);
+      expect(doc.fillOf(left), red, reason: 'the colour stays the child\'s colour');
+      expect(doc.fillAt(2, 5, red, pattern: FillPattern.dots), 0, reason: 'same colour and pattern');
+      expect(doc.fillAt(2, 5, blue, pattern: FillPattern.dots), left, reason: 'new colour, same pattern');
+      doc.undo();
+      expect(doc.regionFill(left)!.argb, red);
+      expect(doc.regionFill(left)!.pattern, FillPattern.dots);
+      doc.undo();
+      expect(doc.regionFill(left)!.pattern, FillPattern.solid);
+    });
+
+    test('a rainbow over a rainbow is not a step, whatever colour is selected', () {
+      expect(doc.fillAt(2, 5, red, pattern: FillPattern.rainbow), left);
+      expect(doc.fillAt(2, 5, blue, pattern: FillPattern.rainbow), 0);
+      expect(doc.fillOf(left), red, reason: 'the colour of the tap is kept for older versions');
+      expect(doc.fillAt(2, 5, blue), left, reason: 'solid blue after a rainbow is a step');
+    });
+
+    test('patterns survive JSON; solid fills write no key; unknown names read as solid', () {
+      doc.fillAt(2, 5, red, pattern: FillPattern.stripes);
+      doc.fillAt(17, 5, blue);
+      final json = doc.toJson();
+      final fills = (json['fills'] as List).cast<Map<String, Object?>>();
+      expect(fills.firstWhere((f) => f['l'] == left)['p'], 'stripes');
+      expect(fills.firstWhere((f) => f['l'] == right).containsKey('p'), isFalse, reason: 'the old format for a flat fill');
+
+      final copy = ColoringDocument(twoRegions())..restore(json);
+      expect(copy.regionFill(left)!.pattern, FillPattern.stripes);
+      expect(copy.regionFill(right)!.pattern, FillPattern.solid);
+
+      fills.firstWhere((f) => f['l'] == left)['p'] = 'hearts';
+      final future = ColoringDocument(twoRegions())..restore(json);
+      expect(future.regionFill(left)!.pattern, FillPattern.solid, reason: 'a pattern from a newer version shows flat');
+      expect(future.fillOf(left), red);
+    });
+
+    test('the eraser and completion treat a patterned fill like a flat one', () {
+      doc.fillAt(2, 5, red, pattern: FillPattern.dots);
+      doc.erase(
+        Stroke(kind: BrushKind.eraser, argb: 0, size: 4, points: Float32List.fromList([2, 5, 0.5, 4, 5, 0.5])),
+        {left},
+      );
+      expect(doc.regionFill(left), isNull);
+      doc.undo();
+      expect(doc.regionFill(left)!.pattern, FillPattern.dots);
+      expect(doc.completionFor(marker()), isNull, reason: 'a filled region never completes');
+    });
+  });
+
   test('undo and redo walk through fills and strokes', () {
     doc.fillAt(2, 5, red);
     doc.fillAt(2, 5, blue);

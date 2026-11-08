@@ -79,3 +79,7 @@ build/
 # Claude Code local settings; project skills are shared
 .claude/*
 !.claude/skills/
+
+# Raw voice recordings stay on the owner's disk; only the processed clips in assets/voice/ are committed
+tool/voice/raw/*
+!tool/voice/raw/README.md

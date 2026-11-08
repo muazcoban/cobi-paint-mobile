@@ -13,6 +13,10 @@
   "space": "Space",
   "music": "Music",
   "clothes": "Clothes",
+  "celebrations": "Celebrations",
+  "@celebrations": {
+    "description": "Home screen card: winter, new year and other celebration pages"
+  },
   "pageLevel": "Page difficulty",
   "pageLevelDesc": "Harder pages move to the front as your child colours. No page is ever locked.",
   "levelAuto": "Automatic",
@@ -48,6 +52,22 @@
   "redo": "Redo",
   "clear": "Clear",
   "fill": "Fill",
+  "fillDots": "Fill: dots",
+  "@fillDots": {
+    "description": "VoiceOver name of the bucket in its dots state"
+  },
+  "fillStripes": "Fill: stripes",
+  "@fillStripes": {
+    "description": "VoiceOver name of the bucket in its stripes state"
+  },
+  "fillRainbow": "Fill: rainbow",
+  "@fillRainbow": {
+    "description": "VoiceOver name of the bucket in its rainbow state"
+  },
+  "pageFinished": "Picture finished",
+  "@pageFinished": {
+    "description": "VoiceOver announcement when every area of a page has paint; never drawn on screen"
+  },
   "eraser": "Eraser",
   "selected": "Selected",
   "cancel": "Cancel",
@@ -80,6 +100,8 @@
   "deleteConfirmTitle": "Delete Artwork",
   "deleteConfirmMessage": "Are you sure you want to delete this artwork?",
   "contactUs": "Contact Us",
+  "rateApp": "Rate the app",
+  "rateAppHint": "Opens the app store",
   "marker": "Marker",
   "brushSize": "Brush size",
   "importedPages": "My Photos",
@@ -91,7 +113,7 @@
   "ageModeLittle": "Little (ages 3–5)",
   "ageModeLittleDesc": "Huge buttons, 9 colours, no zoom. The marker stays inside the lines.",
   "ageModeBig": "Big (ages 6+)",
-  "ageModeBigDesc": "16 colours, pinch to zoom, brush sizes, redo.",
+  "ageModeBigDesc": "18 colours, pinch to zoom, brush sizes, redo.",
   "coloringSection": "Colouring",
   "autoComplete": "Fill small gaps when colouring with the brush",
   "autoCompleteDesc": "When nearly all of an area is coloured with the marker in one colour, the small white corners left fill with that colour. Turn it off for fine motor practice.",
@@ -101,7 +123,7 @@
   "privacyPolicyPurchase": "The Full Version is a one-time purchase, not a subscription. Apple or Google takes the payment; the app never sees payment details and collects no data.",
   "guidedAccessTitle": "Keep your child in the app",
   "guidedAccessText": "On iPhone and iPad use Guided Access: turn on Settings > Accessibility > Guided Access, then triple-click the side button (or the Home button on devices that have one) while the app is open. On Android use Settings > Security > App pinning.",
-  "colorNames": "red,orange,yellow,green,blue,purple,pink,brown,black,light blue,light green,peach,light yellow,navy,dark green,grey",
+  "colorNames": "red,orange,yellow,green,blue,purple,pink,brown,black,light blue,light green,peach,light yellow,navy,dark green,grey,caramel,cocoa",
   "canvasLabel": "Coloring page",
   "scene": "Scene",
   "sceneLabel": "Scene: put the pieces in the picture"

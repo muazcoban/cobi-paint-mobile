@@ -50,6 +50,7 @@ class Category {
       Category(id: 'space', name: 'Uzay', nameEn: 'Space', icon: '🪐', order: 8),
       Category(id: 'music', name: 'Müzik', nameEn: 'Music', icon: '🎸', order: 9),
       Category(id: 'clothes', name: 'Giysiler', nameEn: 'Clothes', icon: '👕', order: 10),
+      Category(id: 'celebrations', name: 'Kutlamalar', nameEn: 'Celebrations', icon: '🎉', order: 11),
       Category(id: 'import', name: 'İçe Aktar', nameEn: 'Import', icon: '📥', order: 99, isImportCategory: true),
     ];
   }

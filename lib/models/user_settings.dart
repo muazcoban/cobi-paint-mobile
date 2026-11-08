@@ -1,5 +1,5 @@
 /// Little: huge buttons, 9 colours, no zoom (the default, for a 3-year-old).
-/// Big: 16 colours, pinch zoom, brush sizes, redo.
+/// Big: 18 colours, pinch zoom, brush sizes, redo.
 enum AgeMode { little, big }
 
 class UserSettings {

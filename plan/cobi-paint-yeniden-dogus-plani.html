@@ -100,6 +100,7 @@ ul.tight li, ol.tight li { margin: 3px 0; }
 </header>
 
 <nav class="toc">
+  <p style="margin:0 0 6px"><a href="#durum-8-kasim"><strong>Durum: 8 Kasım 2026, yayın sonrası plan</strong></a></p>
   <p style="margin:0 0 6px"><a href="#durum"><strong>Durum: 3 Kasım 2026 sabahı</strong></a></p>
   <p style="margin:0 0 6px"><a href="#is-listesi"><strong>İş listesi: 5 Kasım 2026 önerileri</strong></a></p>
   <ol>
@@ -120,6 +121,21 @@ ul.tight li, ol.tight li { margin: 3px 0; }
     <li><a href="#ek">Ek: 76 resmin ölçümü</a></li>
   </ol>
 </nav>
+
+<section id="durum-8-kasim">
+<h2>Durum: 8 Kasım 2026, yayın sonrası plan</h2>
+<p class="lead">2.2.0 yeni adıyla 8 Kasım'dan beri yayında. Uygulamanın satması için iki araştırma yapıldı: <a href="pazar-arastirmasi-2026-11-08.html">pazar araştırması</a> (fiyat, satın alma akışı, Android, büyüme) ve <a href="ozellik-arastirmasi-2026-11-08.html">özellik seti araştırması</a> (rakip matrisi, 10.198 yorum, 3–5 yaş kanıtı, Türkiye, trendler). Sahibin üç kararı: puan isteme yapılır, Android plana girer, kilitten önce özellik seti genişler. Güncel yol haritası özellik raporunun 11. bölümünde.</p>
+<div class="table-wrap"><table>
+<thead><tr><th>İş</th><th>Durum</th><th>Ne</th><th>Sonraki adım</th></tr></thead>
+<tbody>
+<tr><td>Puan isteme</td><td><span class="badge b-p2">Kodlandı</span></td><td>Sistem penceresi yalnız ebeveyn kapıdan geçip bir resmi paylaştıktan ya da galeriye kaydettikten sonra; kurulumdan en az 3 gün ve 3 eser sonra; iki istek arasında en az 14 gün. Ebeveyn alanında kalıcı "Uygulamaya puan ver" satırı (<code>lib/services/rating_prompt.dart</code>, <code>in_app_review</code>).</td><td>2.3.0 ile yayına girer; TestFlight'ta pencere çıkmaz, gerçek cihazda mağaza sayfası denenir.</td></tr>
+<tr><td>Android</td><td><span class="badge b-p1">Planda</span></td><td>Türkiye'de mobil trafiğin %77'si Android. Play Türkiye'de "çocuk boyama" ilk 15'in 13'ü Teacher Approved rozetli.</td><td>Play hesabı ve 12 test kullanıcısı (sahip); 14 günlük kapalı test Aralık'ta; yayın 2.4.0 ile, kilit açık olarak; Families beyanı, Data safety, düşük donanımlı tablet ve TalkBack denemesi.</td></tr>
+<tr><td>Kurul 8 Kasım: P8 canlanma, P9 desen dolgusu</td><td><span class="badge b-p2">Karar</span></td><td>İkisi de 5/5 şartlı geçti, veto yok (<code>plan/kurul-2026-11-08.json</code>). P8: yalnız çocuğun tuval kartı iki kez nefes alır (1,03 ölçek, ±1,5°, 2 sn), açılmadan 220 ms sonra, konfeti ve ses yerinde; her dokunuş 120 ms'de durdurur; Reduce Motion'da hareketsiz halka; "Resim bitti" VoiceOver duyurusu; övgü sesi, rozet, ek haptik, ebeveyn anahtarı yok; mağazada "kıpırdar", asla "canlanır". P9: kova fırça gibi döner; Minik düz ↔ benek, Büyük düz → benek → çizgi → gökkuşağı; zemin çocuğun rengi, benek ve şerit ikinci ton (ΔY ≥ 50); benek adımı kısa kenar/21, şerit periyodu kısa kenar/8, gökkuşağı bölge boyunca altı rengin yumuşak geçişi; JSON <code>p</code> metin ad, eski sürüm düz gösterir.</td><td>Gözlem 3–5 çocuk (Minik beneği ve genlik eşikleri); sahibin açık soruları sentezde.</td></tr>
+<tr><td>Özellik seti: Dalga 1 (2.3.0, kilitsiz)</td><td><span class="badge b-p1">PR'da</span></td><td>8 Kasım gecesi PR'da (dal <code>dalga1/kutlamalar-canlanma-desen</code>): Kutlamalar kategorisi (13 yeni sayfa + ödünç 28 kış ve yılbaşı sayfası, <code>alsoIn</code>; toplam 336 sayfa, 80 ücretsiz), Büyük'te karamel ve kakao (18 renk, iki modda 5 sütun), canlanma (<code>lib/widgets/liveliness.dart</code>), desen dolgusu motoru ve kova döngüsü (<code>lib/engine/render/fill_patterns.dart</code>, <code>FillGlyph</code>), ses işleme betiği <code>tool/voice/process_clips.py</code>, kayıt rehberi <code>tool/voice/kayit-rehberi.md</code>, klip testi; mağaza yürüyüşünde Büyük modda desen karesi (<code>08_patterns</code>) ve 2.3.0 alt yazıları; README ve <code>store_listing.md</code> yeni sayılarla. Sesli adlar kayıt bekliyor (54 anahtar, 106 kayıt). Gece raporu bölüm 25.</td><td>Ses kaydı sahibin işi; vitrin kareleri yayından önce; A8 iPad ölçümü; 2.3.0 hedefi Aralık başı.</td></tr>
+<tr><td>Özellik seti: Dalga 2 (2.4.0, kilitle)</td><td><span class="badge b-p1">Planda</span></td><td>Tam Sürüm kilidi, Aile Paylaşımı ve açılışta hak kontrolü, Manzara (klipler ve gözlem turu sonrası), Ramazan Bayramı paketi, kardeş profilleri (kurul geçerse).</td><td>Aralık; Play yayını aynı sürümle.</td></tr>
+<tr><td>Yapılmayacaklar</td><td><span class="badge b-p2">Karar</span></td><td>Harf izleme, Minik'te sayıyla boyama ve noktadan noktaya, arka plan müziği, rozet ve geri sayım, süre sınırı, yapay zekâ ve mikrofon, AR, lisanslı karakter, fotoğraftan sayfa.</td><td>Gerekçeler özellik raporunun 9. bölümünde.</td></tr>
+</tbody></table></div>
+</section>
 
 <section id="durum">
 <h2>Durum: 3 Kasım 2026 sabahı</h2>

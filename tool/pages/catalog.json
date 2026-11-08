@@ -7,7 +7,7 @@
   "licenseFile": "assets/licenses/fluentui-emoji.txt",
   "style": "Flat"
  },
- "notes": "Subjects chosen for 2-5 year olds: everyday animals, plants, food, vehicles, weather, toys, space, music and clothes. No people, faces, flags, brands, weapons, alcohol, religious symbols or frightening subjects. Pages marked free:true are the fixed free subset (8 per category, spread over the levels; mostly level 1 in space, music and clothes); once free, a page stays free. A page id is <category>_<code> and saved artworks keep it, so a page that has shipped never changes category. A page with \"skip\" is not built; the value says why.",
+ "notes": "Subjects chosen for 2-5 year olds: everyday animals, plants, food, vehicles, weather, toys, space, music and clothes. No people, faces, flags, brands, weapons, alcohol, religious symbols or frightening subjects. Pages marked free:true are the fixed free subset (8 per category, spread over the levels; mostly level 1 in space, music and clothes); once free, a page stays free. A page id is <category>_<code> and saved artworks keep it, so a page that has shipped never changes category. A page with \"skip\" is not built; the value says why. A page may list extra categories in \"also\": it keeps its id and its own category and is shown in those categories too (the celebrations category gathers the winter and new year pages this way; its free subset counts only its own pages).",
  "pages": [
   {
    "code": "1f401",
@@ -247,7 +247,10 @@
    "nameTr": "penguen",
    "nameEn": "penguin",
    "category": "animals",
-   "subgroup": "animal-bird"
+   "subgroup": "animal-bird",
+   "also": [
+    "celebrations"
+   ]
   },
   {
    "code": "1f428",
@@ -439,7 +442,10 @@
    "nameTr": "geyik",
    "nameEn": "deer",
    "category": "animals",
-   "subgroup": "animal-mammal"
+   "subgroup": "animal-mammal",
+   "also": [
+    "celebrations"
+   ]
   },
   {
    "code": "1f98d",
@@ -707,7 +713,10 @@
    "nameEn": "evergreen tree",
    "category": "plants",
    "subgroup": "plant-other",
-   "free": true
+   "free": true,
+   "also": [
+    "celebrations"
+   ]
   },
   {
    "code": "1f333",
@@ -897,7 +906,10 @@
    "nameTr": "kestane",
    "nameEn": "chestnut",
    "category": "plants",
-   "subgroup": "food-vegetable"
+   "subgroup": "food-vegetable",
+   "also": [
+    "celebrations"
+   ]
   },
   {
    "code": "1f343",
@@ -967,7 +979,10 @@
    "nameTr": "mandalina",
    "nameEn": "tangerine",
    "category": "food",
-   "subgroup": "food-fruit"
+   "subgroup": "food-fruit",
+   "also": [
+    "celebrations"
+   ]
   },
   {
    "code": "1f34b",
@@ -1088,7 +1103,10 @@
    "nameTr": "kurabiye",
    "nameEn": "cookie",
    "category": "food",
-   "subgroup": "food-sweet"
+   "subgroup": "food-sweet",
+   "also": [
+    "celebrations"
+   ]
   },
   {
    "code": "1f36b",
@@ -1129,7 +1147,10 @@
    "nameTr": "doğum günü pastası",
    "nameEn": "birthday cake",
    "category": "food",
-   "subgroup": "food-sweet"
+   "subgroup": "food-sweet",
+   "also": [
+    "celebrations"
+   ]
   },
   {
    "code": "1f950",
@@ -1249,7 +1270,10 @@
    "nameTr": "cupcake",
    "nameEn": "cupcake",
    "category": "food",
-   "subgroup": "food-sweet"
+   "subgroup": "food-sweet",
+   "also": [
+    "celebrations"
+   ]
   },
   {
    "code": "1f9c7",
@@ -1623,7 +1647,10 @@
    "nameEn": "cloud with snow",
    "category": "nature",
    "subgroup": "sky & weather",
-   "free": true
+   "free": true,
+   "also": [
+    "celebrations"
+   ]
   },
   {
    "code": "1f329",
@@ -1746,7 +1773,10 @@
    "nameEn": "snowman",
    "category": "nature",
    "subgroup": "sky & weather",
-   "free": true
+   "free": true,
+   "also": [
+    "celebrations"
+   ]
   },
   {
    "code": "26f0",
@@ -1762,7 +1792,10 @@
    "nameTr": "kar tanesi",
    "nameEn": "snowflake",
    "category": "nature",
-   "subgroup": "sky & weather"
+   "subgroup": "sky & weather",
+   "also": [
+    "celebrations"
+   ]
   },
   {
    "code": "2b50",
@@ -1794,7 +1827,10 @@
    "nameTr": "karlı dağ",
    "nameEn": "snowy mountain",
    "category": "nature",
-   "subgroup": "place-geographic"
+   "subgroup": "place-geographic",
+   "also": [
+    "celebrations"
+   ]
   },
   {
    "code": "1f3dc",
@@ -1819,7 +1855,10 @@
    "nameEn": "ribbon",
    "category": "things",
    "subgroup": "event",
-   "free": true
+   "free": true,
+   "also": [
+    "celebrations"
+   ]
   },
   {
    "code": "1f381",
@@ -1828,7 +1867,10 @@
    "nameEn": "wrapped gift",
    "category": "things",
    "subgroup": "event",
-   "free": true
+   "free": true,
+   "also": [
+    "celebrations"
+   ]
   },
   {
    "code": "1f384",
@@ -1837,7 +1879,10 @@
    "nameEn": "Christmas tree",
    "category": "things",
    "subgroup": "event",
-   "free": true
+   "free": true,
+   "also": [
+    "celebrations"
+   ]
   },
   {
    "code": "1f388",
@@ -1846,7 +1891,10 @@
    "nameEn": "balloon",
    "category": "things",
    "subgroup": "event",
-   "free": true
+   "free": true,
+   "also": [
+    "celebrations"
+   ]
   },
   {
    "code": "1f389",
@@ -1855,7 +1903,10 @@
    "nameEn": "party popper",
    "category": "things",
    "subgroup": "event",
-   "free": true
+   "free": true,
+   "also": [
+    "celebrations"
+   ]
   },
   {
    "code": "1f3a0",
@@ -2018,7 +2069,10 @@
    "nameTr": "kızak",
    "nameEn": "sled",
    "category": "things",
-   "subgroup": "sport"
+   "subgroup": "sport",
+   "also": [
+    "celebrations"
+   ]
   },
   {
    "code": "1f6f9",
@@ -2074,7 +2128,10 @@
    "nameTr": "oyuncak ayı",
    "nameEn": "teddy bear",
    "category": "things",
-   "subgroup": "game"
+   "subgroup": "game",
+   "also": [
+    "celebrations"
+   ]
   },
   {
    "code": "1fa70",
@@ -2162,7 +2219,10 @@
    "nameTr": "buz pateni",
    "nameEn": "ice skate",
    "category": "things",
-   "subgroup": "sport"
+   "subgroup": "sport",
+   "also": [
+    "celebrations"
+   ]
   },
   {
    "code": "26fa",
@@ -2252,7 +2312,10 @@
    "nameTr": "parlayan yıldız",
    "nameEn": "glowing star",
    "category": "space",
-   "subgroup": "sky & weather"
+   "subgroup": "sky & weather",
+   "also": [
+    "celebrations"
+   ]
   },
   {
    "code": "1f320",
@@ -2322,7 +2385,10 @@
    "nameEn": "sparkles",
    "category": "space",
    "subgroup": "event",
-   "free": true
+   "free": true,
+   "also": [
+    "celebrations"
+   ]
   },
   {
    "code": "1f30c",
@@ -2433,7 +2499,10 @@
    "nameEn": "bell",
    "category": "music",
    "subgroup": "sound",
-   "free": true
+   "free": true,
+   "also": [
+    "celebrations"
+   ]
   },
   {
    "code": "1fa87",
@@ -2499,7 +2568,10 @@
    "nameEn": "crown",
    "category": "clothes",
    "subgroup": "clothing",
-   "free": true
+   "free": true,
+   "also": [
+    "celebrations"
+   ]
   },
   {
    "code": "1f452",
@@ -2624,7 +2696,10 @@
    "nameTr": "atkı",
    "nameEn": "scarf",
    "category": "clothes",
-   "subgroup": "clothing"
+   "subgroup": "clothing",
+   "also": [
+    "celebrations"
+   ]
   },
   {
    "code": "1f9e4",
@@ -2633,7 +2708,10 @@
    "nameEn": "gloves",
    "category": "clothes",
    "subgroup": "clothing",
-   "free": true
+   "free": true,
+   "also": [
+    "celebrations"
+   ]
   },
   {
    "code": "1f9e5",
@@ -2641,7 +2719,10 @@
    "nameTr": "mont",
    "nameEn": "coat",
    "category": "clothes",
-   "subgroup": "clothing"
+   "subgroup": "clothing",
+   "also": [
+    "celebrations"
+   ]
   },
   {
    "code": "1f9e6",
@@ -2650,7 +2731,10 @@
    "nameEn": "socks",
    "category": "clothes",
    "subgroup": "clothing",
-   "free": true
+   "free": true,
+   "also": [
+    "celebrations"
+   ]
   },
   {
    "code": "1fa71",
@@ -2691,6 +2775,145 @@
    "nameEn": "lab coat",
    "category": "clothes",
    "subgroup": "clothing"
+  },
+  {
+   "code": "1f38a",
+   "name": "confetti ball",
+   "nameTr": "konfeti topu",
+   "nameEn": "confetti ball",
+   "category": "celebrations",
+   "subgroup": "event",
+   "skip": "a 3-year-old does not know a confetti ball; the party popper covers it"
+  },
+  {
+   "code": "1f387",
+   "name": "sparkler",
+   "nameTr": "maytap",
+   "nameEn": "sparkler",
+   "category": "celebrations",
+   "subgroup": "event",
+   "skip": "near-duplicate of fireworks: the same square burst, only with a stick"
+  },
+  {
+   "code": "1f386",
+   "name": "fireworks",
+   "nameTr": "havai fişek",
+   "nameEn": "fireworks",
+   "category": "celebrations",
+   "subgroup": "event"
+  },
+  {
+   "code": "1f56f",
+   "name": "candle",
+   "nameTr": "mum",
+   "nameEn": "candle",
+   "category": "celebrations",
+   "subgroup": "event",
+   "free": true
+  },
+  {
+   "code": "1fad6",
+   "name": "teapot",
+   "nameTr": "çaydanlık",
+   "nameEn": "teapot",
+   "category": "celebrations",
+   "subgroup": "winter",
+   "free": true
+  },
+  {
+   "code": "2615",
+   "name": "hot beverage",
+   "nameTr": "sıcak çikolata",
+   "nameEn": "hot cocoa",
+   "category": "celebrations",
+   "subgroup": "winter",
+   "free": true
+  },
+  {
+   "code": "1f43b_200d_2744",
+   "name": "polar bear",
+   "nameTr": "kutup ayısı",
+   "nameEn": "polar bear",
+   "category": "celebrations",
+   "subgroup": "winter",
+   "free": true
+  },
+  {
+   "code": "1f3bf",
+   "name": "skis",
+   "nameTr": "kayak",
+   "nameEn": "skis",
+   "category": "celebrations",
+   "subgroup": "winter",
+   "free": true
+  },
+  {
+   "code": "1f370",
+   "name": "shortcake",
+   "nameTr": "pasta dilimi",
+   "nameEn": "cake slice",
+   "category": "celebrations",
+   "subgroup": "event",
+   "free": true
+  },
+  {
+   "code": "1f967",
+   "name": "pie",
+   "nameTr": "turta",
+   "nameEn": "pie",
+   "category": "celebrations",
+   "subgroup": "event",
+   "free": true
+  },
+  {
+   "code": "2764",
+   "name": "red heart",
+   "nameTr": "kalp",
+   "nameEn": "heart",
+   "category": "celebrations",
+   "subgroup": "event",
+   "free": true
+  },
+  {
+   "code": "1f963",
+   "name": "bowl with spoon",
+   "nameTr": "çorba",
+   "nameEn": "soup",
+   "category": "celebrations",
+   "subgroup": "winter"
+  },
+  {
+   "code": "1f6a0",
+   "name": "mountain cableway",
+   "nameTr": "teleferik",
+   "nameEn": "cable car",
+   "category": "celebrations",
+   "subgroup": "winter"
+  },
+  {
+   "code": "1faa9",
+   "name": "mirror ball",
+   "nameTr": "disko topu",
+   "nameEn": "disco ball",
+   "category": "celebrations",
+   "subgroup": "event",
+   "skip": "a 3-year-old does not know a disco ball, and its facets are tiny regions"
+  },
+  {
+   "code": "1f49d",
+   "name": "heart with ribbon",
+   "nameTr": "fiyonklu kalp",
+   "nameEn": "heart with bow",
+   "category": "celebrations",
+   "subgroup": "event"
+  },
+  {
+   "code": "1f372",
+   "name": "pot of food",
+   "nameTr": "tencere",
+   "nameEn": "cooking pot",
+   "category": "celebrations",
+   "subgroup": "winter"
   }
  ]
 }

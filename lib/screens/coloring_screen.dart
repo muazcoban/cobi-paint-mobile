@@ -4,6 +4,7 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/foundation.dart' show defaultTargetPlatform;
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart' show SemanticsService;
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
@@ -26,6 +27,8 @@ import '../widgets/idle_hint.dart';
 import '../widgets/kid_button.dart';
 import '../widgets/kid_metrics.dart';
 import '../widgets/kid_palette.dart';
+import '../widgets/liveliness.dart';
+import '../widgets/motion.dart';
 import '../widgets/paint_canvas.dart';
 import 'coloring/artwork_autosaver.dart';
 
@@ -42,7 +45,9 @@ const littlePalette = <Color>[
   Color(0xFF212121),
 ];
 
-/// Büyük mode adds lighter, darker and neutral colours.
+/// Büyük mode adds lighter, darker and neutral colours, and two warm tones
+/// (caramel and cocoa) so that with peach and brown every child finds the
+/// colours of the people they know (8 Nov 2026).
 const bigPalette = <Color>[
   ...littlePalette,
   Color(0xFF4FC3F7),
@@ -52,6 +57,8 @@ const bigPalette = <Color>[
   Color(0xFF283593),
   Color(0xFF2E7D32),
   Color(0xFF9E9E9E),
+  Color(0xFFD9A066),
+  Color(0xFF5D4037),
 ];
 
 /// Brush diameters as a share of the page's shorter side.
@@ -90,6 +97,16 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
   CanvasTool _tool = CanvasTool.fill;
   BrushKind _brush = BrushKind.marker;
   bool _celebrated = false;
+
+  /// Moves the finished picture (council P8, 8 Nov 2026); a touch settles it.
+  final LivelinessController _liveliness = LivelinessController();
+
+  /// The breath waits for the last fill's reveal; a touch in between cancels it.
+  Timer? _livelinessTimer;
+
+  /// How the bucket fills (council P9, 8 Nov 2026): plain, dots, stripes or
+  /// rainbow; a new page starts plain.
+  FillPattern _pattern = FillPattern.solid;
   Timer? _hintTimer;
   Offset? _hintAt;
   Color _color = littlePalette.first;
@@ -121,6 +138,8 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
   @override
   void dispose() {
     _hintTimer?.cancel();
+    _livelinessTimer?.cancel();
+    _liveliness.dispose();
     WidgetsBinding.instance.removeObserver(this);
     unawaited(SystemGestures.deferEdgeGestures(false));
     _document?.removeListener(_syncSystemUndo);
@@ -314,6 +333,57 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
     setState(() => _tool = tool);
   }
 
+  /// The bucket's patterns (council P9): Minik toggles plain and dots, the
+  /// way its mirror switches; Büyük cycles plain, dots, stripes and rainbow.
+  List<FillPattern> _patternCycle(bool big) => big ? FillPattern.values : const [FillPattern.solid, FillPattern.dots];
+
+  /// Stripes and the rainbow are Büyük patterns; Minik falls back to plain
+  /// (the mode can change in the Parents area while a page is open).
+  FillPattern _patternFor(bool big) => _patternCycle(big).contains(_pattern) ? _pattern : FillPattern.solid;
+
+  /// First tap picks the bucket; the next taps change its pattern. No menu,
+  /// no extra button: the glyph, the badge and the VoiceOver name say which.
+  void _tapFill(bool big) {
+    if (_tool != CanvasTool.fill) {
+      _selectTool(CanvasTool.fill);
+      return;
+    }
+    final cycle = _patternCycle(big);
+    final next = cycle[(cycle.indexOf(_patternFor(big)) + 1) % cycle.length];
+    unawaited(_sound.playClickSound());
+    _say(switch (next) {
+      FillPattern.dots => 'fill_dots',
+      FillPattern.stripes => 'fill_stripes',
+      FillPattern.rainbow => 'rainbow',
+      FillPattern.solid => 'fill',
+    });
+    setState(() => _pattern = next);
+    // A focused button whose label changed is not read again on its own.
+    _announce(_fillLabel(next));
+  }
+
+  String _fillLabel(FillPattern pattern) {
+    final l10n = AppLocalizations.of(context)!;
+    return switch (pattern) {
+      FillPattern.dots => l10n.fillDots,
+      FillPattern.stripes => l10n.fillStripes,
+      FillPattern.rainbow => l10n.fillRainbow,
+      FillPattern.solid => l10n.fill,
+    };
+  }
+
+  /// One VoiceOver sentence; nothing is drawn (Ç1).
+  void _announce(String text) {
+    if (!MediaQuery.accessibleNavigationOf(context)) return;
+    unawaited(SemanticsService.sendAnnouncement(View.of(context), text, Directionality.of(context)));
+  }
+
+  /// A touch anywhere on the screen brings a breathing picture to rest.
+  void _settleLiveliness() {
+    _livelinessTimer?.cancel();
+    _liveliness.settle();
+  }
+
   void _selectPaletteItem(int index, List<Color> colors) {
     if (index < colors.length) {
       unawaited(_sound.playColorSelectSound());
@@ -422,6 +492,19 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
       _saver?.completed = true;
       unawaited(_sound.playSuccessSound());
       unawaited(showCelebration(context, duration: const Duration(milliseconds: 1100)));
+      // The child's own picture takes two small breaths (P8) once the last
+      // fill's 220 ms reveal has shown. Only here, never on the way home; a
+      // touch in between means no breath; Reduce Motion shows a still ring.
+      // Scheduled after this frame: the tap that finished the page reaches
+      // the screen's own Listener next, and that touch must not cancel it.
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        _livelinessTimer?.cancel();
+        _livelinessTimer = Timer(const Duration(milliseconds: 220), () {
+          if (mounted) _liveliness.play();
+        });
+      });
+      _announce(AppLocalizations.of(context)!.pageFinished);
     }
   }
 
@@ -470,13 +553,19 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
           autofocus: true,
           child: Scaffold(
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-            body: SafeArea(
-              child: LayoutBuilder(
-                builder: (context, constraints) {
-                  final metrics = KidMetrics(constraints.biggest, big);
-                  final wide = constraints.maxWidth > constraints.maxHeight * 1.1;
-                  return wide ? _wideLayout(metrics, big) : _tallLayout(metrics, big);
-                },
+            // The first finger anywhere stops a breathing picture (P8) and
+            // then does what it came for; nothing waits for the motion.
+            body: Listener(
+              behavior: HitTestBehavior.translucent,
+              onPointerDown: (_) => _settleLiveliness(),
+              child: SafeArea(
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    final metrics = KidMetrics(constraints.biggest, big);
+                    final wide = constraints.maxWidth > constraints.maxHeight * 1.1;
+                    return wide ? _wideLayout(metrics, big) : _tallLayout(metrics, big);
+                  },
+                ),
               ),
             ),
           ),
@@ -495,11 +584,15 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
           child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: _controls(m, big)),
         ),
         Expanded(
-          child: Padding(padding: const EdgeInsets.all(12), child: _canvasArea(big)),
+          // Clipped to its slot: a breathing card never covers a button.
+          child: ClipRect(child: Padding(padding: const EdgeInsets.all(12), child: _canvasArea(big))),
         ),
         Padding(
           padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
-          child: _palette(m, big, columns: big ? 6 : 5),
+          // Five columns in both modes: the nine Minik colours keep their
+          // places when a child moves to Büyük (18 colours, eraser and brush
+          // size make four full rows).
+          child: _palette(m, big, columns: 5),
         ),
       ],
     );
@@ -513,11 +606,13 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
           child: Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: _controls(m, big)),
         ),
         Expanded(
-          child: Padding(padding: const EdgeInsets.symmetric(vertical: 12), child: _canvasArea(big)),
+          child: ClipRect(child: Padding(padding: const EdgeInsets.symmetric(vertical: 12), child: _canvasArea(big))),
         ),
         Padding(
           padding: const EdgeInsets.all(12),
-          child: Center(child: _palette(m, big, columns: big ? 3 : 2)),
+          // Four columns keep Büyük's five rows at full size on a landscape
+          // phone; three would shrink the cells under 44 pt.
+          child: Center(child: _palette(m, big, columns: big ? 4 : 2)),
         ),
       ],
     );
@@ -529,6 +624,7 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
   List<Widget> _controls(KidMetrics m, bool big) {
     final l10n = AppLocalizations.of(context)!;
     final brush = _brushFor(big);
+    final pattern = _patternFor(big);
     final document = _document;
     final listenable = document ?? const AlwaysStoppedAnimation<double>(0);
     return [
@@ -553,13 +649,17 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
           child: MirrorGlyph(ways: _symmetry),
         )
       else
+        // The bucket shows its pattern in its own shape (dots, stripes), the
+        // rainbow in its badge; the colour stays in the badge.
         KidButton(
-          icon: Icons.format_color_fill_rounded,
+          icon: pattern == FillPattern.dots || pattern == FillPattern.stripes ? null : Icons.format_color_fill_rounded,
           size: m.primary * 0.96,
           selected: _tool == CanvasTool.fill,
-          badgeColor: _color,
-          semanticLabel: l10n.fill,
-          onTap: () => _selectTool(CanvasTool.fill),
+          badgeColor: pattern == FillPattern.rainbow ? null : _color,
+          badgeRainbow: pattern == FillPattern.rainbow,
+          semanticLabel: _fillLabel(pattern),
+          onTap: () => _tapFill(big),
+          child: pattern == FillPattern.dots || pattern == FillPattern.stripes ? FillGlyph(pattern: pattern) : null,
         ),
       if (_tool == CanvasTool.sticker)
         // The button shows the sticker the next tap on the page will stick.
@@ -638,44 +738,55 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
     return Center(
       child: AspectRatio(
         aspectRatio: map.width / map.height,
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(24),
-            boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.08), blurRadius: 12, offset: const Offset(0, 4))],
-          ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(24),
-            child: Listener(
-              behavior: HitTestBehavior.translucent,
-              onPointerDown: (_) => _hideHint(),
-              child: Stack(
-                fit: StackFit.expand,
-                children: [
-                  Semantics(
-                    label: AppLocalizations.of(context)!.canvasLabel,
-                    child: PaintCanvas(
-                      document: document,
-                      page: page,
-                      tool: _tool,
-                      color: _color,
-                      brushSize: side * (big ? _brushSteps[_brushStep] : _brushSteps[1]),
-                      brush: _brushFor(big),
-                      stayInside: !widget.image.freeDraw,
-                      eraseFills: !widget.image.freeDraw,
-                      symmetry: widget.image.freeDraw ? _symmetry : 1,
-                      allowZoom: big,
-                      stickers: _stickerCodes,
-                      stickerIndex: _stickerIndex,
-                      stickerSize: side * (big ? _stickerSteps[_brushStep] : _stickerSteps[1]),
-                      autoComplete: !widget.image.freeDraw && _autoComplete,
-                      penPressure: big,
-                      onFilled: _onFilled,
-                      onStamped: _onStamped,
-                    ),
-                  ),
-                  if (_hintAt != null) IdleHint(at: _hintAt!),
+        // Liveliness only transforms the card's raster (its own repaint
+        // boundary), so the layers underneath are never redrawn for it.
+        child: Liveliness(
+          controller: _liveliness,
+          enabled: !reduceMotion(context),
+          child: RepaintBoundary(
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(24),
+                boxShadow: [
+                  BoxShadow(color: Colors.black.withValues(alpha: 0.08), blurRadius: 12, offset: const Offset(0, 4)),
                 ],
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(24),
+                child: Listener(
+                  behavior: HitTestBehavior.translucent,
+                  onPointerDown: (_) => _hideHint(),
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      Semantics(
+                        label: AppLocalizations.of(context)!.canvasLabel,
+                        child: PaintCanvas(
+                          document: document,
+                          page: page,
+                          tool: _tool,
+                          color: _color,
+                          pattern: _patternFor(big),
+                          brushSize: side * (big ? _brushSteps[_brushStep] : _brushSteps[1]),
+                          brush: _brushFor(big),
+                          stayInside: !widget.image.freeDraw,
+                          eraseFills: !widget.image.freeDraw,
+                          symmetry: widget.image.freeDraw ? _symmetry : 1,
+                          allowZoom: big,
+                          stickers: _stickerCodes,
+                          stickerIndex: _stickerIndex,
+                          stickerSize: side * (big ? _stickerSteps[_brushStep] : _stickerSteps[1]),
+                          autoComplete: !widget.image.freeDraw && _autoComplete,
+                          penPressure: big,
+                          onFilled: _onFilled,
+                          onStamped: _onStamped,
+                        ),
+                      ),
+                      if (_hintAt != null) IdleHint(at: _hintAt!),
+                    ],
+                  ),
+                ),
               ),
             ),
           ),
