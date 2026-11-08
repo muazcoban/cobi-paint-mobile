@@ -46,6 +46,10 @@
     "description": "Music category: instruments, notes, a microphone"
   },
   "clothes": "Giysiler",
+  "celebrations": "Kutlamalar",
+  "@celebrations": {
+    "description": "Home screen card: winter, new year and other celebration pages"
+  },
   "@clothes": {
     "description": "Clothes category: things a child wears, hats, shoes and bags included"
   },
@@ -130,6 +134,22 @@
   "fill": "Doldur",
   "@fill": {
     "description": "Fill tool"
+  },
+  "fillDots": "Doldur: benekli",
+  "@fillDots": {
+    "description": "VoiceOver name of the bucket in its dots state"
+  },
+  "fillStripes": "Doldur: çizgili",
+  "@fillStripes": {
+    "description": "VoiceOver name of the bucket in its stripes state"
+  },
+  "fillRainbow": "Doldur: gökkuşağı",
+  "@fillRainbow": {
+    "description": "VoiceOver name of the bucket in its rainbow state"
+  },
+  "pageFinished": "Resim bitti",
+  "@pageFinished": {
+    "description": "VoiceOver announcement when every area of a page has paint; never drawn on screen"
   },
   "eraser": "Silgi",
   "@eraser": {
@@ -229,6 +249,14 @@
   "@contactUs": {
     "description": "Contact us button"
   },
+  "rateApp": "Uygulamaya puan ver",
+  "@rateApp": {
+    "description": "Parents area row that opens the app's store page to leave a rating; behind the gate"
+  },
+  "rateAppHint": "Uygulama mağazasında açılır",
+  "@rateAppHint": {
+    "description": "Subtitle of the rate row: it leaves the app for the App Store or Google Play"
+  },
   "marker": "Keçeli kalem",
   "brushSize": "Fırça boyutu",
   "importedPages": "Fotoğraflarım",
@@ -240,7 +268,7 @@
   "ageModeLittle": "Minik (3–5 yaş)",
   "ageModeLittleDesc": "Kocaman düğmeler, 9 renk, yakınlaştırma yok. Kalem çizginin dışına taşmaz.",
   "ageModeBig": "Büyük (6+ yaş)",
-  "ageModeBigDesc": "16 renk, iki parmakla yakınlaştırma, fırça boyutları, ileri al.",
+  "ageModeBigDesc": "18 renk, iki parmakla yakınlaştırma, fırça boyutları, ileri al.",
   "coloringSection": "Boyama",
   "autoComplete": "Fırçayla boyarken küçük boşlukları tamamla",
   "autoCompleteDesc": "Keçeli kalemle bir alanın neredeyse tamamı tek renkle boyanınca kalan küçük beyaz köşeler aynı renkle dolar. İnce motor alıştırması için kapatabilirsiniz.",
@@ -250,7 +278,7 @@
   "privacyPolicyPurchase": "Tam Sürüm tek seferlik bir satın almadır, abonelik değildir. Ödemeyi Apple ya da Google alır; uygulama ödeme bilgisini görmez ve hiçbir veri toplamaz.",
   "guidedAccessTitle": "Çocuk uygulamada kalsın",
   "guidedAccessText": "iPhone ve iPad'de Rehberli Erişim'i kullanabilirsiniz: Ayarlar > Erişilebilirlik > Rehberli Erişim'i açın, sonra uygulama açıkken yan düğmeye (Ana Ekran düğmeli cihazlarda Ana Ekran düğmesine) üç kez basın. Android'de Ayarlar > Güvenlik > Uygulama sabitleme'yi kullanın.",
-  "colorNames": "kırmızı,turuncu,sarı,yeşil,mavi,mor,pembe,kahverengi,siyah,açık mavi,açık yeşil,şeftali,açık sarı,lacivert,koyu yeşil,gri",
+  "colorNames": "kırmızı,turuncu,sarı,yeşil,mavi,mor,pembe,kahverengi,siyah,açık mavi,açık yeşil,şeftali,açık sarı,lacivert,koyu yeşil,gri,karamel,kakao",
   "canvasLabel": "Boyama sayfası",
   "scene": "Manzara",
   "@scene": {

@@ -48,6 +48,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get clothes => 'Clothes';
 
   @override
+  String get celebrations => 'Celebrations';
+
+  @override
   String get pageLevel => 'Page difficulty';
 
   @override
@@ -158,6 +161,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get fill => 'Fill';
 
   @override
+  String get fillDots => 'Fill: dots';
+
+  @override
+  String get fillStripes => 'Fill: stripes';
+
+  @override
+  String get fillRainbow => 'Fill: rainbow';
+
+  @override
+  String get pageFinished => 'Picture finished';
+
+  @override
   String get eraser => 'Eraser';
 
   @override
@@ -255,6 +270,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get contactUs => 'Contact Us';
 
   @override
+  String get rateApp => 'Rate the app';
+
+  @override
+  String get rateAppHint => 'Opens the app store';
+
+  @override
   String get marker => 'Marker';
 
   @override
@@ -290,7 +311,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get ageModeBig => 'Big (ages 6+)';
 
   @override
-  String get ageModeBigDesc => '16 colours, pinch to zoom, brush sizes, redo.';
+  String get ageModeBigDesc => '18 colours, pinch to zoom, brush sizes, redo.';
 
   @override
   String get coloringSection => 'Colouring';
@@ -325,7 +346,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get colorNames =>
-      'red,orange,yellow,green,blue,purple,pink,brown,black,light blue,light green,peach,light yellow,navy,dark green,grey';
+      'red,orange,yellow,green,blue,purple,pink,brown,black,light blue,light green,peach,light yellow,navy,dark green,grey,caramel,cocoa';
 
   @override
   String get canvasLabel => 'Coloring page';
