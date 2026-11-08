@@ -42,7 +42,9 @@ const littlePalette = <Color>[
   Color(0xFF212121),
 ];
 
-/// Büyük mode adds lighter, darker and neutral colours.
+/// Büyük mode adds lighter, darker and neutral colours, and two warm tones
+/// (caramel and cocoa) so that with peach and brown every child finds the
+/// colours of the people they know (8 Nov 2026).
 const bigPalette = <Color>[
   ...littlePalette,
   Color(0xFF4FC3F7),
@@ -52,6 +54,8 @@ const bigPalette = <Color>[
   Color(0xFF283593),
   Color(0xFF2E7D32),
   Color(0xFF9E9E9E),
+  Color(0xFFD9A066),
+  Color(0xFF5D4037),
 ];
 
 /// Brush diameters as a share of the page's shorter side.
@@ -499,7 +503,10 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
         ),
         Padding(
           padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
-          child: _palette(m, big, columns: big ? 6 : 5),
+          // Five columns in both modes: the nine Minik colours keep their
+          // places when a child moves to Büyük (18 colours, eraser and brush
+          // size make four full rows).
+          child: _palette(m, big, columns: 5),
         ),
       ],
     );
@@ -517,7 +524,9 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
         ),
         Padding(
           padding: const EdgeInsets.all(12),
-          child: Center(child: _palette(m, big, columns: big ? 3 : 2)),
+          // Four columns keep Büyük's five rows at full size on a landscape
+          // phone; three would shrink the cells under 44 pt.
+          child: Center(child: _palette(m, big, columns: big ? 4 : 2)),
         ),
       ],
     );
