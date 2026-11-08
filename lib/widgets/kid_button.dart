@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
+import '../engine/document/coloring_document.dart' show FillPattern;
 import '../engine/render/symmetry.dart';
 import '../services/haptics.dart';
 
@@ -432,4 +433,108 @@ class _NeonPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(_NeonPainter oldDelegate) => oldDelegate.color != color;
+}
+
+/// The bucket in one of its pattern states (council P9, 8 Nov 2026): the
+/// same tilted bucket as the Material fill icon, with dots or diagonal
+/// stripes inside its body. Drawn in the icon colour only; the paint colour
+/// stays in the button's badge, so the state is read from the shape, never
+/// from a colour. The solid state keeps the Material icon itself.
+class FillGlyph extends StatelessWidget {
+  const FillGlyph({super.key, required this.pattern, this.color = const Color(0xFF2D3142)});
+
+  final FillPattern pattern;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) => CustomPaint(painter: _FillGlyphPainter(pattern, color));
+}
+
+class _FillGlyphPainter extends CustomPainter {
+  _FillGlyphPainter(this.pattern, this.color);
+
+  final FillPattern pattern;
+  final Color color;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final u = size.shortestSide;
+    final line = Paint()
+      ..color = color
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round
+      ..strokeJoin = StrokeJoin.round
+      ..strokeWidth = u * 0.075;
+    final fill = Paint()..color = color;
+
+    canvas.save();
+    canvas.translate(size.width / 2, size.height / 2);
+    // The drop that falls out of the Material bucket, on the right and above
+    // the button's colour badge, so the badge never hides it.
+    canvas.drawCircle(Offset(u * 0.34, u * 0.1), u * 0.085, fill);
+    canvas.drawPath(
+      Path()
+        ..moveTo(u * 0.34, -u * 0.08)
+        ..lineTo(u * 0.42, u * 0.07)
+        ..lineTo(u * 0.26, u * 0.07)
+        ..close(),
+      fill,
+    );
+
+    // The bucket, tilted like the icon: a rounded body with a wide rim.
+    canvas.rotate(-0.6);
+    final body = RRect.fromRectAndCorners(
+      Rect.fromCenter(center: Offset(-u * 0.1, u * 0.0), width: u * 0.52, height: u * 0.6),
+      topLeft: Radius.circular(u * 0.05),
+      topRight: Radius.circular(u * 0.05),
+      bottomLeft: Radius.circular(u * 0.14),
+      bottomRight: Radius.circular(u * 0.14),
+    );
+    canvas.drawRRect(body, line);
+    canvas.drawLine(
+      Offset(body.left - u * 0.03, body.top),
+      Offset(body.right + u * 0.03, body.top),
+      line..strokeWidth = u * 0.09,
+    );
+
+    // The pattern inside the body: what the next tap on the page will leave.
+    canvas.save();
+    canvas.clipRRect(body.deflate(u * 0.07));
+    switch (pattern) {
+      case FillPattern.dots:
+        // Two staggered columns of dots, each at least 4 pt wide on a 44 pt
+        // button, so the state reads in a narrow Split View pane.
+        const r = 0.065;
+        for (var row = 0; row < 3; row++) {
+          final y = body.top + body.height * (0.3 + row * 0.25);
+          final shift = row.isOdd ? u * 0.11 : 0.0;
+          for (var col = 0; col < 2; col++) {
+            final x = body.left + body.width * (0.3 + col * 0.4) + shift - u * 0.05;
+            canvas.drawCircle(Offset(x, y), u * r, fill);
+          }
+        }
+      case FillPattern.stripes:
+        // Three diagonal stripes, the way the page's stripes run.
+        final stripe = Paint()
+          ..color = color
+          ..strokeCap = StrokeCap.butt
+          ..strokeWidth = u * 0.075;
+        for (var i = -1; i <= 1; i++) {
+          final d = i * u * 0.17;
+          canvas.drawLine(
+            Offset(body.left - u * 0.3 + d, body.bottom + u * 0.3),
+            Offset(body.right + u * 0.3 + d, body.top - u * 0.3),
+            stripe,
+          );
+        }
+      case FillPattern.solid:
+      case FillPattern.rainbow:
+        break;
+    }
+    canvas.restore();
+    canvas.restore();
+  }
+
+  @override
+  bool shouldRepaint(_FillGlyphPainter oldDelegate) => oldDelegate.pattern != pattern || oldDelegate.color != color;
 }

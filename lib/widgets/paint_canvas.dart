@@ -28,6 +28,7 @@ class PaintCanvas extends StatefulWidget {
     required this.tool,
     required this.color,
     required this.brushSize,
+    this.pattern = FillPattern.solid,
     this.brush = BrushKind.marker,
     this.stayInside = true,
     this.eraseFills = true,
@@ -50,6 +51,10 @@ class PaintCanvas extends StatefulWidget {
   final ui.Image page;
   final CanvasTool tool;
   final Color color;
+
+  /// How the bucket fills: flat, dots, stripes or rainbow (council, 8 Nov
+  /// 2026). Brushes ignore it.
+  final FillPattern pattern;
 
   /// Brush diameter in page pixels.
   final double brushSize;
@@ -297,10 +302,12 @@ class _PaintCanvasState extends State<PaintCanvas> with SingleTickerProviderStat
     final document = widget.document;
     final label = document.map.labelAt(x, y);
     final argb = widget.color.toARGB32();
-    if (label == 0 || document.fillOf(label) == argb) return;
+    // The same colour and pattern again is nothing; a new pattern in the
+    // same colour must show (Ç8), so the document decides.
+    if (label == 0 || !document.wouldChange(label, argb, widget.pattern)) return;
 
     _prepareReveal(p, label);
-    document.fillAt(x, y, argb);
+    document.fillAt(x, y, argb, pattern: widget.pattern);
     widget.onFilled?.call(label);
   }
 

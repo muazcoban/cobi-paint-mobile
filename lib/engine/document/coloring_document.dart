@@ -11,14 +11,33 @@ import 'page_progress.dart';
 import 'sticker.dart';
 import 'stroke.dart';
 
+/// How the bucket paints a region (council, 8 November 2026): one flat
+/// colour, or the child's colour with a pattern of dots or diagonal stripes
+/// in a second tone of the same colour, or a rainbow. Names are stored in
+/// saved artworks (JSON key `p`, absent for solid), so they never change; a
+/// name this version does not know reads as solid.
+enum FillPattern { solid, dots, stripes, rainbow }
+
+/// [name] when it is a pattern this version knows, solid otherwise.
+FillPattern validFillPattern(Object? name) =>
+    FillPattern.values.where((p) => p.name == name).firstOrNull ?? FillPattern.solid;
+
 /// A filled region and the page point it was filled from. The point lets a
 /// saved fill find its region again if the page or the algorithm changes.
+/// [argb] is always the colour the child chose, also under a pattern, so an
+/// older version of the app shows the flat colour and the region counts as
+/// coloured.
 class RegionFill {
-  const RegionFill({required this.argb, required this.x, required this.y});
+  const RegionFill({required this.argb, required this.x, required this.y, this.pattern = FillPattern.solid});
 
   final int argb;
   final int x;
   final int y;
+  final FillPattern pattern;
+
+  /// Whether [other] would paint the same thing.
+  bool samePaintAs(int argb, FillPattern pattern) =>
+      this.pattern == pattern && (pattern == FillPattern.rainbow || this.argb == argb);
 }
 
 /// Everything the child did to one page: region fills, brush strokes and
@@ -56,6 +75,16 @@ class ColoringDocument extends ChangeNotifier {
   /// ARGB colour of [label], or 0 when it is not filled.
   int fillOf(int label) => label <= 0 || label >= _fills.length ? 0 : (_fills[label]?.argb ?? 0);
 
+  /// The fill of [label], or null when it is not filled.
+  RegionFill? regionFill(int label) => label <= 0 || label >= _fills.length ? null : _fills[label];
+
+  /// Whether a tap with [argb] and [pattern] on [label] would change it.
+  bool wouldChange(int label, int argb, FillPattern pattern) {
+    if (label <= 0 || label >= _fills.length) return false;
+    final fill = _fills[label];
+    return fill == null || !fill.samePaintAs(argb, pattern);
+  }
+
   /// Labels whose fill changed since the last call, or null when every
   /// region has to be redrawn (clear, restore).
   Set<int>? takeDirtyLabels() {
@@ -69,12 +98,14 @@ class ColoringDocument extends ChangeNotifier {
     return labels;
   }
 
-  /// Fills the region under the page point ([x], [y]). Returns the label, or
-  /// 0 when nothing changed.
-  int fillAt(int x, int y, int argb) {
+  /// Fills the region under the page point ([x], [y]) with [argb] and
+  /// [pattern]. Returns the label, or 0 when nothing changed: the same colour
+  /// and pattern again is not a step (Ç7), while a new pattern in the same
+  /// colour is one (Ç8).
+  int fillAt(int x, int y, int argb, {FillPattern pattern = FillPattern.solid}) {
     final label = map.labelAt(x, y);
-    if (label == 0 || fillOf(label) == argb) return 0;
-    _push(_FillCommand(label, _fills[label], RegionFill(argb: argb, x: x, y: y)));
+    if (label == 0 || !wouldChange(label, argb, pattern)) return 0;
+    _push(_FillCommand(label, _fills[label], RegionFill(argb: argb, x: x, y: y, pattern: pattern)));
     return label;
   }
 
@@ -213,7 +244,14 @@ class ColoringDocument extends ChangeNotifier {
         'labelAlgorithm': RegionBuilder.algorithmVersion,
         'fills': [
           for (var l = 1; l < _fills.length; l++)
-            if (_fills[l] != null) {'l': l, 'c': _fills[l]!.argb, 'x': _fills[l]!.x, 'y': _fills[l]!.y},
+            if (_fills[l] case final fill?)
+              {
+                'l': l,
+                'c': fill.argb,
+                'x': fill.x,
+                'y': fill.y,
+                if (fill.pattern != FillPattern.solid) 'p': fill.pattern.name,
+              },
         ],
         'strokes': [for (final s in _strokes) s.toJson()],
         if (_stickers.isNotEmpty) 'stickers': [for (final s in _stickers) s.toJson()],
@@ -233,7 +271,9 @@ class ColoringDocument extends ChangeNotifier {
         // A different algorithm may number regions differently: find the
         // region again from the point it was filled at.
         if (!sameAlgorithm || label <= 0 || label >= fills.length) label = map.labelAt(x, y);
-        if (label > 0 && argb != 0) fills[label] = RegionFill(argb: argb, x: x, y: y);
+        if (label > 0 && argb != 0) {
+          fills[label] = RegionFill(argb: argb, x: x, y: y, pattern: validFillPattern(raw['p']));
+        }
       }
     }
     final rawStrokes = json['strokes'];

@@ -4,6 +4,7 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/foundation.dart' show defaultTargetPlatform;
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart' show SemanticsService;
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
@@ -94,6 +95,10 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
   CanvasTool _tool = CanvasTool.fill;
   BrushKind _brush = BrushKind.marker;
   bool _celebrated = false;
+
+  /// How the bucket fills (council P9, 8 Nov 2026): plain, dots, stripes or
+  /// rainbow; a new page starts plain.
+  FillPattern _pattern = FillPattern.solid;
   Timer? _hintTimer;
   Offset? _hintAt;
   Color _color = littlePalette.first;
@@ -318,6 +323,51 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
     setState(() => _tool = tool);
   }
 
+  /// The bucket's patterns (council P9): Minik toggles plain and dots, the
+  /// way its mirror switches; Büyük cycles plain, dots, stripes and rainbow.
+  List<FillPattern> _patternCycle(bool big) => big ? FillPattern.values : const [FillPattern.solid, FillPattern.dots];
+
+  /// Stripes and the rainbow are Büyük patterns; Minik falls back to plain
+  /// (the mode can change in the Parents area while a page is open).
+  FillPattern _patternFor(bool big) => _patternCycle(big).contains(_pattern) ? _pattern : FillPattern.solid;
+
+  /// First tap picks the bucket; the next taps change its pattern. No menu,
+  /// no extra button: the glyph, the badge and the VoiceOver name say which.
+  void _tapFill(bool big) {
+    if (_tool != CanvasTool.fill) {
+      _selectTool(CanvasTool.fill);
+      return;
+    }
+    final cycle = _patternCycle(big);
+    final next = cycle[(cycle.indexOf(_patternFor(big)) + 1) % cycle.length];
+    unawaited(_sound.playClickSound());
+    _say(switch (next) {
+      FillPattern.dots => 'fill_dots',
+      FillPattern.stripes => 'fill_stripes',
+      FillPattern.rainbow => 'rainbow',
+      FillPattern.solid => 'fill',
+    });
+    setState(() => _pattern = next);
+    // A focused button whose label changed is not read again on its own.
+    _announce(_fillLabel(next));
+  }
+
+  String _fillLabel(FillPattern pattern) {
+    final l10n = AppLocalizations.of(context)!;
+    return switch (pattern) {
+      FillPattern.dots => l10n.fillDots,
+      FillPattern.stripes => l10n.fillStripes,
+      FillPattern.rainbow => l10n.fillRainbow,
+      FillPattern.solid => l10n.fill,
+    };
+  }
+
+  /// One VoiceOver sentence; nothing is drawn (Ç1).
+  void _announce(String text) {
+    if (!MediaQuery.accessibleNavigationOf(context)) return;
+    unawaited(SemanticsService.sendAnnouncement(View.of(context), text, Directionality.of(context)));
+  }
+
   void _selectPaletteItem(int index, List<Color> colors) {
     if (index < colors.length) {
       unawaited(_sound.playColorSelectSound());
@@ -538,6 +588,7 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
   List<Widget> _controls(KidMetrics m, bool big) {
     final l10n = AppLocalizations.of(context)!;
     final brush = _brushFor(big);
+    final pattern = _patternFor(big);
     final document = _document;
     final listenable = document ?? const AlwaysStoppedAnimation<double>(0);
     return [
@@ -562,13 +613,17 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
           child: MirrorGlyph(ways: _symmetry),
         )
       else
+        // The bucket shows its pattern in its own shape (dots, stripes), the
+        // rainbow in its badge; the colour stays in the badge.
         KidButton(
-          icon: Icons.format_color_fill_rounded,
+          icon: pattern == FillPattern.dots || pattern == FillPattern.stripes ? null : Icons.format_color_fill_rounded,
           size: m.primary * 0.96,
           selected: _tool == CanvasTool.fill,
-          badgeColor: _color,
-          semanticLabel: l10n.fill,
-          onTap: () => _selectTool(CanvasTool.fill),
+          badgeColor: pattern == FillPattern.rainbow ? null : _color,
+          badgeRainbow: pattern == FillPattern.rainbow,
+          semanticLabel: _fillLabel(pattern),
+          onTap: () => _tapFill(big),
+          child: pattern == FillPattern.dots || pattern == FillPattern.stripes ? FillGlyph(pattern: pattern) : null,
         ),
       if (_tool == CanvasTool.sticker)
         // The button shows the sticker the next tap on the page will stick.
@@ -668,6 +723,7 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
                       page: page,
                       tool: _tool,
                       color: _color,
+                      pattern: _patternFor(big),
                       brushSize: side * (big ? _brushSteps[_brushStep] : _brushSteps[1]),
                       brush: _brushFor(big),
                       stayInside: !widget.image.freeDraw,
