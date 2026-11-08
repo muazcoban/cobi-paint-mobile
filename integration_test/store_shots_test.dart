@@ -1,22 +1,28 @@
 import 'dart:io';
 import 'dart:math' as math;
 
+import 'package:cobi_paint_mobile/data/builtin_images.dart';
 import 'package:cobi_paint_mobile/engine/document/page_progress.dart';
 import 'package:cobi_paint_mobile/engine/region/label_map.dart';
 import 'package:cobi_paint_mobile/l10n/app_localizations.dart';
 import 'package:cobi_paint_mobile/main.dart' as app;
+import 'package:cobi_paint_mobile/models/user_settings.dart';
+import 'package:cobi_paint_mobile/providers/app_provider.dart';
 import 'package:cobi_paint_mobile/screens/home_screen.dart';
 import 'package:cobi_paint_mobile/widgets/kid_button.dart';
 import 'package:cobi_paint_mobile/widgets/paint_canvas.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
+import 'package:provider/provider.dart';
 
 /// Walks the real app through the store screenshot moments on a simulator.
 /// Every moment prints a line (`SHOT:name` or `BURST:name`) that
 /// tool/store/take_screenshots.py answers with `xcrun simctl io screenshot`,
 /// so the pictures have the status bar and the exact device size. The
-/// language is the simulator's. Never run in CI.
+/// language is the simulator's. It sets the age mode itself and starts from
+/// an empty wall (it deletes the saved pictures of the device it runs on),
+/// so run it on a simulator or an emulator only. Never run in CI.
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
   binding.framePolicy = LiveTestWidgetsFlutterBindingFramePolicy.fullyLive;
@@ -111,7 +117,9 @@ void main() {
     return [for (final label in labels) box.localToGlobal(offset + inside(map, label) * scale)];
   }
 
-  Future<void> openFirstPage(WidgetTester tester, String category) async {
+  /// Opens the first card of [category], or the card named [page] (the
+  /// page's name in the app's language, as VoiceOver reads it).
+  Future<void> openPage(WidgetTester tester, String category, {String? page}) async {
     // The home grid builds only the cards on screen: back to the top, then
     // down until the card is there.
     await tester.drag(find.byType(CustomScrollView).first, const Offset(0, 3000));
@@ -124,9 +132,37 @@ void main() {
     await wait(600);
     await tester.tap(find.text(category));
     await wait(1500);
-    await tester.tap(find.byType(PressableCard).hitTestable().first);
+    if (page == null) {
+      await tester.tap(find.byType(PressableCard).hitTestable().first);
+    } else {
+      final card = find.byWidgetPredicate((w) => w is PressableCard && w.semanticLabel == page);
+      for (var i = 0; i < 12 && card.hitTestable().evaluate().isEmpty; i++) {
+        await tester.drag(find.byType(Scrollable).first, const Offset(0, -250));
+        await wait(500);
+      }
+      await tester.tap(card.hitTestable().first);
+    }
     await until(find.byType(PaintCanvas));
     await wait(2000);
+  }
+
+  // The bucket, whatever its pattern says (council P9: its name changes
+  // with the pattern, and a tap on the selected bucket moves to the next).
+  Finder bucket(AppLocalizations l10n) => find.byWidgetPredicate(
+    (w) =>
+        w is KidButton &&
+        (w.semanticLabel == l10n.fill ||
+            w.semanticLabel == l10n.fillDots ||
+            w.semanticLabel == l10n.fillStripes ||
+            w.semanticLabel == l10n.fillRainbow),
+  );
+
+  Future<void> selectBucket(WidgetTester tester, AppLocalizations l10n) async {
+    final button = bucket(l10n);
+    if (button.evaluate().isNotEmpty && !tester.widget<KidButton>(button.first).selected) {
+      await tester.tap(button.first);
+      await wait(300);
+    }
   }
 
   testWidgets('store screenshots', (tester) async {
@@ -139,6 +175,21 @@ void main() {
     final semantics = tester.ensureSemantics();
     final l10n = AppLocalizations.of(tester.element(find.byType(HomeScreen)))!;
     final colours = [for (final name in l10n.colorNames.split(',')) name.trim()];
+    // Minik for every frame but the patterns one; the simulator may have kept
+    // another mode from an earlier run.
+    Future<void> setMode(AgeMode mode) async {
+      await tester.element(find.byType(HomeScreen)).read<AppProvider>().setAgeMode(mode);
+      await wait(600);
+    }
+
+    await setMode(AgeMode.little);
+    // An empty wall: the frames show only what this walk paints, whatever
+    // an earlier run or a hand test left on the simulator.
+    final provider = tester.element(find.byType(HomeScreen)).read<AppProvider>();
+    for (final artwork in List.of(provider.savedArtworks)) {
+      await provider.deleteArtwork(artwork.id);
+    }
+    await wait(800);
 
     // 1. Home, the top and the end of the list with the newest categories.
     await shot('01_home');
@@ -157,7 +208,7 @@ void main() {
     await wait(1500);
 
     // 3. The marker stays inside the lines: rows over the biggest region.
-    await openFirstPage(tester, l10n.food);
+    await openPage(tester, l10n.food);
     await tester.tap(find.bySemanticsLabel(colours[4]));
     await wait(300);
     final brush = find.byWidgetPredicate((w) => w is KidButton && w.icon == Icons.brush_rounded);
@@ -181,12 +232,8 @@ void main() {
 
     // 4. Filling: the first region fills on a tap (02); every finger-sized
     // region a colour finishes the page and brings the confetti (07).
-    await openFirstPage(tester, l10n.animals);
-    final fill = find.bySemanticsLabel(l10n.fill);
-    if (fill.evaluate().isNotEmpty) {
-      await tester.tap(fill.first);
-      await wait(300);
-    }
+    await openPage(tester, l10n.animals);
+    await selectBucket(tester, l10n);
     const order = [1, 6, 5, 4, 3, 2, 0, 7];
     final targets = regionTargets(tester);
     for (var i = 0; i < targets.length; i++) {
@@ -243,7 +290,34 @@ void main() {
     await shot('05_draw');
     await goHome(tester, l10n);
 
-    // 5. The wall of pictures.
+    // 6. The bucket's patterns in Büyük (council P9, 8 Nov 2026): the teapot
+    // gets dots, stripes and the rainbow on its three biggest areas, plain
+    // colours on the rest. The page finishes, so the confetti and the two
+    // breaths (P8) have ended when the frame is taken, and the wall below
+    // gains a picture.
+    await setMode(AgeMode.big);
+    final teapot = builtInImages.firstWhere((image) => image.id == 'celebrations_1fad6');
+    await openPage(tester, l10n.celebrations, page: teapot.localizedName(l10n.localeName.split('_').first));
+    await selectBucket(tester, l10n);
+    final areas = regionTargets(tester);
+    const patternColours = [0, 4, 2, 3, 1, 6, 5, 7];
+    for (var i = 0; i < areas.length; i++) {
+      if (i < 4) {
+        // Plain -> dots -> stripes -> rainbow -> plain again.
+        await tester.tap(bucket(l10n).first);
+        await wait(400);
+      }
+      await tester.tap(find.bySemanticsLabel(colours[patternColours[i % patternColours.length]]));
+      await wait(250);
+      await tester.tapAt(areas[i]);
+      await wait(450);
+    }
+    await wait(3200);
+    await shot('08_patterns');
+    await goHome(tester, l10n);
+    await setMode(AgeMode.little);
+
+    // 7. The wall of pictures.
     await tester.drag(find.byType(CustomScrollView).first, const Offset(0, 3000));
     await wait(800);
     await tester.tap(find.text(l10n.myArtworks));
