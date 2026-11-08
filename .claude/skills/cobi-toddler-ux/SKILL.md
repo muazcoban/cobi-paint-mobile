@@ -56,6 +56,13 @@ Apple's Human Interface Guidelines (read the current pages; HIG changes every WW
   (`free: true`); a page that was free stays free. All of it is off unless the app is built with
   `--dart-define=COBI_IAP=true`.
 - iPad: pass `sharePositionOrigin` to every share, or the popover crashes.
+- Ratings (owner decision, 8 Nov 2026, `lib/services/rating_prompt.dart`): only the system's
+  sheet (`in_app_review`, App Review 5.6.1), asked from My Artworks right after a grown-up passed
+  the gate and finished a share or a gallery save; `RatingPolicy`: at least 3 days after the first
+  launch, at least 3 saved pictures, at least 14 days between asks. The Parents area keeps a
+  permanent "Rate the app" row (a link out, so behind the gate). Never on a child's own tap, never
+  a custom "do you like it?" dialog, never mentioned in release notes (5.6.3). The sheet does
+  nothing in TestFlight and shows every time in a debug build.
 - System undo (3 Nov 2026): only Büyük hands the picture's undo stack to the system
   (`UndoManagerClient` in the coloring screen, `UndoManager.setUndoState` on every document
   change), so the iPadOS three-finger gestures, a hardware keyboard's Cmd-Z and the Undo/Redo
@@ -111,6 +118,47 @@ Apple's Human Interface Guidelines (read the current pages; HIG changes every WW
   from Android 10 without any permission, `PrintHelper` for the system print dialog). iOS keeps the
   share sheet, which has both. The capabilities come from the platform, so iOS and the tests see the
   plain sheet; the privacy text (ARB and `docs/privacy_policy.html`) names both actions.
+- Finished picture, "canlanma" (council P8, 8 Nov 2026, `plan/kurul-2026-11-08.json`, 5/5 with
+  conditions): when every finger-sized area has paint, the child's own canvas card takes two small
+  breaths (scale 1.00 → 1.03 → 1.00 twice, at most ±1.5°, 2.0 s, the pure `livelinessPose` in
+  `lib/widgets/liveliness.dart`, no randomness), starting 220 ms after the last fill's reveal, together
+  with today's confetti and `success.mp3`. Nothing else moves and nothing is drawn: no ready-made
+  animation or character (3 Nov veto), no praise sound, no badge, counter or "next page". The first
+  finger anywhere on the screen settles the card in 120 ms and does what it came for; the card is
+  clipped to its slot (`ClipRect`) so it never covers a button. Only in `_onFilled`, once per open
+  page; never on the way home (`_goHome` keeps its confetti), never on the Draw page. Reduce Motion:
+  no motion and no confetti, instead a still 6 pt amber ring (`Liveliness.ringKey`) fades in and out
+  once in 600 ms; sound stays. VoiceOver hears `pageFinished` once. No parents switch, no new haptic,
+  no new saved field. Store text says "kıpırdar" / "wiggles", never "canlanır" or "comes alive".
+  The spoken page name at the finish (2c) waits for the `page_<kod>` clips and its own vote.
+- Bucket patterns (council P9, 8 Nov 2026, 5/5 with conditions): the bucket cycles like the brush,
+  the first tap only picks it. Minik toggles plain ↔ dots (the mirror pattern); Büyük cycles plain →
+  dots → stripes → rainbow (`_tapFill`, `_patternFor` falls back to plain when the mode drops to
+  Minik). At most four patterns, never hearts, stars or checks; a new one only replaces a state with
+  its own vote. `RegionFill.pattern` (`FillPattern`, JSON key `p` by name, absent for plain; an
+  unknown name reads plain) keeps `c` as the child's colour even under the rainbow, so 2.2.0 shows a
+  flat colour and the region counts as coloured. The same colour and pattern again is not a step; a
+  new pattern in the same colour is one (`wouldChange`). The maths lives in
+  `lib/engine/render/fill_patterns.dart` and runs only in `PageLayers._paintFills` (word writes):
+  the ground is always the child's colour; dots and stripes use `markTone` (light (2c+765)/5 for luma
+  < 160, dark 2c/3 above; every palette colour differs by ≥ 50 luma and ≥ 1.5:1, tested); dot step =
+  short side / 21 (48 px), radius 28% of the step (marks under a quarter), one-pixel blend ring,
+  staggered rows anchored to the page so neighbours line up; stripes 45°, period = short side / 8
+  (128 px), two fifths mark, at most eight pairs per page; the rainbow is one smooth run of the first
+  six Minik colours down the region's height (`rainbowRows`, one word per row), region-anchored,
+  colour ignored. The button shows the state by shape (`FillGlyph` for dots and stripes, the rainbow
+  badge for the rainbow), the colour stays in the badge; VoiceOver names `fill`, `fillDots`,
+  `fillStripes`, `fillRainbow` and hears the new name on every cycle. Clips `fill_dots` and
+  `fill_stripes`; the rainbow reuses `rainbow`. The eraser, undo, auto-complete (always plain) and
+  `PageProgress` are unchanged; the app never puts a pattern on a region by itself. Store copy says
+  "benekli dolgu; Büyük modda çizgili ve gökkuşağı da", screenshot 5 is taken in Büyük.
+- Palette (8 Nov 2026): Minik 9 colours, Büyük 18 (`littlePalette`, `bigPalette` in the coloring
+  screen); the two newest, caramel `0xFFD9A066` and cocoa `0xFF5D4037`, give every child the colours
+  of the people they know next to peach and brown, and are named after food, never "skin". Both modes
+  use five palette columns in the tall layout, so the nine Minik colours keep their places when a
+  child moves to Büyük (18 colours, eraser and brush size are four full rows); the wide layout uses
+  two columns in Minik and four in Büyük (three would shrink Büyük's cells under 44 pt on a landscape
+  phone). `colorNames` in every ARB file and `color_<n>` in `tool/voice/README.md` follow the order.
 - Mirror drawing (council decision, 3 Nov 2026): only on the free drawing page, where it takes the
   fill button's place (a fifth 82 pt button does not fit a 375 pt phone, and a bucket on a blank
   page only recolours the paper). Minik has one switch: four-way on or off. Büyük cycles off, 2,
@@ -154,7 +202,7 @@ Levels come from the page check (same rule in `PageCheck.level` and `level_for`)
 4 finger-sized areas and 10 regions, 3 = 8+ finger areas or 16+ regions, else 2. Pages are never
 locked; a category lists the child's current level first (`lib/data/page_order.dart`).
 
-Catalog rules (5 Nov 2026; nine categories, 323 pages on 6 Nov): an entry that cannot ship keeps
+Catalog rules (5 Nov 2026; ten categories, 336 pages on 8 Nov): an entry that cannot ship keeps
 `"skip": "<reason>"` and `test/builtin_images_test.dart` keeps the catalog and the bundle identical.
 A page id is `<category>_<code>` and saved artworks store it with the asset path, so a shipped page
 never changes category. A new category goes last on the home screen (children find cards by
@@ -164,6 +212,16 @@ recognise (abstract tiles, text inside the art, near-duplicates of a page alread
 On 6 Nov the owner had 13 subjects this rule had dropped added anyway (Milky Way, desert, mountain
 lake, snowy mountain, umbrella in the rain, leaves in the wind, Ferris wheel, roller coaster,
 joystick, game controller, necktie, lab coat, horn); they ship, do not remove them.
+
+Celebrations (8 Nov 2026, Dalga 1): the tenth card, `celebrations` 🎉, last after Clothes (the scene
+card, when built, still comes after it). It is the permanent home of the seasonal packs (winter and
+New Year first; Ramazan Bayramı, 23 Nisan and Mother's Day follow in later releases, each shipped by a
+release, never by a date rule in the app). A pack is new pages with `category: celebrations` plus
+pages the older categories lend through `"also": ["celebrations"]` in the catalog (`ColoringImage.alsoIn`,
+generated): the lent page keeps its id, its folder and its own category, so saved artworks never move,
+and it is free or not where it lives; the 8-free rule counts only the category's own pages.
+`getImagesForCategory` lists the own pages first, then the lent ones. The three subjects dropped on 8 Nov
+(sparkler, confetti ball, disco ball) keep their `skip` reasons.
 
 For hand-drawn art, run the check before adding a page:
 
@@ -182,10 +240,15 @@ checks every catalog level against the page check.
 - `KidPalette`: `lib/widgets/kid_palette.dart`
 - `showParentalGate`: `lib/widgets/parental_gate.dart` (four number words, growing lockout,
   20 s idle close unless assistive navigation is on)
-- `showCelebration`: `lib/widgets/celebration.dart`
+- `showCelebration`: `lib/widgets/celebration.dart`; `Liveliness`, `livelinessPose`: `lib/widgets/liveliness.dart`
+- Fill patterns: `FillPattern` in `lib/engine/document/coloring_document.dart`, the maths in
+  `lib/engine/render/fill_patterns.dart`, the glyphs `FillGlyph` in `lib/widgets/kid_button.dart`
 - Control sizes: `KidMetrics` in `lib/widgets/kid_metrics.dart` (coloring and scene screens)
 - Short labels that stay whole: `OneLineLabel` in `lib/widgets/one_line_label.dart`
 - Page quality: `PageCheck` in `lib/engine/region/page_check.dart`
+- Store screenshots: the walk `integration_test/store_shots_test.dart` (frames shot by
+  `tool/store/take_screenshots.py`, captions and upload order in `tool/store/caption_screenshots.py`);
+  `08_patterns` is the only Büyük frame, every other frame is Minik, the walk sets the mode itself
 
 ## Before calling a UI change done
 

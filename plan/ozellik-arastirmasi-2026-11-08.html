@@ -1,0 +1,447 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Özellik Seti Araştırması</title>
+<style>
+:root {
+  --bg: #fbfaf7; --surface: #ffffff; --surface-2: #f3f1ec; --text: #1f2328; --muted: #5d6470;
+  --border: #e2ded6; --accent: #d9480f; --accent-soft: #fff1e8; --link: #0b62c4;
+  --p0: #c92a2a; --p0-soft: #ffe9e9; --p1: #b35c00; --p1-soft: #fff3e0; --p2: #2f6f3e; --p2-soft: #e8f5ec;
+  --info: #1864ab; --info-soft: #e7f1fb; --code-bg: #f1efe9;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #15171a; --surface: #1d2024; --surface-2: #24282d; --text: #e8e6e3; --muted: #a3a9b3;
+    --border: #343a41; --accent: #ff8a4c; --accent-soft: #3a2418; --link: #6cb4ff;
+    --p0: #ff8787; --p0-soft: #3b1f1f; --p1: #ffb84d; --p1-soft: #3a2c16; --p2: #8ce99a; --p2-soft: #1d3324;
+    --info: #74c0fc; --info-soft: #182a3b; --code-bg: #26292e;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #15171a; --surface: #1d2024; --surface-2: #24282d; --text: #e8e6e3; --muted: #a3a9b3;
+  --border: #343a41; --accent: #ff8a4c; --accent-soft: #3a2418; --link: #6cb4ff;
+  --p0: #ff8787; --p0-soft: #3b1f1f; --p1: #ffb84d; --p1-soft: #3a2c16; --p2: #8ce99a; --p2-soft: #1d3324;
+  --info: #74c0fc; --info-soft: #182a3b; --code-bg: #26292e;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+.wrap { max-width: 1080px; margin: 0 auto; padding: 32px 16px 80px; }
+header.top { border-bottom: 1px solid var(--border); padding-bottom: 20px; margin-bottom: 28px; }
+header.top h1 { font-size: 2rem; line-height: 1.2; margin: 0 0 8px; }
+.meta { color: var(--muted); font-size: .92rem; }
+a { color: var(--link); }
+h2 { font-size: 1.5rem; margin: 48px 0 12px; padding-top: 8px; border-top: 1px solid var(--border); }
+h3 { font-size: 1.15rem; margin: 28px 0 8px; }
+p { margin: 8px 0 12px; }
+.callout { background: var(--accent-soft); border-left: 4px solid var(--accent); border-radius: 8px; padding: 14px 18px; margin: 16px 0; }
+.callout ul, .callout ol { margin: 6px 0; padding-left: 20px; }
+.note { background: var(--info-soft); border-left: 4px solid var(--info); border-radius: 8px; padding: 12px 16px; margin: 16px 0; }
+.table-wrap { overflow-x: auto; margin: 12px 0 20px; border: 1px solid var(--border); border-radius: 10px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: .93rem; }
+th, td { text-align: left; vertical-align: top; padding: 9px 12px; border-bottom: 1px solid var(--border); }
+th { background: var(--surface-2); font-weight: 600; white-space: nowrap; }
+tr:last-child td { border-bottom: 0; }
+code { background: var(--code-bg); padding: 1px 5px; border-radius: 4px; font: .86em/1.4 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; word-break: break-word; }
+.badge { display: inline-block; font-size: .75rem; font-weight: 700; padding: 2px 8px; border-radius: 999px; white-space: nowrap; }
+.b-p0 { background: var(--p0-soft); color: var(--p0); }
+.b-p1 { background: var(--p1-soft); color: var(--p1); }
+.b-p2 { background: var(--p2-soft); color: var(--p2); }
+.b-info { background: var(--info-soft); color: var(--info); }
+:root { --d-fill: #e7f1fb; --d-stroke: #1864ab; --d-fill-2: #fff1e8; --d-stroke-2: #d9480f; --d-line: #5d6470; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --d-fill: #182a3b; --d-stroke: #74c0fc; --d-fill-2: #3a2418; --d-stroke-2: #ff8a4c; --d-line: #a3a9b3; } }
+:root[data-theme="dark"] { --d-fill: #182a3b; --d-stroke: #74c0fc; --d-fill-2: #3a2418; --d-stroke-2: #ff8a4c; --d-line: #a3a9b3; }
+.diagram { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 12px; margin: 12px 0 20px; overflow-x: auto; }
+.diagram svg { display: block; width: 100%; min-width: 760px; height: auto; }
+.diagram svg text { fill: var(--text); font-family: inherit; }
+.diagram .box { fill: var(--d-fill); stroke: var(--d-stroke); stroke-width: 1.5; }
+.diagram .box2 { fill: var(--d-fill-2); stroke: var(--d-stroke-2); stroke-width: 1.5; }
+.diagram .edge { stroke: var(--d-line); stroke-width: 1.6; fill: none; }
+.diagram .t { font-size: 13px; font-weight: 600; }
+.diagram .s { font-size: 11.5px; }
+nav.toc { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; margin: 0 0 32px; }
+nav.toc ol { margin: 0; padding-left: 20px; columns: 2; column-gap: 32px; }
+nav.toc li { break-inside: avoid; margin: 2px 0; }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.ok { color: var(--p2); font-weight: 700; }
+.no { color: var(--p0); font-weight: 700; }
+.pt { color: var(--p1); font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+<h1>Özellik seti: Cobi'nin satması için ne eksik?</h1>
+<p class="meta">8 Kasım 2026 · beş araştırma kolu: 21 + 9 rakibin özellik matrisi, 10.198 ebeveyn yorumu, 3–5 yaş gelişim kanıtı (90 kaynak), Türkiye beklentileri, 2025–2026 trendleri ve editör seçkileri · ayrıntılar ve kaynaklar ekte</p>
+</header>
+
+<div class="callout">
+<p><strong>Sonuç.</strong> Tezin yarısı doğru: Cobi pazarın standart çekirdeğini karşılıyor ama vitrinde satılan hiçbir ayırt ediciyi içermiyor. Diğer yarısı yorumlarda çürüyor: ebeveyn özelliğe değil, çocuğun bağlandığı uygulamaya ödüyor. Bu yüzden kilitten önce uzun bir özellik listesi değil, altı iş gerekiyor.</p>
+<ol>
+<li><strong>Sesli adlar.</strong> Renk ve kategori adlarını insan sesiyle söylemek. Yorumlarda en çok övülen tema "öğretme" (136 yorum), Türkiye'de ABD'nin iki katı. Kod hazır, tek eksik kayıtlar.</li>
+<li><strong>Canlanma.</strong> Sayfa bitince çocuğun boyadığı resmin 2–4 saniye hareket edip ses çıkarması. Rakiplerin 9'unda var, 36 övgü. Kanıt sekiz koşulla "anlamlı geri bildirim" sayıyor: eyleme bağlı, kısa, her seferinde aynı, biriktirilmez, "doğru renk"e bağlı değil.</li>
+<li><strong>Desen dolgusu.</strong> Kovanın benekli, çizgili, gökkuşağı gibi dolgu hâlleri. 21 rakibin 16'sında var; Cobi'de olmayan iki standart özellikten biri.</li>
+<li><strong>Sezon paketleri.</strong> Bayram ve mevsim sayfaları, ayda 10–20 sayfa. Diğer standart eksik (16/21). Uzun süreli ilgi anlatan 138 yorumun en sık gerekçesi yeni içerik akışı.</li>
+<li><strong>Manzara'yı bitirmek.</strong> Sahne kurma rakiplerin 3'ünde, iki dilde sesli nesne adı hiçbirinde yok. Cobi'nin tek gerçek farkı burada ve kayıtlara bağlı.</li>
+<li><strong>Aile Paylaşımı ve kardeş profilleri.</strong> 24 istek. Aile Paylaşımı bir App Store Connect ayarı ve iki üç günlük kod; profiller çocuğun ekranına dokunduğu için kurul oyu ister.</li>
+</ol>
+<p>Türkiye bu sırayı güçlendiriyor: Play Türkiye'deki 37 çocuk boyama uygulamasının hiçbiri Türkçe seslendirme vaat etmiyor ve hiçbirinde Ramazan, Kurban ya da 23 Nisan içeriği yok. Türk ebeveynin ölçütü "güvenli, reklamsız ve öğretici"; öğreticiyi somutlaştıran şey sesli adlar.</p>
+<p>Yapılmayacaklar da net: harf izleme (MEB 2024 programı dışı), sayıyla boyama ve noktadan noktaya Minik'te (4 yaş sonrası), arka plan müziği (18 şikâyet), rozet ve geri sayım (yem), yapay zekâ ve mikrofon (ağ, 5.1.4, COPPA), lisanslı karakter yarışı. Süre: ilk beş iş yaklaşık 4–5 hafta kod; kayıtlar senin ya da bir seslendirmenin işi.</p>
+</div>
+
+<nav class="toc"><ol>
+<li><a href="#envanter">Envanter: Cobi, pazar, talep, kanıt</a></li>
+<li><a href="#zincir">Satın alma zinciri</a></li>
+<li><a href="#rakipler">Rakipler ne sunuyor</a></li>
+<li><a href="#yorumlar">Ebeveynler neye ödüyor</a></li>
+<li><a href="#kanit">3–5 yaş kanıtı</a></li>
+<li><a href="#trend">Trendler ve editörler</a></li>
+<li><a href="#turkiye">Türkiye'ye özgü beklentiler</a></li>
+<li><a href="#teknik">Teknik uygulanabilirlik</a></li>
+<li><a href="#set">Önerilen set: üç dalga</a></li>
+<li><a href="#vitrin">Vitrin ve mağaza metni</a></li>
+<li><a href="#plan">Güncel yol haritası</a></li>
+<li><a href="#kararlar">Senin kararların</a></li>
+<li><a href="#sinirlar">Doğrulanamayanlar</a></li>
+<li><a href="#ekler">Ekler ve kaynaklar</a></li>
+</ol></nav>
+
+<h2 id="envanter">1. Envanter: Cobi, pazar, talep, kanıt</h2>
+<p>Dört kolun verisi tek tabloda. "Pazar" sütunu 21 App Store rakibinde özelliğin açıkça vitrinlendiği uygulama sayısı (A kolu). "Talep" sütunu ebeveyn yorumlarındaki övgü ve istek sayıları (B kolu, 10.198 yorum). "Kanıt" sütunu 3 yaş için gelişim araştırmasının verdiği hüküm (C kolu).</p>
+<div class="table-wrap"><table>
+<tr><th>Özellik</th><th>Cobi</th><th>Pazar (21 rakip)</th><th>Talep (yorum)</th><th>Kanıt, 3 yaş</th><th>Not</th></tr>
+<tr><td>Dokunarak dolgu, çizgide kalma</td><td class="ok">✓</td><td>13/21 standart; çizgide kalma 4/21</td><td>övgü 13, istek 7</td><td>güçlü (açık uçlu)</td><td>Kalemo ve Minik Palet aynı vaadi veriyor</td></tr>
+<tr><td>Fırçalar: keçeli, gökkuşağı, pastel, sprey, simli, neon</td><td class="ok">✓</td><td>fırça 21/21; özel fırça 15/21</td><td>efekt övgü 31</td><td>—</td><td>standart karşılanıyor</td></tr>
+<tr><td>Desen ve doku dolgusu</td><td class="no">✗</td><td><strong>16/21 standart</strong></td><td>istek 3</td><td>nötr</td><td>Cobi'de eksik iki standarttan biri</td></tr>
+<tr><td>Sezon ve bayram içeriği</td><td class="no">✗</td><td><strong>16/21 standart</strong></td><td>"daha çok sayfa" isteği 65</td><td>—</td><td>eksik ikinci standart; 11 liderin hepsi aylık paket çıkarıyor</td></tr>
+<tr><td>Serbest çizim (Çiz kartı), ayna</td><td class="ok">✓</td><td>serbest 11/21; ayna 3/21</td><td>boş sayfa isteği 21</td><td>güçlü</td><td>rakiplerde sık istenen, bizde var</td></tr>
+<tr><td>16 çıkartma</td><td class="ok">✓</td><td>11/21</td><td>övgü 21 (14'ü Disney)</td><td>—</td><td></td></tr>
+<tr><td>Boyanınca canlanma</td><td class="no">✗</td><td><strong>9/21 yaygın</strong></td><td>övgü 36; satın alma cümlesinde 1</td><td>orta; 8 koşulla uygun</td><td>Bini Games üçlüsü, Bimi Boo ×2, Toya, Kid Doodle</td></tr>
+<tr><td>Sesli renk ve kategori adı</td><td class="pt">altyapı hazır, klip yok</td><td>renk adı 1/21, anlatıcı 2/21</td><td>"öğretme" övgüsü 136, TR'de birinci</td><td>orta; eyleme bağlı olmalı</td><td>39 klip × 2 dil kayıt bekliyor</td></tr>
+<tr><td>İki dilde nesne adı, sahne kurma (Manzara)</td><td class="pt">prototip</td><td>sahne 3/21; iki dil 0/21</td><td>sahne övgüsü 21; Türkçe isteği 11</td><td>orta; ebeveyni katan tek mekanik</td><td>20 kelime klibi bekliyor</td></tr>
+<tr><td>Sayıyla boyama</td><td class="no">✗</td><td>7/21 ayırt edici</td><td>övgü 6 (hepsi RV)</td><td><strong>erken</strong>: 4 yaş sonrası, 1–5 rakam</td><td>en fazla Büyük'te, öneri niteliğinde</td></tr>
+<tr><td>Harf ve çizgi izleme</td><td class="no">✗</td><td>7/21</td><td>öğretme teması içinde</td><td><strong>erken</strong>; MEB 2024 harf yönü öğretmez</td><td>yapılmayacak</td></tr>
+<tr><td>Adım adım çizim</td><td class="no">✗ (kurul 0/5)</td><td>6/21</td><td>—</td><td>erken</td><td>kapalı</td></tr>
+<tr><td>Noktadan noktaya</td><td class="no">✗</td><td>4/21</td><td>—</td><td>erken: 4,5–5 yaş</td><td>en fazla Büyük'te, sonra</td></tr>
+<tr><td>Piksel sanatı, kazı-bul, parlayan sayfa</td><td class="no">✗</td><td>piksel 5/21; 2026 trendi</td><td>—</td><td>doğru cevabı yok, uygun</td><td>Büyük için aday</td></tr>
+<tr><td>Arka plan müziği</td><td class="no">✗</td><td>5/21</td><td>övgü 5, <strong>şikâyet 18</strong></td><td>olumsuz</td><td>yapılmayacak</td></tr>
+<tr><td>Düzenli yeni içerik</td><td class="no">✗</td><td>8/21 vaat ediyor</td><td>uzun ilgi 138 yorumda buna bağlanıyor</td><td>—</td><td>sezon paketleriyle gelir</td></tr>
+<tr><td>Lisanslı karakter</td><td class="no">✗</td><td>3/21</td><td>övgü 38</td><td>—</td><td>bütçe dışı; editörler lisanssız sanatı övüyor</td></tr>
+<tr><td>Aile Paylaşımı</td><td class="no">✗</td><td>Kalemo, Minik Palet açıkça yazıyor</td><td>istek 14</td><td>—</td><td>ASC ayarı + hak kontrolü kodu</td></tr>
+<tr><td>Kardeş profilleri</td><td class="no">✗</td><td>2/21 (Minik Palet 6 çocuk)</td><td>istek 10</td><td>kanıt yok, çatışma yok</td><td>kurul oyu: çocuk ekranında seçici</td></tr>
+<tr><td>Süre sınırı</td><td class="no">✗</td><td>3/21 (Kalemo, Minik Palet)</td><td>—</td><td>zayıf; geri sayım zararlı</td><td>Ekran Süresi ve Rehberli Erişim var; yapılmayacak</td></tr>
+<tr><td>Ebeveyn raporu</td><td class="no">✗</td><td>1/21</td><td>—</td><td>kanıt yok</td><td>düşük öncelik</td></tr>
+<tr><td>Yazdırma, galeriye kayıt, paylaşım (kapı arkasında)</td><td class="ok">✓</td><td>yazdırma 1/21</td><td>övgü 1</td><td>zayıf ama olumlu (kâğıt köprüsü)</td><td>vitrinde söylenmiyor</td></tr>
+<tr><td>Zoom, fırça kalınlığı, Apple Pencil basıncı, otomatik tamamlama, otomatik kayıt, iki mod</td><td class="ok">✓</td><td>1–3/21 nadir</td><td>zoom isteği 3, kalınlık 6</td><td>—</td><td>"sessiz kalite": rakipte yok, vitrinde de satılmıyor</td></tr>
+<tr><td>Android</td><td class="no">✗</td><td>15/21</td><td>—</td><td>—</td><td>plana alındı; Play TR'de 14 çocuk uygulamasının 13'ü Teacher Approved</td></tr>
+<tr><td>Yapay zekâ ile sayfa üretimi, mikrofon, AR</td><td class="no">✗</td><td>yapay zekâ 1/21; AR 2/21; mikrofon 0/21</td><td>fotoğraf isteği 1</td><td>AR erken; yapay zekâ politika dışı</td><td>yapılmayacak</td></tr>
+</table></div>
+
+<h2 id="zincir">2. Satın alma zinciri</h2>
+<p>Yorumlardaki 95 açık satın alma cümlesinin yanında geçen neden şu sırada: çocuk ücretsiz kısmı çok sevdi (28), daha çok sayfa açmak (13), öğretici (9), basit (6), reklamsız (5). Canlanma, çıkartma ve efekt birer kez. Özelliklerin işi bu zincirin iki halkasında.</p>
+<div class="diagram"><svg viewBox="0 0 980 260" role="img" aria-label="Satın alma zinciri: indirme, çocuğun bağlanması, içerik duvarı, ebeveynin ödemesi; özellikler ikinci ve dördüncü halkada etkili">
+<rect class="box" x="20" y="40" width="200" height="70" rx="10"/><text class="t" x="120" y="68" text-anchor="middle">1. İndirme</text><text class="s" x="120" y="90" text-anchor="middle">arama, vitrin, puan</text>
+<path class="edge" d="M220 75 H260" marker-end="url(#a)"/>
+<rect class="box" x="262" y="40" width="200" height="70" rx="10"/><text class="t" x="362" y="68" text-anchor="middle">2. Çocuk bağlanır</text><text class="s" x="362" y="90" text-anchor="middle">"ücretsiz kısmı çok sevdi" (28)</text>
+<path class="edge" d="M462 75 H502"/>
+<rect class="box" x="504" y="40" width="200" height="70" rx="10"/><text class="t" x="604" y="68" text-anchor="middle">3. İçerik duvarı</text><text class="s" x="604" y="90" text-anchor="middle">"daha çok sayfa" (13)</text>
+<path class="edge" d="M704 75 H744"/>
+<rect class="box" x="746" y="40" width="210" height="70" rx="10"/><text class="t" x="851" y="68" text-anchor="middle">4. Ebeveyn öder</text><text class="s" x="851" y="90" text-anchor="middle">güven: reklamsız, tek seferlik</text>
+<rect class="box2" x="262" y="150" width="200" height="90" rx="10"/><text class="t" x="362" y="175" text-anchor="middle">Özelliklerin işi</text><text class="s" x="362" y="196" text-anchor="middle">sesli adlar, canlanma, desen,</text><text class="s" x="362" y="214" text-anchor="middle">sezon paketleri, Manzara</text>
+<path class="edge" d="M362 150 V112"/>
+<rect class="box2" x="504" y="150" width="200" height="90" rx="10"/><text class="t" x="604" y="175" text-anchor="middle">Kilidin yeri</text><text class="s" x="604" y="196" text-anchor="middle">72 ücretsiz sayfa, duvar görünür,</text><text class="s" x="604" y="214" text-anchor="middle">çocuk ekranında kilit yok</text>
+<path class="edge" d="M604 150 V112"/>
+<rect class="box2" x="746" y="150" width="210" height="90" rx="10"/><text class="t" x="851" y="175" text-anchor="middle">Güvenin işi</text><text class="s" x="851" y="196" text-anchor="middle">açıklamada model, Aile Paylaşımı,</text><text class="s" x="851" y="214" text-anchor="middle">geri yükleme, puanlar</text>
+<path class="edge" d="M851 150 V112"/>
+</svg></div>
+<p>Bu zincirin bize söylediği şey: özellikler çocuğu bağlar ve ebeveynin "değerli" algısını kurar; satın almayı tetikleyen halka ise içerik duvarı. Cobi'de 72 ücretsiz sayfa rakiplerin ücretsiz katmanından kat kat fazla (çoğunda bir kategori, 2–16 sayfa). Çocuk bağlanmadan duvar görmeyecek; bağlandıktan sonra duvarı görmesi için kilidin doğru yerde olması gerekiyor. Kilidin tasarımı pazar araştırmasının satın alma akışı bölümünde.</p>
+
+<h2 id="rakipler">3. Rakipler ne sunuyor</h2>
+<p>A kolu 21 App Store rakibini ve Google Play Türkiye'de ilk 15'e giren 9 ek uygulamayı taradı: açıklama, ilk üç ekran görüntüsünün alt yazısı ve 2025–2026 sürüm geçmişi (335 sürüm). Hiçbir uygulama indirilmedi; mağaza metninde geçmeyen özellik "yok" sayıldı.</p>
+<h3>Dört ayırt edici küme</h3>
+<div class="table-wrap"><table>
+<tr><th>Küme</th><th>Kaç rakipte</th><th>Kimde</th><th>Cobi</th></tr>
+<tr><td>Boyanınca canlanma</td><td>9/21</td><td>Todli, Pinksy, Drawing Academy (Bini Games), Bimi Boo ×2, JMH, Toya, Kid Doodle, KidloLand</td><td class="no">yok</td></tr>
+<tr><td>Öğrenme katmanı</td><td>harf-sayı-şekil 6, izleme 7, sayıyla boyama 7</td><td>Minik Palet, BoyaBoo, Todli, Orange Studios, Game Tunes</td><td class="no">yok</td></tr>
+<tr><td>Rehberli çizim</td><td>adım adım 6, noktadan noktaya 4</td><td>Bini Games, Bimi Boo Kids Coloring, Orange Studios</td><td class="no">yok (kurul kararı)</td></tr>
+<tr><td>İçerik ritmi</td><td>düzenli yeni içerik 8, lisanslı karakter 3</td><td>Crayon Club, Disney, Crayola, RV, Bimi Boo</td><td class="no">yok</td></tr>
+</table></div>
+<p>Cobi'nin rakiplerde nadir olan özellikleri (çizgide kalma 4/21, zoom 2/21, kalınlık 1/21, ayna 3/21, yazdırma 1/21, Apple Pencil 2/21, otomatik tamamlama 0/21) vitrinde hiç satılmıyor. Satın almayı sürüklediğine dair kanıt yok; bunlar kullanımda hissedilen kalite.</p>
+<h3>Yerli yeni girişler ve Cobi</h3>
+<p>Ekim–Kasım 2026'da çıkan üç yerli uygulama ve aynı yaş bandındaki Kid Doodle, Cobi ile aynı çekirdekte: dokunarak dolgu, reklamsız, ebeveyn kapısı, tek seferlik satın alma (BoyaBoo abonelik). Fark ince eklerde.</p>
+<div class="table-wrap"><table>
+<tr><th>Uygulama</th><th>Çıkış</th><th>İçerik</th><th>Cobi'de olmayan</th><th>Cobi'de olup onda olmayan</th></tr>
+<tr><td>Kalemo (Fikret Alp Işık)</td><td>4 Kasım 2026</td><td>89 resim, 8 kitap</td><td>desen ve gökkuşağı dolgusu, üç yaş modu, kazanılan renk kutuları, maskot, müzik, süre sınırı, ilerleme ekranı, 12 dil</td><td>323 sayfa, ayna, çıkartma, Pencil basıncı, otomatik tamamlama, yazdırma</td></tr>
+<tr><td>Minik Palet (Caner Gümüş)</td><td>9 Ekim 2026</td><td>100 resim, 50'si ücretsiz</td><td>sayıyla boyama, kardeş profilleri (6 çocuk), günlük süre sınırı, Cadılar Bayramı paketi</td><td>fırça çeşidi, ayna, çıkartma, iki mod, yazdırma</td></tr>
+<tr><td>BoyaBoo (Arif Tok)</td><td>5 Kasım 2026</td><td>paketler</td><td>konuşan etiket ("Burun"), sayı ve harf paketleri, 5 doku dolgusu, renk karıştırıcı, kamera ile kayıt</td><td>sayfa hacmi, ebeveyn metni, tek seferlik model</td></tr>
+<tr><td>Kid Doodle (Atilla Özder)</td><td>22 Haziran 2026, 25 sürüm</td><td>15 kitap</td><td>anlatıcı (15 dil), canlanan kitaplar (hareket eden araçlar, konser veren müzik sayfaları), yapay zekâ ile sayfa üretimi, desen, widget, Split View</td><td>çevrimdışı tasarım (yapay zekâ internet ister), tek seferlik model (Kid Doodle haftalık/yıllık abonelik), çizgide kalma</td></tr>
+</table></div>
+<p>Kid Doodle bu listede en hızlı özellik temposuna sahip: beş ayda 24 özellik sürümü. Yorumlarda ise 20 yorumla görünür değil; tempo tek başına talep üretmiyor.</p>
+<h3>Vitrin dili: ilk üç karede en çok ne söyleniyor</h3>
+<div class="table-wrap"><table>
+<tr><th>Vaat</th><th class="num">21 rakipte</th><th>Örnek alt yazılar</th><th>Cobi'nin bugünkü vitrini</th></tr>
+<tr><td>Sayfa sayısı rakamla</td><td class="num">12</td><td>"176 COLORING PAGES", "89 pictures in 8 books", "100 coloring pages / 50 free"</td><td>açıklamada var, alt yazıda yok</td></tr>
+<tr><td>Araç ve desen çeşitliliği</td><td class="num">6</td><td>"Different tools, colors and patterns", "Crayons, markers, glitter / Patterns and rainbows"</td><td>yok</td></tr>
+<tr><td>Reklamsız, güvenli, ebeveyn kontrolü</td><td class="num">6</td><td>"No Ads", "Safe, ad-free", "50 free • No ads"</td><td>açıklamada var, alt yazıda yok</td></tr>
+<tr><td>Öğrenme, izleme</td><td class="num">4</td><td>"TRACING", "Learn colors and numbers"</td><td>yok (bilinçli)</td></tr>
+<tr><td>Yaş bandı</td><td class="num">3</td><td>"Ages 1-5", "ages 0-6"</td><td>alt başlıkta "3-5 yaş"</td></tr>
+<tr><td>Okuma gerektirmez, dokun boya</td><td class="num">2</td><td>"Tap to color, like magic" (Kalemo), "Tap to paint! No reading needed" (Minik Palet)</td><td>açıklamada var</td></tr>
+</table></div>
+<p>Google Play Türkiye: "çocuk boyama" aramasında ilk 15'in 14'ü çocuk uygulaması, 13'ünde Teacher Approved rozeti var. "boyama oyunları" aramasında ilk 15'in 8'i yetişkin sayı ve piksel boyama. Çocuk rafı "çocuk boyama" kelimesinde; rozet orada fiilen standart. Play'e özgü uygulamalarda ayrışan tek şey mini oyun (5/9) ve sahne kurma (3/9).</p>
+
+<h2 id="yorumlar">4. Ebeveynler neye ödüyor</h2>
+<p>B kolu App Store (ABD ve Türkiye) ve Google Play (ABD ve Türkiye) yorumlarını çekti: 10.198 yorum, 3.408'i Türkiye. Altı kelime ve üzeri 6.098 yorumun tamamı okundu, özellik sinyali taşıyan 1.391'i elle etiketlendi. Fiyat şikâyetleri bu çalışmanın dışında; onlar pazar araştırmasında.</p>
+<h3>Övülen özellikler (4–5 yıldız, yorum sayısı)</h3>
+<div class="table-wrap"><table>
+<tr><th>Tema</th><th class="num">Toplam</th><th class="num">TR</th><th class="num">ABD</th><th>En çok geçtiği uygulamalar</th><th class="num">Satın alma cümlesinde</th></tr>
+<tr><td>Öğretme, anlatım, renk ve harf öğrenme</td><td class="num">136</td><td class="num">53</td><td class="num">83</td><td>Todli 23, Drawing Academy 22, Pinksy 20</td><td class="num">9</td></tr>
+<tr><td>Reklamsız, güvenli</td><td class="num">92</td><td class="num">25</td><td class="num">67</td><td>RV 29, Disney 12</td><td class="num">5</td></tr>
+<tr><td>Sakinleştirici, meşgul ediyor</td><td class="num">91</td><td class="num">8</td><td class="num">83</td><td>Pinksy 14, Bimi Boo Baby Coloring 13</td><td class="num">1</td></tr>
+<tr><td>Çok sayfa, çeşit</td><td class="num">52</td><td class="num">12</td><td class="num">40</td><td>Bimi Boo ×2, Disney, RV</td><td class="num">13</td></tr>
+<tr><td>Çok aktivite türü</td><td class="num">49</td><td class="num">8</td><td class="num">41</td><td>Crayola 11, KidloLand 10</td><td class="num">3</td></tr>
+<tr><td>İnce motor, çizim becerisi gelişti</td><td class="num">47</td><td class="num">29</td><td class="num">18</td><td>Pinksy 17, Drawing Academy 12</td><td class="num">0</td></tr>
+<tr><td>Basit, çocuk tek başına kullanıyor</td><td class="num">44</td><td class="num">5</td><td class="num">39</td><td>Bimi Boo ×2, Toya</td><td class="num">6</td></tr>
+<tr><td>Lisanslı karakter</td><td class="num">38</td><td class="num">8</td><td class="num">30</td><td>Disney 27, Sago 10</td><td class="num">0</td></tr>
+<tr><td>Canlanan resim</td><td class="num">36</td><td class="num">5</td><td class="num">31</td><td>Todli 12, Pinksy 11, Drawing Academy 9</td><td class="num">1</td></tr>
+<tr><td>Ücretsiz, tek seferlik, fiyatı makul</td><td class="num">35</td><td class="num">11</td><td class="num">24</td><td>RV 24</td><td class="num">4</td></tr>
+<tr><td>Efekt: sim, parıltı, gökkuşağı</td><td class="num">31</td><td class="num">4</td><td class="num">27</td><td>Bimi Boo, Toya, Pinksy</td><td class="num">1</td></tr>
+<tr><td>Çevrimdışı; araba, uçak, bekleme</td><td class="num">29</td><td class="num">3</td><td class="num">26</td><td>Disney, RV, KidloLand</td><td class="num">2</td></tr>
+<tr><td>Çizgide kalma, dokunarak dolgu</td><td class="num">13</td><td class="num">1</td><td class="num">12</td><td>Bimi Boo, Toya, Amaya</td><td class="num">0</td></tr>
+<tr><td>Sayıyla boyama</td><td class="num">6</td><td class="num">4</td><td class="num">2</td><td>RV (hepsi)</td><td class="num">0</td></tr>
+<tr><td>Müzik</td><td class="num">5</td><td class="num">2</td><td class="num">3</td><td>—</td><td class="num">0</td></tr>
+<tr><td>Yazdırma · fotoğraftan sayfa</td><td class="num">1 · 1</td><td class="num">0</td><td class="num">1 · 1</td><td>Disney · Budge</td><td class="num">0</td></tr>
+</table></div>
+<h3>İstenen özellikler (tüm yıldızlar)</h3>
+<div class="table-wrap"><table>
+<tr><th>İstek</th><th class="num">Yorum</th><th class="num">TR</th><th>Cobi'de</th></tr>
+<tr><td>Daha çok sayfa, yeni resim (13'ü belirli lisanslı karakter)</td><td class="num">65</td><td class="num">17</td><td>323 sayfa; ritim yok</td></tr>
+<tr><td>Boş sayfa, serbest çizim</td><td class="num">21</td><td class="num">3</td><td class="ok">var (Çiz)</td></tr>
+<tr><td>Daha çok renk; kahverengi, ten rengi</td><td class="num">18 + 2</td><td class="num">6</td><td>kahverengi var; ten rengi yalnız Büyük'te bir ton</td></tr>
+<tr><td>Çevrimdışı çalışsın</td><td class="num">17</td><td class="num">4</td><td class="ok">var</td></tr>
+<tr><td>Aile Paylaşımı</td><td class="num">14</td><td class="num">2</td><td class="no">yok</td></tr>
+<tr><td>Resmi tek dokunuşla sıfırlama</td><td class="num">12</td><td class="num">3</td><td class="ok">var, kapı arkasında ("baştan boya")</td></tr>
+<tr><td>Dil: Türkçe ve başka diller</td><td class="num">11</td><td class="num">9</td><td class="ok">Türkçe ve İngilizce</td></tr>
+<tr><td>Çoklu profil</td><td class="num">10</td><td class="num">2</td><td class="no">yok</td></tr>
+<tr><td>Büyük çocuk içeriği, zorluk</td><td class="num">10</td><td class="num">1</td><td class="ok">Büyük modu, 3 seviye</td></tr>
+<tr><td>Fırça kalınlığı</td><td class="num">6</td><td class="num">1</td><td class="ok">Büyük'te var</td></tr>
+<tr><td>Canlanma eklensin</td><td class="num">3</td><td class="num">2</td><td class="no">yok</td></tr>
+<tr><td>Desenli fırça</td><td class="num">3</td><td class="num">1</td><td class="no">yok</td></tr>
+</table></div>
+<h3>Özellik kaynaklı şikâyetler (1–3 yıldız)</h3>
+<p>Reklam 65 (Play sürümleri), az sayfa 50, sıkıcı 41, yaşa uymuyor 22, kafa karıştıran arayüz 22, az renk 20, ses ve müzik rahatsız edici 18, zor ve küçük alanlar 16, ürkütücü içerik 16, hep aynı 10. "Bir günde bitirdi" sinyali 12 yorumda. Türkiye'de "yaşa uymuyor" (%16,4 – %5,3) ve "çocuk bıraktı" (%9,1 – %1,6) payı ABD'nin üç beş katı.</p>
+<h3>Uzun süreli ilgi</h3>
+<p>138 yorum aylar ya da yıllar süren kullanım anlatıyor (Pinksy 19, Crayola 18, Todli 17, Disney 16, Bimi Boo Drawing 13). Gerekçe iki yerde toplanıyor: yeni içerik akışı (Crayola, Disney, Sago) ve "yapabildiğini görme" hissi (Pinksy, Drawing Academy, Todli'de çizim becerisi). Salt boyama uygulamalarında uzun ilgi basitliğe ve "hep elinin altında" olmaya bağlanıyor; hızlı bırakma (22 yorum) içerik bitince geliyor.</p>
+<h3>Türkiye ile ABD</h3>
+<p>Türkiye'de ebeveyn "eğitici mi, çocuğumu geliştiriyor mu, Türkçe mi" diye bakıyor: öğretme payı iki kat (%24,9 – %13,7), ince motor dört kat (%13,6 – %3,0), Türkçe isteği Türkiye'ye özgü. ABD'de "beni rahatlatıyor mu, araba ve restoranda işe yarıyor mu, çocuk tek başına kullanabiliyor mu" öne çıkıyor. Cobi'nin Türkçe ve yerli olması Türkiye'de doğrudan bir övgü temasına denk geliyor; "öğretici" algısını taşıyacak somut öğe (renk ve nesne adı) Türkiye'de daha çok iş görür.</p>
+<div class="note"><p><strong>Sınır.</strong> Cobi'nin kendi yorumu yok; bulgular rakiplerin ebeveynlerinden. Kalemo'da hiç yorum yok, Minik Palet'te 2; yerli tek seferlik uygulamalar için anlamlı veri yok. Etiketleme tek kişi tarafından yapıldı.</p></div>
+
+<h2 id="kanit">5. 3–5 yaş kanıtı</h2>
+<p>C kolu hakemli çalışmaları, NAEYC ve Fred Rogers Center bildirgesini, Hirsh-Pasek'in dört sütun çerçevesini, MEB Okul Öncesi Eğitim Programı 2024'ü ve değerlendirme kurumlarının ölçütlerini taradı (90 kaynak). Üç hüküm öne çıkıyor.</p>
+<ul>
+<li><strong>Açık uçlu boyama en güçlü desteklenen tür.</strong> 124 uygulamalık içerik analizinde sade çizim uygulamaları 12 üzerinden 4, açık uçlu dünya uygulamaları 8–9 aldı; fark "anlamlı bağlantı" (nesnenin adı, gerçek hayatla ilişki) ve "sosyal etkileşim" (birlikte oynamaya davet) sütunlarında. Cobi'nin büyüme alanı bu iki sütun; yeni bir ödül sistemi değil.</li>
+<li><strong>Canlanma dışsal ödül değil, geri bildirim olabilir.</strong> 128 deneyi derleyen meta-analizde olumlu geri bildirim içsel motivasyonu artırıyor (d = 0,33), beklenen somut ödül düşürüyor (d = −0,28 ile −0,40) ve düşüş çocuklarda daha büyük. Lepper'in 1973 deneyi tam bu yaşta, keçeli kalemle çizimde yapıldı.</li>
+<li><strong>Sesli nesne adı için kanıt orta ve koşullu.</strong> Sözcük öğrenme dokunuş nesneye özgü olduğunda gerçekleşiyor; zorunlu dokunuş 3 yaşta öğrenmeyi bozabiliyor; ebeveynin yanında olması en güçlü etken. "İngilizce öğretir" iddiası kanıtsız; doğru iddia "İngilizce adını duyar".</li>
+</ul>
+<h3>Canlanmanın sekiz koşulu</h3>
+<p>Koşullardan biri bozulursa canlanma "yem" sınıfına kayar (Radesky 2022'nin manipülatif tasarım sınıfları).</p>
+<ol>
+<li>Eyleme bağlı: çocuğun az önce boyadığı nesne canlanır, başka bir şey değil.</li>
+<li>Kısa ve kesilebilir: 2–4 saniye; dokununca durur ya da tekrar eder.</li>
+<li>Belirlenimli: aynı eylem aynı sonucu verir; rastgele sürpriz yok.</li>
+<li>Biriktirilmez, sayılmaz, kilit açmaz: yıldız, rozet, "3 sayfa daha" yok.</li>
+<li>"Doğru renk"e bağlı değil: mor fil de canlanır.</li>
+<li>Görsel ve ses birlikte; ses tek başına taşımaz.</li>
+<li>Karar noktasına konmaz: çıkışta, menüde, ebeveyn alanı geçişinde oynatılmaz.</li>
+<li>Doğal duraklama: canlanma, sonra sakin "bitti" durumu; otomatik sonraki sayfa yok.</li>
+</ol>
+<h3>Yaş çapaları (MEB 2024 ve CDC)</h3>
+<div class="table-wrap"><table>
+<tr><th>Etkinlik</th><th>3 yaş</th><th>Gerekçe</th><th>Cobi için biçim</th></tr>
+<tr><td>Şekil eşleme (daire, kare, üçgen)</td><td class="ok">uygun</td><td>MEB 36–48 ay tipik örnekleri tanır</td><td>yanlış yere bırakılan parça sessizce geri kayar; "yanlış" sesi yok</td></tr>
+<tr><td>Sayıyla boyama</td><td class="no">erken</td><td>36–48 ay 1–3 rakamını tanır; 49–60 ay 1–10 yazılı sayıları tanır</td><td>4 yaş sonrası, 1–5 rakam, anahtar öneri olarak; 3 yaş için eşdeğeri "şekille boyama"</td></tr>
+<tr><td>Noktadan noktaya</td><td class="no">erken</td><td>rakam sırası + çizgi kontrolü; eğri çizgi 61–72 ay</td><td>4,5–5 yaş; en çok 10 nokta, sıradaki nokta parlar</td></tr>
+<tr><td>Harf izleme</td><td class="no">erken, program dışı</td><td>MEB: "harflerin yazılış yönlerini öğretme amacı bulunmamaktadır"; kanıt izlemeyi değil serbest üretimi destekliyor</td><td>yapılmayacak; alternatif: adının harflerini çıkartma olarak koyma</td></tr>
+<tr><td>Arka plan müziği</td><td class="pt">sınırlı</td><td>bebeklerde öğrenmeyi düşürdü; arka plan sesi oyunu ve ebeveyn etkileşimini böldü</td><td>yok; eyleme bağlı kısa sesler kalır</td></tr>
+<tr><td>Süre sınırı, geri sayım</td><td class="no">geri sayım zararlı</td><td>çocuğa gösterilen uyarı geçişi zorlaştırıyor</td><td>Ekran Süresi ve Rehberli Erişim rehberi yeter</td></tr>
+<tr><td>Günlük ödül, rozet</td><td class="no">hayır</td><td>yem sınıfı; beklenen ödül içsel ilgiyi düşürür</td><td>kurul kararıyla aynı</td></tr>
+<tr><td>AR</td><td class="no">erken</td><td>"2B resmi 3B canlandırma" uzun oyun üretmedi</td><td>yok</td></tr>
+</table></div>
+<p>Değerlendirme kurumlarında puan getiren beş şey: okuma gerektirmeyen bağımsız kullanım; açık uçlu yaratıcılık artı anlamlı içerik; reklam, satın alma baskısı ve veri yokluğu; ebeveyn ayarları, ses kapatma, eseri saklama ve yazdırma; kapsayıcılık ve sakin keyif. Cobi'nin seti bu beşlinin dördünü karşılıyor; "anlamlı içerik" sesli adlarla gelir.</p>
+
+<h2 id="trend">6. Trendler ve editörler</h2>
+<p>E kolu 37 uygulamanın 2025–2026 sürüm notlarını, Apple ve Google'ın editoryal sayfalarını, ödül listelerini ve çocuk uygulamalarında yapay zekâ politikasını okudu.</p>
+<h3>Sürüm notlarından sekiz örüntü</h3>
+<ol>
+<li>Aylık içerik takvimi (mevsim, bayram, film) 11 liderin tamamında standart; Crayon Club Mart 2026'da Ramazan paketi çıkardı; Khan Academy Kids bayram temasını ebeveyn ayarından kapattırıyor.</li>
+<li>Boyama mekaniği çeşitlendi: sayıyla boya (Bimi Boo Aralık 2025, Crayon Club Nisan 2026), piksel sanatı (dört lider), noktaları birleştir, kazı-bul, karanlıkta parlayan sayfa (Crayola Glow Art), animasyonlu sim, ekstra büyük sayfa.</li>
+<li>Boyamadan "yaratıcı rol oyunu"na genişleme: salon, ev tasarımı, evcil hayvan, müzik, parti, erken kodlama (Pok Pok Code Factory).</li>
+<li>Küçük çocuk için gezinme yeniden tasarımları (Bimi Boo, PBS KIDS, Disney Coloring World).</li>
+<li>Çevrimdışı ve yazdırılabilir içerik (PBS KIDS indirme, Khan Kids yazdırılabilir sayfalar).</li>
+<li>Kalem desteği (Khan Kids izleme etkinlikleri, Lake'te Pencil Pro önizleme).</li>
+<li>Paketleme: Piknik Unlimited, Crayola Creativity Bundle, KidloLand+.</li>
+<li>Ebeveyn kontrollü tema ve ses davranışı (PBS KIDS sessiz modda ses).</li>
+</ol>
+<h3>Editörler ve ödül kurulları neyi övüyor</h3>
+<p>Apple'ın Pok Pok için yazdığı Editors' Choice metni "talimat yok, kural yok, metin ve konuşma yok, oyuncaklar sessiz başlar" diyor. Apple Design Awards 2026'da Sago Mini Jinja's Garden "okuma gerektirmeyen etkileşim, zamanlayıcı yok, yapılacaklar listesi yok" ile kazandı; 2024'te Crayola Adventures "okumayanlar için tam anlatım" ile. Crayon Club alt başlığına "Safe Drawing for Kids Ages 2-6" yazıyor. Cobi'nin "çevrimdışı, reklamsız, hesapsız, mikrofonsuz, puan yok" seti bu dille birebir örtüşüyor; eksik olan bunu vitrine yazmak.</p>
+<h3>Takip edilecek ve uzak durulacak</h3>
+<div class="table-wrap"><table>
+<tr><th>Takip et</th><th>Uzak dur</th></tr>
+<tr><td>Doğru cevabı olmayan yeni mekanikler: piksel, kazı-bul, parlayan sayfa (Büyük için aday)</td><td>Üretken yapay zekâ: Apple Intelligence 13 yaş altına kapalı; çocuk uygulamasında yapay zekâ buluta gider, "ağ yok, mikrofon yok" kuralı bozulur, 5.1.4 "drawings" maddesi ve COPPA ses izi yükü eklenir</td></tr>
+<tr><td>Aylık 10–20 sayfalık paket ve ebeveynin kapatabildiği tema</td><td>Haftalık abonelik, jeton, paket kilidi zinciri; editoryal seçkilerde bu modelden uygulama yok</td></tr>
+<tr><td>Sahne tabanlı oyun: Manzara, KidloLand Scene Coloring ve Disney'in odalı çıkartma kitabıyla aynı çizgide</td><td>Rozet, görev, seri ve lisanslı karakter yarışı</td></tr>
+<tr><td>"Eksikleri" ürün sayfasına yazmak; Play'de Teacher Approved</td><td></td></tr>
+<tr><td>Pencil Pro önizleme, tek parmak kaydır-yakınlaştır, kapıda sesli yönlendirme (Apple'ın kendi önerisi)</td><td></td></tr>
+</table></div>
+<p>Platform notu: iOS 27 kategori bazlı süre izni getiriyor; uygulamanın birincil kategorisi (Education mi, Games mi) ebeveynin çocuğa tanıdığı süreye doğrudan etki edecek. Çocuk uygulamalarının hiçbiri Liquid Glass, iPhone Duo, widget ya da Pencil Pro duyurmadı.</p>
+
+<h2 id="turkiye">7. Türkiye'ye özgü beklentiler</h2>
+<p>D kolu Google Play Türkiye'de dört aramanın ilk 20'sindeki 37 çocuk uygulamasını, 57 forum ve video sayfasını, 343 Türkçe yorumu, MEB program metinlerini, Diyanet'in 2027 takvimini ve Türkiye tablet pazarını taradı. Reddit, Instagram, TikTok ve Google Trends açılamadı.</p>
+<div class="callout"><p><strong>Üç bulgu.</strong> Play Türkiye'deki çocuk boyama vitrini yabancı stüdyoların çevrilmiş metinlerinden oluşuyor: 37 uygulamanın hiçbirinde Türkiye'ye özgü içerik yok (bayram, 23 Nisan, yerel nesne), hiçbiri Türkçe seslendirme vaat etmiyor; sezon içeriği olan 8 uygulama yalnız Noel, Cadılar Bayramı ve Paskalya yapıyor. Türk ebeveynin ölçütü üç kelime: "güvenli, reklamsız ve öğretici". Teacher Approved rozeti 37 uygulamanın 29'unda var; yokluğu eksik, varlığı fark değil.</p></div>
+<h3>Türkiye'de fark yaratacak beş özellik</h3>
+<div class="table-wrap"><table>
+<tr><th>Özellik</th><th>Neden</th><th>Cobi</th></tr>
+<tr><td>Türkçe sesli nesne ve renk adları (isteğe bağlı İngilizce)</td><td>1 milyon ve üstü kurulumlu hiçbir boyama uygulamasında yok; ebeveynin en net isteği (Türkçe 11 kaynak, sesli ad 10 kaynak); TRT Anaokulum yorumlarında bile en sık istek "renk ve şekil adları seslendirilsin"</td><td>kod hazır, kayıt bekliyor</td></tr>
+<tr><td>Türkiye takvimine bağlı sezon setleri</td><td>37 uygulamada Ramazan, Kurban ve 23 Nisan yok; bayram tatilleri ev kullanımını artırır; öğretmen üretimi en yüksek günler Anneler Günü ve Kasım kümesi</td><td>"Kutlamalar" kategorisiyle gelir</td></tr>
+<tr><td>Yerel nesne ve kamu malı kahraman sayfaları</td><td>simit, çay bardağı, nazar boncuğu, lale, leylek, Kapadokya balonu, İstanbul kedisi; Keloğlan, Nasreddin Hoca, Karagöz ve Hacivat kendi çizimle; 37 uygulamada 0; lisans gerekmez</td><td>Fluent setinde yok; elle çizim ya da illüstratör gerekir</td></tr>
+<tr><td>Çocuğun çıkamayacağı kilit</td><td>"çocuk çıkıyor, ayarları bozuyor" 6 kaynak; "ekran kitleme" isteği; Samsung tablet payı %51, Samsung Kids ve ekran sabitlemeyle uyum</td><td>ebeveyn kapısı, ilk parmak kuralı, immersive mod var; vitrinde anlatılmıyor</td></tr>
+<tr><td>Düşük donanımlı tablette akıcılık, iki yönde düzen</td><td>ucuz segment 7" 1024×600, 2 GB RAM, Android 10 Go; rakiplerin hiçbiri düşük cihaz ya da yön yazmıyor; Android 16 tablette yön kilidini yok sayıyor</td><td>Android'de denenmedi</td></tr>
+</table></div>
+<p>Tek başına fark yaratmayacaklar: reklamsız ve çevrimdışı olmak (TRT'nin 42 uygulaması ve RV AppStudios aynı vaadi veriyor; yine de ilk cümlede yazılmalı), Teacher Approved rozeti, yazdırma (ebeveyn yorumlarında 0 istek; öğretmen kâğıdı ücretsiz forumdan alıyor), çıkartma ve fırça çeşidi, sayıyla piksel boyama, yerli lisanslı karakter (Kral Şakir Boyama Kitabı 10 bin kurulum, 3,6 puan). Niloya, Pırıl, Rafadan Tayfa ve Kukuli için boyama uygulaması da, ebeveyn talebi de bulunamadı.</p>
+<h3>Türk ebeveynlerin söyledikleri (kaynak sayısı)</h3>
+<p>Reklam 16 (çocuk reklama basıp çıkıyor), yaşa uygunluk 12 (küçük simgeler, içerik çabuk bitiyor), Türkçe yokluğu 11, sesli renk ve şekil adı isteği 10, ebeveyn kontrolü ve ekran süresi 10, çocuğun uygulamadan çıkması 6, boyama mekaniği 6 ("çizgiden dışarı taşımaması daha iyi olurdu"), donma ve eski cihaz 6, içerik tükenmesi 4, internet zorunluluğu 4. Pil ve ısınma şikâyeti hiçbir kaynakta yok. Rakip çevirileri zayıf ("Başvurumuzdan memnun musunuz?"); özgün Türkçe metin başlı başına fark.</p>
+<h3>2027 takvimi: sezon paketlerinin sırası</h3>
+<p>Tarihler Diyanet'in 2027 listesinden ve MEB 2026–27 çalışma takviminden doğrulandı. "Forum" sütunu okuloncesi.net arşivindeki konu sayısı, öğretmen üretiminin ölçüsü.</p>
+<div class="table-wrap"><table>
+<tr><th class="num">Sıra</th><th>Gün</th><th>2027 tarihi</th><th>İçerik yayında olmalı</th><th class="num">Forum</th><th>3 yaş için motifler</th></tr>
+<tr><td class="num">1</td><td>23 Nisan</td><td>Cuma</td><td>9 Nisan</td><td class="num">43 (+270 gösteri)</td><td>bayrak, balon, dünya çocukları, pankart</td></tr>
+<tr><td class="num">2</td><td>Ramazan Bayramı</td><td>9–11 Mart; Ramazan 8 Şubat'ta başlar; ara tatil 8–12 Mart</td><td>1 Şubat</td><td class="num">10</td><td>hilal, kandil, şeker, şekerlik, bayramlık, kart</td></tr>
+<tr><td class="num">3</td><td>Anneler Günü</td><td>9 Mayıs; sınıf etkinliği 3–7 Mayıs</td><td>26 Nisan</td><td class="num">258</td><td>kalp, çiçek, lale, kart, fincan</td></tr>
+<tr><td class="num">4</td><td>Yılbaşı ve kış; Yerli Malı Haftası</td><td>31 Aralık; 12–18 Aralık</td><td>1 Aralık</td><td class="num">133 + 47</td><td>kar tanesi, kardan adam, çam, atkı, hediye; meyve ve sebze</td></tr>
+<tr><td class="num">5</td><td>29 Ekim, 10 Kasım, 24 Kasım</td><td>Cuma, Çarşamba, Çarşamba</td><td>15 Ekim</td><td class="num">288</td><td>bayrak, balon, kalp, çiçek; portre yerine silüet</td></tr>
+<tr><td class="num">6</td><td>Kurban Bayramı</td><td>16–19 Mayıs; 19 Mayıs ile çakışır</td><td>3 Mayıs</td><td class="num">≈68</td><td>koyun, kuzu, inek, kart (Hayvanlar setiyle örtüşür)</td></tr>
+<tr><td class="num">7</td><td>Hayvanları Koruma Günü, sonbahar</td><td>4 Ekim</td><td>20 Eylül</td><td class="num">44</td><td>köpek, kedi, kuş, yuva; yaprak, kestane</td></tr>
+<tr><td class="num">8</td><td>Orman Haftası</td><td>21–26 Mart</td><td>8 Mart</td><td class="num">75</td><td>ağaç, fidan, sincap</td></tr>
+</table></div>
+<p>Bizim takvimimizle çakışma: Dalga 1'in kış paketi 1 Aralık hedefine yakın; Dalga 2'nin Ramazan paketi 1 Şubat'a yetişmeli; 23 Nisan ve Anneler Günü paketleri Nisan başında hazır olmalı. Bayram tarihleri her yıl kayar; paket tarihleri yıllık güncellenir.</p>
+<h3>MEB dili ve öğretmenler</h3>
+<p>MEB Maarif Modeli (2024 ve 2026 baskıları) boyamayı sanat değil küçük kas çıktısı sayıyor; 36–48 ay planlarında renk olarak kırmızı, sarı, mavi; sayma 1–5. Yazma öncesi çıktı istemiyor; Türkçe harf izleme programla uyumsuz. Devlet anasınıflarında tablet ve etkileşimli tahta standart değil; sınıf kipi düşünülürse hedef TV'ye yansıtma. Mağaza metni için dil: "küçük kas ve el-göz koordinasyonu", "renk ve şekil tanıma", "1'den 5'e sayma"; "sanat eğitimi" denmez; Teacher Approved için "yetişkinle birlikte" ve "sınıf için" ifadelerinden kaçınılır.</p>
+<h3>Android için teknik liste</h3>
+<ul>
+<li>Hedef API 36 hazır; 16 KB sayfa hizalı derleme 1 Şubat 2027'den sonra zorunlu, eklenti kitaplıkları tek tek doğrulanır.</li>
+<li>minSdk kararı: Android 10 Go ve 2 GB RAM cihazlar (Hometech, Everest) kapsanacaksa gerçek cihaz testi; Impeller API 29 altında eski işleyiciye düşer.</li>
+<li>Yön kilidi yok; dikey ve yatay düzen; döndürmede tuval, renk ve geri al korunur. Düzen test seti: 7" 1024×600, 8" 1280×800, 8,7" 1340×800, 10,1" 1280×800, 11" 1920×1200.</li>
+<li>Kurulum boyutu rakip bandının (51–105 MB) altında kalır.</li>
+<li>tr-TR yerelinde tam regresyon (bir rakipte Türkçe dilde donma raporu var).</li>
+<li>Her ekranda geri yolu, kapatılamayan tam ekran diyalog yok (Samsung Kids ve ekran sabitleme). Kayıt sayfa çıkışında ve arka plana geçişte zaten yapılıyor.</li>
+<li>Veri güvenliği formunda "veri toplanmıyor"; manifestte AD_ID yok; "Çevrimdışı" etiketi koşulları.</li>
+</ul>
+
+<h2 id="teknik">8. Teknik uygulanabilirlik</h2>
+<p>Kodun bugünkü hâline göre tahminlerim. "Gün" benim iş günüm; kayıt, ses seçimi ve gözlem turu senin ya da üçüncü kişinin işi. Kurul sütunu, çocuğun ekranına dokunduğu için oy gereken işleri gösteriyor.</p>
+<div class="table-wrap"><table>
+<tr><th>İş</th><th>Kodda ne var</th><th>Yapılacak</th><th class="num">Gün</th><th>Kurul</th><th>Risk</th></tr>
+<tr><td>Sesli adlar</td><td><code>VoiceService</code>, ayar anahtarı, kategori ve palet çağrıları hazır (<code>home_screen.dart:348</code>, <code>coloring_screen.dart:249</code>, kapı); <code>assets/voice/</code> yok</td><td>39 klip × TR ve EN kaydı (liste <code>tool/voice/README.md</code>), −16 LUFS normalizasyon betiği, <code>pubspec.yaml</code> satırları, klip varlığı testi; sayfa adları (323 × 2) ikinci aşama</td><td class="num">3</td><td>hayır (karar var)</td><td>kayıt kalitesi; seslendirmenden yazılı hak devri</td></tr>
+<tr><td>Canlanma</td><td>bitişte konfeti (<code>showCelebration</code>, <code>coloring_screen.dart:424</code>); eseri birleştiren <code>ArtworkRenderer</code></td><td>bitişte çocuğun resminin 2–3 sn nefes alıp sallanması ve kategoriye özgü kısa ses; dokununca durur; Reduce Motion'da yalnız ses; her seferinde aynı; sayılmaz. Kategori sesleri (9) kayıt ya da lisansı temiz kaynak</td><td class="num">5–6</td><td>evet (yeni bitiş davranışı)</td><td>ses lisansı; "canlı karakter" beklentisini karşılamaz, dürüst anlatılmalı</td></tr>
+<tr><td>Desen dolgusu</td><td>dolgu bölge başına düz renk (<code>RegionFill.argb</code>, <code>PageLayers._paintFills</code>); fırça düğmesi döngü örneği</td><td><code>RegionFill</code>'e desen alanı, piksel döngüsünde desen çizimi, kayıt şemasına anahtar, dışa aktarma çizicisi, otomatik tamamlama ile uyum, kova düğmesinde döngü (düz, benek, çizgi, gökkuşağı), testler</td><td class="num">4–5</td><td>evet (Minik'te kova döngüsü)</td><td>çocuk kovanın hâlini anlamalı; düğme simgesi değişir</td></tr>
+<tr><td>Sezon paketleri</td><td>sayfa üretim hattı (<code>catalog.json</code>, <code>build_pages.py</code>), 8 ücretsiz sayfa kuralı, kategori sırası kuralı</td><td>kalıcı "Kutlamalar" kategorisi (kartlar yerinden tanınır), ilk paket kış ve yılbaşı (1 Aralık), sonra Ramazan Bayramı (1 Şubat), 23 Nisan (9 Nisan) ve Anneler Günü (26 Nisan); her paket 10–20 sayfa; mağaza "Yenilikler" metni</td><td class="num">1–2 / paket</td><td>hayır (içerik hattı genişlemesi)</td><td>Fluent setinde uygun konu sayısı; bayrak ve dinî sembol seçimi</td></tr>
+<tr><td>Manzara'yı bitirmek</td><td>kaba prototip master'da (yerleştirme, boyama, birleştirme); kelime çalma kodu bayrak arkasında</td><td>20 kelime klibi (TR + EN), gözlem turu 1 (3–5 çocuk), kelime çalma ve bitiş davranışı, Eserlerim'de sahne, testler, mağaza metni</td><td class="num">5–8</td><td>şartlar var (5–6 Kasım kararı)</td><td>kliplerin gecikmesi; sürükleme 3 yaşta zor, dokunma yolu şart</td></tr>
+<tr><td>Aile Paylaşımı ve açılışta hak kontrolü</td><td><code>PurchaseService.init</code> yalnız yerel tercihi okuyor; geri yükleme düğmesi var</td><td>App Store Connect'te ürüne Aile Paylaşımı; açılışta mağaza haklarını okuma, aile üyesinin ayrılmasını işleme, sandbox aile testi; Play'de karşılığı yok</td><td class="num">2–3</td><td>hayır</td><td>StoreKit 2 davranışı; zaten pazar raporunda kod boşluğu olarak kayıtlı</td></tr>
+<tr><td>Kardeş profilleri</td><td>tek ayar ve tek eser listesi (<code>StorageService</code> anahtarları)</td><td>profil başına ayar, eserler ve seviye; seçici: Ebeveyn alanından aktif çocuk ya da ana ekranda iki avatar</td><td class="num">4–5</td><td>evet (çocuk ekranında seçici)</td><td>3 yaşındaki çocuk rastgele seçer; ebeveyn alanından seçim daha güvenli</td></tr>
+<tr><td>Palet: ten renkleri</td><td>Minik 9, Büyük 16 renk; renk adı klipleri listede</td><td>Büyük'e iki ten tonu; renk adı ve klip; testler. Minik 9'da kalır</td><td class="num">0,5</td><td>Büyük için hayır</td><td>yok</td></tr>
+<tr><td>Vitrin yenileme</td><td><code>tool/store/take_screenshots.py</code>, alt yazılı kare hattı</td><td>ilk karede sayfa sayısı, ikinci karede "reklam yok · internet yok · hesap yok · puan yok", üçüncüde dokun-boya; Teacher Approved için Play metni</td><td class="num">1</td><td>hayır</td><td>yok</td></tr>
+<tr><td>Sayıyla boyama (Büyük, öneri niteliğinde)</td><td>bölge haritası ve bölge alanları hazır</td><td>bölge numaraları ve renk anahtarı, başka renk de kabul, Büyük'te anahtar; 1–5 rakam</td><td class="num">5–6</td><td>evet</td><td>"doğru renk" kuralı; Dalga 3</td></tr>
+<tr><td>Piksel sanatı, kazı-bul, parlayan sayfa</td><td>yok</td><td>yeni sayfa türleri ve çizici</td><td class="num">5+ / tür</td><td>evet</td><td>Dalga 3; Büyük</td></tr>
+<tr><td>Süre sınırı, ebeveyn raporu</td><td>yok</td><td>yapılmayacak / 1 günlük rapor satırı</td><td class="num">0 / 1</td><td>—</td><td>düşük değer</td></tr>
+</table></div>
+
+<h2 id="set">9. Önerilen set: üç dalga</h2>
+<div class="callout">
+<p><strong>Dalga 1 · kilitten önce, sürüm 2.3.0 (yaklaşık 4–5 hafta).</strong> Sesli adlar, canlanma, desen dolgusu, ilk sezon paketi (kış ve yılbaşı, "Kutlamalar" kategorisi), Büyük'te ten renkleri, vitrin yenileme. Bu sürüm ücretsiz kalır ve puan isteme (bugün kodlandı) ile birlikte çıkar; mağaza "Yenilikler" alanı ilk kez dolu olur. Sesli adlar kayıtlar gelmezse sürümden düşer, diğerleri beklemez.</p>
+<p><strong>Dalga 2 · kilitle birlikte, sürüm 2.4.0 (Dalga 1'den 2–3 hafta sonra).</strong> Tam Sürüm kilidi (pazar raporundaki akış ve mevcut kullanıcı koruması), Aile Paylaşımı ve açılışta hak kontrolü, Manzara (klipler ve gözlem turu bittiyse), ikinci sezon paketi (Ramazan 8 Şubat'ta başlıyor, bayram 9–11 Mart; içerik 1 Şubat'ta yayında), kardeş profilleri (kurul geçerse). Google Play bu sürümle, kilit açık olarak.</p>
+<p><strong>Dalga 3 · Büyük modu, 2027 ilk çeyrek.</strong> Sayıyla boyama (öneri niteliğinde, 1–5), piksel sanatı ya da parlayan sayfa, Pencil Pro önizleme, tek parmak kaydır-yakınlaştır. Her biri ayrı kurul oyu.</p>
+</div>
+<h3>Neden bu sıra</h3>
+<ul>
+<li><strong>Sesli adlar önce</strong>, çünkü en çok övülen tema bu (136), Türkiye'de birinci, kod hazır ve kurul kararı var. Tek engel kayıt.</li>
+<li><strong>Canlanma</strong>, çünkü vitrinde satılan dört kümeden kurul kurallarına uyarlanabilen tek küme bu; 36 övgü. Çocuğun kendi renkleri hareket eder; hazır renkli animasyon kullanılmaz, çünkü "renkli örnek" 3 Kasım'da reddedildi.</li>
+<li><strong>Desen dolgusu ve sezon paketi</strong>, çünkü pazarın iki standart eksiği bunlar; ikisi de mevcut altyapının üstüne geliyor.</li>
+<li><strong>Manzara</strong>, çünkü Cobi'nin tek gerçek farkı burada (sahne 3/21, iki dilde ad 0/21) ve trendin tam üstünde; ama kayıtlara ve gözleme bağlı olduğu için Dalga 1'i bekletmemeli.</li>
+<li><strong>Aile Paylaşımı kilitle aynı anda</strong>, çünkü tek seferlik modelin kendine özgü şikâyeti "ödedim, ikinci cihazda açılmadı".</li>
+</ul>
+<h3>Yapılmayacaklar</h3>
+<div class="table-wrap"><table>
+<tr><th>Özellik</th><th>Neden</th></tr>
+<tr><td>Harf izleme, adım adım çizim</td><td>MEB 2024 harf yönü öğretmiyor; kanıt serbest üretimi destekliyor; kurul 0/5</td></tr>
+<tr><td>Sayıyla boyama ve noktadan noktaya Minik'te</td><td>4 ve 4,5–5 yaş; renk anahtarı "doğru renk" baskısı</td></tr>
+<tr><td>Arka plan müziği</td><td>18 şikâyet, 5 övgü; kanıt olumsuz</td></tr>
+<tr><td>Rozet, günlük ödül, geri sayım, süre sınırı</td><td>yem sınıfı; kurul kuralı; Ekran Süresi zaten var</td></tr>
+<tr><td>Yapay zekâ ile sayfa, mikrofon, AR</td><td>ağ ve veri yükü; 13 yaş altında cihaz içi model yok; kanıt zayıf</td></tr>
+<tr><td>Lisanslı karakter</td><td>bütçe; editörler lisanssız sanatı övüyor</td></tr>
+<tr><td>Fotoğraftan sayfa</td><td>kurul vetosu; talep 1 övgü + 1 istek</td></tr>
+</table></div>
+
+<h2 id="vitrin">10. Vitrin ve mağaza metni</h2>
+<p>Rakiplerin ilk üç karesinde en çok söylenen şey sayfa sayısı (12/21); Cobi bunu yalnız açıklamada söylüyor. Editörlerin övdüğü "eksikler" dili de vitrinde yok. Dalga 1 ile birlikte:</p>
+<ul>
+<li>Kare 1: "323 boyama sayfası · 9 kategori" alt yazısıyla ana ekran.</li>
+<li>Kare 2: "Reklam yok · İnternet yok · Hesap yok · Puan yok" alt yazısıyla boyama ekranı.</li>
+<li>Kare 3: "Dokun, boya; okuma gerektirmez" alt yazısıyla tek dokunuş dolgu.</li>
+<li>Kare 4: canlanma anı; kare 5: desen dolgusu; kare 6: Ebeveyn alanı ("Ayarlar, paylaşım ve yazdırma büyüklerde").</li>
+<li>Açıklamada model açıkça: 72 sayfa ücretsiz, gerisi tek seferlik, abonelik ve deneme yok, Aile Paylaşımı var; fiyat yazılmaz (2.3.7).</li>
+<li>Google Play: Families beyanı ve Teacher Approved için yaşa uygun dil; "çocuk boyama" anahtar kelimesi; Türkçe açıklama birincil ve özgün (rakip çevirileri bozuk).</li>
+<li>Türkiye için ilk cümle: 3–5 yaş, Türkçe sesli, reklamsız, internetsiz, hesapsız. Eğitici vaat MEB diliyle: "küçük kas ve el-göz koordinasyonu", "renk ve şekil tanıma"; "sanat eğitimi", "yetişkinle birlikte" ve "sınıf için" denmez.</li>
+<li>Haziran 2025 ürün sayfası beyanları: kullanıcı içeriği yok, reklam yok, mesajlaşma yok, uygulama içi ebeveyn kontrolü var.</li>
+</ul>
+<p>"İngilizce öğretir" yazılmaz; Manzara için doğru cümle "boyadığı her parçanın İngilizce adını duyar".</p>
+
+<h2 id="plan">11. Güncel yol haritası</h2>
+<p>Pazar araştırmasındaki 13 haftalık planın özellik işiyle birleşmiş hâli. Android işi plana girdi. Bugün yapılan: ebeveyn kapısı arkasında puan isteme kodu (<code>lib/services/rating_prompt.dart</code>, 247 test geçiyor, commit bekliyor).</p>
+<div class="table-wrap"><table>
+<tr><th>Dönem</th><th>Ben</th><th>Sen</th></tr>
+<tr><td>Hafta 1–2<br>9–22 Kasım</td><td>Canlanma ve desen dolgusu için kurul dosyaları; desen dolgusu kodu; "Kutlamalar" kategorisi ve kış paketi; ses işleme betiği; Büyük'te ten renkleri; vitrin karelerinin taslağı. Kış öne çıkarma adaylığı metni.</td><td>Ses kaydı: 39 klip × 2 dil + 20 Manzara kelimesi (kim okuyacak kararı). Kurul oyları. Google Play hesabı ve 12 test kullanıcısı. Paid Apps sözleşmesi, vergi ve banka. Kış adaylığını gönder (son gün 24 Kasım).</td></tr>
+<tr><td>Hafta 3–4<br>23 Kasım – 6 Aralık</td><td>Canlanma kodu ve kategori sesleri; sesli adların paketlenmesi; 2.3.0 derlemesi, TestFlight, mağaza metni ve kareler. Satın alma altyapısı bayrak arkasında (hak kontrolü, Aile Paylaşımı, Ekran Süresi metni, "Kod kullan", mevcut kullanıcı koruması, teklif ekranı). Play derlemesi ve Data safety.</td><td>2.3.0'ı incelemeye gönder. Play kapalı testini başlat (14 gün). Manzara gözlem turu 1 (3–5 çocuk).</td></tr>
+<tr><td>Hafta 5–7<br>7–27 Aralık</td><td>2.4.0: kilit, Aile Paylaşımı, Manzara (klipler geldiyse), Ramazan Bayramı paketi, kardeş profilleri (kurul geçerse). Sandbox ve aile testi. ASO ölçümü (22 Kasım'dan sonra yeni ad etkisi).</td><td>Satın alma ürününü App Store Connect'te onayla; 2.4.0'ı gönder. Apple Ads hesabı. Öğretmen ve kreş kanalı için ilk e-postalar.</td></tr>
+<tr><td>Hafta 8–13<br>28 Aralık – 6 Şubat</td><td>Play yayını (kilit açık), Teacher Approved takibi. Haftalık ölçüm: puan, dönüşüm, kategori başına boyama. Ramazan paketi 1 Şubat'a, 23 Nisan paketi 9 Nisan'a, Anneler Günü paketi 26 Nisan'a hazır. Dalga 3 kurul dosyaları.</td><td>23 Nisan adaylığı (son gün 23 Ocak). 60. gün kanal ve fiyat kararları.</td></tr>
+</table></div>
+<p>Android işinin kalemleri: Play hesabı ve kimlik doğrulama; 12 test kullanıcılı 14 günlük kapalı test; Families beyanı, Data safety, Teacher Approved için yaşa uygun açıklama; 16 KB sayfa hizası (1 Şubat 2027 kapısı); minSdk kararı ve düşük donanımlı tablette deneme (7" 1024×600, 2 GB RAM); iki yönde düzen ve döndürmede tuvalin korunması; tr-TR regresyonu ve TalkBack; Samsung Kids ve ekran sabitlemeyle uyum; Android'e özgü galeriye kayıt ve yazdırma zaten var; yayın kilit açık olarak. Ayrıntı 7. bölümün Android listesinde.</p>
+
+<h2 id="kararlar">12. Senin kararların</h2>
+<div class="table-wrap"><table>
+<tr><th>Konu</th><th>Seçenekler</th><th>Önerim</th></tr>
+<tr><td>Ses kaydı: kim okuyacak</td><td>(a) sen ya da aileden biri, README kurallarıyla; (b) seslendirmen, yazılı hak devriyle; (c) lisanslı yapay ses (kurul kararına aykırı, yeniden oy ister)</td><td>(a) bu hafta; kalite yetmezse (b). Fiyat alınmadı.</td></tr>
+<tr><td>Canlanma biçimi</td><td>çocuğun resminin bütün olarak hareketi ve kategori sesi; ya da hazır animasyonlu çizimler</td><td>birincisi; ikincisi "renkli örnek" vetosuna takılır. Kurula gidecek.</td></tr>
+<tr><td>Desen dolgusu nerede</td><td>Minik ve Büyük'te kova döngüsü; yalnız Büyük</td><td>ikisinde, kova düğmesinde döngü; kurul oyu</td></tr>
+<tr><td>Sezon içeriğinin yeri</td><td>kalıcı "Kutlamalar" kategorisi; mevcut kategorilere dağıtma; kapatılabilir tema</td><td>kalıcı kategori, 8 ücretsiz sayfa kuralıyla; tema anahtarı gerekmez</td></tr>
+<tr><td>Kilit zamanı</td><td>2.3.0 kilitsiz, 2.4.0 kilit; tek sürüm</td><td>iki sürüm: 2.3.0 puan toplar ve "Yenilikler" dolu çıkar</td></tr>
+<tr><td>Kardeş profilleri</td><td>Ebeveyn alanından aktif çocuk seçimi; ana ekranda avatar seçici</td><td>Ebeveyn alanından; çocuk ekranı değişmez</td></tr>
+<tr><td>Sayıyla boyama</td><td>yok; yalnız Büyük'te öneri anahtarıyla (Dalga 3)</td><td>Dalga 3'te Büyük; Minik'te hiç</td></tr>
+<tr><td>Önceki rapordan açık kalanlar</td><td>Türkiye fiyatı (₺249,99 önerisi), mevcut kullanıcı koruması, ilk açılış ebeveyn satırı, Play hesabı, DSA ve vergi, Apple Ads testi</td><td>pazar raporunun 9. bölümündeki gibi</td></tr>
+</table></div>
+
+<h2 id="sinirlar">13. Doğrulanamayanlar ve sınırlar</h2>
+<ul>
+<li>Cobi'nin kendi kullanıcı yorumu yok; "bu haliyle alır mı" sorusu rakiplerin ebeveynleriyle dolaylı yanıtlandı.</li>
+<li>Rakip özellikleri mağaza metninden ve ekran görüntülerinden okundu, uygulamalar indirilmedi; fırça kalınlığı, zoom, otomatik kayıt ve ebeveyn kapısı 17–20 rakipte "?" kaldı.</li>
+<li>Sürüm geçmişi Apple'ın verdiği son 25 sürümle sınırlı; Google Play "Yenilikler" sayfaları açılamadı.</li>
+<li>Gelişim kanıtında Lepper 1973, Patchan 2016 ve Clements 1999'un özet ayrıntıları ve bazı kurumların güncel ölçütleri (CTR, KAPi) doğrulanamadı.</li>
+<li>Süre tahminleri kodu okuyarak yapıldı; kurul şartları işi büyütebilir.</li>
+<li>Yorum etiketlemesi tek kişi tarafından yapıldı; seri görünümlü 51 yorum sayımlardan çıkarıldı.</li>
+<li>Apple koleksiyonları ("Apps for toddlers" gibi) ve Türkiye vitrini çocuk seçkileri bulunamadı.</li>
+<li>Türkiye kolunda Reddit, Instagram, TikTok ve Google Trends açılamadı; Play ekran görüntüleri okunmadı, yalnız metinler; Türkiye'de harcamanın iki mağazaya bölünüşü yine bulunamadı.</li>
+</ul>
+
+<h2 id="ekler">14. Ekler ve kaynaklar</h2>
+<p>Dört kolun tam notları, tabloları ve kaynak listeleri <code>plan/ozellik-arastirmasi-2026-11-08/</code> klasöründe:</p>
+<ul>
+<li><code>a-rakip-ozellik-matrisi.md</code>: 21 + 9 uygulama, 7 bölümlü matris, uygulama notları, vitrin dili, kaynak URL'leri.</li>
+<li><code>b-yorum-ozellik-talebi.md</code>: 10.198 yorum, etiket sözlüğü, tablolar, kısa alıntılar; ham veri ve betikler scratchpad'de.</li>
+<li><code>c-cocuk-gelisimi-kanit.md</code>: 12 bölüm, özellik × kanıt tablosu, 90 kaynak.</li>
+<li><code>d-turkiye-beklentiler.md</code>: 37 uygulamalık Play Türkiye vitrini, yerli markalar, ebeveyn ve öğretmen istekleri, MEB programı, 2027 takvimi, Türkiye tablet pazarı ve Android önerileri.</li>
+<li><code>e-trendler-editoryal.md</code>: 37 uygulamanın sürüm notları, editoryal seçkiler, ödüller, yapay zekâ politikası.</li>
+</ul>
+<p>Önceki çalışmalar: <code>plan/pazar-arastirmasi-2026-11-08.html</code> (fiyat, satın alma akışı, Android, büyüme), <code>plan/kurul-2026-11-05.json</code> ve <code>plan/kurul-2026-11-05-manzara.json</code> (kurul kararları), <code>.claude/skills/cobi-toddler-ux/SKILL.md</code> (kurallar).</p>
+</div>
+</body>
+</html>

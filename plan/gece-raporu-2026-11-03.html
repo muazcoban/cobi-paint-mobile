@@ -125,6 +125,7 @@ ul.tight li, ol.tight li { margin: 3px 0; }
     <li><a href="#surum-220">6 Kasım gecesi: 2.2.0 sürüm hazırlığı ve Manzara kurulu</a></li>
     <li><a href="#manzara-prototip">Faz 12: Manzara kaba prototipi</a></li>
     <li><a href="#hig-metin-boyu">7 Kasım: HIG denetimi ve en büyük metin boyu</a></li>
+    <li><a href="#dalga-1">8 Kasım gecesi: Dalga 1 (2.3.0) kodda</a></li>
   </ol>
 </nav>
 
@@ -592,6 +593,27 @@ ul.tight li, ol.tight li { margin: 3px 0; }
 <li><strong>Testler.</strong> 6 yeni test, toplam 236, analiz temiz. En büyük metin testi hem taşmayı hem de kesilen yazıyı yakalıyor; eski ana ekranda "Animals is cut off" diye düşüyor. Mağaza yürüyüşü en büyük metinde iPhone SE simülatöründe geçti.</li>
 </ul>
 <figure><img src="img/metin-boyu-once-sonra.jpg" alt="En büyük metin boyunda önce ve sonra"><figcaption>iPhone SE simülatörü, en büyük erişilebilirlik metni (uygulama yüzde 200'de keser): ana ekran ve Eserlerim önce ve sonra, düzeltilmiş ebeveyn kapısı.</figcaption></figure>
+<h2 id="dalga-1">25. 8 Kasım gecesi: Dalga 1 (2.3.0) kodda</h2>
+<p>Sahibin üç kararıyla (puan isteme yapılır, Android plana girer, kilitten önce özellik seti genişler) Dalga 1'in kod tarafını bitirdim. Dal <code>dalga1/kutlamalar-canlanma-desen</code>, master <code>4889d5e</code> üstünde. Gün içinde iki araştırma yazıldı (<code>plan/pazar-arastirmasi-2026-11-08.html</code>, <code>plan/ozellik-arastirmasi-2026-11-08.html</code>), akşam beş üyeli kurul P8 canlanma ve P9 desen dolgusunu 5/5 şartlı onayladı (<code>plan/kurul-2026-11-08.json</code>), gece kod yazıldı.</p>
+<ul>
+<li><strong>Kutlamalar.</strong> Onuncu kart, Giysiler'den sonra: 13 yeni sayfa (kalp, fiyonklu kalp, mum, sıcak çikolata, çaydanlık, çorba, tencere, turta, pasta dilimi, kutup ayısı, kayak, teleferik, havai fişek) ve diğer kategorilerden ödünç 28 kış ve yılbaşı sayfası (katalogda <code>also</code>, kodda <code>ColoringImage.alsoIn</code>). Ödünç sayfa kimliğini, klasörünü ve kategorisini korur; kayıtlı eserler yerinden oynamaz. Toplam 336 sayfa, 80 ücretsiz. Eski 323 sayfanın dosyası bayt bayt aynı kaldı. Maytap, konfeti topu ve disko topu 3 yaşın tanımayacağı için katalogda <code>skip</code> ile kaldı.</li>
+<li><strong>Palet.</strong> Büyük'te karamel ve kakao (18 renk); iki modda da 5 sütun, Minik renkleri yerinde. Renk adları 12 ARB dosyasında, ses listesinde <code>color_16</code> ve <code>color_17</code>.</li>
+<li><strong>Canlanma (P8).</strong> Sayfa bitince yalnız çocuğun kendi tuval kartı iki kez nefes alır: en çok yüzde 3 büyür, 1,5° eğilir, 2 saniye sürer, son dolgunun açılmasından 220 ms sonra başlar (<code>lib/widgets/liveliness.dart</code>). Konfeti ve ses yerinde; her dokunuş 120 ms'de durdurur; kart yuvasına kırpılır. Hareketi Azalt açıkken kart kıpırdamaz, kenarda sessiz bir halka belirip söner. Övgü sesi, rozet, yeni titreşim ve ebeveyn anahtarı yok. VoiceOver bir kez "Resim bitti" duyar.</li>
+<li><strong>Desen dolgusu (P9).</strong> Kova fırça gibi döner; ilk dokunuş yalnız seçer. Minik düz ↔ benek, Büyük düz → benek → çizgi → gökkuşağı. Zemin hep çocuğun rengi, benek ve şerit aynı rengin açık ya da koyu tonu (<code>lib/engine/render/fill_patterns.dart</code>); gökkuşağı rengi yok sayar. Kayıtta <code>p</code> alanı; 2.2.0 desenli bölgeyi düz renkle gösterir, hiçbir eser kaybolmaz. Kova glifi durumu gösterir, VoiceOver adı her döngüde değişir.</li>
+<li><strong>Puan isteme.</strong> Yalnız sistemin penceresi (<code>in_app_review</code>): ebeveyn kapıdan geçip bir resmi paylaştıktan ya da galeriye kaydettikten sonra, ilk açılıştan en az 3 gün ve 3 eser sonra, iki istek arasında en az 14 gün. Ebeveynler alanında kalıcı "Uygulamaya puan ver" satırı mağazayı açar. Çocuğun ekranında hiçbir şey yok.</li>
+<li><strong>Ses araçları.</strong> <code>tool/voice/process_clips.py</code> ham kaydı kırpar, −16 LUFS'a getirir, MP3 yazar, eksikleri denetler. <code>tool/voice/kayit-rehberi.md</code> 54 anahtar, iki dilde 106 kayıt. Kayıtlar gelince betik gerisini yapar.</li>
+<li><strong>Vitrin.</strong> Mağaza yürüyüşüne Büyük modda desen karesi eklendi (<code>08_patterns</code>: çaydanlıkta benek, çizgi, gökkuşağı; yükleme sırasında 5. kare), konfeti karesinin alt yazısı "Biten resim kıpırdar ve kutlanır", ana ekran karesi "336 boyama sayfası · 10 kategori" oldu. Yürüyüş artık modu kendisi ayarlıyor. README ve <code>store_listing.md</code> yeni sayılarla.</li>
+<li><strong>Doğrulama.</strong> 285 test, analiz temiz. Simülatörde Kutlamalar kartı, 18 renkli palet ve üç desen görüldü; yürüyüş iPhone SE'de Türkçe baştan sona geçti. Nefes hareketi yalnız testlerle doğrulandı (yüzde 3 durağan karede görünmez). Eski iPad (A8) ölçümü yapılmadı.</li>
+</ul>
+<figure><img src="img/dalga1-desen-kutlamalar-iphone-se.jpg" alt="Desen dolgusu Büyük modda ve Kutlamalar kartı iPhone SE simülatöründe"><figcaption>iPhone SE simülatörü, Türkçe: solda Büyük modda çaydanlık, bölgeler benekli, çizgili ve gökkuşağı dolguyla, 18 renkli palet; sağda ana ekranın sonunda Kutlamalar kartı.</figcaption></figure>
+<p><strong>Senden beklenenler:</strong></p>
+<ol>
+<li>PR'ı gözden geçirip merge et; sürüm numarası (2.3.0) yayın dalında artar.</li>
+<li>Ses kaydı: <code>tool/voice/kayit-rehberi.md</code> sırasıyla 54 anahtarı iki dilde oku, ham dosyaları <code>tool/voice/raw/&lt;dil&gt;/</code> altına koy. Seslendirmen kim, sayfa adı klipleri (336 × 2) ne zaman.</li>
+<li>3–5 yaşında 3–5 çocukla gözlem: Minik'te benekten düze dönebiliyorlar mı, nefes hareketi dikkat dağıtıyor mu.</li>
+<li>Kurulun açık soruları: Hareketi Azalt halkası kabul mü; gökkuşağı dolgusu için mevcut "Gökkuşağı" klibi yeter mi; 5. kare Büyük modda kalsın mı.</li>
+<li>Eski bir iPad (A8) varsa desenli dolgunun süresini ölç; yayından önce kareler ve metinler.</li>
+</ol>
 </div>
 
 </body>

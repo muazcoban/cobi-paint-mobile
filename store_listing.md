@@ -91,7 +91,7 @@ boyama ve otomatik kayıt sayesinde çocuğunuz yardım istemeden boyar.
 
 🧒 **İki mod**
 - Minik (3–5 yaş): 9 renk, yakınlaştırma yok.
-- Büyük (6+ yaş): 16 renk, iki parmakla yakınlaştırma, fırça boyutları, ileri al.
+- Büyük (6+ yaş): 18 renk, iki parmakla yakınlaştırma, fırça boyutları, ileri al.
 
 👨‍👩‍👧 **Ebeveynler için**
 - Reklam yok, internet bağlantısı yok, hesap yok, veri toplanmaz.
@@ -130,7 +130,7 @@ saving let your child color without asking for help.
 
 🧒 **Two modes**
 - Little (ages 3–5): 9 colours, no zoom.
-- Big (ages 6+): 16 colours, pinch to zoom, brush sizes, redo.
+- Big (ages 6+): 18 colours, pinch to zoom, brush sizes, redo.
 
 👨‍👩‍👧 **For parents**
 - No ads, no internet connection, no accounts, no data collection.
@@ -173,6 +173,53 @@ App Review bu alanı İngilizce okur. Kapı bilgisi `lib/widgets/parental_gate.d
   opens a blank copy and keeps the old picture. When the marker has covered nearly all of an area, the
   last small white corners fill in by themselves; parents can turn this off in the Parents area. In Big
   mode on iPad, Apple Pencil pressure sets the width of the marker, pastel and neon lines.
+
+### Sonraki sürümün notuna eklenecek (8 Kasım 2026, kodda hazır)
+
+- Rating request: the app only calls the system's review sheet (SKStoreReviewController / Play In-App
+  Review) after a grown-up has passed the parental gate and finished sharing or saving a picture, at
+  least three days after the first launch and with at least three saved pictures; never on the child's
+  screens. The Parents area has a "Rate the app" row that opens the App Store page (behind the gate).
+  Sürüm notunda puan istemeden söz edilmez (5.6.3).
+
+### 2.3.0 taslağı (8 Kasım 2026, Dalga 1; sürüm çıkmadan tamamlanır)
+
+Sayılar 8 Kasım itibarıyla: 10 kategoride 336 sayfa (Kutlamalar: 13 yeni sayfa + diğer kategorilerden
+ödünç 28 kış ve yılbaşı sayfası), 80 ücretsiz sayfa (kategori başına 8), Büyük modda 18 renk.
+Canlanma, desen dolgusu ve sesli adlar kurul ve kayıt sonucuna göre eklenir.
+
+- TR: Yeni "Kutlamalar" kategorisi: kış ve yılbaşı sayfaları (kutup ayısı, çaydanlık, sıcak çikolata,
+  mum, kayak, teleferik, çorba, tencere, turta, pasta dilimi, kalp, fiyonklu kalp, havai fişek) ve kardan
+  adam, hediye, balon gibi sevilen sayfalar artık bir arada. Toplam 336 boyama sayfası. Büyük modda iki yeni renk:
+  karamel ve kakao.
+- EN: New "Celebrations" category: winter and New Year pages (polar bear, teapot, hot cocoa, candle,
+  skis, cable car, soup, cooking pot, pie, cake slice, heart, heart with bow, fireworks) together with
+  favourites like the snowman, the gift and the balloon. 336 coloring pages in all. Two new colours in Big mode: caramel and cocoa.
+- Kurul 8 Kasım (P8 canlanma, P9 desen dolgusu; `plan/kurul-2026-11-08.json`) yalnız yayında yazılacak
+  cümleler. Yasak sözcükler: "canlanır", "comes alive", "animated", "hareketli karakter", "doku
+  kütüphanesi", "yüzlerce desen".
+  - Açıklama, "Taşmayan boya" altına: TR "Kovaya bir daha dokunun: benekli dolgu; Büyük modda çizgili ve
+    gökkuşağı da." EN "Tap the bucket again for dots; Big mode adds stripes and a rainbow fill."
+  - Açıklama, kutlama satırı (bugünkü "kısa bir konfetiyle kutlanır" yerine): TR "Biten resim kısa bir
+    konfetiyle kutlanır ve çocuğun kendi resmi bir an kıpırdar." EN "A short confetti celebrates a
+    finished picture and the child's own drawing gives a little wiggle."
+  - Yenilikler: TR "Kovaya ikinci kez dokunun: benekli dolgu; Büyük modda çizgili ve gökkuşağı dolgu.
+    Biten resim artık iki kez nefes alıp hafifçe kıpırdıyor; Hareketi Azalt açıkken yalnız sessiz bir
+    vurgu gösterilir." EN "Tap the bucket again for dotted fills; Big mode adds striped and rainbow
+    fills. A finished picture now takes two little breaths and wiggles; with Reduce Motion on, only a
+    quiet highlight shows."
+  - Ekran görüntüleri: canlanma için yeni kare yok (konfeti karesinin alt yazısı "Biten resim kıpırdar ve
+    kutlanır" / "Finish it: it wiggles and celebrates" olur); desen için 5. kare Büyük modda, aynı sayfada
+    benekli, çizgili ve gökkuşağı bölge, alt yazı "Benekli, çizgili, gökkuşağı dolgu" / "Dots, stripes
+    and rainbow fills"; kalan kareler Minik. App Preview yok.
+- Notes for Review ekine: "New in this version: a Celebrations category with 13 new pages; 336 pages in
+  all. The bucket's second tap changes the fill pattern (dots; Big mode adds stripes and a rainbow); the
+  pattern is the child's choice, nothing is pre-coloured. When a page is finished the child's own
+  picture scales by 3% and tilts 1.5° for two seconds; no ready-made animation; skipped with Reduce
+  Motion; any touch stops it. No new permissions, no network use, no new third-party code." (puan
+  isteme satırı yukarıda).
+- Ekran görüntüsü 1 alt yazısı "336 boyama sayfası · 10 kategori" olur; Promotional Text'teki
+  "9 kategoride 323" sayıları da güncellenir.
 
 ---
 
@@ -233,6 +280,12 @@ kullanılırken çekilmeli (App Review 2.3.3). Çekilen kareler:
 4. Eserlerim: çocuğun boyadığı resimler
 5. Ebeveyn kontrolü
 6. 13" iPad yatay (2064×2752 ya da 2752×2064)
+
+8 Kasım 2026: yürüyüşe (`integration_test/store_shots_test.dart`) Büyük modda bir desen karesi eklendi:
+`08_patterns`, çaydanlık sayfasında benekli, çizgili ve gökkuşağı bölgeler, 18 renkli palet.
+`tool/store/caption_screenshots.py` onu yükleme sırasında 5. kare yapar; konfeti karesinin alt yazısı
+"Biten resim kıpırdar ve kutlanır", ana ekran karesi "336 boyama sayfası · 10 kategori" oldu. Yürüyüş
+modu artık kendisi ayarlar (desen karesi dışında Minik). Kareler 2.3.0 yayınından önce yeniden çekilir.
 
 ---
 

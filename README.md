@@ -6,9 +6,9 @@ Uygulama yeniden yapılandırılıyor. Yol haritası ve gerekçeler `plan/cobi-p
 
 ## Bugünkü özellikler
 
-- 🎨 **Dokun ve boya**: Bölgeye dokununca seçili renkle dolar.
+- 🎨 **Dokun ve boya**: Bölgeye dokununca seçili renkle dolar. Kovaya bir daha dokununca dolgu benekli olur; Büyük modda çizgili ve gökkuşağı dolgu da var. Biten resim kısa bir konfetiyle kutlanır ve çocuğun kendi resmi iki kez nefes alıp hafifçe kıpırdar (Hareketi Azalt açıkken yalnız sessiz bir halka görünür).
 - ✏️ **Kalem ve silgi**: Keçeli kalemle bir alanın neredeyse tamamı tek renkle boyanınca kalan küçük beyaz köşeler kendiliğinden dolar (Ebeveynler alanında kapatılabilir). Büyük modda iPad'de Apple Pencil ile bastırdıkça keçeli kalem, pastel ve neon kalınlaşır.
-- 🖼️ **Kategoriler**: Hayvanlar, Bitkiler, Yiyecekler, Araçlar, Doğa, Eşyalar, Uzay, Müzik, Giysiler (323 sayfa, 3 zorluk seviyesi) ve serbest çizim sayfası. Serbest sayfada ayna çizimi: Minik'te tek düğmeyle dört yönlü, Büyük'te iki, dört ya da altı yönlü simetri. Fırça düğmesi keçeli kalem, gökkuşağı, sprey ve simli fırça arasında döner; Büyük'te pastel ve neon kalem de var. Her sayfada 16 çıkartma: aynı döngünün sonunda, dokunuş basar, sürükleme iz bırakır.
+- 🖼️ **Kategoriler**: Hayvanlar, Bitkiler, Yiyecekler, Araçlar, Doğa, Eşyalar, Uzay, Müzik, Giysiler, Kutlamalar (336 sayfa, 3 zorluk seviyesi; Kutlamalar kış ve yılbaşı sayfalarını diğer kategorilerden ödünç de alır) ve serbest çizim sayfası. Serbest sayfada ayna çizimi: Minik'te tek düğmeyle dört yönlü, Büyük'te iki, dört ya da altı yönlü simetri. Fırça düğmesi keçeli kalem, gökkuşağı, sprey ve simli fırça arasında döner; Büyük'te pastel ve neon kalem de var. Her sayfada 16 çıkartma: aynı döngünün sonunda, dokunuş basar, sürükleme iz bırakır.
 - ↩️ **Geri al / ileri al**
 - 💾 **Eserlerim**: Boyanan sayfalar kaydedilir ve sonra açılabilir. Ebeveyn kapısının arkasında bir sayfa baştan boyanabilir; eski resim yerinde kalır.
 - 📤 **Paylaşım**: Sistem paylaşım menüsü; Android'de ayrıca galeriye kaydetme ve yazdırma. Hepsi ebeveyn kapısının arkasında.
@@ -54,7 +54,7 @@ GitHub Actions her pull request'te ve `master`'a her push'ta bu iki komutu çal�
 lib/
 ├── main.dart                     # Uygulama giriş noktası
 ├── data/
-│   └── builtin_images.dart       # Üretilmiş: 323 boyama sayfası (tool/pages/build_pages.py)
+│   └── builtin_images.dart       # Üretilmiş: 336 boyama sayfası (tool/pages/build_pages.py)
 ├── models/                       # Category, ColoringImage, SavedArtwork, UserSettings
 ├── providers/
 │   ├── app_provider.dart         # Ayarlar, kategoriler, eserler
@@ -81,7 +81,7 @@ Sayfalar `tool/pages/catalog.json` kataloğundan üretilir; dosyalar elle eklenm
 Kurallar:
 
 - Kaynakta olmayan ya da denetimden geçmeyen bir konu katalogda `"skip": "<neden>"` ile kalır; betik onu atlar, test nedenin yazılı olmasını ister.
-- Sayfa kimliği `<kategori>_<kod>` biçimindedir ve kayıtlı resimler bu kimliği ve dosya yolunu saklar. Yayımlanmış bir sayfanın kategorisi bu yüzden değişmez.
+- Sayfa kimliği `<kategori>_<kod>` biçimindedir ve kayıtlı resimler bu kimliği ve dosya yolunu saklar. Yayımlanmış bir sayfanın kategorisi bu yüzden değişmez. Bir sayfayı ikinci bir kategoride de göstermek için katalogda `"also": ["<kategori>"]` yaz: sayfa kendi kategorisinde kalır, ödünç verildiği kategoride de listelenir (`ColoringImage.alsoIn`).
 - Yeni kategori için: `Category.getDefaultCategories()` listesinin sonuna ekle (çocuk kartları yerinden tanır, eski kartlar yer değiştirmez), ARB dosyalarına ve `lib/l10n/drafts/` taslaklarına adını yaz, `categoryName` içine ekle, `pubspec.yaml`'a klasörünü ekle, `tool/voice/README.md` kayıt listesine `category_<kimlik>` satırını yaz. Testler bunların hepsini denetler.
 
 Kaynak çizimler Microsoft'un Fluent UI Emoji setinden (MIT); lisans metni `assets/licenses/` altında ve uygulamanın Ebeveynler alanında gösterilir.
