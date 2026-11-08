@@ -52,12 +52,35 @@ void main() {
   });
 
   group('categories', () {
-    test('nine coloring categories, the older six keep their places on the home screen', () {
+    test('ten coloring categories, the older nine keep their places on the home screen', () {
       // A child finds a card by where it is, so new categories only ever go last.
       expect(
         coloringCategories.map((c) => c.id),
-        ['animals', 'plants', 'vehicles', 'nature', 'food', 'things', 'space', 'music', 'clothes'],
+        ['animals', 'plants', 'vehicles', 'nature', 'food', 'things', 'space', 'music', 'clothes', 'celebrations'],
       );
+    });
+
+    test('a page lent to another category keeps its own id and category', () {
+      final ids = coloringCategories.map((c) => c.id).toSet();
+      for (final page in builtInImages) {
+        for (final other in page.alsoIn) {
+          expect(ids, contains(other), reason: '${page.id} is lent to an unknown category');
+          expect(other, isNot(page.category), reason: '${page.id} lends itself to its own category');
+        }
+        expect(page.id, startsWith('${page.category}_'), reason: 'the id names the home category');
+      }
+    });
+
+    test('celebrations gathers the winter and new year pages of the older categories', () {
+      final lent = builtInImages.where((page) => page.alsoIn.contains('celebrations')).toList();
+      expect(lent.length, greaterThanOrEqualTo(20));
+      for (final name in ['Snowman', 'Christmas tree', 'Penguin', 'Wrapped gift', 'Gloves']) {
+        expect(lent.map((page) => page.nameEn), contains(name));
+      }
+      // The free rule counts a category's own pages; a lent page is free or
+      // not where it lives.
+      final own = builtInImages.where((page) => page.category == 'celebrations');
+      expect(own.length, greaterThanOrEqualTo(10));
     });
 
     test('every page belongs to a category on the home screen', () {
@@ -75,7 +98,7 @@ void main() {
     });
 
     test('the new categories start with easy pages: most free pages are level 1', () {
-      for (final id in ['space', 'music', 'clothes']) {
+      for (final id in ['space', 'music', 'clothes', 'celebrations']) {
         final pages = builtInImages.where((page) => page.category == id).toList();
         expect(pages.length, greaterThanOrEqualTo(12), reason: id);
         final freeLevel1 = pages.where((page) => page.free && page.level == 1);

@@ -102,7 +102,12 @@ class AppProvider extends ChangeNotifier {
   List<ColoringImage> getImagesForCategory(String categoryId) {
     // Imported pages only live in the import category
     if (categoryId == 'import') return _importedImages;
-    final pages = builtInImages.where((img) => img.category == categoryId);
+    // The category's own pages first, then the pages other categories lend
+    // it (ColoringImage.alsoIn); a page keeps one id wherever it shows.
+    final pages = [
+      ...builtInImages.where((img) => img.category == categoryId),
+      ...builtInImages.where((img) => img.category != categoryId && img.alsoIn.contains(categoryId)),
+    ];
     final locked = PurchaseService.enabled && !PurchaseService().isFull.value;
     return (locked ? pages.where((img) => img.free) : pages).toList();
   }

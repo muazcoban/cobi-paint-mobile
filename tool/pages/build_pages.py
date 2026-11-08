@@ -167,7 +167,8 @@ def main():
         lines.append(
             f"  ColoringImage(id: '{p['category']}_{p['code']}', name: '{name_tr}', nameEn: '{name_en}', "
             f"category: '{p['category']}', imagePath: 'assets/pages/{p['category']}/{p['code']}.png', level: {p['level']}"
-            f"{', free: true' if p.get('free') else ''}),"
+            f"{', free: true' if p.get('free') else ''}"
+            f"{', alsoIn: [' + ', '.join(repr(c) for c in p['also']) + ']' if p.get('also') else ''}),"
         )
     lines += ["];", ""]
     open(DART_FILE, "w", encoding="utf-8").write("\n".join(lines))

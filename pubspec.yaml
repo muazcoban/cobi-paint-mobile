@@ -68,6 +68,7 @@ flutter:
     - assets/pages/space/
     - assets/pages/music/
     - assets/pages/clothes/
+    - assets/pages/celebrations/
     - assets/pages/free/
     - assets/scenes/garden/
     - assets/licenses/
