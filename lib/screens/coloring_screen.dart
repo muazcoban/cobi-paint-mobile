@@ -27,6 +27,8 @@ import '../widgets/idle_hint.dart';
 import '../widgets/kid_button.dart';
 import '../widgets/kid_metrics.dart';
 import '../widgets/kid_palette.dart';
+import '../widgets/liveliness.dart';
+import '../widgets/motion.dart';
 import '../widgets/paint_canvas.dart';
 import 'coloring/artwork_autosaver.dart';
 
@@ -96,6 +98,12 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
   BrushKind _brush = BrushKind.marker;
   bool _celebrated = false;
 
+  /// Moves the finished picture (council P8, 8 Nov 2026); a touch settles it.
+  final LivelinessController _liveliness = LivelinessController();
+
+  /// The breath waits for the last fill's reveal; a touch in between cancels it.
+  Timer? _livelinessTimer;
+
   /// How the bucket fills (council P9, 8 Nov 2026): plain, dots, stripes or
   /// rainbow; a new page starts plain.
   FillPattern _pattern = FillPattern.solid;
@@ -130,6 +138,8 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
   @override
   void dispose() {
     _hintTimer?.cancel();
+    _livelinessTimer?.cancel();
+    _liveliness.dispose();
     WidgetsBinding.instance.removeObserver(this);
     unawaited(SystemGestures.deferEdgeGestures(false));
     _document?.removeListener(_syncSystemUndo);
@@ -368,6 +378,12 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
     unawaited(SemanticsService.sendAnnouncement(View.of(context), text, Directionality.of(context)));
   }
 
+  /// A touch anywhere on the screen brings a breathing picture to rest.
+  void _settleLiveliness() {
+    _livelinessTimer?.cancel();
+    _liveliness.settle();
+  }
+
   void _selectPaletteItem(int index, List<Color> colors) {
     if (index < colors.length) {
       unawaited(_sound.playColorSelectSound());
@@ -476,6 +492,19 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
       _saver?.completed = true;
       unawaited(_sound.playSuccessSound());
       unawaited(showCelebration(context, duration: const Duration(milliseconds: 1100)));
+      // The child's own picture takes two small breaths (P8) once the last
+      // fill's 220 ms reveal has shown. Only here, never on the way home; a
+      // touch in between means no breath; Reduce Motion shows a still ring.
+      // Scheduled after this frame: the tap that finished the page reaches
+      // the screen's own Listener next, and that touch must not cancel it.
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        _livelinessTimer?.cancel();
+        _livelinessTimer = Timer(const Duration(milliseconds: 220), () {
+          if (mounted) _liveliness.play();
+        });
+      });
+      _announce(AppLocalizations.of(context)!.pageFinished);
     }
   }
 
@@ -524,13 +553,19 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
           autofocus: true,
           child: Scaffold(
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-            body: SafeArea(
-              child: LayoutBuilder(
-                builder: (context, constraints) {
-                  final metrics = KidMetrics(constraints.biggest, big);
-                  final wide = constraints.maxWidth > constraints.maxHeight * 1.1;
-                  return wide ? _wideLayout(metrics, big) : _tallLayout(metrics, big);
-                },
+            // The first finger anywhere stops a breathing picture (P8) and
+            // then does what it came for; nothing waits for the motion.
+            body: Listener(
+              behavior: HitTestBehavior.translucent,
+              onPointerDown: (_) => _settleLiveliness(),
+              child: SafeArea(
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    final metrics = KidMetrics(constraints.biggest, big);
+                    final wide = constraints.maxWidth > constraints.maxHeight * 1.1;
+                    return wide ? _wideLayout(metrics, big) : _tallLayout(metrics, big);
+                  },
+                ),
               ),
             ),
           ),
@@ -549,7 +584,8 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
           child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: _controls(m, big)),
         ),
         Expanded(
-          child: Padding(padding: const EdgeInsets.all(12), child: _canvasArea(big)),
+          // Clipped to its slot: a breathing card never covers a button.
+          child: ClipRect(child: Padding(padding: const EdgeInsets.all(12), child: _canvasArea(big))),
         ),
         Padding(
           padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
@@ -570,7 +606,7 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
           child: Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: _controls(m, big)),
         ),
         Expanded(
-          child: Padding(padding: const EdgeInsets.symmetric(vertical: 12), child: _canvasArea(big)),
+          child: ClipRect(child: Padding(padding: const EdgeInsets.symmetric(vertical: 12), child: _canvasArea(big))),
         ),
         Padding(
           padding: const EdgeInsets.all(12),
@@ -702,45 +738,55 @@ class _ColoringScreenState extends State<ColoringScreen> with WidgetsBindingObse
     return Center(
       child: AspectRatio(
         aspectRatio: map.width / map.height,
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(24),
-            boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.08), blurRadius: 12, offset: const Offset(0, 4))],
-          ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(24),
-            child: Listener(
-              behavior: HitTestBehavior.translucent,
-              onPointerDown: (_) => _hideHint(),
-              child: Stack(
-                fit: StackFit.expand,
-                children: [
-                  Semantics(
-                    label: AppLocalizations.of(context)!.canvasLabel,
-                    child: PaintCanvas(
-                      document: document,
-                      page: page,
-                      tool: _tool,
-                      color: _color,
-                      pattern: _patternFor(big),
-                      brushSize: side * (big ? _brushSteps[_brushStep] : _brushSteps[1]),
-                      brush: _brushFor(big),
-                      stayInside: !widget.image.freeDraw,
-                      eraseFills: !widget.image.freeDraw,
-                      symmetry: widget.image.freeDraw ? _symmetry : 1,
-                      allowZoom: big,
-                      stickers: _stickerCodes,
-                      stickerIndex: _stickerIndex,
-                      stickerSize: side * (big ? _stickerSteps[_brushStep] : _stickerSteps[1]),
-                      autoComplete: !widget.image.freeDraw && _autoComplete,
-                      penPressure: big,
-                      onFilled: _onFilled,
-                      onStamped: _onStamped,
-                    ),
-                  ),
-                  if (_hintAt != null) IdleHint(at: _hintAt!),
+        // Liveliness only transforms the card's raster (its own repaint
+        // boundary), so the layers underneath are never redrawn for it.
+        child: Liveliness(
+          controller: _liveliness,
+          enabled: !reduceMotion(context),
+          child: RepaintBoundary(
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(24),
+                boxShadow: [
+                  BoxShadow(color: Colors.black.withValues(alpha: 0.08), blurRadius: 12, offset: const Offset(0, 4)),
                 ],
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(24),
+                child: Listener(
+                  behavior: HitTestBehavior.translucent,
+                  onPointerDown: (_) => _hideHint(),
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      Semantics(
+                        label: AppLocalizations.of(context)!.canvasLabel,
+                        child: PaintCanvas(
+                          document: document,
+                          page: page,
+                          tool: _tool,
+                          color: _color,
+                          pattern: _patternFor(big),
+                          brushSize: side * (big ? _brushSteps[_brushStep] : _brushSteps[1]),
+                          brush: _brushFor(big),
+                          stayInside: !widget.image.freeDraw,
+                          eraseFills: !widget.image.freeDraw,
+                          symmetry: widget.image.freeDraw ? _symmetry : 1,
+                          allowZoom: big,
+                          stickers: _stickerCodes,
+                          stickerIndex: _stickerIndex,
+                          stickerSize: side * (big ? _stickerSteps[_brushStep] : _stickerSteps[1]),
+                          autoComplete: !widget.image.freeDraw && _autoComplete,
+                          penPressure: big,
+                          onFilled: _onFilled,
+                          onStamped: _onStamped,
+                        ),
+                      ),
+                      if (_hintAt != null) IdleHint(at: _hintAt!),
+                    ],
+                  ),
+                ),
               ),
             ),
           ),
