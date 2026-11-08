@@ -7,8 +7,9 @@ class ShareService {
   /// Shares a saved artwork through the system share sheet. [text] comes
   /// from the caller in the app's language. [origin] is the global rect of
   /// the control that opened it; iPad and Mac need it to anchor the share
-  /// popover and fail without it.
-  Future<void> shareArtwork(
+  /// popover and fail without it. The result says whether the grown-up
+  /// finished sharing or dismissed the sheet.
+  Future<ShareResult> shareArtwork(
     String imagePath, {
     required String text,
     String? subject,
@@ -19,7 +20,7 @@ class ShareService {
       if (!await file.exists()) {
         throw Exception('Image file not found');
       }
-      await SharePlus.instance.share(
+      return await SharePlus.instance.share(
         ShareParams(
           files: [XFile(imagePath)],
           text: text,

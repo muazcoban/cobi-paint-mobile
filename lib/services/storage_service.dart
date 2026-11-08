@@ -22,6 +22,8 @@ class StorageService {
   static const String _artworksKey = 'saved_artworks';
   static const String _settingsKey = 'user_settings';
   static const String _importedImagesKey = 'imported_images';
+  static const String _firstLaunchKey = 'first_launch_at';
+  static const String _ratingAskedKey = 'rating_asked_at';
 
   final Future<Directory> Function() _documentsDirectory;
   late SharedPreferences _prefs;
@@ -50,6 +52,27 @@ class StorageService {
 
   Future<void> saveUserSettings(UserSettings settings) async {
     await _prefs.setString(_settingsKey, jsonEncode(settings.toJson()));
+  }
+
+  // Rating request (lib/services/rating_prompt.dart)
+
+  /// When the app was first opened on this device; an update to a version
+  /// that records it counts from the update.
+  Future<DateTime?> getFirstLaunchAt() async => _readTime(_firstLaunchKey);
+
+  /// Records [now] as the first launch unless one is recorded already.
+  Future<void> recordFirstLaunch(DateTime now) async {
+    if (_prefs.getString(_firstLaunchKey) != null) return;
+    await _prefs.setString(_firstLaunchKey, now.toIso8601String());
+  }
+
+  Future<DateTime?> getRatingAskedAt() async => _readTime(_ratingAskedKey);
+
+  Future<void> saveRatingAskedAt(DateTime at) => _prefs.setString(_ratingAskedKey, at.toIso8601String());
+
+  DateTime? _readTime(String key) {
+    final raw = _prefs.getString(key);
+    return raw == null ? null : DateTime.tryParse(raw);
   }
 
   // Saved Artworks

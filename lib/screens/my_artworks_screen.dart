@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart' show ShareResultStatus;
 import '../l10n/app_localizations.dart';
 import '../models/saved_artwork.dart';
 import '../models/coloring_image.dart';
@@ -226,7 +227,9 @@ class _ArtworkCard extends StatelessWidget {
       case 'share':
         try {
           final path = app.storageService.resolveArtworkFile(artwork.savedImagePath).path;
-          await ShareService().shareArtwork(path, text: l10n.shareText, subject: artwork.name, origin: origin);
+          final result =
+              await ShareService().shareArtwork(path, text: l10n.shareText, subject: artwork.name, origin: origin);
+          if (result.status == ShareResultStatus.success && context.mounted) await _maybeAskForRating(context);
         } catch (e) {
           debugPrint('Share failed: $e');
           if (context.mounted) {
@@ -239,6 +242,7 @@ class _ArtworkCard extends StatelessWidget {
           await ExportService().saveToGallery(bytes, name: _exportName(DateTime.now()));
           if (context.mounted) {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.savedToGallery)));
+            await _maybeAskForRating(context);
           }
         } catch (e) {
           debugPrint('Gallery save failed: $e');
@@ -272,7 +276,9 @@ class _ArtworkCard extends StatelessWidget {
           final file = File('${(await getTemporaryDirectory()).path}/blank_page.png');
           await file.writeAsBytes(bytes);
           if (!context.mounted) return;
-          await ShareService().shareArtwork(file.path, text: l10n.shareText, subject: artwork.name, origin: origin);
+          final result =
+              await ShareService().shareArtwork(file.path, text: l10n.shareText, subject: artwork.name, origin: origin);
+          if (result.status == ShareResultStatus.success && context.mounted) await _maybeAskForRating(context);
         } catch (e) {
           debugPrint('Blank page share failed: $e');
           if (context.mounted) {
@@ -298,6 +304,15 @@ class _ArtworkCard extends StatelessWidget {
         if (yes == true) await app.deleteArtwork(artwork.id);
     }
   }
+}
+
+/// Right after a grown-up finished sharing or saving a picture: the one
+/// moment the app may ask for a rating (RatingPolicy decides whether it is
+/// time; the system decides whether its sheet appears). Never from a child's
+/// own taps.
+Future<void> _maybeAskForRating(BuildContext context) {
+  final app = context.read<AppProvider>();
+  return app.ratingPrompt.maybeAsk(artworkCount: app.savedArtworks.length);
 }
 
 /// A page's line art for printing: from the bundle, or from the app's files

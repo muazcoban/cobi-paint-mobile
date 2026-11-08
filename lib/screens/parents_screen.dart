@@ -178,6 +178,16 @@ class ParentsScreen extends StatelessWidget {
           _Section(l10n.guidedAccessTitle),
           Text(l10n.guidedAccessText),
           _Section(l10n.about),
+          // A link out to the store, so it stays behind the gate (1.3). The
+          // system's own sheet is asked for elsewhere, after a share.
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            leading: const Icon(Icons.star_outline_rounded),
+            title: Text(l10n.rateApp),
+            subtitle: Text(l10n.rateAppHint),
+            trailing: const Icon(Icons.open_in_new_rounded),
+            onTap: () => app.ratingPrompt.openStoreListing(),
+          ),
           ListTile(
             contentPadding: EdgeInsets.zero,
             leading: const Icon(Icons.privacy_tip_outlined),
