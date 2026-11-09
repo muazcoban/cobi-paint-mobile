@@ -2,7 +2,7 @@ name: cobi_paint_mobile
 description: "Cobi Paint - Çocuklar için eğlenceli boyama uygulaması"
 publish_to: 'none'
 
-version: 2.2.0+9
+version: 2.3.0+10
 
 environment:
   sdk: ^3.10.0
