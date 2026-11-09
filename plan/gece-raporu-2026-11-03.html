@@ -126,7 +126,7 @@ ul.tight li, ol.tight li { margin: 3px 0; }
     <li><a href="#manzara-prototip">Faz 12: Manzara kaba prototipi</a></li>
     <li><a href="#hig-metin-boyu">7 Kasım: HIG denetimi ve en büyük metin boyu</a></li>
     <li><a href="#dalga-1">8 Kasım gecesi: Dalga 1 (2.3.0) kodda</a></li>
-    <li><a href="#surum-230">9 Kasım: 2.3.0 yayın hazırlığı</a></li>
+    <li><a href="#surum-230">9 Kasım: 2.3.0 yayın hazırlığı ve App Store Connect</a></li>
   </ol>
 </nav>
 
@@ -615,7 +615,7 @@ ul.tight li, ol.tight li { margin: 3px 0; }
 <li>Kurulun açık soruları: Hareketi Azalt halkası kabul mü; gökkuşağı dolgusu için mevcut "Gökkuşağı" klibi yeter mi; 5. kare Büyük modda kalsın mı.</li>
 <li>Eski bir iPad (A8) varsa desenli dolgunun süresini ölç; yayından önce kareler ve metinler.</li>
 </ol>
-<h2 id="surum-230">26. 9 Kasım: 2.3.0 yayın hazırlığı</h2>
+<h2 id="surum-230">26. 9 Kasım: 2.3.0 yayın hazırlığı ve App Store Connect</h2>
 <p>PR #16 00:03'te master'a girdi (<code>a1bb42a</code>, iki CI işi geçti). 2.3.0 yerelde hazır: dal <code>release/2.3.0</code>, master'ın üstünde, sürüm <code>2.3.0+10</code>. Sürümde Dalga 1'in kod tarafı var: Kutlamalar, 18 renk, canlanma, desen dolgusu, puan isteme. Sesli adlar yok; kayıt gelince ayrı sürüme girer.</p>
 <ul>
 <li><strong>Mağaza metni.</strong> <code>store_listing.md</code> artık 2.3.0 metnini gövde olarak tutuyor, canlı 2.2.0'dan farklı satırlar "2.2.0'da (canlı)" notuyla işaretli: tanıtım metni (10 kategoride 336 sayfa; 164 ve 167 karakter), açıklamada kategori satırı ve listesi, "Taşmayan boya" altında kova satırı, kutlama satırı ("çocuğun kendi resmi bir an kıpırdar"), Büyük 18 renk; What's New dört madde (TR, EN); Notes for Review'da yeni sürüm paragrafı ve puan isteme paragrafı. Puan isteme sürüm notunda yok (5.6.3); kurulun yasak sözcükleri kullanılmadı.</li>
@@ -624,10 +624,11 @@ ul.tight li, ol.tight li { margin: 3px 0; }
 <li><strong>Doğrulama.</strong> Dart kodu PR #16'dakiyle aynı; değişen yalnız sürüm numarası ve belgeler. <code>flutter analyze</code> temiz, 285 test geçiyor.</li>
 </ul>
 <figure><img src="img/surum-230-iphone-tr.jpg" alt="2.3.0 iPhone Türkçe ekran görüntüsü seti"><figcaption>iPhone 6,3" Türkçe set, yükleme sırasında: dolgu, çizgi, kutlama, çizim, desen, ana ekran, Eserlerim, kapı.</figcaption></figure>
+<p><strong>Akşam: sürüm App Store Connect'te.</strong> PR #17 14:01'de master'a girdi (<code>a8468ef</code>, iki CI işi geçti). <code>v2.3.0</code> etiketi onayınla 16:41'de push edildi; Xcode Cloud 16:42'de başlayıp 16:52'de derleme 10'u bitirdi, TestFlight "Tester" grubunda "Ready to Submit". App Store Connect'te 2.3.0 sürümü 19:05'te dolduruldu ve sayfa yeniden yüklenerek doğrulandı: derleme 10; Türkçe tanıtım metni 164 karakter, açıklama 1580 (beş yerinde değişiklik), What's New 536; İngilizce 167, 1585 ve 525; Notes for Review 1759 (2.2.0 notunun giriş ve kapı paragrafları aynen, yeni sürüm ve puan isteme paragrafları, Tam Sürüm kapalı cümlesi); dört set sekizer kare, 2.2.0 kareleri kaldırıldı (Asset Library'de duruyor); yayın elle, puan korunuyor. Mağazadaki açıklama düz metindir ("ÖZELLİKLER" başlığı, emoji ve kalın yazı yok); <code>store_listing.md</code> kaynak biçimdir.</p>
+<p>Yolda iki aksaklık oldu. iPhone Türkçe set yüklendikten sonra <code>flutter clean</code> (senin çalıştırdığın) <code>build/</code> altındaki öbür üç seti ve zip'i sildi; setler yeniden çekildi: ilk koşu <code>.dart_tool</code> olmadan düştü (<code>take_screenshots.py</code> <code>--no-pub</code> çağırır), <code>flutter pub get</code> sonrası iPad setleri geçti (Türkçe set temiz derlemeyle 48 dakika), iPhone İngilizce koşusunda simülatör dolgu karesinde bir kez kapandı ve tek başına ikinci denemede geçti. Ders: mağaza setleri <code>build/</code> altında kalıcı değil; yüklemeden önce başka yere kopyala. Alanları doldurma yöntemi de değişti: seçim aralığı ve <code>insertText</code> komutuyla yerinde düzenleme; form değişikliği görüyor, Save etkinleşiyor ve yeniden yüklemede metin yerinde kalıyor.</p>
 <p><strong>Senden beklenenler:</strong></p>
 <ol>
-<li><code>release/2.3.0</code> PR'ını merge et; sonra <code>git tag v2.3.0 &amp;&amp; git push origin v2.3.0</code> (Xcode Cloud etikette derler, 25–35 dakika; derleme numarasını kendisi verir).</li>
-<li>Derleme TestFlight'ta görününce söyle: App Store Connect'te 2.3.0 sürümünü açıp metinleri ve dört seti ben yüklerim (Chrome'da oturumun açık olmalı); "Add for Review" ve "Submit for Review" sende.</li>
+<li>App Store Connect'te 2.3.0 sayfasında "Add for Review", sonra "Submit for Review"; onaydan sonra "Release this version" (yayın elle).</li>
 <li>Kış öne çıkarma adaylığı için son gün 24 Kasım; 2.3.0 incelemeden geçince başvur.</li>
 <li>Ses kayıtları, 3–5 çocukla gözlem, A8 iPad ölçümü ve kurulun açık soruları 25. bölümde.</li>
 </ol>

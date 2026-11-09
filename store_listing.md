@@ -3,13 +3,16 @@
 Bu dosya mağaza metinlerinin kaynağıdır. Gövde 2.3.0 metnidir; canlı 2.2.0'dan farklı satırlar
 "2.2.0'da (canlı)" notuyla işaretlidir. Türkçe birincil, İngilizce (ABD) ikinci dil. Google Play kaydı yok.
 
-> **Durum (9 Kasım 2026):** 2.2.0 yeni adıyla 8 Kasım 07:49'dan beri App Store'da. 2.3.0 `release/2.3.0`
-> dalında hazırlandı (sürüm 2.3.0+10; PR #16 ile master'a giren Dalga 1 işi): bu dosyadaki 2.3.0 metinleri
-> (tanıtım metni, açıklamadaki satırlar, What's New, Notes for Review) ve dört ekran görüntüsü seti
-> (`build/store_screenshots/*_230_captioned`; iPhone 6,3" ve 13" iPad, TR ve EN, sekizer kare). Sıra: PR
-> merge → `v2.3.0` etiketi (Xcode Cloud derler) → TestFlight → App Store Connect'te 2.3.0 sürümü (build,
-> metinler, kareler, yayın elle) → "Add for Review" ve "Submit for Review" sahibin işi. Sesli adlar bu
-> sürümde yok; kayıt bekliyor. Sürüm notunda puan istemeden söz edilmez (5.6.3).
+> **Durum (9 Kasım 2026, akşam):** 2.2.0 yeni adıyla 8 Kasım 07:49'dan beri App Store'da. 2.3.0 (sürüm
+> 2.3.0+10, derleme 10) App Store Connect'te "Prepare for Submission": `release/2.3.0` PR #17 ile master'a
+> girdi, `v2.3.0` etiketi 16:41'de push edildi, Xcode Cloud derleme 10'u 16:52'de bitirdi, TestFlight
+> "Tester" grubunda. Sürüm sayfası 19:05'te bu dosyadaki 2.3.0 metinleriyle dolduruldu ve yeniden yüklenerek
+> doğrulandı: tanıtım metni (TR, EN), açıklamada beş yerinde değişiklik (TR, EN), What's New (TR, EN), Notes
+> for Review (2.2.0 notunun giriş ve kapı paragrafları aynen, yeni sürüm ve puan isteme paragrafları, Tam
+> Sürüm kapalı cümlesi), dört ekran görüntüsü seti (iPhone 6,3" ve 13" iPad, TR ve EN, sekizer kare; 2.2.0
+> kareleri kaldırıldı). Yayın elle, puan korunuyor. "Add for Review" ve "Submit for Review" sahibin işi.
+> Sesli adlar bu sürümde yok; kayıt bekliyor. Sürüm notunda puan istemeden söz edilmez (5.6.3). Mağazadaki
+> açıklama düz metindir ("ÖZELLİKLER" başlığı, emoji ve kalın yazı yok); bu dosyadaki biçim kaynak metindir.
 
 > **Durum (7 Kasım 2026):** 2.1.0, 4 Kasım 20:07'den beri App Store'da. 2.2.0 sürümü App Store Connect'te
 > açıldı ve bu dosyadaki 2.2.0 metinleriyle dolduruldu: build 9, tanıtım metni ve açıklamadaki iki satır (TR,
@@ -293,7 +296,10 @@ modu artık kendisi ayarlar (desen karesi dışında Minik). Kareler 2.3.0 yayı
 Pro M4 simülatörü), her biri dokuz ham kare; `*_230_captioned` klasörlerinde sekiz alt yazılı kare yükleme
 sırasında (dolgu, çizgi, kutlama, çizim, desen, ana ekran, Eserlerim, kapı) ve `_contact.png`; hepsi
 `surum-230-gorseller.zip` içinde. `01b_home_end` yalnız kontrol içindir, alt yazı betiği onu atlar. App
-Preview yok. Dil simülatörün ayarından geldi (`AppleLanguages`, `AppleLocale`), durum çubuğu 9:41.
+Preview yok. Dil simülatörün ayarından geldi (`AppleLanguages`, `AppleLocale`), durum çubuğu 9:41. Akşam
+`flutter clean` `build/` altındaki setleri ve zip'i sildi; iPhone TR seti o sırada App Store Connect'e
+yüklenmişti, iPhone EN, iPad TR ve iPad EN yeniden çekildi (`flutter pub get` sonrası; betik `--no-pub`
+çağırır) ve dört set yüklendi. Setler `build/` altında kalıcı değil; yüklemeden önce başka yere kopyala.
 
 ---
 
