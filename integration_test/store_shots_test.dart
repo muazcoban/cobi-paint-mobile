@@ -27,6 +27,16 @@ void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
   binding.framePolicy = LiveTestWidgetsFlutterBindingFramePolicy.fullyLive;
 
+  // --dart-define=COBI_LOCALE=tr_TR speaks that language whatever the device
+  // says: an Android emulator's system language does not change from adb.
+  const localeOverride = String.fromEnvironment('COBI_LOCALE');
+  if (localeOverride.isNotEmpty) {
+    final parts = localeOverride.split('_');
+    final locale = Locale(parts.first, parts.length > 1 ? parts[1] : null);
+    binding.platformDispatcher.localesTestValue = [locale];
+    binding.platformDispatcher.localeTestValue = locale;
+  }
+
   Future<void> wait(int ms) => Future<void>.delayed(Duration(milliseconds: ms));
 
   Future<void> until(Finder finder, {int seconds = 40}) async {
@@ -46,6 +56,9 @@ void main() {
   // --dart-define=COBI_SHOTS=false nobody answers and the walk is a plain smoke
   // test, for example on Android.
   const shooting = bool.fromEnvironment('COBI_SHOTS', defaultValue: true);
+  // On Android the host cannot see the app's folders; it reads this line and
+  // drops the flags with `adb shell run-as`.
+  if (shooting) say('TMPDIR:${Directory.systemTemp.path}');
 
   Future<void> answer(String file) async {
     if (!shooting) return wait(800);
