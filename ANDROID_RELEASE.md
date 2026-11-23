@@ -1,7 +1,7 @@
 # Cobi Paint: Google Play yayını
 
-Bu dosya Google Play hazırlığının kaynağıdır: teknik kontroller, Play Console'da yapılanlar, bekleyen
-beyanların taslak cevapları ve yayına kadar kalan sıra. Mağaza metinleri `store_listing.md` içindeki
+Bu dosya Google Play hazırlığının kaynağıdır: teknik kontroller, Play Console'da yapılanlar, upload
+anahtarı, beyanların taslak cevapları ve yayına kadar kalan sıra. Mağaza metinleri `store_listing.md` içindeki
 "Google Play" bölümündedir.
 
 ## Hesap ve uygulama (17 Kasım 2026)
@@ -27,7 +27,7 @@ beyanların taslak cevapları ve yayına kadar kalan sıra. Mağaza metinleri `s
 | İzinler | `BILLING`, `INTERNET`, `ACCESS_NETWORK_STATE` (satın alma kütüphanesinden), `DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION` |
 | Reklam kimliği | Yok. Manifest'e `tools:node="remove"` ile koruma eklendi; ileride bir bağımlılık ekleyemez |
 | Reklam, analitik, çökme raporu | Yok: bağımlılıklarda Firebase, AdMob ya da analitik paketi yok |
-| İmza | Upload anahtarı `android/app/cobi-paint-keystore.jks`, parolalar `android/key.properties` (ikisi de gitignore'da) |
+| İmza | Play'e kayıtlı upload anahtarı Memoko'nunki (SHA1 `96:5A:E9…18:54`), aşağıdaki "Upload anahtarı" bölümüne bakın. Repodaki `android/app/cobi-paint-keystore.jks` bugün Play'de geçmez. Parolalar `android/key.properties` içinde (ikisi de gitignore'da) |
 | Gizlilik politikası | https://muazcoban.github.io/cobi-paint-mobile/privacy_policy.html canlı |
 
 Satın alma kodu `--dart-define=COBI_IAP=true` olmadan kapalıdır; Play'e gidecek derlemede satın alma ekranı
@@ -42,8 +42,48 @@ politikasının istediği ebeveyn kapısı (satın alma zaten kapı arkasında) 
 - Mağaza ayarları: Uygulama, kategori Eğitim, etiketler Boyama kitabı, Eğitim, Okul öncesi eğitim, Resim,
   Sanat ve tasarım; e-posta cobipaint@gmail.com, web sitesi https://muazcoban.github.io/cobi-paint-mobile/.
 - Varsayılan mağaza girişi: İngilizce ve Türkçe ad, kısa ve tam açıklama (taslak olarak kaydedildi).
+- 23 Kasım 2026: varsayılan mağaza girişi iki dilde görselleriyle kaydedildi; kurulum listesi 12/12 oldu ve
+  kapalı test açıldı. Play kaydederken "yapay zekâyla üretilmiş öğe beyanı" istedi: 512 px simge ve iki
+  tanıtım görseli (simgeyi içerir) etiketli, ekran görüntüleri etiketsiz (uygulamanın kendi ekranları).
+  Etiketli görsel mağazada yapay zekâ notuyla görünür; etiket Öğe kitaplığından değiştirilebilir.
+- 23 Kasım 2026: "Kapalı test - Alpha" kanalı kuruldu. Kapsam 178 ülke ve bölge. Test kullanıcıları
+  geliştirici hesabı düzeyindeki "Cobi Studio test kullanıcıları" e-posta listesinden gelir; liste Memoko ile
+  ortaktır ve 23 Kasım'da 11 kişiydi. Geri bildirim adresi cobipaint@gmail.com. Sürüm 10 (2.3.0) yüklendi;
+  Play'in hesapladığı ilk indirme boyutu 14,6 MB. Aynı gün 17 değişiklik Google incelemesine gönderildi.
 
-## Bekleyen beyanlar ve taslak cevaplar
+## Upload anahtarı (23 Kasım 2026)
+
+Play bu uygulama için Memoko'nun upload anahtarını bekler, repodaki Cobi anahtarını değil.
+
+| Sertifika | SHA1 |
+|---|---|
+| Play'in beklediği (Memoko'nun upload anahtarı) | `96:5A:E9:90:5B:93:22:97:8E:D0:0F:E9:74:CD:AB:77:6E:27:18:54` |
+| Repodaki `cobi-paint-keystore.jks` | `FB:08:94:E1:CE:93:BE:7A:C9:4B:52:D3:E6:0C:CE:F1:A5:AB:FC:F5` |
+
+Repodaki anahtarla imzalanan paket "Android App Bundle yanlış anahtarla imzalanmış" hatası alır. İki
+projede de paketin adı `app-release.aab`; ilk yükleme denemesinde Memoko'nun paketi yüklendi. Play o paketi
+paket adı yüzünden reddetti, ama anahtarını bu yükleme sırasında Cobi'nin upload anahtarı olarak kaydettiği
+görünüyor. Kullanıcıya giden imza bundan etkilenmez: Play App Signing açık, dağıtılan APK'ları Play bu
+uygulamaya özel ve Google'da duran uygulama imzalama anahtarıyla imzalar.
+
+**Sürüm derlemek.** Gradle imzayı `android/key.properties` dosyasından okur. 2.3.0 (10) şöyle derlendi:
+Cobi'nin `key.properties` dosyası yedeklendi, yerine Memoko reposundaki `android/key.properties` kopyalandı,
+`flutter build appbundle --release` koşuldu, sonra Cobi'nin dosyası geri kondu. Yüklemeden önce imzayı ve
+paket adını kontrol edin; Memoko'nun paketi de aynı anahtarı taşır, yalnız SHA1 ikisini ayırmaz:
+
+```bash
+keytool -printcert -jarfile build/app/outputs/bundle/release/app-release.aab | grep SHA1
+unzip -p build/app/outputs/bundle/release/app-release.aab base/manifest/AndroidManifest.xml | strings | grep -m1 com.cobi.paint
+```
+
+**Cobi'nin kendi anahtarına dönmek.** Play Console → Uygulama imzalama → "Sıfırlama talep edin". Play yeni
+upload sertifikasını `.pem` dosyası olarak ister. Talep Google'ın onayına bağlıdır; onay gelene kadar yalnız
+kayıtlı anahtarla yükleme yapılır.
+
+## Beyanlar ve taslak cevaplar
+
+23 Kasım 2026'da dört beyan Play'de tamamlanmış görünüyordu; Yayın özeti hedef yaş aralığını 0–8 gösterdi.
+Aşağıdaki taslaklar cevapların gerekçesi olarak kalıyor.
 
 Bu dört beyan sahibin onayını ister: anketi doldurmak IARC Hizmet Şartları'nı kabul etmek demektir, hedef
 kitle Families taahhütleri içerir, tacirlik durumu hukuki bir karardır.
@@ -79,10 +119,13 @@ tablet 1200×1920, 10 inç tablet 1600×2560. Alt yazıları `tool/store/caption
 
 ## Yayına kadar sıra
 
-1. Bekleyen dört beyan (sahibin onayıyla).
-2. Kapalı test: yeni kişisel hesaplarda üretime çıkmak için en az 12 test kullanıcısının son 14 gün boyunca
-   kapalı teste katılmış olması gerekir; şart her uygulama için ayrıdır. Memoko'nun test grubu kullanılabilir.
-3. İlk AAB'yi kapalı test kanalına yüklemek: Play App Signing yeni uygulamada varsayılandır; upload anahtarı
-   repodaki anahtardır. Derleme numarası (versionCode) bir kez yüklenince tekrar kullanılamaz.
+1. Dört beyan: tamam.
+2. İlk AAB: 2.3.0 (10) 23 Kasım 2026'da kapalı test kanalına yüklendi. Derleme numarası (versionCode) bir
+   kez yüklenince tekrar kullanılamaz; sıradaki numara 11. İmza için "Upload anahtarı" bölümüne bakın.
+3. Kapalı test: 23 Kasım 2026'da incelemeye gönderildi. Onaydan sonra Test kullanıcıları sekmesinde web
+   katılım bağlantısı görünür; Memoko'daki düzene göre beklenen bağlantı
+   https://play.google.com/apps/testing/com.cobi.paint.cobi_paint_mobile. Yeni kişisel hesaplarda üretime
+   çıkmak için en az 12 test kullanıcısının son 14 gün boyunca kapalı teste katılmış olması gerekir; şart her
+   uygulama için ayrıdır. Ortak liste 23 Kasım'da 11 kişiydi.
 4. 14 gün sonra üretime erişim başvurusu, sonra üretim sürümü. Yayından sonra geliştirici sitesine Play
    bağlantısı eklenir (ayrı repo).
