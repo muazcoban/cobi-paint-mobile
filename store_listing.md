@@ -318,3 +318,33 @@ https://muazcoban.github.io/cobi-paint-mobile/ (`docs/index.html`)
 
 ## Support Email
 cobipaint@gmail.com
+
+---
+
+## Google Play (17 Kasım 2026)
+
+Play Console'da varsayılan mağaza girişine taslak olarak yazıldı; ayrıntı ve beyanlar `ANDROID_RELEASE.md`
+içinde. Varsayılan dil İngilizce (ABD); çevirisi olmayan ülkeler İngilizce kaydı görür. App Store
+metninden farkları: Rehberli Erişim yerine Android'in Uygulama sabitleme özelliği, Apple Pencil yok,
+emoji ve kalın yazı yok.
+
+### App name (30)
+- EN: Cobi: Coloring Games for Kids (29)
+- TR: Cobi: Çocuk Boyama Oyunları (27)
+
+### Short description (80)
+- EN: Coloring for little hands: tap to fill, paint stays in the lines. No ads. (73)
+- TR: Küçük eller için boyama: dokun, boya. Boya çizgiden taşmaz, reklam yok. (71)
+
+### Full description
+
+Gövde App Store Connect'teki 2.3.0 açıklamasıyla aynıdır (düz metin, "FEATURES" / "ÖZELLİKLER"
+başlıklı); yalnız son satır değişir:
+
+- EN: "- An in-app guide to App pinning keeps your child inside the app." (1648 karakter)
+- TR: "- Uygulama içi Uygulama sabitleme rehberi, çocuğunuzun uygulamada kalmasını sağlar." (1633 karakter)
+
+### Graphics
+- Simge 512×512 ve tanıtım görseli 1024×500 (TR, EN): `tool/store/play_graphics.py`.
+- Telefon 1080×1920, 7 inç tablet 1200×1920, 10 inç tablet 1600×2560, TR ve EN, sekizer kare:
+  `tool/store/take_screenshots.py --android` ve `tool/store/caption_screenshots.py`.

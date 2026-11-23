@@ -21,6 +21,21 @@ Pillow. The status bar is set to 9:41, full battery and full bars.
 
     python3 tool/store/take_screenshots.py <udid> build/scene_shots/se \
         --test integration_test/scene_walk_test.dart --define COBI_SCENE=observation
+
+--android takes an adb serial instead of a simulator udid (Google Play sets).
+Frames come from `adb exec-out screencap`, the burst video from
+`adb shell screenrecord`, and the flags go into the folder the walk prints
+on its TMPDIR line, with `adb shell run-as`. The status bar goes into demo
+mode (9:41, full battery). An emulator's system language does not change
+from adb, so the walk takes the language from --define COBI_LOCALE. Set the
+screen first; Play wants the long side at most twice the short side, so a
+phone runs at 1080x1920 (7" tablet 1200x1920 at 240 dpi, 10" 1600x2560 at
+320), for example:
+
+    adb -s emulator-5580 shell wm size 1080x1920
+    adb -s emulator-5580 shell wm density 420
+    python3 tool/store/take_screenshots.py emulator-5580 build/store_screenshots/play_phone_tr \
+        --android --define COBI_LOCALE=tr_TR
 """
 import argparse
 import glob
@@ -34,12 +49,23 @@ import time
 from PIL import Image, ImageChops
 
 FLUTTER = os.path.expanduser("~/flutter/sdk/flutter/bin/flutter")
+ADB = os.path.expanduser("~/Library/Android/sdk/platform-tools/adb")
 BUNDLE = "com.cobi.paint.cobiPaintMobile"
+PACKAGE = "com.cobi.paint.cobi_paint_mobile"
+ANDROID = False
 _container = {}
+_tmpdir = {}
+
+
+def adb(udid, *args, **kwargs):
+    return subprocess.run([ADB, "-s", udid, *args], **kwargs)
 
 
 def answer(udid, flag):
     """Drops [flag] into the app's temporary folder; the test waits for it."""
+    if ANDROID:
+        adb(udid, "shell", "run-as", PACKAGE, "touch", f"{_tmpdir[udid]}/{flag}", check=True)
+        return
     if udid not in _container:
         _container[udid] = subprocess.run(
             ["xcrun", "simctl", "get_app_container", udid, BUNDLE, "data"],
@@ -49,7 +75,49 @@ def answer(udid, flag):
 
 
 def shoot(udid, path):
+    if ANDROID:
+        with open(path, "wb") as out:
+            adb(udid, "exec-out", "screencap", "-p", stdout=out, check=True)
+        return
     subprocess.run(["xcrun", "simctl", "io", udid, "screenshot", path], check=True, capture_output=True)
+
+
+def start_recording(udid, video):
+    if ANDROID:
+        return subprocess.Popen(
+            [ADB, "-s", udid, "shell", "screenrecord", "--bit-rate", "12000000", "/sdcard/cobi_burst.mp4"],
+            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+        )
+    return subprocess.Popen(
+        ["xcrun", "simctl", "io", udid, "recordVideo", "--codec=h264", "--force", video],
+        stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+    )
+
+
+def stop_recording(udid, recorder, video):
+    if ANDROID:
+        adb(udid, "shell", "pkill", "-INT", "screenrecord", capture_output=True)
+        recorder.wait(timeout=20)
+        time.sleep(1.0)  # the device finishes writing the file
+        adb(udid, "pull", "/sdcard/cobi_burst.mp4", video, capture_output=True)
+        adb(udid, "shell", "rm", "-f", "/sdcard/cobi_burst.mp4", capture_output=True)
+        return
+    recorder.send_signal(signal.SIGINT)
+    recorder.wait(timeout=20)
+
+
+def demo_status_bar(udid):
+    """Android's demo mode: 9:41, full battery and bars, no notifications."""
+    adb(udid, "shell", "settings", "put", "global", "sysui_demo_allowed", "1", check=True)
+    for extras in (
+        ["-e", "command", "enter"],
+        ["-e", "command", "clock", "-e", "hhmm", "0941"],
+        ["-e", "command", "battery", "-e", "level", "100", "-e", "plugged", "false"],
+        ["-e", "command", "network", "-e", "wifi", "show", "-e", "level", "4"],
+        ["-e", "command", "network", "-e", "mobile", "show", "-e", "datatype", "none", "-e", "level", "4"],
+        ["-e", "command", "notifications", "-e", "visible", "false"],
+    ):
+        adb(udid, "shell", "am", "broadcast", "-a", "com.android.systemui.demo", *extras, capture_output=True)
 
 
 def colourful(path):
@@ -76,10 +144,7 @@ def burst(udid, out, name):
     frame with the most colour wins; a lossless screenshot wins a near tie."""
     work = tempfile.mkdtemp(prefix="cobi_burst_")
     video = os.path.join(work, "burst.mp4")
-    recorder = subprocess.Popen(
-        ["xcrun", "simctl", "io", udid, "recordVideo", "--codec=h264", "--force", video],
-        stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
-    )
+    recorder = start_recording(udid, video)
     time.sleep(1.0)  # let the recorder start before the last tap
     answer(udid, f"cobi_shot_{name}.go")
     shots = []
@@ -89,8 +154,7 @@ def burst(udid, out, name):
         shoot(udid, path)
         shots.append(path)
     time.sleep(max(0.0, end + 0.5 - time.time()))
-    recorder.send_signal(signal.SIGINT)
-    recorder.wait(timeout=20)
+    stop_recording(udid, recorder, video)
     frames = []
     if os.path.exists(video):
         subprocess.run(["ffmpeg", "-loglevel", "error", "-i", video, "-vf", "fps=12", os.path.join(work, "video_%03d.png")])
@@ -118,14 +182,20 @@ def main():
     parser.add_argument("out")
     parser.add_argument("--test", default="integration_test/store_shots_test.dart")
     parser.add_argument("--define", action="append", default=[], help="NAME=VALUE for --dart-define")
+    parser.add_argument("--android", action="store_true", help="udid is an adb serial (Google Play sets)")
     args = parser.parse_args()
+    global ANDROID
+    ANDROID = args.android
     udid, out = args.udid, args.out
     os.makedirs(out, exist_ok=True)
-    subprocess.run(
-        ["xcrun", "simctl", "status_bar", udid, "override", "--time", "9:41", "--batteryState", "charged",
-         "--batteryLevel", "100", "--cellularBars", "4", "--wifiBars", "3", "--dataNetwork", "wifi"],
-        check=True,
-    )
+    if ANDROID:
+        demo_status_bar(udid)
+    else:
+        subprocess.run(
+            ["xcrun", "simctl", "status_bar", udid, "override", "--time", "9:41", "--batteryState", "charged",
+             "--batteryLevel", "100", "--cellularBars", "4", "--wifiBars", "3", "--dataNetwork", "wifi"],
+            check=True,
+        )
     test = subprocess.Popen(
         [FLUTTER, "test", args.test, "-d", udid, "--no-pub"] + [f"--dart-define={d}" for d in args.define],
         stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, bufsize=1,
@@ -133,7 +203,9 @@ def main():
     for line in test.stdout:
         sys.stdout.write(line)
         sys.stdout.flush()
-        if "SHOT:" in line:
+        if "TMPDIR:" in line:
+            _tmpdir[udid] = line.split("TMPDIR:", 1)[1].split()[0]
+        elif "SHOT:" in line:
             name = line.split("SHOT:", 1)[1].split()[0]
             shoot(udid, os.path.join(out, f"{name}.png"))
             answer(udid, f"cobi_shot_{name}.done")
