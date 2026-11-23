@@ -55,7 +55,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get pageLevelDesc =>
-      'Harder pages move to the front as your child colours. No page is ever locked.';
+      'Harder pages move to the front as your child colours. Levels never lock a page.';
 
   @override
   String get levelAuto => 'Automatic';
