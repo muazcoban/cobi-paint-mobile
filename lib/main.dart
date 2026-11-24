@@ -42,7 +42,12 @@ void main() async {
     ),
   );
 
-  if (PurchaseService.enabled) unawaited(PurchaseService().init());
+  if (PurchaseService.enabled) {
+    // Awaited before runApp: nothing has written preferences in this launch
+    // yet, which is how it tells an earlier user from a new install.
+    await PurchaseService.grantEarlierUsers();
+    unawaited(PurchaseService().init());
+  }
   runApp(const CobiPaintApp());
 
   // After the first frame, so neither delays the app appearing:
