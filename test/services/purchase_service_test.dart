@@ -120,4 +120,39 @@ void main() {
     await service.listenForTesting(readSaved: true);
     expect(service.isFull.value, isTrue);
   });
+
+  group('a device that used the app before the purchase existed', () {
+    test('keeps every page: anything stored by an earlier version unlocks it', () async {
+      SharedPreferences.setMockInitialValues({'saved_artworks': '[]', 'user_settings': '{}'});
+      await PurchaseService.grantEarlierUsers();
+      final service = PurchaseService();
+      await service.listenForTesting(readSaved: true);
+      expect(service.isFull.value, isTrue);
+    });
+
+    test('a new install, with nothing stored, gets the free pages only', () async {
+      await PurchaseService.grantEarlierUsers();
+      final service = PurchaseService();
+      await service.listenForTesting(readSaved: true);
+      expect(service.isFull.value, isFalse);
+      expect((await SharedPreferences.getInstance()).getBool('full_version_earlier_user'), isFalse);
+    });
+
+    test('a new install does not become an earlier user once it has stored settings', () async {
+      await PurchaseService.grantEarlierUsers(); // first launch of a new install
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('user_settings', '{}'); // the child uses the app
+
+      await PurchaseService.grantEarlierUsers(); // next launch
+      final service = PurchaseService();
+      await service.listenForTesting(readSaved: true);
+      expect(service.isFull.value, isFalse);
+    });
+
+    test('a bought Full Version alone does not count as earlier use', () async {
+      SharedPreferences.setMockInitialValues({'full_version': true});
+      await PurchaseService.grantEarlierUsers();
+      expect((await SharedPreferences.getInstance()).getBool('full_version_earlier_user'), isFalse);
+    });
+  });
 }

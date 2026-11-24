@@ -3,6 +3,14 @@
 Bu dosya mağaza metinlerinin kaynağıdır. Gövde 2.3.0 metnidir; canlı 2.2.0'dan farklı satırlar
 "2.2.0'da (canlı)" notuyla işaretlidir. Türkçe birincil, İngilizce (ABD) ikinci dil. Google Play kaydı yok.
 
+> **2.4.0 (24 Kasım 2026'da hazırlandı):** Tam Sürüm (`com.cobi.paint.full`, tek seferlik, 5,99 $ / ₺199,99,
+> Aile Paylaşımı açık) App Store Connect'te oluşturuldu. Ücretsiz sürümde her kategoriden 8 sayfa (80)
+> görünür; serbest çizim, fırçalar, çıkartmalar ve ayna ücretsiz kalır. 2.4.0'dan önce uygulamayı kullanmış
+> cihazlar Tam Sürüm'ü ödemeden alır. App Review 2.3.2 gereği açıklama ve tanıtım metni hangi içeriğin
+> ücretli olduğunu söyler. 2.4.0 metinleri aşağıda "2.4.0" başlıklarıyla duruyor; açıklamaya "Ücretsiz ve
+> Tam Sürüm" bölümü eklendi, "Ebeveynler için" bölümünün iki satırı değişti. Google Play metni, Play'de
+> ürün açılınca (satıcı hesabından sonra) aynı şekilde güncellenir; o zamana kadar Play'de satın alma yok.
+
 > **Durum (9 Kasım 2026, akşam):** 2.2.0 yeni adıyla 8 Kasım 07:49'dan beri App Store'da. 2.3.0 (sürüm
 > 2.3.0+10, derleme 10) App Store Connect'te "Prepare for Submission": `release/2.3.0` PR #17 ile master'a
 > girdi, `v2.3.0` etiketi 16:41'de push edildi, Xcode Cloud derleme 10'u 16:52'de bitirdi, TestFlight
@@ -59,6 +67,10 @@ Bu dosya mağaza metinlerinin kaynağıdır. Gövde 2.3.0 metnidir; canlı 2.2.0
 - TR: Yepyeni Cobi Paint: 10 kategoride 336 boyama sayfası, taşmayan tek dokunuş dolgu, 6 fırça, 16 çıkartma ve aynalı serbest çizim. Reklam yok, internet yok, hesap yok. (164)
 - EN: New Cobi Paint: 336 coloring pages in 10 categories, one-tap fill that stays in the lines, 6 brushes, 16 stickers and mirror drawing. No ads, no internet, no accounts. (167)
 
+2.4.0 (Tam Sürüm; ücretsiz kısım metinde, App Review 2.3.2):
+- TR: Cobi Paint: 10 kategoride 336 boyama sayfası, 80'i ücretsiz; tek seferlik Tam Sürüm hepsini açar. Taşmayan dolgu, 6 fırça, 16 çıkartma, aynalı çizim. Reklam yok. (161)
+- EN: Cobi Paint: 336 coloring pages in 10 categories, 80 of them free; a one-time Full Version opens them all. Paint stays in the lines, 6 brushes, 16 stickers. No ads. (163)
+
 ---
 
 ## Short Description (80 characters max)
@@ -109,10 +121,18 @@ boyama ve otomatik kayıt sayesinde çocuğunuz yardım istemeden boyar.
 
 > 2.2.0'da (canlı): kova satırı yok, kutlama satırı "Biten resim kısa bir konfetiyle kutlanır.", Büyük 16 renk.
 
+💎 **Ücretsiz ve Tam Sürüm** (2.4.0)
+- Ücretsiz sürümde her kategoriden 8 sayfa var, toplam 80. Serbest çizim, fırçalar, çıkartmalar ve ayna ücretsizdir.
+- Tam Sürüm bütün sayfaları tek seferlik ödemeyle açar. Abonelik yoktur; Aile Paylaşımı açıktır.
+- Satın alma yalnız ebeveyn alanında, ebeveyn kontrolünün arkasındadır. Çocuğun ekranında fiyat, kilit ya da satın alma çağrısı yoktur.
+
 👨‍👩‍👧 **Ebeveynler için**
-- Reklam yok, internet bağlantısı yok, hesap yok, veri toplanmaz.
-- Paylaşım, galeriye kaydetme, yazdırma, silme ve ayarlar ebeveyn kontrolünün arkasında.
+- Reklam yok, hesap yok, veri toplanmaz; uygulama internetsiz çalışır.
+- Satın alma, paylaşım, galeriye kaydetme, yazdırma, silme ve ayarlar ebeveyn kontrolünün arkasında.
 - Rehberli Erişim (Guided Access) için uygulama içi rehber.
+
+> 2.3.0'da (canlı): "Ücretsiz ve Tam Sürüm" bölümü yok; ilk satır "Reklam yok, internet bağlantısı yok, hesap
+> yok, veri toplanmaz.", ikinci satır "Paylaşım, galeriye kaydetme, ..." diye başlar.
 
 ### English
 🎨 **Cobi Paint – coloring for ages 3 and up**
@@ -150,10 +170,33 @@ saving let your child color without asking for help.
 
 > 2.2.0'da (canlı): kova satırı yok, kutlama satırı "A short confetti celebrates a finished picture.", Big 16 colours.
 
+💎 **Free and Full Version** (2.4.0)
+- The free version has 8 pages in each category, 80 in all. Free drawing, brushes, stickers and the mirror are free.
+- The Full Version opens every page with one payment. There is no subscription; Family Sharing is on.
+- Purchases happen only in the Parents area, behind a grown-up check. Your child's screens show no prices, locks or purchase prompts.
+
 👨‍👩‍👧 **For parents**
-- No ads, no internet connection, no accounts, no data collection.
-- Sharing, saving to the gallery, printing, deleting and settings sit behind a grown-up check.
+- No ads, no accounts, no data collection; the app works offline.
+- Purchases, sharing, saving to the gallery, printing, deleting and settings sit behind a grown-up check.
 - An in-app guide to Guided Access.
+
+> 2.3.0'da (canlı): "Free and Full Version" bölümü yok; ilk satır "No ads, no internet connection, no
+> accounts, no data collection.", ikinci satır "Sharing, saving to the gallery, ..." diye başlar.
+
+---
+
+## What's New (2.4.0)
+
+Mevcut kullanıcıya kaybettiği bir şey olmadığını açıkça söyler; 2.4.0'dan önce kullanılan cihazlarda bütün
+sayfalar açık kalır (`PurchaseService.grantEarlierUsers`).
+
+### Turkish
+- Tam Sürüm: ücretsiz sürümde her kategoriden 8 sayfa var; tek seferlik ödemeyle 336 sayfanın hepsi açılır. Abonelik yok, Aile Paylaşımı açık. Satın alma yalnız ebeveyn alanında.
+- Cobi'yi bu sürümden önce kullanıyorsanız hiçbir şey değişmez: bütün sayfalar açık kalır, ödeme gerekmez.
+
+### English
+- Full Version: the free version has 8 pages in each category; one payment opens all 336 pages. No subscription, Family Sharing on. Purchases happen only in the Parents area.
+- If you used Cobi before this version, nothing changes: every page stays open and no payment is needed.
 
 ---
 
@@ -191,6 +234,22 @@ Puan isteme yazılmaz (5.6.3); sesli adlar bu sürümde olmadığı için yazıl
 - To color a picture again, press and hold it in My Artworks, answer the grown-up question and tap "Colour this page again". The old picture stays.
 - When the marker has covered nearly all of an area, the last small white corners fill in by themselves. You can turn this off in the Parents area.
 - In Big mode on iPad, marker, pastel and neon lines get thicker as you press harder with Apple Pencil.
+
+---
+
+## Notes for Review (2.4.0)
+
+2.3.0 notunun ilk üç maddesi (oturum yok, kapı, Eserlerim) ve puan isteme maddesi aynen kalır; "New in this
+version" maddesi şununla değişir. Ürünün kendi inceleme notu (App Store Connect > In-App Purchases > Full
+Version) aynı yolu anlatır.
+
+- New in this version: a one-time, non-consumable Full Version (com.cobi.paint.full). It is sold only on the
+  Full Version screen in the Parents area (grey gear at the top right of the home screen, then the parental
+  gate). Before the purchase each category shows 8 free pages, 80 in all; free drawing, brushes and stickers
+  stay free, and the child's screens never show a price, a lock or a purchase prompt. Restore Purchases is on
+  the same screen. Devices that used the app before 2.4.0 keep every page without paying, so a fresh install
+  is needed to see the free set and the purchase. The purchase goes through StoreKit only; the app itself
+  still makes no network requests and collects no data.
 
 ---
 
@@ -263,7 +322,8 @@ toddler,preschool,coloring,book,drawing,games,baby,animals,stickers,no ads,learn
   sonra, sistem paylaşım menüsüyle yapılır.
 - **Messaging, social features, web access:** Hayır
 - **Advertising:** Hayır
-- **In-app purchases:** Hayır (bu sürümde)
+- **In-app purchases:** 2.4.0'dan itibaren evet (tek seferlik Tam Sürüm, ebeveyn kontrolünün arkasında);
+  2.3.0'a kadar hayır
 - **Personal information collection:** Hayır
 - Apple'ın 2025 yaş anketi ve Eylül 2026'da eklenen social media sorusu App Store Connect'te
   yanıtlanmalı.

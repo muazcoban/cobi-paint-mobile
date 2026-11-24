@@ -18,7 +18,7 @@
     "description": "Home screen card: winter, new year and other celebration pages"
   },
   "pageLevel": "Page difficulty",
-  "pageLevelDesc": "Harder pages move to the front as your child colours. No page is ever locked.",
+  "pageLevelDesc": "Harder pages move to the front as your child colours. Levels never lock a page.",
   "levelAuto": "Automatic",
   "level1": "Big areas",
   "level2": "More areas",

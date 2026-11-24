@@ -23,6 +23,25 @@ class PurchaseService {
   static const String productId = 'com.cobi.paint.full';
   static const String _prefsKey = 'full_version';
 
+  /// True when this device used the app before the purchase existed; false
+  /// when the check found a new install. Absent until the check has run.
+  static const String _earlierUserKey = 'full_version_earlier_user';
+
+  /// Gives the Full Version to a device that used the app before the
+  /// purchase existed: up to 2.3.0 every page was free, and an update must
+  /// not take pages away from a child (decided 24 November 2026).
+  ///
+  /// Call it before anything in this launch writes preferences, so any key
+  /// already stored was written by an earlier launch, that is by an earlier
+  /// version. The answer is stored on the first run, so a new install that
+  /// stores settings later never counts as an earlier user.
+  static Future<void> grantEarlierUsers() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (prefs.containsKey(_earlierUserKey)) return;
+    final earlier = prefs.getKeys().any((key) => key != _prefsKey);
+    await prefs.setBool(_earlierUserKey, earlier);
+  }
+
   /// True once the unlock was bought or restored on this device.
   final ValueNotifier<bool> isFull = ValueNotifier<bool>(false);
 
@@ -54,7 +73,7 @@ class PurchaseService {
   Future<void> _start({required bool readSaved}) async {
     if (readSaved) {
       final prefs = await SharedPreferences.getInstance();
-      isFull.value = prefs.getBool(_prefsKey) ?? false;
+      isFull.value = (prefs.getBool(_prefsKey) ?? false) || (prefs.getBool(_earlierUserKey) ?? false);
     }
     _subscription ??= _store.purchaseStream.listen(
       _onPurchases,

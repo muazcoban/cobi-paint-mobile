@@ -12,6 +12,14 @@
 # automatic with team 5MY44SLWZU, so Xcode must be signed in with an Apple
 # account of that team (Xcode > Settings > Accounts). The version and build
 # number come from pubspec.yaml; raise the build number before each upload.
+#
+# The Full Version purchase is compiled in only with COBI_IAP=true:
+#
+#   COBI_IAP=true tool/release/ios_testflight.sh --upload
+#
+# Set it only once the com.cobi.paint.full product exists in App Store
+# Connect and the Paid Apps Agreement is active; without it every page is
+# free and the purchase screen is absent.
 set -euo pipefail
 setopt null_glob
 
@@ -38,8 +46,14 @@ if [ "${1:-}" = "--upload" ]; then
   plist=ios/ExportOptionsUpload.plist
 fi
 echo "Version: $(grep -E '^version:' pubspec.yaml)"
+iap="${COBI_IAP:-false}"
+if [ "$iap" != true ] && [ "$iap" != false ]; then
+  echo "COBI_IAP must be true or false, not '$iap'." >&2
+  exit 1
+fi
+echo "Full Version purchase (COBI_IAP): $iap"
 
-"$FLUTTER" build ipa --release --export-options-plist "$plist"
+"$FLUTTER" build ipa --release --export-options-plist "$plist" --dart-define=COBI_IAP="$iap"
 
 if [ "$plist" = ios/ExportOptions.plist ]; then
   ls -la build/ios/ipa/*.ipa

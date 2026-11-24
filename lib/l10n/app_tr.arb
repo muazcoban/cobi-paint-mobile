@@ -54,7 +54,7 @@
     "description": "Clothes category: things a child wears, hats, shoes and bags included"
   },
   "pageLevel": "Sayfa zorluğu",
-  "pageLevelDesc": "Çocuk birkaç sayfa boyadıkça daha zor sayfalar öne gelir. Hiçbir sayfa kilitli değildir.",
+  "pageLevelDesc": "Çocuk birkaç sayfa boyadıkça daha zor sayfalar öne gelir. Seviyeler hiçbir sayfayı kilitlemez.",
   "levelAuto": "Otomatik",
   "level1": "Büyük alanlar",
   "level2": "Daha çok alan",

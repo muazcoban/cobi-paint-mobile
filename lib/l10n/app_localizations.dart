@@ -191,7 +191,7 @@ abstract class AppLocalizations {
   /// No description provided for @pageLevelDesc.
   ///
   /// In tr, this message translates to:
-  /// **'Çocuk birkaç sayfa boyadıkça daha zor sayfalar öne gelir. Hiçbir sayfa kilitli değildir.'**
+  /// **'Çocuk birkaç sayfa boyadıkça daha zor sayfalar öne gelir. Seviyeler hiçbir sayfayı kilitlemez.'**
   String get pageLevelDesc;
 
   /// No description provided for @levelAuto.

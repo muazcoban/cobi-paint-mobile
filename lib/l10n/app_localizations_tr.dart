@@ -55,7 +55,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get pageLevelDesc =>
-      'Çocuk birkaç sayfa boyadıkça daha zor sayfalar öne gelir. Hiçbir sayfa kilitli değildir.';
+      'Çocuk birkaç sayfa boyadıkça daha zor sayfalar öne gelir. Seviyeler hiçbir sayfayı kilitlemez.';
 
   @override
   String get levelAuto => 'Otomatik';
